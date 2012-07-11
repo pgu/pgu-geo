@@ -1,6 +1,7 @@
 package pgu.client;
 
 import pgu.shared.FieldVerifier;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -12,6 +13,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -26,8 +28,8 @@ public class Pgu_contacts implements EntryPoint {
      * returns an error.
      */
     private static final String        SERVER_ERROR    = "An error occurred while "
-                                                               + "attempting to contact the server. Please check your network "
-                                                               + "connection and try again.";
+            + "attempting to contact the server. Please check your network "
+            + "connection and try again.";
 
     /**
      * Create a remote service proxy to talk to the server-side Greeting service.
@@ -37,7 +39,37 @@ public class Pgu_contacts implements EntryPoint {
     /**
      * This is the entry point method.
      */
+    @Override
     public void onModuleLoad() {
+
+        final Button logInLinkedin = new Button("Login");
+        logInLinkedin.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(final ClickEvent event) {
+                greetingService.logInLinkedin(new AsyncCallback<Void>(){
+
+                    @Override
+                    public void onFailure(final Throwable caught) {
+                        GWT.log("onFailure");
+                    }
+
+                    @Override
+                    public void onSuccess(final Void result) {
+                        GWT.log("success");
+                    }
+
+                });
+            }
+        });
+
+        final VerticalPanel vp = new VerticalPanel();
+        vp.add(logInLinkedin);
+
+        RootPanel.get().add(vp);
+
+
+
         final Button sendButton = new Button("Send");
         final TextBox nameField = new TextBox();
         nameField.setText("GWT User");
@@ -65,19 +97,20 @@ public class Pgu_contacts implements EntryPoint {
         closeButton.getElement().setId("closeButton");
         final Label textToServerLabel = new Label();
         final HTML serverResponseLabel = new HTML();
-        VerticalPanel dialogVPanel = new VerticalPanel();
+        final VerticalPanel dialogVPanel = new VerticalPanel();
         dialogVPanel.addStyleName("dialogVPanel");
         dialogVPanel.add(new HTML("<b>Sending name to the server:</b>"));
         dialogVPanel.add(textToServerLabel);
         dialogVPanel.add(new HTML("<br><b>Server replies:</b>"));
         dialogVPanel.add(serverResponseLabel);
-        dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
+        dialogVPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
         dialogVPanel.add(closeButton);
         dialogBox.setWidget(dialogVPanel);
 
         // Add a handler to close the DialogBox
         closeButton.addClickHandler(new ClickHandler() {
-            public void onClick(ClickEvent event) {
+            @Override
+            public void onClick(final ClickEvent event) {
                 dialogBox.hide();
                 sendButton.setEnabled(true);
                 sendButton.setFocus(true);
@@ -89,14 +122,16 @@ public class Pgu_contacts implements EntryPoint {
             /**
              * Fired when the user clicks on the sendButton.
              */
-            public void onClick(ClickEvent event) {
+            @Override
+            public void onClick(final ClickEvent event) {
                 sendNameToServer();
             }
 
             /**
              * Fired when the user types in the nameField.
              */
-            public void onKeyUp(KeyUpEvent event) {
+            @Override
+            public void onKeyUp(final KeyUpEvent event) {
                 if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
                     sendNameToServer();
                 }
@@ -108,7 +143,7 @@ public class Pgu_contacts implements EntryPoint {
             private void sendNameToServer() {
                 // First, we validate the input.
                 errorLabel.setText("");
-                String textToServer = nameField.getText();
+                final String textToServer = nameField.getText();
                 if (!FieldVerifier.isValidName(textToServer)) {
                     errorLabel.setText("Please enter at least four characters");
                     return;
@@ -119,7 +154,8 @@ public class Pgu_contacts implements EntryPoint {
                 textToServerLabel.setText(textToServer);
                 serverResponseLabel.setText("");
                 greetingService.greetServer(textToServer, new AsyncCallback<String>() {
-                    public void onFailure(Throwable caught) {
+                    @Override
+                    public void onFailure(final Throwable caught) {
                         // Show the RPC error message to the user
                         dialogBox.setText("Remote Procedure Call - Failure");
                         serverResponseLabel.addStyleName("serverResponseLabelError");
@@ -128,7 +164,8 @@ public class Pgu_contacts implements EntryPoint {
                         closeButton.setFocus(true);
                     }
 
-                    public void onSuccess(String result) {
+                    @Override
+                    public void onSuccess(final String result) {
                         dialogBox.setText("Remote Procedure Call");
                         serverResponseLabel.removeStyleName("serverResponseLabelError");
                         serverResponseLabel.setHTML(result);
@@ -140,7 +177,7 @@ public class Pgu_contacts implements EntryPoint {
         }
 
         // Add a handler to send the name to the server
-        MyHandler handler = new MyHandler();
+        final MyHandler handler = new MyHandler();
         sendButton.addClickHandler(handler);
         nameField.addKeyUpHandler(handler);
     }
