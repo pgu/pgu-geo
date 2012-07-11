@@ -2,7 +2,7 @@
 .project
 .settings/
 .gwt/
-war/pgu-contacts/
+war/pgu_contacts/
 war/WEB-INF/deploy/
 war/WEB-INF/lib/
 war/WEB-INF/classes/
