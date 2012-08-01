@@ -2,6 +2,9 @@ package pgu.server;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Scanner;
 
@@ -113,7 +116,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
         final String myProfileUrl = "http://api.linkedin.com/v1/people/~";
         OAuthRequest request = newRequest(service, accessToken, myProfileUrl);
         Response response = request.send();
-        System.out.println(response.getBody());
+        // System.out.println(response.getBody());
 
         final String connectionsUrl = "http://api.linkedin.com/v1/people/~/connections";
         request = newRequest(service, accessToken, connectionsUrl);
@@ -124,16 +127,38 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
         final Connections connections = gson.fromJson(response.getBody(), Connections.class);
         System.out.println(connections.get_total());
 
-        if (connections.getValues() != null) {
-            for (final Person p : connections.getValues()) {
-                System.out.print(p.getLocation().getCountry().getCode());
-                System.out.print(",");
-            }
-            System.out.println("");
+        final ArrayList<Person> persons = connections.getValues();
+        if (persons == null) {
+            return;
         }
 
-        // gson.fromJson(json, Response.class);
-        // System.out.println(response.getBody());
+        final HashMap<String, Integer> code2weight = new HashMap<String, Integer>();
+        for (final Person p : persons) {
+            final Location location = p.getLocation();
+            if (location == null) {
+                continue;
+            }
+            final Country country = location.getCountry();
+            if (country == null) {
+                continue;
+            }
+            final String code = country.getCode();
+            if (code == null) {
+                continue;
+            }
+
+            if (code2weight.containsKey(code)) {
+                final Integer count = code2weight.get(code) + 1;
+                code2weight.put(code, count);
+            } else {
+                code2weight.put(code, 1);
+            }
+        }
+
+        for (final Entry<String, Integer> e : code2weight.entrySet()) {
+            System.out.println(e.getKey() + ": " + e.getValue());
+        }
+        // https://developers.google.com/maps/documentation/javascript/tutorial
 
         // https://developer.linkedin.com/documents/profile-fields
         // first-name
@@ -173,19 +198,19 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 
         if (responseNumber >= 199 && responseNumber < 300) {
             System.out.println("HOORAY IT WORKED!!");
-            System.out.println(response.getBody());
+            // System.out.println(response.getBody());
         } else if (responseNumber >= 500 && responseNumber < 600) {
             // you could actually raise an exception here in your own code
             System.out.println("Ruh Roh application error of type 500: " + responseNumber);
-            System.out.println(response.getBody());
+            // System.out.println(response.getBody());
         } else if (responseNumber == 403) {
             System.out.println("A 403 was returned which usually means you have reached a throttle limit");
         } else if (responseNumber == 401) {
             System.out.println("A 401 was returned which is a Oauth signature error");
-            System.out.println(response.getBody());
+            // System.out.println(response.getBody());
         } else {
             System.out.println("We got a different response that we should add to the list: " + responseNumber);
-            System.out.println(response.getBody());
+            // System.out.println(response.getBody());
         }
     }
 
