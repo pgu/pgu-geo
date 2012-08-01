@@ -4,23 +4,23 @@ import java.util.ArrayList;
 
 public class Connections {
 
-    private String            total;
-    private ArrayList<Person> persons = new ArrayList<Person>();
+    private String            _total;
+    private ArrayList<Person> values = new ArrayList<Person>();
 
-    public String getTotal() {
-        return total;
+    public String get_total() {
+        return _total;
     }
 
-    public void setTotal(final String total) {
-        this.total = total;
+    public void set_total(final String _total) {
+        this._total = _total;
     }
 
-    public ArrayList<Person> getPersons() {
-        return persons;
+    public ArrayList<Person> getValues() {
+        return values;
     }
 
-    public void setPersons(final ArrayList<Person> persons) {
-        this.persons = persons;
+    public void setValues(final ArrayList<Person> values) {
+        this.values = values;
     }
 
 }

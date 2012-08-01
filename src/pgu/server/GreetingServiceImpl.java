@@ -122,13 +122,14 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 
         final Gson gson = new Gson();
         final Connections connections = gson.fromJson(response.getBody(), Connections.class);
-        System.out.println(connections.getTotal());
-        System.out.println(connections.getPersons());
+        System.out.println(connections.get_total());
 
-        if (connections.getPersons() != null) {
-            for (final Person p : connections.getPersons()) {
-                System.out.println(p);
+        if (connections.getValues() != null) {
+            for (final Person p : connections.getValues()) {
+                System.out.print(p.getLocation().getCountry().getCode());
+                System.out.print(",");
             }
+            System.out.println("");
         }
 
         // gson.fromJson(json, Response.class);
