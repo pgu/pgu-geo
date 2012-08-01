@@ -18,6 +18,7 @@ import pgu.client.GreetingService;
 import pgu.shared.FieldVerifier;
 
 import com.google.appengine.api.utils.SystemProperty;
+import com.google.gson.Gson;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -83,7 +84,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
                 .provider(LinkedInApi.class) //
                 .apiKey(API_KEY) //
                 .apiSecret(API_SECRET) //
-                .callback(getCallbackUrl()) //
+                // .callback(getCallbackUrl()) // // TODO PGU Aug 1, 2012 how to use callback url
                 .build();
 
         // set the scanner to catch input from the user
@@ -118,7 +119,20 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
         request = newRequest(service, accessToken, connectionsUrl);
         response = request.send();
         showResponseCode(response);
-        System.out.println(response.getBody());
+
+        final Gson gson = new Gson();
+        final Connections connections = gson.fromJson(response.getBody(), Connections.class);
+        System.out.println(connections.getTotal());
+        System.out.println(connections.getPersons());
+
+        if (connections.getPersons() != null) {
+            for (final Person p : connections.getPersons()) {
+                System.out.println(p);
+            }
+        }
+
+        // gson.fromJson(json, Response.class);
+        // System.out.println(response.getBody());
 
         // https://developer.linkedin.com/documents/profile-fields
         // first-name
