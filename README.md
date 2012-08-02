@@ -13,6 +13,9 @@ https://developers.google.com/maps/documentation/javascript/
 https://developers.google.com/maps/documentation/geocoding/
 https://developers.google.com/fusiontables/docs/developers_guide
 
+fusion tables:
+ISO_2DIGIT <=> country codes
+
 83
 ca: 3
 it: 1
