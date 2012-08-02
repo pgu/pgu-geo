@@ -8,6 +8,7 @@ http://commons.apache.org/codec/
 
 map api:
 https://google-developers.appspot.com/maps/documentation/javascript/examples/geocoding-simple
++ country: countrycode
 https://developers.google.com/maps/documentation/javascript/
 https://developers.google.com/maps/documentation/geocoding/
 https://developers.google.com/fusiontables/docs/developers_guide
