@@ -1,62 +1,98 @@
 <!doctype html>
-<!-- The DOCTYPE declaration above will set the     -->
-<!-- browser's rendering engine into                -->
-<!-- "Standards Mode". Replacing this declaration   -->
-<!-- with a "Quirks Mode" doctype is not supported. -->
-
 <html>
   <head>
+  
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-
-    <!--                                                               -->
-    <!-- Consider inlining CSS to reduce the number of requested files -->
-    <!--                                                               -->
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 }
+      #map_canvas { 
+        height: 90%; 
+        top: 30px; 
+        position: relative; 
+        background-color: #E5E3DF;
+        overflow: hidden;
+      }
+    </style>
+    
     <link type="text/css" rel="stylesheet" href="Pgu_contacts.css">
-
-    <!--                                           -->
-    <!-- Any title is fine                         -->
-    <!--                                           -->
-    <title>Web Application Starter Project</title>
     
-    <!--                                           -->
-    <!-- This script loads your compiled module.   -->
-    <!-- If you add any GWT meta tags, they must   -->
-    <!-- be added before this line.                -->
-    <!--                                           -->
+    <title>Pgu contacts</title>
+    
+    <script type="text/javascript">
+      var geocoder;
+      var map;
+      
+      function initialize() {
+    	  
+    	geocoder = new google.maps.Geocoder();
+    	
+    	var latlng = new google.maps.LatLng(0, 0);
+        var mapOptions = {
+          center: latlng,
+          zoom: 2,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        map = new google.maps.Map(document.getElementById("map_canvas"),
+            mapOptions);
+      }
+      
+      function loadScript() {
+    	  var script = document.createElement("script");
+    	  script.type = "text/javascript";
+    	  script.src = "http://maps.googleapis.com/maps/api/js?key=AIzaSyAP-PSZ5TkuUxa7Lqe8ni0uE1fwS6lrojw&sensor=false&callback=initialize";
+    	  document.body.appendChild(script);
+      }
+      
+      window.onload = loadScript;
+      
+      function codeAddress() {
+    	  var address = document.getElementById("address").value;
+    	  
+    	  geocoder.geocode( {'address': address}, function(results, status) {
+    		  
+    		if (status != google.maps.GeocoderStatus.OK) {
+    			alert("Geocode was not successful for the following reason: " + status);
+    			return;
+    		}  
+
+    	    console.log(results);
+    	    
+    		var loc = results[0].geometry.location;
+    		console.log("location " + loc);
+    		
+    		map.setCenter(loc);
+    		var marker = new google.maps.Marker({
+    		  map: map,
+    		  position: results[0].geometry.location
+    		});
+    		
+    	  });
+    	  
+      }
+      
+    </script>    
     <script type="text/javascript" language="javascript" src="pgu_contacts/pgu_contacts.nocache.js"></script>
-  </head>
-
-  <!--                                           -->
-  <!-- The body can have arbitrary html, or      -->
-  <!-- you can leave the body empty if you want  -->
-  <!-- to create a completely dynamic UI.        -->
-  <!--                                           -->
-  <body>
-
-    <!-- OPTIONAL: include this if you want history support -->
-    <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
     
-    <!-- RECOMMENDED if your web app will not function without JavaScript enabled -->
+  </head>
+  <body>
+  
+    <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
     <noscript>
       <div style="width: 22em; position: absolute; left: 50%; margin-left: -11em; color: red; background-color: white; border: 1px solid red; padding: 4px; font-family: sans-serif">
         Your web browser must have JavaScript enabled
         in order for this application to display correctly.
       </div>
     </noscript>
-
-    <h1>Web Application Starter Project</h1>
-
-    <table align="center">
-      <tr>
-        <td colspan="2" style="font-weight:bold;">Please enter your name:</td>        
-      </tr>
-      <tr>
-        <td id="nameFieldContainer"></td>
-        <td id="sendButtonContainer"></td>
-      </tr>
-      <tr>
-        <td colspan="2" style="color:red;" id="errorLabelContainer"></td>
-      </tr>
-    </table>
+    
+    <div>
+        <input id="address" type="text" value="London, UK" />
+        <input type="button" value="Geocode" onclick="codeAddress()" />
+    </div>
+    
+    <div id="map_canvas"></div>
+    
   </body>
 </html>
