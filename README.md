@@ -6,6 +6,9 @@ oauth lib:
 https://github.com/fernandezpablo85/scribe-java/wiki/getting-started
 http://commons.apache.org/codec/
 
+map api:
+https://developers.google.com/maps/documentation/javascript/
+
 83
 ca: 3
 it: 1
