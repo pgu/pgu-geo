@@ -7,7 +7,10 @@ https://github.com/fernandezpablo85/scribe-java/wiki/getting-started
 http://commons.apache.org/codec/
 
 map api:
+https://google-developers.appspot.com/maps/documentation/javascript/examples/geocoding-simple
 https://developers.google.com/maps/documentation/javascript/
+https://developers.google.com/maps/documentation/geocoding/
+https://developers.google.com/fusiontables/docs/developers_guide
 
 83
 ca: 3
