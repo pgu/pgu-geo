@@ -8,6 +8,9 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Scanner;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.LinkedInApi;
 import org.scribe.model.OAuthRequest;
@@ -18,7 +21,12 @@ import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
 import pgu.client.GreetingService;
-import pgu.shared.FieldVerifier;
+import pgu.shared.Connections;
+import pgu.shared.Country;
+import pgu.shared.Location;
+import pgu.shared.OauthAuthorizationStart;
+import pgu.shared.Person;
+import pgu.shared.RequestToken;
 
 import com.google.appengine.api.utils.SystemProperty;
 import com.google.gson.Gson;
@@ -30,74 +38,35 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 @SuppressWarnings("serial")
 public class GreetingServiceImpl extends RemoteServiceServlet implements GreetingService {
 
+    private OAuthService oauthService = null;
+
     @Override
-    public String greetServer(String input) throws IllegalArgumentException {
-        // Verify that the input is valid.
-        if (!FieldVerifier.isValidName(input)) {
-            // If the input is not valid, throw an IllegalArgumentException back to
-            // the client.
-            throw new IllegalArgumentException("Name must be at least 4 characters long");
-        }
+    public void init(final ServletConfig config) throws ServletException {
+        final String apiFileName = config.getServletContext().getInitParameter("apiFile");
+        final Properties props = loadProperties(apiFileName);
 
-        final String serverInfo = getServletContext().getServerInfo();
-        String userAgent = getThreadLocalRequest().getHeader("User-Agent");
+        final String apiKey = props.getProperty("api.key");
+        final String apiSecret = props.getProperty("api.secret");
 
-        // Escape data from the client to avoid cross-site script vulnerabilities.
-        input = escapeHtml(input);
-        userAgent = escapeHtml(userAgent);
+        // System.out.println("k: " + apiKey);
+        // System.out.println("s: " + apiSecret);
 
-        return "Hello, " + input + "!<br><br>I am running " + serverInfo + ".<br><br>It looks like you are using:<br>"
-                + userAgent;
+        oauthService = getOauthService(apiKey, apiSecret);
+
+        super.init(config);
     }
-
-    /**
-     * Escape an html string. Escaping data received from the client helps to prevent cross-site script vulnerabilities.
-     * 
-     * @param html
-     *            the html string to escape
-     * @return the escaped string
-     */
-    private String escapeHtml(final String html) {
-        if (html == null) {
-            return null;
-        }
-        return html.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
-    }
-
-    private final Properties props = new Properties();
 
     @Override
     public void logInLinkedin() {
-        try {
-            props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("pgu.properties"));
-
-        } catch (final FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (final IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        final String API_KEY = props.getProperty("api.key");
-        final String API_SECRET = props.getProperty("api.secret");
-        System.out.println("key " + API_KEY);
-        System.out.println("sec " + API_SECRET);
-
-        // build the service to make the access token request and all other requests
-        final OAuthService service = new ServiceBuilder() //
-                .provider(LinkedInApi.class) //
-                .apiKey(API_KEY) //
-                .apiSecret(API_SECRET) //
-                // .callback(getCallbackUrl()) // // TODO PGU Aug 1, 2012 how to use callback url
-                .build();
 
         // set the scanner to catch input from the user
         final Scanner in = new Scanner(System.in);
 
         // get our request token
-        final Token requestToken = service.getRequestToken();
+        final Token requestToken = oauthService.getRequestToken();
 
         // now use the request token to get the verifier
-        System.out.println(service.getAuthorizationUrl(requestToken));
+        System.out.println(oauthService.getAuthorizationUrl(requestToken));
         System.out.println("Visit the above URL in your browser and then paste the numerical verifier code here");
         System.out.print(">>");
 
@@ -109,19 +78,19 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
         final Verifier verifier = new Verifier(in.nextLine());
 
         // use the request token and our verifier to get an access token and we are all set
-        final Token accessToken = service.getAccessToken(requestToken, verifier);
+        final Token accessToken = oauthService.getAccessToken(requestToken, verifier);
 
         // now make a simple query to make sure our token works
         // we fetch our own profile on linkedin. This query will be explained more on later pages
         final String myProfileUrl = "http://api.linkedin.com/v1/people/~";
-        OAuthRequest request = newRequest(service, accessToken, myProfileUrl);
+        OAuthRequest request = newRequest(oauthService, accessToken, myProfileUrl);
         Response response = request.send();
         // System.out.println(response.getBody());
 
         final String connectionsUrl = "http://api.linkedin.com/v1/people/~/connections";
-        request = newRequest(service, accessToken, connectionsUrl);
+        request = newRequest(oauthService, accessToken, connectionsUrl);
         response = request.send();
-        showResponseCode(response);
+        logResponseCode(response);
 
         final Gson gson = new Gson();
         final Connections connections = gson.fromJson(response.getBody(), Connections.class);
@@ -184,6 +153,15 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
         // https://api.linkedin.com/uas/oauth/invalidateToken
     }
 
+    private OAuthService getOauthService(final String apiKey, final String apiSecret) {
+        return new ServiceBuilder() //
+                .provider(LinkedInApi.class) //
+                .apiKey(apiKey) //
+                .apiSecret(apiSecret) //
+                // .callback(getCallbackUrl()) // // TODO PGU Aug 1, 2012 how to use callback url
+                .build();
+    }
+
     private String getCallbackUrl() {
         return isEnvProd() ? "http://pgu-contacts.appspot.com"
                 : "http://127.0.0.1:8888/Pgu_contacts.html?gwt.codesvr=127.0.0.1:9997";
@@ -193,7 +171,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
         return SystemProperty.environment.value() == SystemProperty.Environment.Value.Production;
     }
 
-    private void showResponseCode(final Response response) {
+    private void logResponseCode(final Response response) {
         final int responseNumber = response.getCode();
 
         if (responseNumber >= 199 && responseNumber < 300) {
@@ -219,5 +197,57 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
         request.addHeader("x-li-format", "json");
         service.signRequest(accessToken, request);
         return request;
+    }
+
+    @Override
+    public OauthAuthorizationStart getLinkedinUrlAuthorization() {
+
+        final Token token = oauthService.getRequestToken();
+        final String url = oauthService.getAuthorizationUrl(token);
+
+        final RequestToken rqToken = new RequestToken();
+        rqToken.setRawResponse(token.getRawResponse());
+        rqToken.setSecret(token.getSecret());
+        rqToken.setToken(token.getToken());
+
+        final OauthAuthorizationStart oas = new OauthAuthorizationStart();
+        oas.setRequestToken(rqToken);
+        oas.setAuthorizationUrl(url);
+        return oas;
+    }
+
+    private Properties loadProperties(final String apiFileName) {
+        try {
+
+            final Properties props = new Properties();
+            props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(apiFileName));
+            return props;
+
+        } catch (final FileNotFoundException e) {
+            throw new RuntimeException(e);
+
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Connections fetchConnections(final String oauthCode, final RequestToken requestToken) {
+
+        final Token token = new Token( //
+                requestToken.getToken() //
+                , requestToken.getSecret() //
+                , requestToken.getRawResponse() //
+        );
+
+        final Verifier verifier = new Verifier(oauthCode);
+        final Token accessToken = oauthService.getAccessToken(token, verifier);
+
+        final String connectionsUrl = "http://api.linkedin.com/v1/people/~/connections";
+        final OAuthRequest request = newRequest(oauthService, accessToken, connectionsUrl);
+        final Response response = request.send();
+        logResponseCode(response);
+
+        return new Gson().fromJson(response.getBody(), Connections.class);
     }
 }

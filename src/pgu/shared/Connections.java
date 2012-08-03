@@ -1,8 +1,10 @@
-package pgu.server;
+package pgu.shared;
 
 import java.util.ArrayList;
 
-public class Connections {
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public class Connections implements IsSerializable {
 
     private String            _total;
     private ArrayList<Person> values = new ArrayList<Person>();

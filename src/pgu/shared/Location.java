@@ -1,6 +1,9 @@
-package pgu.server;
+package pgu.shared;
 
-public class Location {
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public class Location implements IsSerializable {
+
     private String  name;
     private Country country;
 

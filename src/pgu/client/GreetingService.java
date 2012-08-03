@@ -1,14 +1,18 @@
 package pgu.client;
 
+import pgu.shared.Connections;
+import pgu.shared.OauthAuthorizationStart;
+import pgu.shared.RequestToken;
+
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
-/**
- * The client side stub for the RPC service.
- */
 @RemoteServiceRelativePath("greet")
 public interface GreetingService extends RemoteService {
-    String greetServer(String name) throws IllegalArgumentException;
 
     void logInLinkedin();
+
+    OauthAuthorizationStart getLinkedinUrlAuthorization();
+
+    Connections fetchConnections(String oauthCode, RequestToken requestToken);
 }

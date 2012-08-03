@@ -1,12 +1,16 @@
 package pgu.client;
 
+import pgu.shared.Connections;
+import pgu.shared.OauthAuthorizationStart;
+import pgu.shared.RequestToken;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-/**
- * The async counterpart of <code>GreetingService</code>.
- */
 public interface GreetingServiceAsync {
-    void greetServer(String input, AsyncCallback<String> callback) throws IllegalArgumentException;
 
     void logInLinkedin(AsyncCallback<Void> asyncCallback);
+
+    void getLinkedinUrlAuthorization(AsyncCallback<OauthAuthorizationStart> asyncCallback);
+
+    void fetchConnections(String oauthCode, RequestToken requestToken, AsyncCallback<Connections> asyncCallback);
 }
