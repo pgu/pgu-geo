@@ -7,6 +7,10 @@ https://github.com/fernandezpablo85/scribe-java/wiki/getting-started
 http://commons.apache.org/codec/
 
 map api:
+
+https://developers.google.com/maps/documentation/javascript/overlays#InfoWindows
+https://developers.google.com/maps/documentation/javascript/overlays#Circles
+
 https://google-developers.appspot.com/maps/documentation/javascript/examples/geocoding-simple
 + country: countrycode
 https://developers.google.com/maps/documentation/javascript/
