@@ -15,6 +15,7 @@ https://developers.google.com/fusiontables/docs/developers_guide
 
 fusion tables:
 ISO_2DIGIT <=> country codes
+https://developers.google.com/fusiontables/docs/v1/getting_started#background
 
 83
 ca: 3
