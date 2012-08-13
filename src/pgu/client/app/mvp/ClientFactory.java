@@ -1,0 +1,29 @@
+package pgu.client.app.mvp;
+
+import pgu.client.app.AppState;
+import pgu.client.app.AppView;
+import pgu.client.menu.MenuView;
+import pgu.client.service.GreetingServiceAsync;
+import pgu.shared.LoginInfo;
+
+import com.google.gwt.place.shared.PlaceController;
+import com.google.web.bindery.event.shared.EventBus;
+
+public interface ClientFactory {
+
+    EventBus getEventBus();
+
+    PlaceController getPlaceController();
+
+    void setLoginInfo(LoginInfo loginInfo);
+
+    AppView getAppView();
+
+    AppState getAppState();
+
+    MenuView getMenuView();
+
+    LoginInfo getLoginInfo();
+
+    GreetingServiceAsync getGreetingService();
+}

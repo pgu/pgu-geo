@@ -1,4 +1,4 @@
-package pgu.client;
+package pgu.client.service;
 
 import pgu.shared.Connections;
 import pgu.shared.OauthAuthorizationStart;

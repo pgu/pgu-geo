@@ -20,7 +20,7 @@ import org.scribe.model.Verb;
 import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
-import pgu.client.GreetingService;
+import pgu.client.service.GreetingService;
 import pgu.shared.Connections;
 import pgu.shared.Country;
 import pgu.shared.Location;

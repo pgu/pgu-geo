@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import pgu.client.service.GreetingService;
+import pgu.client.service.GreetingServiceAsync;
 import pgu.shared.Connections;
 import pgu.shared.Country;
 import pgu.shared.Location;
