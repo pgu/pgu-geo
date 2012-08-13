@@ -1,4 +1,4 @@
-package pgu.shared;
+package pgu.shared.dto;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 

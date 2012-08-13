@@ -1,8 +1,8 @@
 package pgu.client.service;
 
-import pgu.shared.Connections;
-import pgu.shared.OauthAuthorizationStart;
-import pgu.shared.RequestToken;
+import pgu.shared.dto.Connections;
+import pgu.shared.dto.OauthAuthorizationStart;
+import pgu.shared.dto.RequestToken;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;

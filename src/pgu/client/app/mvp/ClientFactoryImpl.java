@@ -3,11 +3,15 @@ package pgu.client.app.mvp;
 import pgu.client.app.AppState;
 import pgu.client.app.AppView;
 import pgu.client.app.ui.AppViewImpl;
+import pgu.client.contacts.ContactsView;
+import pgu.client.contacts.ui.ContactsViewImpl;
 import pgu.client.menu.MenuView;
 import pgu.client.menu.ui.MenuViewImpl;
 import pgu.client.service.LinkedinService;
 import pgu.client.service.LinkedinServiceAsync;
-import pgu.shared.LoginInfo;
+import pgu.client.service.LoginService;
+import pgu.client.service.LoginServiceAsync;
+import pgu.shared.dto.LoginInfo;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.PlaceController;
@@ -20,8 +24,10 @@ public class ClientFactoryImpl implements ClientFactory {
     private static PlaceController      placeController = new PlaceController(eventBus);
     private static AppView              appView         = new AppViewImpl();
     private static MenuView             menuView        = new MenuViewImpl();
+    private static ContactsView         contactsView    = new ContactsViewImpl();
 
-    private static LinkedinServiceAsync greetingService = GWT.create(LinkedinService.class);
+    private static LinkedinServiceAsync linkedinService = GWT.create(LinkedinService.class);
+    private static LoginServiceAsync    loginService    = GWT.create(LoginService.class);
 
     private static AppState             appState        = new AppState();
     private LoginInfo                   loginInfo;
@@ -57,13 +63,23 @@ public class ClientFactoryImpl implements ClientFactory {
     }
 
     @Override
-    public LinkedinServiceAsync getGreetingService() {
-        return greetingService;
+    public LinkedinServiceAsync getLinkedinService() {
+        return linkedinService;
     }
 
     @Override
     public void setLoginInfo(final LoginInfo loginInfo) {
         this.loginInfo = loginInfo;
+    }
+
+    @Override
+    public LoginServiceAsync getLoginService() {
+        return loginService;
+    }
+
+    @Override
+    public ContactsView getContactsView() {
+        return contactsView;
     }
 
 }

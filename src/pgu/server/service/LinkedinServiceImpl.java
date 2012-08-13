@@ -1,4 +1,4 @@
-package pgu.server;
+package pgu.server.service;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -21,12 +21,12 @@ import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
 import pgu.client.service.LinkedinService;
-import pgu.shared.Connections;
-import pgu.shared.Country;
-import pgu.shared.Location;
-import pgu.shared.OauthAuthorizationStart;
-import pgu.shared.Person;
-import pgu.shared.RequestToken;
+import pgu.shared.dto.Connections;
+import pgu.shared.dto.Country;
+import pgu.shared.dto.Location;
+import pgu.shared.dto.OauthAuthorizationStart;
+import pgu.shared.dto.Person;
+import pgu.shared.dto.RequestToken;
 
 import com.google.appengine.api.utils.SystemProperty;
 import com.google.gson.Gson;

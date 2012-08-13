@@ -5,7 +5,7 @@ import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.service.LinkedinServiceAsync;
-import pgu.shared.LoginInfo;
+import pgu.shared.dto.LoginInfo;
 
 import com.google.web.bindery.event.shared.EventBus;
 
@@ -23,7 +23,7 @@ public class MenuActivity implements MenuPresenter //
     public MenuActivity(final ClientFactory clientFactory) {
         view = clientFactory.getMenuView();
         loginInfo = clientFactory.getLoginInfo();
-        booksService = clientFactory.getGreetingService();
+        booksService = clientFactory.getLinkedinService();
     }
 
     public void start(final EventBus eventBus) {

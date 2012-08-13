@@ -9,12 +9,20 @@
   <!-- Servlets -->
   <servlet>
     <servlet-name>linkedinServlet</servlet-name>
-    <servlet-class>pgu.server.LinkedinServiceImpl</servlet-class>
+    <servlet-class>pgu.server.service.LinkedinServiceImpl</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>login</servlet-name>
+    <servlet-class>pgu.server.service.LoginServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
     <servlet-name>linkedinServlet</servlet-name>
     <url-pattern>/pgu_contacts/linkedin</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>login</servlet-name>
+    <url-pattern>/pgu_books/login</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->

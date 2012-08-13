@@ -1,4 +1,4 @@
-package pgu.shared;
+package pgu.shared.dto;
 
 import java.util.ArrayList;
 
