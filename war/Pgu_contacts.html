@@ -1,6 +1,14 @@
 <!doctype html>
 <html>
   <head>
+    <!-- before your module(*.nocache.js) loading  -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if IE 7]>
+    <link rel="stylesheet" href="{your module name}/css/font-awesome-ie7.css">
+    <![endif]-->
+    <!-- your module(*.nocache.js) loading  -->
   
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
@@ -46,7 +54,7 @@
       }
       
       window.onload = loadScript;
-      
+/*      
       function codeAddress() {
     	  var address = document.getElementById("address").value;
     	  
@@ -71,12 +79,12 @@
     	  });
     	  
       }
-      
+*/    
     </script>    
     <script type="text/javascript" language="javascript" src="pgu_contacts/pgu_contacts.nocache.js"></script>
     
   </head>
-  <body>
+  <body data-spy="scroll" data-offset="25">
   
     <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
     <noscript>
@@ -86,10 +94,10 @@
       </div>
     </noscript>
     
-    <div>
-        <input id="address" type="text" value="London, UK" />
-        <input type="button" value="Geocode" onclick="codeAddress()" />
-    </div>
+<!--     <div> -->
+<!--         <input id="address" type="text" value="London, UK" /> -->
+<!--         <input type="button" value="Geocode" onclick="codeAddress()" /> -->
+<!--     </div> -->
     <div id="map_canvas"></div>
     
   </body>
