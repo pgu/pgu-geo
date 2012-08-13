@@ -7,6 +7,8 @@ import pgu.client.contacts.ContactsView;
 import pgu.client.contacts.ui.ContactsViewImpl;
 import pgu.client.menu.MenuView;
 import pgu.client.menu.ui.MenuViewImpl;
+import pgu.client.profile.ProfileView;
+import pgu.client.profile.ui.ProfileViewImpl;
 import pgu.client.service.LinkedinService;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.client.service.LoginService;
@@ -25,6 +27,7 @@ public class ClientFactoryImpl implements ClientFactory {
     private static AppView              appView         = new AppViewImpl();
     private static MenuView             menuView        = new MenuViewImpl();
     private static ContactsView         contactsView    = new ContactsViewImpl();
+    private static ProfileView          profileView     = new ProfileViewImpl();
 
     private static LinkedinServiceAsync linkedinService = GWT.create(LinkedinService.class);
     private static LoginServiceAsync    loginService    = GWT.create(LoginService.class);
@@ -80,6 +83,11 @@ public class ClientFactoryImpl implements ClientFactory {
     @Override
     public ContactsView getContactsView() {
         return contactsView;
+    }
+
+    @Override
+    public ProfileView getProfileView() {
+        return profileView;
     }
 
 }

@@ -2,6 +2,8 @@ package pgu.client.app.mvp;
 
 import pgu.client.contacts.ContactsActivity;
 import pgu.client.contacts.ContactsPlace;
+import pgu.client.profile.ProfileActivity;
+import pgu.client.profile.ProfilePlace;
 
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
@@ -20,12 +22,9 @@ public class AppActivityMapper implements ActivityMapper {
         if (place instanceof ContactsPlace) {
             return new ContactsActivity((ContactsPlace) place, clientFactory);
 
-            // } else if (place instanceof ImportBooksPlace) {
-            // return new ImportBooksActivity((ImportBooksPlace) place, clientFactory);
-            //
-            // } else if (place instanceof SetupPlace) {
-            // return new SetupActivity((SetupPlace) place, clientFactory);
-            //
+        } else if (place instanceof ProfilePlace) {
+            return new ProfileActivity((ProfilePlace) place, clientFactory);
+
         }
 
         return null;
