@@ -1,10 +1,11 @@
 package pgu.client.menu;
 
+import pgu.client.app.event.GoToContactsEvent;
+import pgu.client.app.event.GoToProfileEvent;
 import pgu.client.app.event.HideWaitingIndicatorEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.ClientUtils;
-import pgu.client.service.LinkedinServiceAsync;
 import pgu.shared.dto.LoginInfo;
 
 import com.google.web.bindery.event.shared.EventBus;
@@ -14,16 +15,14 @@ public class MenuActivity implements MenuPresenter //
         , HideWaitingIndicatorEvent.Handler //
 {
 
-    private final MenuView             view;
-    private EventBus                   eventBus;
-    private final LoginInfo            loginInfo;
-    private final LinkedinServiceAsync booksService;
-    private final ClientUtils          u = new ClientUtils();
+    private final MenuView    view;
+    private EventBus          eventBus;
+    private final LoginInfo   loginInfo;
+    private final ClientUtils u = new ClientUtils();
 
     public MenuActivity(final ClientFactory clientFactory) {
         view = clientFactory.getMenuView();
         loginInfo = clientFactory.getLoginInfo();
-        booksService = clientFactory.getLinkedinService();
     }
 
     public void start(final EventBus eventBus) {
@@ -34,118 +33,50 @@ public class MenuActivity implements MenuPresenter //
         eventBus.addHandler(ShowWaitingIndicatorEvent.TYPE, this);
         eventBus.addHandler(HideWaitingIndicatorEvent.TYPE, this);
 
-        if (loginInfo.isLoggedIn()) {
+        view.getProfileWidget().setVisible(true);
+        view.getContactsWidget().setVisible(true);
 
-            view.getLoginWidget().hide();
+        final boolean isAdmin = loginInfo.isLoggedIn();
 
+        view.getLoginWidget().setVisible(!isAdmin);
+        view.getLogoutWidget().setVisible(isAdmin);
+
+        if (isAdmin) {
             view.getLogoutWidget().setHref(loginInfo.getLogoutUrl());
-            view.getLogoutWidget().show();
-
-            view.getLibraryWidget().show();
 
         } else {
             view.getLoginWidget().setHref(loginInfo.getLoginUrl());
-            view.getLoginWidget().show();
-
-            view.getLogoutWidget().hide();
-            view.getLibraryWidget().hide();
         }
 
-        if (loginInfo.isLoggedIn() //
-                && "guilcher.pascal.dev@gmail.com".equals(loginInfo.getEmailAddress())) {
+        final boolean isSuperAdmin = isAdmin //
+                && "guilcher.pascal.dev@gmail.com".equals(loginInfo.getEmailAddress());
 
-            view.getImportWidget().show();
-            view.getAppstatsWidget().show();
-
-        } else {
-            view.getImportWidget().hide();
-            view.getAppstatsWidget().hide();
-
-        }
-
+        view.getAppstatsWidget().setVisible(isSuperAdmin);
     }
 
     public void setAppTitle() {
-        // booksService.getBooksCount(new AsyncCallbackApp<BooksCount>(eventBus) {
-        //
-        // @Override
-        // public void onSuccess(final BooksCount booksCount) {
-        // if (booksCount == null) {
-        // view.getBooksCountWidget().hide();
-        // return;
-        // }
-        //
-        // final int count = booksCount.getCount();
-        //
-        // final String str_date = booksCount.getCountDate();
-        // final Date lastCountDate = DateTimeFormat.getFormat(DateUtils.FULL_DOT_FMT).parseStrict(str_date);
-        //
-        // view.getBooksCountWidget().setCount(count, lastCountDate);
-        // }
-        //
-        // @Override
-        // public void onFailure(final Throwable caught) {
-        // view.getBooksCountWidget().hide();
-        // super.onFailure(caught);
-        // }
-        //
-        // });
+        // TODO PGU Aug 13, 2012 add feature of open id with linkedin
+        // TODO PGU Aug 13, 2012 set name of the linked logged user
     }
 
     @Override
-    public void searchBooks() {
+    public void goToProfile() {
+        u.fire(eventBus, new GoToProfileEvent());
+    }
 
-        // final HashMap<SearchField, String> filters = new HashMap<SearchField, String>();
-        // filters.put(SearchField.AUTHOR, view.getFilterAuthor());
-        // filters.put(SearchField.CATEGORY, view.getFilterCategory());
-        // filters.put(SearchField.COMMENT, view.getFilterComment());
-        // filters.put(SearchField.EDITOR, view.getFilterEditor());
-        // filters.put(SearchField.TITLE, view.getFilterTitle());
-        // filters.put(SearchField.YEAR, view.getFilterYear());
-        //
-        // final GoToBooksEvent event = new GoToBooksEvent();
-        // event.setFilters(filters);
-        //
-        // u.fire(eventBus, event);
+    @Override
+    public void goToContacts() {
+        u.fire(eventBus, new GoToContactsEvent());
     }
 
     @Override
     public void onHideWaitingIndicator(final HideWaitingIndicatorEvent event) {
-        view.getWaitingIndicator().hide();
+        view.getWaitingIndicator().setVisible(false);
     }
 
     @Override
     public void onShowWaitingIndicator(final ShowWaitingIndicatorEvent event) {
-        view.getWaitingIndicator().show();
-    }
-
-    @Override
-    public void importBooks() {
-        // u.fire(eventBus, new ImportBooksEvent());
-    }
-
-    @Override
-    public void goToSetup() {
-        // u.fire(eventBus, new SetupEvent());
-    }
-
-    @Override
-    public void searchSuggestions(final String text) {
-        if (text.trim().isEmpty()) {
-            return;
-        }
-
-        // booksService.searchSuggestions(text, new AsyncCallbackApp<SuggestionsResult>(eventBus) {
-        //
-        // @Override
-        // public void onSuccess(final SuggestionsResult result) {
-        //
-        // view.getSuggestionsWidget().setSuggestions(result.getSuggestions());
-        // view.getSuggestionsWidget().show();
-        // }
-        //
-        // });
-
+        view.getWaitingIndicator().setVisible(true);
     }
 
 }

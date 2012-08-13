@@ -1,7 +1,5 @@
 package pgu.client.app;
 
-import java.util.ArrayList;
-
 import pgu.client.app.event.NotificationEvent;
 import pgu.client.app.event.TechnicalErrorEvent;
 import pgu.client.app.mvp.ClientFactory;
@@ -13,23 +11,18 @@ import pgu.client.menu.MenuView;
 
 import com.google.gwt.place.shared.PlaceController;
 import com.google.web.bindery.event.shared.EventBus;
-import com.google.web.bindery.event.shared.HandlerRegistration;
 
 public class AppActivity implements //
         NotificationEvent.Handler //
         , TechnicalErrorEvent.Handler //
 {
 
-    private final ClientFactory                  clientFactory;
-    private final AppView                        view;
-    private final MenuView                       menuView;
-    private final PlaceController                placeController;
-    private final ArrayList<HandlerRegistration> handlerRegs = new ArrayList<HandlerRegistration>();
-    private EventBus                             eventBus;
-    private final ClientUtils                    u           = new ClientUtils();
-
-    private static final int                     PAGE_INIT   = 0;
-    private static final String                  CURSOR_INIT = null;
+    private final ClientFactory   clientFactory;
+    private final AppView         view;
+    private final MenuView        menuView;
+    private final PlaceController placeController;
+    private EventBus              eventBus;
+    private final ClientUtils     u = new ClientUtils();
 
     public AppActivity(final PlaceController placeController, final ClientFactory clientFactory) {
         this.clientFactory = clientFactory;
@@ -42,21 +35,13 @@ public class AppActivity implements //
     public void start(final EventBus eventBus) {
         this.eventBus = eventBus;
 
-        handlerRegs.add(eventBus.addHandler(TechnicalErrorEvent.TYPE, this));
-        handlerRegs.add(eventBus.addHandler(NotificationEvent.TYPE, this));
+        eventBus.addHandler(TechnicalErrorEvent.TYPE, this);
+        eventBus.addHandler(NotificationEvent.TYPE, this);
 
         final MenuActivity menuActivity = new MenuActivity(clientFactory);
         menuActivity.start(eventBus);
 
         view.getHeader().setWidget(menuView);
-    }
-
-    public void onStop() {
-        for (HandlerRegistration handlerReg : handlerRegs) {
-            handlerReg.removeHandler();
-            handlerReg = null;
-        }
-        handlerRegs.clear();
     }
 
     @Override

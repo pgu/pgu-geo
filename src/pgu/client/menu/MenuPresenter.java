@@ -1,14 +1,9 @@
 package pgu.client.menu;
 
-
 public interface MenuPresenter {
 
-    void searchBooks();
+    void goToProfile();
 
-    void importBooks();
-
-    void goToSetup();
-
-    void searchSuggestions(String text);
+    void goToContacts();
 
 }

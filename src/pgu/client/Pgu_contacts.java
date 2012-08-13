@@ -10,7 +10,7 @@ import pgu.client.app.mvp.AppActivityMapper;
 import pgu.client.app.mvp.AppPlaceHistoryMapper;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
-import pgu.client.contacts.ContactsPlace;
+import pgu.client.profile.ProfilePlace;
 import pgu.client.service.LinkedinService;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.shared.dto.Connections;
@@ -78,7 +78,7 @@ public class Pgu_contacts implements EntryPoint {
                         final AppActivity appActivity = new AppActivity(placeController, clientFactory);
                         appActivity.start(eventBus);
 
-                        final Place defaultPlace = new ContactsPlace();
+                        final Place defaultPlace = new ProfilePlace();
 
                         final ActivityMapper activityMapper = new AppActivityMapper(clientFactory);
                         final ActivityManager activityManager = new ActivityManager(activityMapper, eventBus);
