@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import pgu.client.service.GreetingService;
-import pgu.client.service.GreetingServiceAsync;
+import pgu.client.service.LinkedinService;
+import pgu.client.service.LinkedinServiceAsync;
 import pgu.shared.Connections;
 import pgu.shared.Country;
 import pgu.shared.Location;
@@ -32,7 +32,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class Pgu_contacts implements EntryPoint {
 
-    private final GreetingServiceAsync greetingService       = GWT.create(GreetingService.class);
+    private final LinkedinServiceAsync linkedinService       = GWT.create(LinkedinService.class);
 
     private final Button               oauthStartBtn         = new Button("Start LinkedIn authorization");
     private final Button               refreshBtn            = new Button("refresh");
@@ -94,7 +94,7 @@ public class Pgu_contacts implements EntryPoint {
 
     private void searchAndMarkContactsCountries() {
 
-        greetingService.fetchConnections(oauthCode, requestToken, new AsyncCallback<Connections>() {
+        linkedinService.fetchConnections(oauthCode, requestToken, new AsyncCallback<Connections>() {
 
             @Override
             public void onFailure(final Throwable caught) {
@@ -212,7 +212,7 @@ public class Pgu_contacts implements EntryPoint {
 
             @Override
             public void onClick(final ClickEvent event) {
-                greetingService.getLinkedinUrlAuthorization(new AsyncCallback<OauthAuthorizationStart>() {
+                linkedinService.getLinkedinUrlAuthorization(new AsyncCallback<OauthAuthorizationStart>() {
 
                     @Override
                     public void onFailure(final Throwable caught) {
@@ -249,7 +249,7 @@ public class Pgu_contacts implements EntryPoint {
 
             @Override
             public void onClick(final ClickEvent event) {
-                greetingService.logInLinkedin(new AsyncCallback<Void>() {
+                linkedinService.logInLinkedin(new AsyncCallback<Void>() {
 
                     @Override
                     public void onFailure(final Throwable caught) {

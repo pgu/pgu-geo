@@ -20,7 +20,7 @@ import org.scribe.model.Verb;
 import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
-import pgu.client.service.GreetingService;
+import pgu.client.service.LinkedinService;
 import pgu.shared.Connections;
 import pgu.shared.Country;
 import pgu.shared.Location;
@@ -36,7 +36,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
  * The server side implementation of the RPC service.
  */
 @SuppressWarnings("serial")
-public class GreetingServiceImpl extends RemoteServiceServlet implements GreetingService {
+public class LinkedinServiceImpl extends RemoteServiceServlet implements LinkedinService {
 
     private OAuthService oauthService = null;
 

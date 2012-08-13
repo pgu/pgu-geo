@@ -3,7 +3,7 @@ package pgu.client.app.mvp;
 import pgu.client.app.AppState;
 import pgu.client.app.AppView;
 import pgu.client.menu.MenuView;
-import pgu.client.service.GreetingServiceAsync;
+import pgu.client.service.LinkedinServiceAsync;
 import pgu.shared.LoginInfo;
 
 import com.google.gwt.place.shared.PlaceController;
@@ -25,5 +25,5 @@ public interface ClientFactory {
 
     LoginInfo getLoginInfo();
 
-    GreetingServiceAsync getGreetingService();
+    LinkedinServiceAsync getGreetingService();
 }

@@ -6,7 +6,7 @@ import pgu.shared.RequestToken;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public interface GreetingServiceAsync {
+public interface LinkedinServiceAsync {
 
     void logInLinkedin(AsyncCallback<Void> asyncCallback);
 

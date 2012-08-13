@@ -5,8 +5,8 @@ import pgu.client.app.AppView;
 import pgu.client.app.ui.AppViewImpl;
 import pgu.client.menu.MenuView;
 import pgu.client.menu.ui.MenuViewImpl;
-import pgu.client.service.GreetingService;
-import pgu.client.service.GreetingServiceAsync;
+import pgu.client.service.LinkedinService;
+import pgu.client.service.LinkedinServiceAsync;
 import pgu.shared.LoginInfo;
 
 import com.google.gwt.core.client.GWT;
@@ -21,7 +21,7 @@ public class ClientFactoryImpl implements ClientFactory {
     private static AppView              appView         = new AppViewImpl();
     private static MenuView             menuView        = new MenuViewImpl();
 
-    private static GreetingServiceAsync greetingService = GWT.create(GreetingService.class);
+    private static LinkedinServiceAsync greetingService = GWT.create(LinkedinService.class);
 
     private static AppState             appState        = new AppState();
     private LoginInfo                   loginInfo;
@@ -57,7 +57,7 @@ public class ClientFactoryImpl implements ClientFactory {
     }
 
     @Override
-    public GreetingServiceAsync getGreetingService() {
+    public LinkedinServiceAsync getGreetingService() {
         return greetingService;
     }
 

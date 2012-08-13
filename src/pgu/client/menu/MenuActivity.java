@@ -4,7 +4,7 @@ import pgu.client.app.event.HideWaitingIndicatorEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.ClientUtils;
-import pgu.client.service.GreetingServiceAsync;
+import pgu.client.service.LinkedinServiceAsync;
 import pgu.shared.LoginInfo;
 
 import com.google.web.bindery.event.shared.EventBus;
@@ -17,7 +17,7 @@ public class MenuActivity implements MenuPresenter //
     private final MenuView             view;
     private EventBus                   eventBus;
     private final LoginInfo            loginInfo;
-    private final GreetingServiceAsync booksService;
+    private final LinkedinServiceAsync booksService;
     private final ClientUtils          u = new ClientUtils();
 
     public MenuActivity(final ClientFactory clientFactory) {
