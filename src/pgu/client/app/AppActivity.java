@@ -1,13 +1,17 @@
 package pgu.client.app;
 
+import pgu.client.app.event.GoToContactsEvent;
+import pgu.client.app.event.GoToProfileEvent;
 import pgu.client.app.event.NotificationEvent;
 import pgu.client.app.event.TechnicalErrorEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.Level;
 import pgu.client.app.utils.Notification;
+import pgu.client.contacts.ContactsPlace;
 import pgu.client.menu.MenuActivity;
 import pgu.client.menu.MenuView;
+import pgu.client.profile.ProfilePlace;
 
 import com.google.gwt.place.shared.PlaceController;
 import com.google.web.bindery.event.shared.EventBus;
@@ -15,6 +19,8 @@ import com.google.web.bindery.event.shared.EventBus;
 public class AppActivity implements //
         NotificationEvent.Handler //
         , TechnicalErrorEvent.Handler //
+        , GoToProfileEvent.Handler //
+        , GoToContactsEvent.Handler //
 {
 
     private final ClientFactory   clientFactory;
@@ -91,6 +97,16 @@ public class AppActivity implements //
         }
 
         notification.show();
+    }
+
+    @Override
+    public void onGoToContacts(final GoToContactsEvent event) {
+        placeController.goTo(new ContactsPlace());
+    }
+
+    @Override
+    public void onGoToProfile(final GoToProfileEvent event) {
+        placeController.goTo(new ProfilePlace());
     }
 
 }

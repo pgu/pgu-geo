@@ -41,8 +41,8 @@ public class MenuViewImpl extends Composite implements MenuView {
         goToProfileBtn.setVisible(false);
         goToContactsBtn.setVisible(false);
         goToAppstatsBtn.setVisible(false);
-        progressBar.setVisible(false);
 
+        progressBar.setVisible(false);
     }
 
     @Override
