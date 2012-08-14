@@ -4,6 +4,7 @@ import pgu.client.app.AppState;
 import pgu.client.app.AppView;
 import pgu.client.contacts.ContactsView;
 import pgu.client.menu.MenuView;
+import pgu.client.oauth.OAuthView;
 import pgu.client.profile.ProfileView;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.client.service.LoginServiceAsync;
@@ -35,4 +36,6 @@ public interface ClientFactory {
     ContactsView getContactsView();
 
     ProfileView getProfileView();
+
+    OAuthView getOAuthView();
 }

@@ -26,4 +26,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         this.presenter = presenter;
     }
 
+    // is user logged in linkedin?
+    // if no, then offer him to authorize the app to access its account
+    // then with his code, he allows the call to its profile and contacts
+    // else,
+    // -- if the user is in our database
+    // -- then we get its profile
+    // -- else we offer him to let the app to connect to its account (the same as above)
 }
