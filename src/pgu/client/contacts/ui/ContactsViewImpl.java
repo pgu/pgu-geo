@@ -80,6 +80,7 @@ public class ContactsViewImpl extends Composite implements ContactsView {
 
             if (weight2codes.containsKey(weight)) {
                 weight2codes.get(weight).add(countryCode);
+
             } else {
                 final ArrayList<String> countryCodes = new ArrayList<String>();
                 countryCodes.add(countryCode);
@@ -97,6 +98,7 @@ public class ContactsViewImpl extends Composite implements ContactsView {
 
                     @Override
                     public void run() {
+                        // TODO PGU Aug 14, 2012 add a marker without geocoder for already existing connections
                         addMarker(countryCode, Integer.toString(weight));
                         GWT.log(countryCode + " is done");
                     }
