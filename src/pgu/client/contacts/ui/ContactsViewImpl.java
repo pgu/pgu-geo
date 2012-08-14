@@ -3,6 +3,7 @@ package pgu.client.contacts.ui;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import pgu.client.contacts.ContactsPresenter;
 import pgu.client.contacts.ContactsView;
@@ -72,23 +73,39 @@ public class ContactsViewImpl extends Composite implements ContactsView {
 
         logResult(code2weight);
 
-        int count = 1;
+        final TreeMap<Integer, ArrayList<String>> weight2codes = new TreeMap<Integer, ArrayList<String>>();
         for (final Entry<String, Integer> e : code2weight.entrySet()) {
             final String countryCode = e.getKey();
             final Integer weight = e.getValue();
 
-            new Timer() {
-
-                @Override
-                public void run() {
-                    addMarker(countryCode, Integer.toString(weight));
-                    GWT.log(countryCode + " is done");
-                }
-
-            }.schedule(count * 1000);
-            count += 2;
+            if (weight2codes.containsKey(weight)) {
+                weight2codes.get(weight).add(countryCode);
+            } else {
+                final ArrayList<String> countryCodes = new ArrayList<String>();
+                countryCodes.add(countryCode);
+                weight2codes.put(weight, countryCodes);
+            }
         }
 
+        int count = 1;
+        for (final Entry<Integer, ArrayList<String>> e : weight2codes.entrySet()) {
+            final Integer weight = e.getKey();
+            final ArrayList<String> countryCodes = e.getValue();
+
+            for (final String countryCode : countryCodes) {
+                new Timer() {
+
+                    @Override
+                    public void run() {
+                        addMarker(countryCode, Integer.toString(weight));
+                        GWT.log(countryCode + " is done");
+                    }
+
+                }.schedule(count * 1000);
+
+                count += 2;
+            }
+        }
     }
 
     private void logResult(final HashMap<String, Integer> code2weight) {
