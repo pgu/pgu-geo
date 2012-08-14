@@ -34,7 +34,8 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         panel.setWidget(view.asWidget());
 
         u.fire(eventBus, new ShowWaitingIndicatorEvent());
-        linkedinService.fetchProfile(clientFactory.getAppState().getOAuthCode() //
+        linkedinService.fetchProfile( //
+                clientFactory.getAppState().getOAuthCode() //
                 , clientFactory.getAppState().getRequestToken() //
                 , new AsyncCallbackApp<String>(eventBus) {
 

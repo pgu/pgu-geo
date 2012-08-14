@@ -93,8 +93,10 @@ public class Pgu_contacts implements EntryPoint {
                     }
 
                 });
+    }
 
-        // /////////
+    private void oldModuleLoad() {
+
         oauthCodeLabel.setVisible(false);
         oauthCodeInput.setVisible(false);
         oauthAuthorizationUrl.setVisible(false);

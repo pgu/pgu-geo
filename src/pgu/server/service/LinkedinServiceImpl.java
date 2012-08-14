@@ -21,6 +21,7 @@ import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
 import pgu.client.service.LinkedinService;
+import pgu.server.utils.AppUtils;
 import pgu.shared.dto.Connections;
 import pgu.shared.dto.Country;
 import pgu.shared.dto.Location;
@@ -28,7 +29,6 @@ import pgu.shared.dto.OauthAuthorizationStart;
 import pgu.shared.dto.Person;
 import pgu.shared.dto.RequestToken;
 
-import com.google.appengine.api.utils.SystemProperty;
 import com.google.gson.Gson;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -38,7 +38,11 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 @SuppressWarnings("serial")
 public class LinkedinServiceImpl extends RemoteServiceServlet implements LinkedinService {
 
-    private OAuthService oauthService = null;
+    private static final String PROFILE_URL     = "http://api.linkedin.com/v1/people/~";
+    private static final String CONNECTIONS_URL = PROFILE_URL + "/connections";
+
+    private final AppUtils      u               = new AppUtils();
+    private OAuthService        oauthService    = null;
 
     @Override
     public void init(final ServletConfig config) throws ServletException {
@@ -59,6 +63,10 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
     @Override
     public void logInLinkedin() {
 
+        // https://developer.linkedin.com/documents/common-issues-oauth-authentication
+        // https://developer.linkedin.com/documents/debugging-api-calls
+        // https://developer.linkedin.com/oauth-test-console
+
         // set the scanner to catch input from the user
         final Scanner in = new Scanner(System.in);
 
@@ -70,10 +78,6 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         System.out.println("Visit the above URL in your browser and then paste the numerical verifier code here");
         System.out.print(">>");
 
-        // https://developer.linkedin.com/documents/common-issues-oauth-authentication
-        // https://developer.linkedin.com/documents/debugging-api-calls
-        // https://developer.linkedin.com/oauth-test-console
-
         // build the verifer with the pin the user enters
         final Verifier verifier = new Verifier(in.nextLine());
 
@@ -83,12 +87,12 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         // now make a simple query to make sure our token works
         // we fetch our own profile on linkedin. This query will be explained more on later pages
         final String myProfileUrl = "http://api.linkedin.com/v1/people/~";
-        OAuthRequest request = newRequest(oauthService, accessToken, myProfileUrl);
+        OAuthRequest request = newRequest(myProfileUrl, accessToken);
         Response response = request.send();
         // System.out.println(response.getBody());
 
         final String connectionsUrl = "http://api.linkedin.com/v1/people/~/connections";
-        request = newRequest(oauthService, accessToken, connectionsUrl);
+        request = newRequest(connectionsUrl, accessToken);
         response = request.send();
         logResponseCode(response);
 
@@ -163,12 +167,8 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
     }
 
     private String getCallbackUrl() {
-        return isEnvProd() ? "http://pgu-contacts.appspot.com"
+        return u.isEnvProd() ? "http://pgu-contacts.appspot.com"
                 : "http://127.0.0.1:8888/Pgu_contacts.html?gwt.codesvr=127.0.0.1:9997";
-    }
-
-    public boolean isEnvProd() {
-        return SystemProperty.environment.value() == SystemProperty.Environment.Value.Production;
     }
 
     private void logResponseCode(final Response response) {
@@ -192,11 +192,33 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         }
     }
 
-    private OAuthRequest newRequest(final OAuthService service, final Token accessToken, final String myProfileUrl) {
-        final OAuthRequest request = new OAuthRequest(Verb.GET, myProfileUrl);
+    private OAuthRequest newRequest( //
+            final String url //
+            , final Token accessToken) {
+
+        final OAuthRequest request = new OAuthRequest(Verb.GET, url);
         request.addHeader("x-li-format", "json");
-        service.signRequest(accessToken, request);
+        oauthService.signRequest(accessToken, request);
+
         return request;
+    }
+
+    private OAuthRequest newRequest( //
+            final String url //
+            , final String oauthCode //
+            , final RequestToken requestToken) {
+
+        final Token token = new Token( //
+                requestToken.getToken() //
+                , requestToken.getSecret() //
+                , requestToken.getRawResponse() //
+        );
+
+        final Verifier verifier = new Verifier(oauthCode);
+        // TODO PGU Aug 14, 2012 pass this accesstoken instead of token
+        final Token accessToken = oauthService.getAccessToken(token, verifier);
+
+        return newRequest(url, accessToken);
     }
 
     @Override
@@ -234,25 +256,21 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
     @Override
     public Connections fetchConnections(final String oauthCode, final RequestToken requestToken) {
 
-        final Token token = new Token( //
-                requestToken.getToken() //
-                , requestToken.getSecret() //
-                , requestToken.getRawResponse() //
-        );
-
-        final Verifier verifier = new Verifier(oauthCode);
-        final Token accessToken = oauthService.getAccessToken(token, verifier);
-
-        final String connectionsUrl = "http://api.linkedin.com/v1/people/~/connections";
-        final OAuthRequest request = newRequest(oauthService, accessToken, connectionsUrl);
-        final Response response = request.send();
-        logResponseCode(response);
-
-        return new Gson().fromJson(response.getBody(), Connections.class);
+        final String body = fetchResponseBody(oauthCode, requestToken, CONNECTIONS_URL);
+        return new Gson().fromJson(body, Connections.class);
     }
 
     @Override
-    public String fetchProfile(final String oAuthCode, final RequestToken requestToken) {
-        return "you...";
+    public String fetchProfile(final String oauthCode, final RequestToken requestToken) {
+        return fetchResponseBody(oauthCode, requestToken, PROFILE_URL);
+    }
+
+    private String fetchResponseBody(final String oauthCode, final RequestToken requestToken, final String profileUrl) {
+
+        final OAuthRequest request = newRequest(profileUrl, oauthCode, requestToken);
+        final Response response = request.send();
+        logResponseCode(response);
+
+        return response.getBody();
     }
 }
