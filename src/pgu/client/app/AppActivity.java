@@ -43,6 +43,8 @@ public class AppActivity implements //
 
         eventBus.addHandler(TechnicalErrorEvent.TYPE, this);
         eventBus.addHandler(NotificationEvent.TYPE, this);
+        eventBus.addHandler(GoToProfileEvent.TYPE, this);
+        eventBus.addHandler(GoToContactsEvent.TYPE, this);
 
         final MenuActivity menuActivity = new MenuActivity(clientFactory);
         menuActivity.start(eventBus);

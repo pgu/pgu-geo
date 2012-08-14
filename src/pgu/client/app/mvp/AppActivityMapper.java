@@ -19,11 +19,12 @@ public class AppActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(final Place place) {
-        if (place instanceof ContactsPlace) {
-            return new ContactsActivity((ContactsPlace) place, clientFactory);
 
-        } else if (place instanceof ProfilePlace) {
+        if (place instanceof ProfilePlace) {
             return new ProfileActivity((ProfilePlace) place, clientFactory);
+
+        } else if (place instanceof ContactsPlace) {
+            return new ContactsActivity((ContactsPlace) place, clientFactory);
 
         }
 
