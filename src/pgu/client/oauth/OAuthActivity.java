@@ -1,5 +1,7 @@
 package pgu.client.oauth;
 
+import pgu.client.app.event.HideWaitingIndicatorEvent;
+import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
@@ -34,15 +36,26 @@ public class OAuthActivity extends AbstractActivity implements OAuthPresenter {
         view.setPresenter(this);
         panel.setWidget(view.asWidget());
 
+        u.fire(eventBus, new ShowWaitingIndicatorEvent());
         linkedinService.getLinkedinUrlAuthorization(new AsyncCallbackApp<OauthAuthorizationStart>(eventBus) {
 
             @Override
             public void onSuccess(final OauthAuthorizationStart oas) {
+                u.fire(eventBus, new HideWaitingIndicatorEvent());
+
                 clientFactory.getAppState().setRequestToken(oas.getRequestToken());
                 // add to display an iframe or a link with the oas.getAuthorizationUrl();
+                view.getOAuthLinkWidget().setHref(oas.getAuthorizationUrl());
             }
 
         });
+    }
+
+    @Override
+    public void setOauthCode(final String oauthCode) {
+        clientFactory.getAppState().setOAuthCode(oauthCode);
+        clientFactory.getAppState().setHasUser(true);
+        clientFactory.getPlaceController().goTo(redirectPlace);
     }
 
 }
