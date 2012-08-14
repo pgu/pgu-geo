@@ -43,9 +43,11 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
                     public void onSuccess(final String profile) {
                         u.fire(eventBus, new HideWaitingIndicatorEvent());
 
+                        // clientFactory.getAppState().setUser(profile);
                         view.getProfileBoard().setText(profile);
                     }
 
                 });
+        // TODO PGU Aug 14, 2012 fetch contacts in parallel?
     }
 }

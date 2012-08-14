@@ -44,9 +44,11 @@ public class ContactsActivity extends AbstractActivity implements ContactsPresen
                     public void onSuccess(final Connections connections) {
                         u.fire(eventBus, new HideWaitingIndicatorEvent());
 
+                        // clientFactory.getAppState().setConnections(connections);
                         view.setConnections(connections);
                     }
 
                 });
+        // TODO PGU Aug 14, 2012 fetch profile in parallel?
     }
 }
