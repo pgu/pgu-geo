@@ -44,7 +44,7 @@ public class OAuthActivity extends AbstractActivity implements OAuthPresenter {
                 u.fire(eventBus, new HideWaitingIndicatorEvent());
 
                 clientFactory.getAppState().setRequestToken(oas.getRequestToken());
-                // add to display an iframe or a link with the oas.getAuthorizationUrl();
+                // TODO PGU add to display an iframe or a link with the oas.getAuthorizationUrl();
                 view.getOAuthLinkWidget().setHref(oas.getAuthorizationUrl());
             }
 

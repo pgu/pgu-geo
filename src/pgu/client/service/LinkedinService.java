@@ -15,4 +15,6 @@ public interface LinkedinService extends RemoteService {
     OauthAuthorizationStart getLinkedinUrlAuthorization();
 
     Connections fetchConnections(String oauthCode, RequestToken requestToken);
+
+    String fetchProfile(String oAuthCode, RequestToken requestToken);
 }

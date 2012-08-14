@@ -13,4 +13,6 @@ public interface LinkedinServiceAsync {
     void getLinkedinUrlAuthorization(AsyncCallback<OauthAuthorizationStart> asyncCallback);
 
     void fetchConnections(String oauthCode, RequestToken requestToken, AsyncCallback<Connections> asyncCallback);
+
+    void fetchProfile(String oAuthCode, RequestToken requestToken, AsyncCallback<String> asyncCallbackApp);
 }
