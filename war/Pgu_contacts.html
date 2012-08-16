@@ -17,7 +17,7 @@
       html { height: 100% }
       body { height: 100%; margin: 0; padding: 0 }
       #map_canvas { 
-        height: 400px; 
+        height: 600px; 
         position: relative; 
         background-color: #E5E3DF;
         overflow: hidden;
@@ -29,7 +29,7 @@
     <title>Pgu contacts</title>
     
     <script type="text/javascript">
-      var geocoder;
+      var geocoder; 
       var map;
       
       function initialize() {
@@ -54,38 +54,10 @@
       }
       
       window.onload = loadScript;
-/*      
-      function codeAddress() {
-    	  var address = document.getElementById("address").value;
-    	  
-    	  geocoder.geocode( {'address': address}, function(results, status) {
-    		  
-    		if (status != google.maps.GeocoderStatus.OK) {
-    			alert("Geocode was not successful for the following reason: " + status);
-    			return;
-    		}  
-
-    	    console.log(results);
-    	    
-    		var loc = results[0].geometry.location;
-    		console.log("location " + loc);
-    		
-    		map.setCenter(loc);
-    		var marker = new google.maps.Marker({
-    		  map: map,
-    		  position: results[0].geometry.location
-    		});
-    		
-    	  });
-    	  
-      }
-*/    
     </script>    
-    <script type="text/javascript" language="javascript" src="pgu_contacts/pgu_contacts.nocache.js"></script>
-    
+    <script type="text/javascript" src="pgu_contacts/pgu_contacts.nocache.js"></script>
   </head>
   <body data-spy="scroll" data-offset="25">
-  
     <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
     <noscript>
       <div style="width: 22em; position: absolute; left: 50%; margin-left: -11em; color: red; background-color: white; border: 1px solid red; padding: 4px; font-family: sans-serif">
@@ -94,11 +66,6 @@
       </div>
     </noscript>
     
-<!--     <div> -->
-<!--         <input id="address" type="text" value="London, UK" /> -->
-<!--         <input type="button" value="Geocode" onclick="codeAddress()" /> -->
-<!--     </div> -->
     <div id="map_canvas"></div>
-    
   </body>
 </html>

@@ -260,6 +260,9 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         return new Gson().fromJson(body, Connections.class);
     }
 
+    /**
+     * https://developer.linkedin.com/documents/profile-api
+     */
     @Override
     public String fetchProfile(final String oauthCode, final RequestToken requestToken) {
         return fetchResponseBody(oauthCode, requestToken, PROFILE_URL);

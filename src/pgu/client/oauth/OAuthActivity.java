@@ -9,7 +9,6 @@ import pgu.client.service.LinkedinServiceAsync;
 import pgu.shared.dto.OauthAuthorizationStart;
 
 import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
@@ -26,7 +25,6 @@ public class OAuthActivity extends AbstractActivity implements OAuthPresenter {
     private EventBus                   eventBus;
 
     public OAuthActivity(final Place place, final ClientFactory clientFactory) {
-        GWT.log("redirect place: " + place);
         redirectPlace = place;
         this.clientFactory = clientFactory;
         view = clientFactory.getOAuthView();
