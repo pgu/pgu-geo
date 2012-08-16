@@ -10,7 +10,7 @@
     <g:HTMLPanel>
 <!--         position="TOP"  -->
         <b:Navbar addStyleNames="{style.firstNavbar}">
-            <b:Brand ui:field="appTitle">GEO LinkedIn</b:Brand>
+            <b:Brand ui:field="appTitle">Geo CV</b:Brand>
             <b:Nav>
                 <b:NavLink icon="USER" ui:field="goToProfileBtn" iconSize="LARGE" >Profile</b:NavLink>
                 <b:NavLink icon="GLOBE" ui:field="goToContactsBtn" iconSize="LARGE" >Contacts</b:NavLink>
