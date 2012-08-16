@@ -12,6 +12,7 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 public class OAuthActivity extends AbstractActivity implements OAuthPresenter {
@@ -57,7 +58,7 @@ public class OAuthActivity extends AbstractActivity implements OAuthPresenter {
     public void setOauthCode(final String oauthCode) {
         clientFactory.getAppState().setOAuthCode(oauthCode);
         clientFactory.getAppState().setHasUser(true);
-        clientFactory.getPlaceController().goTo(redirectPlace);
+        eventBus.fireEvent(new PlaceChangeEvent(redirectPlace));
     }
 
 }
