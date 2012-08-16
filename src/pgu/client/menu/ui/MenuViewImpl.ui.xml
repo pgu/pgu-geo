@@ -11,8 +11,10 @@
 <!--         position="TOP"  -->
         <b:Navbar addStyleNames="{style.firstNavbar}">
             <b:Brand ui:field="appTitle">GEO LinkedIn</b:Brand>
-            <b:NavLink icon="USER" ui:field="goToProfileBtn" iconSize="LARGE" >Profile</b:NavLink>
-            <b:NavLink icon="GLOBE" ui:field="goToContactsBtn" iconSize="LARGE" >Contacts</b:NavLink>
+            <b:Nav>
+                <b:NavLink icon="USER" ui:field="goToProfileBtn" iconSize="LARGE" >Profile</b:NavLink>
+                <b:NavLink icon="GLOBE" ui:field="goToContactsBtn" iconSize="LARGE" >Contacts</b:NavLink>
+            </b:Nav>
             <b:Nav alignment="RIGHT">
                 <b:NavLink icon="DASHBOARD" ui:field="goToAppstatsBtn" iconSize="LARGE" >Appstats</b:NavLink>
                 <b:NavLink icon="UNLOCK" ui:field="logoutBtn" iconSize="LARGE" >Log out</b:NavLink>
