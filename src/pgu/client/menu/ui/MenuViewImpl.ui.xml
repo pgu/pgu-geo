@@ -3,11 +3,14 @@
             xmlns:g="urn:import:com.google.gwt.user.client.ui"
             xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
     <ui:style>
+        .headerApp {
+            margin-bottom: 10px;
+        }
         .firstNavbar {
             margin-bottom: 0px;
         }
     </ui:style>
-    <g:HTMLPanel>
+    <g:HTMLPanel addStyleNames="{style.headerApp}">
 <!--         position="TOP"  -->
         <b:Navbar addStyleNames="{style.firstNavbar}">
             <b:Brand ui:field="appTitle">Geo CV</b:Brand>

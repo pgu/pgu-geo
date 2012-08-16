@@ -3,7 +3,7 @@ package pgu.client.oauth.ui;
 import pgu.client.oauth.OAuthPresenter;
 import pgu.client.oauth.OAuthView;
 
-import com.github.gwtbootstrap.client.ui.Button;
+import com.github.gwtbootstrap.client.ui.SubmitButton;
 import com.github.gwtbootstrap.client.ui.TextBox;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -28,7 +28,7 @@ public class OAuthViewImpl extends Composite implements OAuthView {
     @UiField
     TextBox                oauthCodeInput;
     @UiField
-    Button                 submitBtn;
+    SubmitButton           submitBtn;
 
     private OAuthPresenter presenter;
 
@@ -41,11 +41,6 @@ public class OAuthViewImpl extends Composite implements OAuthView {
         this.presenter = presenter;
     }
 
-    @Override
-    public Anchor getOAuthLinkWidget() {
-        return oauthLink;
-    }
-
     @UiHandler("oauthCodeInput")
     public void keyPressCodeInput(final KeyPressEvent e) {
         if (e.getCharCode() == KeyCodes.KEY_ENTER) {
@@ -56,6 +51,11 @@ public class OAuthViewImpl extends Composite implements OAuthView {
     @UiHandler("submitBtn")
     public void clickSubmitBtn(final ClickEvent e) {
         presenter.setOauthCode(oauthCodeInput.getText());
+    }
+
+    @Override
+    public void setOAuthUrl(final String authorizationUrl) {
+        oauthLink.setHref(authorizationUrl);
     }
 
 }

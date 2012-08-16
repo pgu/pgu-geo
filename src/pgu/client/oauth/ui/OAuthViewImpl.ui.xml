@@ -2,14 +2,28 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" 
             xmlns:g="urn:import:com.google.gwt.user.client.ui"
             xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
-    <ui:style>
-    </ui:style>
-    <g:HTMLPanel>
-        <g:Anchor ui:field="oauthLink">Authorization ></g:Anchor>
-        <b:WellForm>
-            <b:ControlLabel>Authorization code</b:ControlLabel>
-            <b:TextBox ui:field="oauthCodeInput" placeholder="code..."/>
-            <b:Button ui:field="submitBtn" type="PRIMARY">Submit</b:Button>
-        </b:WellForm>
+            
+    <g:HTMLPanel addStyleNames="container-fluid">
+        <div class="row-fluid">
+        
+            <div class="span6">
+                <h6>Allow the application to access LinkedIn</h6>
+                <p>
+                    In order to refresh your profile information from LinkedIn, 
+                    you need to provide the LinkedIn's authorization code. 
+                </p>
+                <g:Anchor ui:field="oauthLink" target="_blank" addStyleNames="btn"> Get code » </g:Anchor>
+            </div>
+            
+            <div class="span6">
+                <b:WellForm>
+                    <b:ControlLabel>Authorization code</b:ControlLabel>
+                    <b:TextBox ui:field="oauthCodeInput" placeholder="code..."/>
+                    <b:ControlLabel></b:ControlLabel>
+                    <b:SubmitButton ui:field="submitBtn" type="PRIMARY" addStyleNames="btn">Submit</b:SubmitButton>
+                </b:WellForm>
+            </div>
+            
+        </div>
     </g:HTMLPanel>
 </ui:UiBinder> 
