@@ -1,35 +1,26 @@
 package pgu.client.app;
 
-import pgu.shared.dto.RequestToken;
+import pgu.shared.dto.AccessToken;
 
 public class AppState {
 
-    private RequestToken requestToken;
-    private String       oauthCode;
-    private boolean      hasUser;
+    private AccessToken accessToken;
+    private boolean     hasUser;
 
     public boolean hasUser() {
         return hasUser;
     }
 
-    public RequestToken getRequestToken() {
-        return requestToken;
-    }
-
-    public void setRequestToken(final RequestToken requestToken) {
-        this.requestToken = requestToken;
-    }
-
-    public void setOAuthCode(final String oauthCode) {
-        this.oauthCode = oauthCode;
-    }
-
-    public String getOAuthCode() {
-        return oauthCode;
-    }
-
     public void setHasUser(final boolean hasUser) {
         this.hasUser = hasUser;
+    }
+
+    public AccessToken getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(final AccessToken accessToken) {
+        this.accessToken = accessToken;
     }
 
 }

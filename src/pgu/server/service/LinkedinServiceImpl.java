@@ -23,6 +23,7 @@ import org.scribe.oauth.OAuthService;
 import pgu.client.service.LinkedinService;
 import pgu.server.app.AppLog;
 import pgu.server.utils.AppUtils;
+import pgu.shared.dto.AccessToken;
 import pgu.shared.dto.Connections;
 import pgu.shared.dto.Country;
 import pgu.shared.dto.Location;
@@ -197,6 +198,19 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
 
     private OAuthRequest newRequest( //
             final String url //
+            , final AccessToken accessToken) {
+
+        final Token token = new Token( //
+                accessToken.getToken() //
+                , accessToken.getSecret() //
+                , accessToken.getRawResponse() //
+        );
+
+        return newRequest(url, token);
+    }
+
+    private OAuthRequest newRequest( //
+            final String url //
             , final Token accessToken) {
 
         final OAuthRequest request = new OAuthRequest(Verb.GET, url);
@@ -204,24 +218,6 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         oauthService.signRequest(accessToken, request);
 
         return request;
-    }
-
-    private OAuthRequest newRequest( //
-            final String url //
-            , final String oauthCode //
-            , final RequestToken requestToken) {
-
-        final Token token = new Token( //
-                requestToken.getToken() //
-                , requestToken.getSecret() //
-                , requestToken.getRawResponse() //
-        );
-
-        final Verifier verifier = new Verifier(oauthCode);
-        // TODO PGU Aug 14, 2012 pass this accesstoken instead of token
-        final Token accessToken = oauthService.getAccessToken(token, verifier);
-
-        return newRequest(url, accessToken);
     }
 
     @Override
@@ -257,9 +253,9 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
     }
 
     @Override
-    public Connections fetchConnections(final String oauthCode, final RequestToken requestToken) {
+    public Connections fetchConnections(final AccessToken accessToken) {
 
-        final String body = fetchResponseBody(oauthCode, requestToken, CONNECTIONS_URL);
+        final String body = fetchResponseBody(accessToken, CONNECTIONS_URL);
         return new Gson().fromJson(body, Connections.class);
     }
 
@@ -267,7 +263,7 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
      * https://developer.linkedin.com/documents/profile-api
      */
     @Override
-    public String fetchProfile(final String oauthCode, final RequestToken requestToken) {
+    public String fetchProfile(final AccessToken accessToken) {
         final String detailedProfiled = PROFILE_URL + //
                 ":(" + //
                 "id" + //
@@ -285,12 +281,12 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
                 ",languages:(language,proficiency)" + //
                 ",educations" + //
                 ")";
-        return fetchResponseBody(oauthCode, requestToken, detailedProfiled);
+        return fetchResponseBody(accessToken, detailedProfiled);
     }
 
-    private String fetchResponseBody(final String oauthCode, final RequestToken requestToken, final String profileUrl) {
+    private String fetchResponseBody(final AccessToken accessToken, final String profileUrl) {
 
-        final OAuthRequest request = newRequest(profileUrl, oauthCode, requestToken);
+        final OAuthRequest request = newRequest(profileUrl, accessToken);
         final Response response = request.send();
         logResponseCode(response);
 
@@ -298,4 +294,24 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         log.info(this, "%s", body);
         return body;
     }
+
+    @Override
+    public AccessToken getAccessToken(final String oauthCode, final RequestToken requestToken) {
+        final Token token = new Token( //
+                requestToken.getToken() //
+                , requestToken.getSecret() //
+                , requestToken.getRawResponse() //
+        );
+
+        final Verifier verifier = new Verifier(oauthCode);
+        final Token linkedinAccessToken = oauthService.getAccessToken(token, verifier);
+
+        final AccessToken accessToken = new AccessToken();
+        accessToken.setRawResponse(linkedinAccessToken.getRawResponse());
+        accessToken.setSecret(linkedinAccessToken.getSecret());
+        accessToken.setToken(linkedinAccessToken.getToken());
+
+        return accessToken;
+    }
+
 }

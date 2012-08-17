@@ -36,19 +36,16 @@ public class ContactsActivity extends AbstractActivity implements ContactsPresen
 
         u.fire(eventBus, new ShowWaitingIndicatorEvent());
         linkedinService.fetchConnections( //
-                clientFactory.getAppState().getOAuthCode() //
-                , clientFactory.getAppState().getRequestToken() //
+                clientFactory.getAppState().getAccessToken() //
                 , new AsyncCallbackApp<Connections>(eventBus) {
 
                     @Override
                     public void onSuccess(final Connections connections) {
                         u.fire(eventBus, new HideWaitingIndicatorEvent());
 
-                        // clientFactory.getAppState().setConnections(connections);
                         view.setConnections(connections);
                     }
 
                 });
-        // TODO PGU Aug 14, 2012 fetch profile in parallel?
     }
 }
