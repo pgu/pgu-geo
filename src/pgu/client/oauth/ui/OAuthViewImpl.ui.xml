@@ -20,7 +20,7 @@
                     <b:ControlLabel>Authorization code</b:ControlLabel>
                     <b:TextBox ui:field="oauthCodeInput" placeholder="code..."/>
                     <b:ControlLabel></b:ControlLabel>
-                    <b:SubmitButton ui:field="submitBtn" type="PRIMARY" addStyleNames="btn">Submit</b:SubmitButton>
+                    <b:Button ui:field="submitBtn" type="PRIMARY" addStyleNames="btn">Submit</b:Button>
                 </b:WellForm>
             </div>
             

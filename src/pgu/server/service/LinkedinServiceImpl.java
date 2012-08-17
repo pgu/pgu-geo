@@ -21,6 +21,7 @@ import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
 import pgu.client.service.LinkedinService;
+import pgu.server.app.AppLog;
 import pgu.server.utils.AppUtils;
 import pgu.shared.dto.Connections;
 import pgu.shared.dto.Country;
@@ -42,6 +43,8 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
     private static final String CONNECTIONS_URL = PROFILE_URL + "/connections";
 
     private final AppUtils      u               = new AppUtils();
+    private final AppLog        log             = new AppLog();
+
     private OAuthService        oauthService    = null;
 
     @Override
@@ -265,7 +268,24 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
      */
     @Override
     public String fetchProfile(final String oauthCode, final RequestToken requestToken) {
-        return fetchResponseBody(oauthCode, requestToken, PROFILE_URL);
+        final String detailedProfiled = PROFILE_URL + //
+                ":(" + //
+                "id" + //
+                ",first-name" + //
+                ",last-name" + //
+                ",headline" + //
+                ",location" + //
+                ",num-connections" + //
+                ",num-connections-capped" + //
+                ",summary" + //
+                ",specialties" + //
+                ",picture-url" + //
+                ",public-profile-url" + //
+                ",positions:(company,endDate,isCurrent,startDate,summary,title,location)" + //
+                ",languages:(language,proficiency)" + //
+                ",educations" + //
+                ")";
+        return fetchResponseBody(oauthCode, requestToken, detailedProfiled);
     }
 
     private String fetchResponseBody(final String oauthCode, final RequestToken requestToken, final String profileUrl) {
@@ -274,6 +294,8 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         final Response response = request.send();
         logResponseCode(response);
 
-        return response.getBody();
+        final String body = response.getBody();
+        log.info(this, "%s", body);
+        return body;
     }
 }
