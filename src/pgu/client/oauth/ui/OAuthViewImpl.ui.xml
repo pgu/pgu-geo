@@ -12,7 +12,7 @@
                     In order to refresh your profile information from LinkedIn, 
                     you need to provide the LinkedIn's authorization code. 
                 </p>
-                <g:Anchor ui:field="oauthLink" target="_blank" addStyleNames="btn"> Get code » </g:Anchor>
+                <g:Anchor ui:field="oauthLink" addStyleNames="btn"> Get code » </g:Anchor>
             </div>
             
             <div class="span6">
