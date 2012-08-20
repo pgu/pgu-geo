@@ -13,7 +13,7 @@
         <div class="row-fluid">
             <div class="span4">
                 <h6>Languages</h6>
-                <p>French, English, Spanish, German</p>
+                <g:HTMLPanel ui:field="lgContainer" />
             </div>
             <div class="span4">
                 <h6>Specialties</h6>

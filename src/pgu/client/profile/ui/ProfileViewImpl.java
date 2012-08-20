@@ -1,8 +1,13 @@
 package pgu.client.profile.ui;
 
+import java.util.LinkedHashMap;
+import java.util.Map.Entry;
+
 import pgu.client.profile.ProfilePresenter;
 import pgu.client.profile.ProfileView;
 
+import com.github.gwtbootstrap.client.ui.Column;
+import com.github.gwtbootstrap.client.ui.FluidRow;
 import com.github.gwtbootstrap.client.ui.Heading;
 import com.github.gwtbootstrap.client.ui.Paragraph;
 import com.github.gwtbootstrap.client.ui.Section;
@@ -10,6 +15,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -27,6 +33,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     @UiField(provided = true)
     Section   positionsSection, educationSection;
+    @UiField
+    HTMLPanel lgContainer;
 
     public ProfileViewImpl() {
         positionsSection = new Section("profile:positions");
@@ -39,6 +47,35 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         headlineBasic.setText("Senior Web Java J2EE Engineer Developer at SFEIR");
         summaryBasic
                 .setText("A senior Java J2EE web developer with broad experience in web-based development, mainly with AJAX interface and Java-based frameworks such as J2EE, Spring and Hibernate. Resourceful, opened to different technologies, willing to join a state of the art web project to build up a successful career.");
+
+        final String star = "<i class=\"icon-star\"></i>";
+
+        final LinkedHashMap<String, Integer> lg2level = new LinkedHashMap<String, Integer>();
+        lg2level.put("French", 4);
+        lg2level.put("English", 3);
+        lg2level.put("Spanish", 3);
+        lg2level.put("German", 2);
+
+        for (final Entry<String, Integer> e : lg2level.entrySet()) {
+
+            final Column labelCol = new Column(3);
+            final Column levelCol = new Column(3);
+
+            labelCol.getElement().setInnerHTML(e.getKey());
+
+            final StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < e.getValue(); i++) {
+                sb.append(star);
+            }
+            levelCol.getElement().setInnerHTML(sb.toString());
+
+            final FluidRow row = new FluidRow();
+            row.add(labelCol);
+            row.add(levelCol);
+
+            lgContainer.add(row);
+        }
+
     }
 
     private ProfilePresenter presenter;
