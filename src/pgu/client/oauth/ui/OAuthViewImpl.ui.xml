@@ -12,7 +12,7 @@
                     In order to refresh your profile information from LinkedIn, 
                     you need to provide the LinkedIn's authorization code. 
                 </p>
-                <b:Button ui:field="oauthLink" icon="LINKEDIN_SIGN"> Get code » </b:Button>
+                <b:Button ui:field="oauthLink" icon="LINKEDIN_SIGN" iconSize="LARGE" > Get code » </b:Button>
             </div>
             
             <div class="span6">
@@ -20,7 +20,7 @@
                     <b:ControlLabel>Authorization code</b:ControlLabel>
                     <b:TextBox ui:field="oauthCodeInput" placeholder="code..."/>
                     <b:ControlLabel></b:ControlLabel>
-                    <b:Button ui:field="submitBtn" type="PRIMARY" addStyleNames="btn">Submit</b:Button>
+                    <b:Button ui:field="submitBtn" type="PRIMARY" icon="SIGNIN" iconSize="LARGE" >Submit</b:Button>
                 </b:WellForm>
             </div>
             
