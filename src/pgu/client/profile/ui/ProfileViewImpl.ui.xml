@@ -7,6 +7,42 @@
         <b:Hero>
             <b:Heading size="2">Profile</b:Heading>
             <b:Paragraph ui:field="profileBoard"></b:Paragraph>
-        </b:Hero>    
+        </b:Hero>  
+        
+        <!-- Person -->
+        <b:Section ui:field="profileSection">
+            <g:HTMLPanel>
+                <g:HTMLPanel addStyleNames="page-header">
+                    <h5>Profile</h5>
+                </g:HTMLPanel>
+            </g:HTMLPanel>
+            <g:HTMLPanel addStyleNames="row-fluid">
+            <!-- languages, summary, specialties, publicProfileUrl -->
+            </g:HTMLPanel>
+        </b:Section>
+        
+        <!-- Positions -->
+        <b:Section ui:field="positionsSection">
+            <g:HTMLPanel>
+                <g:HTMLPanel addStyleNames="page-header">
+                    <h5>Experience</h5>
+                </g:HTMLPanel>
+            </g:HTMLPanel>
+            <g:HTMLPanel addStyleNames="row-fluid">
+            </g:HTMLPanel>
+        </b:Section>
+        
+        
+        <!-- Education -->
+        <b:Section ui:field="educationSection">
+            <g:HTMLPanel>
+                <g:HTMLPanel addStyleNames="page-header">
+                    <h5>Education</h5>
+                </g:HTMLPanel>
+            </g:HTMLPanel>
+            <g:HTMLPanel addStyleNames="row-fluid">
+            </g:HTMLPanel>
+        </b:Section>
+        
     </g:HTMLPanel>
 </ui:UiBinder> 

@@ -4,6 +4,7 @@ import pgu.client.profile.ProfilePresenter;
 import pgu.client.profile.ProfileView;
 
 import com.github.gwtbootstrap.client.ui.Paragraph;
+import com.github.gwtbootstrap.client.ui.Section;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -21,7 +22,14 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     @UiField
     Paragraph profileBoard;
 
+    @UiField(provided = true)
+    Section   profileSection, positionsSection, educationSection;
+
     public ProfileViewImpl() {
+        profileSection = new Section("profile:profile");
+        positionsSection = new Section("profile:positions");
+        educationSection = new Section("profile:section");
+
         initWidget(uiBinder.createAndBindUi(this));
     }
 
@@ -43,17 +51,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
             @Override
             public void setText(final String text) {
-                profileBoard.setText(text);
+                // profileBoard.setText(text);
+                // TODO PGU Aug 20, 2012 enable it
             }
 
         };
     }
 
-    // is user logged in linkedin?
-    // if no, then offer him to authorize the app to access its account
-    // then with his code, he allows the call to its profile and contacts
-    // else,
-    // -- if the user is in our database
-    // -- then we get its profile
-    // -- else we offer him to let the app to connect to its account (the same as above)
 }
