@@ -14,7 +14,6 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -26,11 +25,9 @@ public class OAuthViewImpl extends Composite implements OAuthView {
     }
 
     @UiField
-    Anchor                 oauthLink;
-    @UiField
     TextBox                oauthCodeInput;
     @UiField
-    Button                 submitBtn;
+    Button                 submitBtn, oauthLink;
 
     private OAuthPresenter presenter;
 
@@ -44,8 +41,9 @@ public class OAuthViewImpl extends Composite implements OAuthView {
                 event.preventDefault();
                 event.stopPropagation();
 
-                Window.open(oauthLink.getHref(), "linkedin", "height=500, width=500");
+                Window.open(oauthLink.getHref(), "linkedin", "width=600, height=422");
             }
+
         });
     }
 
