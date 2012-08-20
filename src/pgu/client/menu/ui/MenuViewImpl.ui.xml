@@ -24,11 +24,14 @@
                 <b:NavLink icon="GLOBE" ui:field="goToContactsBtn" iconSize="LARGE" >Contacts</b:NavLink>
             </b:Nav>
             <b:Nav alignment="RIGHT">
+                <b:NavLink ui:field="mapSizeBtn" iconSize="LARGE" ></b:NavLink>
                 <b:NavLink icon="DASHBOARD" ui:field="goToAppstatsBtn" iconSize="LARGE" >Appstats</b:NavLink>
                 <b:NavLink icon="UNLOCK" ui:field="logoutBtn" iconSize="LARGE" >Log out</b:NavLink>
                 <b:NavLink icon="LOCK" ui:field="adminBtn" iconSize="LARGE" >Admin</b:NavLink>
             </b:Nav>
         </b:Navbar>
-        <b:ProgressBar ui:field="progressBar" type="ANIMATED" percent="100"  addStyleNames="{style.progressBar}" />
+        <g:HTMLPanel addStyleNames="{style.progressBar}">
+            <b:ProgressBar ui:field="progressBar" type="ANIMATED" percent="100" />
+        </g:HTMLPanel>
     </g:HTMLPanel>
 </ui:UiBinder> 

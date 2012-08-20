@@ -7,6 +7,7 @@ import pgu.client.menu.MenuView;
 import com.github.gwtbootstrap.client.ui.Brand;
 import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.ProgressBar;
+import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -29,13 +30,22 @@ public class MenuViewImpl extends Composite implements MenuView {
     @UiField
     ProgressBar               progressBar;
     @UiField
-    NavLink                   adminBtn, logoutBtn, goToProfileBtn, goToContactsBtn, goToAppstatsBtn;
+    NavLink                   adminBtn, logoutBtn, goToProfileBtn, goToContactsBtn, goToAppstatsBtn, mapSizeBtn;
 
     private MenuPresenter     presenter;
-    private final ClientUtils u = new ClientUtils();
+    private final ClientUtils u              = new ClientUtils();
+    private boolean           isMapDisplayed = true;
 
     public MenuViewImpl() {
         initWidget(uiBinder.createAndBindUi(this));
+
+        mapSizeBtn.getElement().setAttribute("data-toggle", "collapse");
+        mapSizeBtn.getElement().setAttribute("data-target", "#map_canvas_container");
+
+        mapSizeBtn.setIcon(IconType.RESIZE_SMALL);
+        mapSizeBtn.setText("Hide map");
+        isMapDisplayed = true;
+
         logoutBtn.setVisible(false);
 
         goToProfileBtn.setVisible(false);
@@ -48,6 +58,22 @@ public class MenuViewImpl extends Composite implements MenuView {
     @Override
     public void setPresenter(final MenuPresenter presenter) {
         this.presenter = presenter;
+    }
+
+    @UiHandler("mapSizeBtn")
+    public void clickMapSize(final ClickEvent e) {
+
+        if (isMapDisplayed) {
+            mapSizeBtn.setIcon(IconType.RESIZE_FULL);
+            mapSizeBtn.setText("Show map");
+            isMapDisplayed = false;
+
+        } else {
+            mapSizeBtn.setIcon(IconType.RESIZE_SMALL);
+            mapSizeBtn.setText("Hide map");
+            isMapDisplayed = true;
+
+        }
     }
 
     @UiHandler("goToContactsBtn")
