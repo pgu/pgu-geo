@@ -3,6 +3,7 @@ package pgu.client.profile.ui;
 import pgu.client.profile.ProfilePresenter;
 import pgu.client.profile.ProfileView;
 
+import com.github.gwtbootstrap.client.ui.Heading;
 import com.github.gwtbootstrap.client.ui.Paragraph;
 import com.github.gwtbootstrap.client.ui.Section;
 import com.google.gwt.core.client.GWT;
@@ -20,17 +21,24 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     @UiField
-    Paragraph profileBoard;
+    Heading   nameBasic, headlineBasic;
+    @UiField
+    Paragraph summaryBasic;
 
     @UiField(provided = true)
-    Section   profileSection, positionsSection, educationSection;
+    Section   positionsSection, educationSection;
 
     public ProfileViewImpl() {
-        profileSection = new Section("profile:profile");
         positionsSection = new Section("profile:positions");
         educationSection = new Section("profile:section");
 
         initWidget(uiBinder.createAndBindUi(this));
+
+        // http://www.linkedin.com/pub/pascal-guilcher/2/3b1/955
+        nameBasic.setText("Pascal Guilcher");
+        headlineBasic.setText("Senior Web Java J2EE Engineer Developer at SFEIR");
+        summaryBasic
+                .setText("A senior Java J2EE web developer with broad experience in web-based development, mainly with AJAX interface and Java-based frameworks such as J2EE, Spring and Hibernate. Resourceful, opened to different technologies, willing to join a state of the art web project to build up a successful career.");
     }
 
     private ProfilePresenter presenter;
@@ -46,7 +54,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
             @Override
             public String getText() {
-                return profileBoard.getText();
+                return headlineBasic.getText();
             }
 
             @Override

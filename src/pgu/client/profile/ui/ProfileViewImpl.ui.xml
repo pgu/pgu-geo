@@ -5,27 +5,31 @@
             
     <g:HTMLPanel>
         <b:Hero>
-            <b:Heading size="2">Profile</b:Heading>
-            <b:Paragraph ui:field="profileBoard"></b:Paragraph>
+            <b:Heading size="2" ui:field="nameBasic" />
+            <b:Heading size="3" ui:field="headlineBasic" />
+            <b:Paragraph ui:field="summaryBasic" />
         </b:Hero>  
         
-        <!-- Person -->
-        <b:Section ui:field="profileSection">
-            <g:HTMLPanel>
-                <g:HTMLPanel addStyleNames="page-header">
-                    <h5>Profile</h5>
-                </g:HTMLPanel>
-            </g:HTMLPanel>
-            <g:HTMLPanel addStyleNames="row-fluid">
-            <!-- languages, summary, specialties, publicProfileUrl -->
-            </g:HTMLPanel>
-        </b:Section>
+        <div class="row-fluid">
+            <div class="span4">
+                <h6>Languages</h6>
+                <p>French, English, Spanish, German</p>
+            </div>
+            <div class="span4">
+                <h6>Specialties</h6>
+                <p>Ajax, J2EE, Java, Javascript, Eclipse</p>
+            </div>
+            <div class="span4">
+                <h6>Location</h6>
+                <p>Paris Area, France</p>
+            </div>
+        </div>
         
         <!-- Positions -->
         <b:Section ui:field="positionsSection">
             <g:HTMLPanel>
                 <g:HTMLPanel addStyleNames="page-header">
-                    <h5>Experience</h5>
+                    <h3>Experience</h3>
                 </g:HTMLPanel>
             </g:HTMLPanel>
             <g:HTMLPanel addStyleNames="row-fluid">
@@ -37,7 +41,7 @@
         <b:Section ui:field="educationSection">
             <g:HTMLPanel>
                 <g:HTMLPanel addStyleNames="page-header">
-                    <h5>Education</h5>
+                    <h3>Education</h3>
                 </g:HTMLPanel>
             </g:HTMLPanel>
             <g:HTMLPanel addStyleNames="row-fluid">

@@ -6,6 +6,8 @@
     <g:HTMLPanel>
         <g:SimplePanel ui:field="header" />
         <g:HTMLPanel ui:field="notification" />
-        <g:SimplePanel ui:field="body" />
+        <g:HTMLPanel addStyleNames="container-fluid">
+            <g:SimplePanel ui:field="body" />
+        </g:HTMLPanel>
     </g:HTMLPanel>
 </ui:UiBinder> 
