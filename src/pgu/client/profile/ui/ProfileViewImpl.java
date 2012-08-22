@@ -6,14 +6,19 @@ import java.util.Map.Entry;
 import pgu.client.profile.ProfilePresenter;
 import pgu.client.profile.ProfileView;
 
+import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.Column;
 import com.github.gwtbootstrap.client.ui.FluidRow;
 import com.github.gwtbootstrap.client.ui.Heading;
 import com.github.gwtbootstrap.client.ui.Paragraph;
+import com.github.gwtbootstrap.client.ui.Popover;
 import com.github.gwtbootstrap.client.ui.Section;
+import com.github.gwtbootstrap.client.ui.constants.Placement;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -28,9 +33,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     @UiField
-    Heading   nameBasic, headlineBasic;
+    Heading   nameBasic;
     @UiField
-    Paragraph summaryBasic;
+    Paragraph headlineBasic;
+    @UiField
+    Popover   summaryBasic;
+    @UiField
+    Button    summaryBasicBtn;
 
     @UiField(provided = true)
     Section   positionsSection, educationSection;
@@ -46,8 +55,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         // http://www.linkedin.com/pub/pascal-guilcher/2/3b1/955
         nameBasic.setText("Pascal Guilcher");
         headlineBasic.setText("Senior Web Java J2EE Engineer Developer at SFEIR");
-        summaryBasic
-                .setText("A senior Java J2EE web developer with broad experience in web-based development, mainly with AJAX interface and Java-based frameworks such as J2EE, Spring and Hibernate. Resourceful, opened to different technologies, willing to join a state of the art web project to build up a successful career.");
 
         final String trophy = " <i class=\"icon-trophy\"></i> ";
 
@@ -89,6 +96,17 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             locContainer.add(new HTML(loc));
         }
 
+        summaryBasic.setAnimation(true);
+        summaryBasic.setPlacement(Placement.LEFT);
+        summaryBasic.setHeading("Summary");
+        summaryBasic
+                .setText("A senior Java J2EE web developer with broad experience in web-based development, mainly with AJAX interface and Java-based frameworks such as J2EE, Spring and Hibernate. Resourceful, opened to different technologies, willing to join a state of the art web project to build up a successful career.");
+
+    }
+
+    @UiHandler("summaryBasicBtn")
+    public void clickSummaryBasic(final ClickEvent e) {
+        summaryBasic.toggle();
     }
 
     private ProfilePresenter presenter;

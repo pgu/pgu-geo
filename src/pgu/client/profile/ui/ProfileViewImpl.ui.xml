@@ -4,19 +4,20 @@
             xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
             
             
-    <ui:style>
-        .summary {
-            margin-top: 20px;
-        }
-    </ui:style>
     <g:HTMLPanel>
         <b:Hero>
+            <b:Popover ui:field="summaryBasic">
+                <b:Button ui:field="summaryBasicBtn" icon="PLUS" type="INFO" iconSize="LARGE" addStyleNames="pull-right" />
+            </b:Popover>
             <b:Heading size="2" ui:field="nameBasic" />
-            <b:Heading size="3" ui:field="headlineBasic" />
-            <b:Paragraph ui:field="summaryBasic" addStyleNames="{style.summary}" />
+            <b:Paragraph ui:field="headlineBasic" />
         </b:Hero>  
         
         <div class="row-fluid">
+            <div class="span4">
+                <h6>Location</h6>
+                <g:HTMLPanel ui:field="locContainer" />
+            </div>
             <div class="span4">
                 <h6>Languages</h6>
                 <g:HTMLPanel ui:field="lgContainer" />
@@ -24,10 +25,6 @@
             <div class="span4">
                 <h6>Specialties</h6>
                 <g:HTMLPanel ui:field="spContainer" />
-            </div>
-            <div class="span4">
-                <h6>Location</h6>
-                <g:HTMLPanel ui:field="locContainer" />
             </div>
         </div>
         
