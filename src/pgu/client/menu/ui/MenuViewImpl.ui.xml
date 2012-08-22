@@ -22,6 +22,8 @@
             <b:Nav>
                 <b:NavLink icon="USER" ui:field="goToProfileBtn" iconSize="LARGE" >Profile</b:NavLink>
                 <b:NavLink icon="GLOBE" ui:field="goToContactsBtn" iconSize="LARGE" >Contacts</b:NavLink>
+                <b:NavSearch size="3" placeholder="Location..." />
+                <b:Button icon="SEARCH" iconSize="LARGE">Search</b:Button>
             </b:Nav>
             <b:Nav alignment="RIGHT">
                 <b:NavLink ui:field="mapSizeBtn" iconSize="LARGE" ></b:NavLink>

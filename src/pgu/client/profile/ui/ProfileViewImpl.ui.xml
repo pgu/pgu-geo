@@ -8,8 +8,10 @@
         <b:Hero>
             <b:Popover ui:field="summaryBasic">
                 <b:Button ui:field="summaryBasicBtn" icon="PLUS" type="INFO" iconSize="LARGE" addStyleNames="pull-right" />
+                <!-- play profile -->
             </b:Popover>
             <b:Heading size="2" ui:field="nameBasic" />
+            <!-- picture -->
             <b:Paragraph ui:field="headlineBasic" />
         </b:Hero>  
         
