@@ -3,6 +3,7 @@ package pgu.client.menu.ui;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.menu.MenuPresenter;
 import pgu.client.menu.MenuView;
+import pgu.shared.dto.LatLng;
 
 import com.github.gwtbootstrap.client.ui.Brand;
 import com.github.gwtbootstrap.client.ui.Button;
@@ -73,10 +74,11 @@ public class MenuViewImpl extends Composite implements MenuView {
         GWT.log("save " + //
                 itemId + //
                 ", " + locationSearchBox.getTextBox().getText() + //
-                ", the found location..." //
+                ", the found location: " + //
+                latLng //
         );
 
-        presenter.saveLocationItem(itemId, locationSearchBox.getTextBox().getText());
+        presenter.saveLocationItem(latLng, itemId, locationSearchBox.getTextBox().getText());
         locationSaveBtn.setVisible(false);
 
     }
@@ -90,10 +92,16 @@ public class MenuViewImpl extends Composite implements MenuView {
         searchLocationAndAddMarker(this, locationText);
     }
 
-    public void showSaveBtn() {
+    private LatLng latLng = null;
+
+    public void showSaveBtn(final String lat, final String lng) {
         if (u.isVoid(itemId)) {
             return;
         }
+
+        latLng = new LatLng();
+        latLng.setLat(lat);
+        latLng.setLng(lng);
 
         locationSaveBtn.setVisible(true);
     }
@@ -121,12 +129,15 @@ public class MenuViewImpl extends Composite implements MenuView {
 
 							var marker = new $wnd.google.maps.Marker({
 								map : $wnd.map,
-								position : results[0].geometry.location,
+								position : loc,
 								animation : $wnd.google.maps.Animation.DROP,
 								title : locationText
 							});
 
-							menu.@pgu.client.menu.ui.MenuViewImpl::showSaveBtn()();
+							var lat = loc.lat() + "";
+							var lng = loc.lng() + "";
+
+							menu.@pgu.client.menu.ui.MenuViewImpl::showSaveBtn(Ljava/lang/String;Ljava/lang/String;)(lat,lng);
 
 						});
 

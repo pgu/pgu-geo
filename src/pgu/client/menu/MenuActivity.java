@@ -7,6 +7,7 @@ import pgu.client.app.event.LocationSearchEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.ClientUtils;
+import pgu.shared.dto.LatLng;
 import pgu.shared.dto.LoginInfo;
 
 import com.google.web.bindery.event.shared.EventBus;
@@ -90,8 +91,8 @@ public class MenuActivity implements MenuPresenter //
     }
 
     @Override
-    public void saveLocationItem(final String itemId, final String text) {
-        // TODO PGU Aug 22, 2012 missing location object
+    public void saveLocationItem(final LatLng latLng, final String itemId, final String text) {
+        // TODO PGU Aug 22, 2012 save item...
     }
 
 }
