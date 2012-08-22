@@ -5,7 +5,9 @@ import pgu.client.menu.MenuPresenter;
 import pgu.client.menu.MenuView;
 
 import com.github.gwtbootstrap.client.ui.Brand;
+import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.NavLink;
+import com.github.gwtbootstrap.client.ui.NavSearch;
 import com.github.gwtbootstrap.client.ui.ProgressBar;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.core.client.GWT;
@@ -15,6 +17,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasVisibility;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -31,6 +34,10 @@ public class MenuViewImpl extends Composite implements MenuView {
     ProgressBar               progressBar;
     @UiField
     NavLink                   adminBtn, logoutBtn, goToProfileBtn, goToContactsBtn, goToAppstatsBtn, mapSizeBtn;
+    @UiField
+    NavSearch                 locationSearchBox;
+    @UiField
+    Button                    locationSearchBtn;
 
     private MenuPresenter     presenter;
     private final ClientUtils u              = new ClientUtils();
@@ -183,6 +190,11 @@ public class MenuViewImpl extends Composite implements MenuView {
     @Override
     public HasVisibility getContactsWidget() {
         return goToContactsBtn;
+    }
+
+    @Override
+    public HasText getLocationSearchWidget() {
+        return locationSearchBox.getTextBox();
     }
 
 }

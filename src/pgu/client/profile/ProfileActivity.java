@@ -1,6 +1,7 @@
 package pgu.client.profile;
 
 import pgu.client.app.event.HideWaitingIndicatorEvent;
+import pgu.client.app.event.LocationSearchEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
@@ -46,5 +47,10 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
                     }
 
                 });
+    }
+
+    @Override
+    public void searchForPosition(final String id, final String text) {
+        u.fire(eventBus, new LocationSearchEvent(id, text));
     }
 }

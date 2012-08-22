@@ -2,7 +2,12 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" 
             xmlns:g="urn:import:com.google.gwt.user.client.ui"
             xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
-            
+
+    <ui:style>
+        .location {
+            font-weight: bold;    
+        }
+    </ui:style>            
             
     <g:HTMLPanel>
         <b:Hero>
@@ -51,7 +56,11 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><b>Paris (France)</b></td>
+                                    <td>
+                                        <b:NavPills>
+                                            <b:NavLink ui:field="positionLocation" addStyleNames="{style.location}">Paris (France)</b:NavLink>
+                                        </b:NavPills>
+                                    </td>
                                     <td>Present<br/>November 2011<br/>(10 months)</td>
                                     <td>SFEIR - Senior Web Java J2EE Engineer Developer</td>
                                     <td>

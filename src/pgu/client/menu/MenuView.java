@@ -1,6 +1,7 @@
 package pgu.client.menu;
 
 import com.github.gwtbootstrap.client.ui.base.HasHref;
+import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasVisibility;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -22,5 +23,7 @@ public interface MenuView extends IsWidget {
     HasVisibility getProfileWidget();
 
     HasVisibility getContactsWidget();
+
+    HasText getLocationSearchWidget();
 
 }

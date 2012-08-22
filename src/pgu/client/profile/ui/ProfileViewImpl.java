@@ -10,6 +10,7 @@ import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.Column;
 import com.github.gwtbootstrap.client.ui.FluidRow;
 import com.github.gwtbootstrap.client.ui.Heading;
+import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.Paragraph;
 import com.github.gwtbootstrap.client.ui.Popover;
 import com.github.gwtbootstrap.client.ui.Section;
@@ -45,6 +46,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     Section   positionsSection, educationSection;
     @UiField
     HTMLPanel lgContainer, spContainer, locContainer;
+    @UiField
+    NavLink   positionLocation;
 
     public ProfileViewImpl() {
         positionsSection = new Section("profile:positions");
@@ -102,6 +105,15 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         summaryBasic
                 .setText("A senior Java J2EE web developer with broad experience in web-based development, mainly with AJAX interface and Java-based frameworks such as J2EE, Spring and Hibernate. Resourceful, opened to different technologies, willing to join a state of the art web project to build up a successful career.");
 
+    }
+
+    @UiHandler("positionLocation")
+    public void clickPositionLocation(final ClickEvent e) {
+        positionLocation.setActive(!positionLocation.isActive());
+
+        if (positionLocation.isActive()) {
+            presenter.searchForPosition("positionId", positionLocation.getText());
+        }
     }
 
     @UiHandler("summaryBasicBtn")

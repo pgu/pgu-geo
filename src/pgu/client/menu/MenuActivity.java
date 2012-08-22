@@ -3,6 +3,7 @@ package pgu.client.menu;
 import pgu.client.app.event.GoToContactsEvent;
 import pgu.client.app.event.GoToProfileEvent;
 import pgu.client.app.event.HideWaitingIndicatorEvent;
+import pgu.client.app.event.LocationSearchEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.ClientUtils;
@@ -13,6 +14,7 @@ import com.google.web.bindery.event.shared.EventBus;
 public class MenuActivity implements MenuPresenter //
         , ShowWaitingIndicatorEvent.Handler //
         , HideWaitingIndicatorEvent.Handler //
+        , LocationSearchEvent.Handler //
 {
 
     private final MenuView    view;
@@ -32,6 +34,7 @@ public class MenuActivity implements MenuPresenter //
 
         eventBus.addHandler(ShowWaitingIndicatorEvent.TYPE, this);
         eventBus.addHandler(HideWaitingIndicatorEvent.TYPE, this);
+        eventBus.addHandler(LocationSearchEvent.TYPE, this);
 
         view.getProfileWidget().setVisible(true);
         view.getContactsWidget().setVisible(true);
@@ -77,6 +80,11 @@ public class MenuActivity implements MenuPresenter //
     @Override
     public void onShowWaitingIndicator(final ShowWaitingIndicatorEvent event) {
         view.getWaitingIndicator().setVisible(true);
+    }
+
+    @Override
+    public void onLocationSearch(final LocationSearchEvent event) {
+        view.getLocationSearchWidget().setText(event.getText());
     }
 
 }
