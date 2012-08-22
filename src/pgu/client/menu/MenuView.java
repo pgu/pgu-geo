@@ -26,4 +26,6 @@ public interface MenuView extends IsWidget {
 
     HasText getLocationSearchWidget();
 
+    void setItemId(String id);
+
 }

@@ -24,6 +24,7 @@
                 <b:NavLink icon="GLOBE" ui:field="goToContactsBtn" iconSize="LARGE" >Contacts</b:NavLink>
                 <b:NavSearch ui:field="locationSearchBox" size="3" placeholder="Location..." />
                 <b:Button ui:field="locationSearchBtn" icon="SEARCH" iconSize="LARGE">Search</b:Button>
+                <b:Button ui:field="locationSaveBtn" icon="SAVE" iconSize="LARGE">Save</b:Button>
             </b:Nav>
             <b:Nav alignment="RIGHT">
                 <b:NavLink ui:field="mapSizeBtn" iconSize="LARGE" ></b:NavLink>

@@ -55,6 +55,7 @@ public class MenuActivity implements MenuPresenter //
                 && "guilcher.pascal.dev@gmail.com".equals(loginInfo.getEmailAddress());
 
         view.getAppstatsWidget().setVisible(isSuperAdmin);
+
     }
 
     public void setAppTitle() {
@@ -84,7 +85,13 @@ public class MenuActivity implements MenuPresenter //
 
     @Override
     public void onLocationSearch(final LocationSearchEvent event) {
+        view.setItemId(event.getId());
         view.getLocationSearchWidget().setText(event.getText());
+    }
+
+    @Override
+    public void saveLocationItem(final String itemId, final String text) {
+        // TODO PGU Aug 22, 2012 missing location object
     }
 
 }

@@ -6,4 +6,6 @@ public interface MenuPresenter {
 
     void goToContacts();
 
+    void saveLocationItem(String itemId, String text);
+
 }
