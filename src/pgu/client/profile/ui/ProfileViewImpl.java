@@ -44,15 +44,16 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     Button    summaryBasicBtn;
 
     @UiField(provided = true)
-    Section   positionsSection, educationSection;
+    Section   overviewSection, experienceSection, educationSection;
     @UiField
     HTMLPanel lgContainer, spContainer, locContainer;
     @UiField
     NavLink   positionLocation;
 
     public ProfileViewImpl() {
-        positionsSection = new Section("profile:positions");
-        educationSection = new Section("profile:section");
+        overviewSection = new Section("profile:overview");
+        experienceSection = new Section("profile:experience");
+        educationSection = new Section("profile:education");
 
         initWidget(uiBinder.createAndBindUi(this));
 

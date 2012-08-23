@@ -9,34 +9,45 @@
         }
     </ui:style>            
             
-    <g:HTMLPanel>
-        <b:Hero>
-            <b:Popover ui:field="summaryBasic">
-                <b:Button ui:field="summaryBasicBtn" icon="PLUS" type="INFO" iconSize="LARGE" addStyleNames="pull-right" />
                 <!-- play profile -->
-            </b:Popover>
-            <b:Heading size="2" ui:field="nameBasic" />
-            <!-- picture -->
-            <b:Paragraph ui:field="headlineBasic" />
-        </b:Hero>  
-        
-        <div class="row-fluid">
-            <div class="span4">
-                <h6>Location</h6>
-                <g:HTMLPanel ui:field="locContainer" />
-            </div>
-            <div class="span4">
-                <h6>Specialties</h6>
-                <g:HTMLPanel ui:field="spContainer" />
-            </div>
-            <div class="span4">
-                <h6>Languages</h6>
-                <g:HTMLPanel ui:field="lgContainer" />
-            </div>
-        </div>
+                
+    <g:HTMLPanel>
+        <g:HTMLPanel ui:field="submenu" styleName="subnav subnav-fixed">
+            <b:NavPills>
+                <b:NavLink href="#profile:overview">Overview</b:NavLink>
+                <b:NavLink href="#profile:experience">Experience</b:NavLink>
+                <b:NavLink href="#profile:education">Education</b:NavLink>
+            </b:NavPills>
+        </g:HTMLPanel>
+    
+        <b:Section ui:field="overviewSection">
+            <b:Hero>
+                <b:Popover ui:field="summaryBasic">
+                    <b:Button ui:field="summaryBasicBtn" icon="PLUS" type="INFO" iconSize="LARGE" addStyleNames="pull-right" />
+                </b:Popover>
+                <b:Heading size="2" ui:field="nameBasic" />
+                <!-- picture -->
+                <b:Paragraph ui:field="headlineBasic" />
+            </b:Hero>  
+            
+            <g:HTMLPanel addStyleNames="row-fluid">
+                <div class="span4">
+                    <h6>Location</h6>
+                    <g:HTMLPanel ui:field="locContainer" />
+                </div>
+                <div class="span4">
+                    <h6>Specialties</h6>
+                    <g:HTMLPanel ui:field="spContainer" />
+                </div>
+                <div class="span4">
+                    <h6>Languages</h6>
+                    <g:HTMLPanel ui:field="lgContainer" />
+                </div>
+            </g:HTMLPanel>
+        </b:Section>
         
         <!-- Positions -->
-        <b:Section ui:field="positionsSection">
+        <b:Section ui:field="experienceSection">
             <g:HTMLPanel>
                 <g:HTMLPanel addStyleNames="page-header">
                     <h3>Experience</h3>
@@ -58,11 +69,11 @@
                                 <tr>
                                     <td>
                                         <b:NavPills>
-                                            <b:NavLink ui:field="positionLocation" addStyleNames="{style.location}">Paris (France)</b:NavLink>
+                                            <b:NavLink ui:field="positionLocation" addStyleNames="{style.location}">Paris, France</b:NavLink>
                                         </b:NavPills>
                                     </td>
                                     <td>Present<br/>November 2011<br/>(10 months)</td>
-                                    <td>SFEIR - Senior Web Java J2EE Engineer Developer</td>
+                                    <td>SFEIR<br/>Senior Web Java J2EE Engineer Developer</td>
                                     <td>
                                         <b:Popover>
                                             <b:Button icon="PLUS" type="INFO" iconSize="SMALL" size="MINI" />
@@ -70,9 +81,9 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><b>Paris (France)</b></td>
+                                    <td><b>Paris, France</b></td>
                                     <td>October 2011<br/>August 2011<br/>(3 months)</td>
-                                    <td>SFEIR - Senior Web Java J2EE Engineer Developer</td>
+                                    <td>SFEIR<br/>Senior Web Java J2EE Engineer Developer</td>
                                     <td>
                                         <b:Popover>
                                             <b:Button icon="PLUS" type="INFO" iconSize="SMALL" size="MINI" />
@@ -80,9 +91,9 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><b>Paris (France)</b></td>
+                                    <td><b>Paris, France</b></td>
                                     <td>July 2011<br/>September 2010<br/>(11 months)</td>
-                                    <td>SFEIR - Senior Web Java J2EE Engineer Developer</td>
+                                    <td>SFEIR<br/>Senior Web Java J2EE Engineer Developer</td>
                                     <td>
                                         <b:Popover>
                                             <b:Button icon="PLUS" type="INFO" iconSize="SMALL" size="MINI" />
@@ -90,9 +101,9 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><b>Madrid (Spain), <br/>Lausanne (Switzerland)</b></td>
+                                    <td><b>Madrid, Spain<br/>Lausanne, Switzerland</b></td>
                                     <td>August 2010<br/>October 2007<br/>(2 years 11 months)</td>
-                                    <td>ELCA Informática - Senior Web Java J2EE Engineer Developer</td>
+                                    <td>ELCA Informática<br/>Senior Web Java J2EE Engineer Developer</td>
                                     <td>
                                         <b:Popover>
                                             <b:Button icon="PLUS" type="INFO" iconSize="SMALL" size="MINI" />
@@ -100,9 +111,9 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><b>Madrid (Spain)</b></td>
+                                    <td><b>Madrid, Spain</b></td>
                                     <td>September 2007<br/>January 2006<br/>(1 year 9 months)</td>
-                                    <td>Sopra Group - Junior Web Java J2EE Engineer Developer</td>
+                                    <td>Sopra Group<br/>Junior Web Java J2EE Engineer Developer</td>
                                     <td>
                                         <b:Popover>
                                             <b:Button icon="PLUS" type="INFO" iconSize="SMALL" size="MINI" />
@@ -110,9 +121,9 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><b>Neuss (Germany)</b></td>
+                                    <td><b>Neuss, Germany</b></td>
                                     <td>April 2005<br/>January 2005<br/>(4 months)</td>
-                                    <td>3M - Market research internship</td>
+                                    <td>3M<br/>Market research internship</td>
                                     <td>
                                         <b:Popover>
                                             <b:Button icon="PLUS" type="INFO" iconSize="SMALL" size="MINI" />
@@ -120,9 +131,9 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><b>Prague (Czech Republic)</b></td>
+                                    <td><b>Prague, Czech Republic</b></td>
                                     <td>June 2004<br/>January 2004<br/>(6 months)</td>
-                                    <td>Czech Technical University, CVUT - Computer Science internship</td>
+                                    <td>Czech Technical University, CVUT<br/>Computer Science internship</td>
                                     <td>
                                         <b:Popover>
                                             <b:Button icon="PLUS" type="INFO" iconSize="SMALL" size="MINI" />
@@ -141,7 +152,7 @@
         <b:Section ui:field="educationSection">
             <g:HTMLPanel>
                 <g:HTMLPanel addStyleNames="page-header">
-                    <h3>Educations</h3>
+                    <h3>Education</h3>
                 </g:HTMLPanel>
             </g:HTMLPanel>
             <g:HTMLPanel addStyleNames="row-fluid">
@@ -158,9 +169,9 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><b>Rostock (Germany)</b></td>
+                                    <td><b>Rostock, Germany</b></td>
                                     <td>2005<br/>2005</td>
-                                    <td>Universität Rostock - International Trade</td>
+                                    <td>Universität Rostock<br/>International Trade</td>
                                     <td>
                                         <b:Popover>
                                             <b:Button icon="PLUS" type="INFO" iconSize="SMALL" size="MINI" />
@@ -168,9 +179,9 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><b>Nantes (France)</b></td>
+                                    <td><b>Nantes, France</b></td>
                                     <td>2005<br/>2004</td>
-                                    <td>Université de Nantes - Master 2 International Trade</td>
+                                    <td>Université de Nantes<br/>Master 2 International Trade</td>
                                     <td>
                                         <b:Popover>
                                             <b:Button icon="PLUS" type="INFO" iconSize="SMALL" size="MINI" />
@@ -178,9 +189,9 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><b>Nantes (France)</b></td>
+                                    <td><b>Nantes, France</b></td>
                                     <td>2004<br/>2001</td>
-                                    <td>Polytech'Nantes - Software Engineer</td>
+                                    <td>Polytech'Nantes<br/>Software Engineer</td>
                                     <td>
                                         <b:Popover>
                                             <b:Button icon="PLUS" type="INFO" iconSize="SMALL" size="MINI" />
@@ -188,9 +199,9 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><b>Nantes (France)</b></td>
+                                    <td><b>Nantes, France</b></td>
                                     <td>2001<br/>1999</td>
-                                    <td>Lycée Clémenceau - Prépa MP/MPSI</td>
+                                    <td>Lycée Clémenceau<br/>Prépa MP/MPSI</td>
                                     <td>
                                         <b:Popover>
                                             <b:Button icon="PLUS" type="INFO" iconSize="SMALL" size="MINI" />
