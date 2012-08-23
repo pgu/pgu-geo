@@ -1,10 +1,12 @@
 package pgu.client.profile.ui;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 import pgu.client.profile.ProfilePresenter;
 import pgu.client.profile.ProfileView;
+import pgu.shared.dto.Position;
 
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.Column;
@@ -27,7 +29,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Widget;
 
 public class ProfileViewImpl extends Composite implements ProfileView {
@@ -49,7 +50,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     @UiField(provided = true)
     Section   overviewSection, experienceSection, educationSection;
     @UiField
-    HTMLPanel lgContainer, spContainer, locContainer;
+    HTMLPanel lgContainer, spContainer, locContainer, experiencesContainer;
     @UiField
     NavLink   positionLocation;
 
@@ -166,21 +167,23 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     @Override
-    public HasText getProfileBoard() {
-        return new HasText() {
+    public void setProfile(final ArrayList<Position> positions) {
+        // basic information
 
-            @Override
-            public String getText() {
-                return headlineBasic.getText();
-            }
+        // experience
+        final String experienceTable = displayTable(positions);
+        experiencesContainer.getElement().setInnerHTML(experienceTable);
 
-            @Override
-            public void setText(final String text) {
-                // profileBoard.setText(text);
-                // TODO PGU Aug 20, 2012 enable it
-            }
+        // education
 
-        };
+    }
+
+    private String displayTable(final ArrayList<Position> positions) {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("<table class=\"table table-bordered table-striped\">");
+        sb.append("<thead><tr><th>Location</th><th>Dates</th><th>Position</th><th></th></tr></thead>");
+
+        return sb.toString();
     }
 
 }

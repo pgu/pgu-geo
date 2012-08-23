@@ -1,5 +1,7 @@
 package pgu.client.profile;
 
+import java.util.ArrayList;
+
 import pgu.client.app.event.HideWaitingIndicatorEvent;
 import pgu.client.app.event.LocationSearchEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
@@ -7,6 +9,7 @@ import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.service.LinkedinServiceAsync;
+import pgu.shared.dto.Position;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -43,7 +46,8 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
                     public void onSuccess(final String profile) {
                         u.fire(eventBus, new HideWaitingIndicatorEvent());
 
-                        view.getProfileBoard().setText(profile);
+                        final ArrayList<Position> positions = new ArrayList<Position>();
+                        view.setProfile(positions);
                     }
 
                 });

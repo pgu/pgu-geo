@@ -55,7 +55,7 @@
             </g:HTMLPanel>
             <g:HTMLPanel addStyleNames="row-fluid">
                 <div class="span12">
-                    <div>
+                    <g:HTMLPanel ui:field="experiencesContainer">
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
@@ -65,7 +65,7 @@
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody ui:field="experiencesContainer">
+                            <tbody>
                                 <tr>
                                     <td>
                                         <b:NavPills>
@@ -151,7 +151,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
+                    </g:HTMLPanel>
                 </div>
             </g:HTMLPanel>
         </b:Section>
