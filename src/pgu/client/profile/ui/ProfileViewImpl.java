@@ -22,6 +22,9 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.IsSerializable;
 import com.google.gwt.user.client.ui.Composite;
@@ -177,7 +180,37 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         xp.dates = "Present<br/>November 2011<br/>(10 months)";
         xp.experience = "SFEIR<br/>Senior Web Java J2EE Engineer Developer";
         dataProvider.getList().add(xp);
+
+        exportMethod();
     }
+
+    public static void searchMapFor(final String id, final String location) {
+
+        final Element anchor = DOM.getElementById(id);
+        final com.google.gwt.dom.client.Element li = anchor.getParentElement();
+        if (li.getClassName().contains("active")) {
+            li.removeClassName("active");
+            return;
+        }
+
+        li.addClassName("active");
+
+        new Timer() {
+
+            @Override
+            public void run() {
+                Window.scrollTo(0, 0);
+                staticPresenter.searchForPosition("positionId", location);
+            }
+
+        }.schedule(300);
+    }
+
+    private static ProfilePresenter staticPresenter = null;
+
+    public native static void exportMethod() /*-{
+		$wnd.searchMapFor = $entry(@pgu.client.profile.ui.ProfileViewImpl::searchMapFor(Ljava/lang/String;Ljava/lang/String;));
+    }-*/;
 
     @UiHandler("positionLocation")
     public void clickPositionLocation(final ClickEvent e) {
@@ -198,6 +231,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     @Override
     public void setPresenter(final ProfilePresenter presenter) {
+        staticPresenter = presenter;
         this.presenter = presenter;
     }
 

@@ -83,13 +83,22 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><b>Paris, France</b></td>
-                                    <td>October 2011<br/>August 2011<br/>(3 months)</td>
-                                    <td>SFEIR<br/>Senior Web Java J2EE Engineer Developer</td>
                                     <td>
-                                        <b:Popover>
-                                            <b:Button icon="PLUS" type="INFO" iconSize="SMALL" size="MINI" />
-                                        </b:Popover>
+                                        <ul class="nav nav-pills">
+                                          <li>
+                                            <a id='123' href="javascript:;" onclick="javascript:searchMapFor('123', 'Paris, France');return false;"><b>xParis, France</b></a>
+                                          </li>
+                                        </ul>
+                                    </td>
+                                    <td>October 2011<br/>August 2011<br/>(3 months)</td>
+                                    <td>SFEIR<br/>Senior Web Java J2EE Engineer Developer
+                                    </td>
+                                    <td style="cursor:pointer" onclick="javascript:$('#info123').popover('toggle');">
+                                        <i id="info123" class="icon-info-sign icon-large" 
+                                        data-title="Experience"
+                                        data-content="blablabla..."
+                                        data-placement="left"
+                                        ></i>
                                     </td>
                                 </tr>
                                 <tr>
