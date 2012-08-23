@@ -56,8 +56,6 @@
             <g:HTMLPanel addStyleNames="row-fluid">
                 <div class="span12">
                     <div>
-                        <b:CellTable ui:field="experiencesTable" striped="true" bordered="true" condensed="true">
-                        </b:CellTable>
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
