@@ -7,6 +7,7 @@ import pgu.client.profile.ProfilePresenter;
 import pgu.client.profile.ProfileView;
 
 import com.github.gwtbootstrap.client.ui.Button;
+import com.github.gwtbootstrap.client.ui.CellTable;
 import com.github.gwtbootstrap.client.ui.Column;
 import com.github.gwtbootstrap.client.ui.FluidRow;
 import com.github.gwtbootstrap.client.ui.Heading;
@@ -20,12 +21,15 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.IsSerializable;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.ListDataProvider;
 
 public class ProfileViewImpl extends Composite implements ProfileView {
 
@@ -35,22 +39,81 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     @UiField
-    Heading   nameBasic;
+    Heading                  nameBasic;
     @UiField
-    Paragraph headlineBasic;
+    Paragraph                headlineBasic;
     @UiField
-    Popover   summaryBasic;
+    Popover                  summaryBasic;
     @UiField
-    Button    summaryBasicBtn;
+    Button                   summaryBasicBtn;
 
     @UiField(provided = true)
-    Section   overviewSection, experienceSection, educationSection;
+    Section                  overviewSection, experienceSection, educationSection;
     @UiField
-    HTMLPanel lgContainer, spContainer, locContainer;
+    HTMLPanel                lgContainer, spContainer, locContainer;
     @UiField
-    NavLink   positionLocation;
+    NavLink                  positionLocation;
+    @UiField(provided = true)
+    CellTable<ExperienceDto> experiencesTable;
+
+    public class ExperienceDto implements IsSerializable {
+
+        private String location;
+        private String dates;
+        private String experience;
+
+        public String getLocation() {
+            return location;
+        }
+
+        public String getDates() {
+            return dates;
+        }
+
+        public String getExperience() {
+            return experience;
+        }
+
+    }
 
     public ProfileViewImpl() {
+
+        experiencesTable = new CellTable<ExperienceDto>();
+
+        final TextColumn<ExperienceDto> locationCol = new TextColumn<ExperienceDto>() {
+
+            @Override
+            public String getValue(final ExperienceDto xp) {
+                return xp.getLocation();
+            }
+        };
+        final TextColumn<ExperienceDto> datesCol = new TextColumn<ExperienceDto>() {
+
+            @Override
+            public String getValue(final ExperienceDto xp) {
+                return xp.getDates();
+            }
+        };
+        final TextColumn<ExperienceDto> experienceCol = new TextColumn<ExperienceDto>() {
+
+            @Override
+            public String getValue(final ExperienceDto xp) {
+                return xp.getExperience();
+            }
+        };
+        final TextColumn<ExperienceDto> moreCol = new TextColumn<ExperienceDto>() {
+
+            @Override
+            public String getValue(final ExperienceDto xp) {
+                return "";
+            }
+        };
+        experiencesTable.addColumn(locationCol, "Location");
+        experiencesTable.addColumn(datesCol, "Dates");
+        experiencesTable.addColumn(experienceCol, "Position");
+        experiencesTable.addColumn(moreCol, "");
+        // experiencesTable.setColumnWidth(firstNameColumn, 20, Unit.PCT);
+
         overviewSection = new Section("profile:overview");
         experienceSection = new Section("profile:experience");
         educationSection = new Section("profile:education");
@@ -107,6 +170,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         summaryBasic
                 .setText("A senior Java J2EE web developer with broad experience in web-based development, mainly with AJAX interface and Java-based frameworks such as J2EE, Spring and Hibernate. Resourceful, opened to different technologies, willing to join a state of the art web project to build up a successful career.");
 
+        final ListDataProvider<ExperienceDto> dataProvider = new ListDataProvider<ExperienceDto>();
+        dataProvider.addDataDisplay(experiencesTable);
+        final ExperienceDto xp = new ExperienceDto();
+        xp.location = "Paris, France";
+        xp.dates = "Present<br/>November 2011<br/>(10 months)";
+        xp.experience = "SFEIR<br/>Senior Web Java J2EE Engineer Developer";
+        dataProvider.getList().add(xp);
     }
 
     @UiHandler("positionLocation")
