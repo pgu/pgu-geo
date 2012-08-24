@@ -7,6 +7,7 @@ import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.service.LinkedinServiceAsync;
+import pgu.shared.dto.Profile;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -38,10 +39,10 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
         linkedinService.fetchProfile( //
                 clientFactory.getAppState().getAccessToken() //
-                , new AsyncCallbackApp<String>(eventBus) {
+                , new AsyncCallbackApp<Profile>(eventBus) {
 
                     @Override
-                    public void onSuccess(final String profile) {
+                    public void onSuccess(final Profile profile) {
                         u.fire(eventBus, new HideWaitingIndicatorEvent());
                         view.setProfile(profile);
                     }

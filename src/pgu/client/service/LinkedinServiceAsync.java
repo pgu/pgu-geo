@@ -3,6 +3,7 @@ package pgu.client.service;
 import pgu.shared.dto.AccessToken;
 import pgu.shared.dto.Connections;
 import pgu.shared.dto.OauthAuthorizationStart;
+import pgu.shared.dto.Profile;
 import pgu.shared.dto.RequestToken;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -15,7 +16,7 @@ public interface LinkedinServiceAsync {
 
     void fetchConnections(AccessToken accessToken, AsyncCallback<Connections> asyncCallback);
 
-    void fetchProfile(AccessToken accessToken, AsyncCallback<String> asyncCallbackApp);
+    void fetchProfile(AccessToken accessToken, AsyncCallback<Profile> asyncCallbackApp);
 
     void getAccessToken(String oauthCode, RequestToken requestToken, AsyncCallback<AccessToken> callbackApp);
 }

@@ -3,6 +3,7 @@ package pgu.client.service;
 import pgu.shared.dto.AccessToken;
 import pgu.shared.dto.Connections;
 import pgu.shared.dto.OauthAuthorizationStart;
+import pgu.shared.dto.Profile;
 import pgu.shared.dto.RequestToken;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -17,7 +18,7 @@ public interface LinkedinService extends RemoteService {
 
     Connections fetchConnections(AccessToken accessToken);
 
-    String fetchProfile(AccessToken acceToken);
+    Profile fetchProfile(AccessToken accessToken);
 
     AccessToken getAccessToken(String oauthCode, RequestToken requestToken);
 }

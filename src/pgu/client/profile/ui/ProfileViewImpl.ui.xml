@@ -71,7 +71,7 @@
             </g:HTMLPanel>
             <g:HTMLPanel addStyleNames="row-fluid">
                 <div class="span12">
-                    <div>
+                    <div id="profile:edu_table">
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>

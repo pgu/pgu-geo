@@ -12,7 +12,7 @@ function createXpTable(table_id, positions) {
 
 	xp_table.push(createXpTableFoot());
 
-	document.getElementById(table_id).innerHTML = xp_table.join('');
+	$(table_id).html(xp_table.join(''));
 }
 
 function createXpTableHead() {
@@ -192,14 +192,14 @@ function labelTitle(position) {
 	return title.join('');
 }
 
-function createListLocations(info_xp_id, position) {
+function createListLocations(info_id, position) {
 	var loc = position.location || '';
 	var names = loc.name || '';
 	var locations = names.split(";");
 
 	var list = [];
 	for (var i = 0, len = locations.length; i < len; i++) {
-		var id = info_xp_id + "_" + i;
+		var id = info_id + "_" + i;
 		var location = locations[i];
 		
 		var el = ''
@@ -240,4 +240,111 @@ function getMarkdownConverter() {
 	_showdown_converter = new Showdown.converter();
 	return _showdown_converter;
 }
+
+function createEduTable(table_id, educations, id2loc) {
+	
+	var edu_table = [];
+	
+	edu_table.push(createEduTableHead());
+	
+	for ( var i = 0, len = positions.length; i < len; i++) {
+		
+		edu_table.push(createEduTableRow(i, positions[i], id2loc));
+	}
+
+	edu_table.push(createEduTableFoot());
+
+	$(table_id).html(edu_table.join(''));
+	
+}
+
+function createEduTableHead() {
+	return ''
+	+ '<table class="table table-bordered table-striped"> '
+	+ '  <thead>                                          '
+	+ '    <tr>                                           '
+	+ '      <th>Location</th>                            '
+	+ '      <th>Dates</th>                               '
+	+ '      <th>Education</th>                           '
+	+ '      <th></th>                                    '
+	+ '    </tr>                                          '
+	+ '  </thead>                                         '
+	+ '<tbody>                                            '
+	+ '';
+	
+}
+
+function createEduTableFoot() {
+	return ''
+	+ '  </tbody>                                        '
+	+ '</table>                                          '
+	+ '';
+	
+}
+
+function createEduTableRow(index, position, id2loc) {
+	
+	var info_edu_id = "info_edu_" + index;
+	var locations = createEduListLocations(info_edu_id, position, id2loc);
+	var dates = labelDates(position); // 2005<br/>2005
+//	var title = labelEduTitle(position); // Universität Rostock<br/>International Trade
+	var title = "todo";
+//	var notes = labelNotes(position);
+	var notes = "todo";
+	
+	return '' 
+	+ '<tr>                                   '
+	+ '  <td>                                 '
+	+ '    <ul class="nav nav-pills">         '
+	+ locations
+	+ '    </ul>                              '
+	+ '  </td>                                '
+	+ '  <td>' + dates + '</td>               '
+	+ '  <td>' + title + '</td>               '
+	+ '  <td style="cursor:pointer"           '
+	+ '      onclick="javascript:$(\'#' + info_edu_id + '\').popover(\'toggle\');"'
+	+ '      >                                '
+	+ '    <i id="' + info_edu_id + '" class="icon-info-sign icon-large"  '
+	+ '      data-animation="true"                            '
+	+ '      data-html="true"                                 '
+	+ '      data-placement="left"                            '
+	+ '      data-title="Education"                          '
+	+ '      data-content="' + notes + '"                   '
+	+ '     ></i>                                             '
+	+ '   </td>                                               '
+	+ '</tr>                                                  '
+	+ '';
+	
+}
+
+// TODO
+function createEduListLocations(info_edu_id, position, id2loc) {
+	var loc = position.location || '';
+	var names = loc.name || '';
+	var locations = names.split(";");
+
+	var list = [];
+	for (var i = 0, len = locations.length; i < len; i++) {
+		var id = info_id + "_" + i;
+		var location = locations[i];
+		
+		var el = ''
+		+ '      <li>                             '
+		+ '        <a id="' + id + '"             '
+		+ '           href="javascript:;"         '
+		+ '           onclick="javascript:searchMapFor(\''+ id +'\', \''+ location +'\');return false;"'
+		+ '           >                           '
+		+ '           <b>' + location + '</b>     '
+		+ '        </a>                           '
+		+ '      </li>                            '
+		+ '      <br/>                            '
+		+ '';
+		
+		list.push(el);
+	}
+	
+	return list.join('');
+}
+
+
 

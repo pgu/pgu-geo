@@ -33,6 +33,7 @@ import pgu.shared.dto.Country;
 import pgu.shared.dto.Location;
 import pgu.shared.dto.OauthAuthorizationStart;
 import pgu.shared.dto.Person;
+import pgu.shared.dto.Profile;
 import pgu.shared.dto.RequestToken;
 
 import com.google.gson.Gson;
@@ -269,9 +270,19 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
      * https://developer.linkedin.com/documents/profile-api
      */
     @Override
-    public String fetchProfile(final AccessToken accessToken) {
+    public Profile fetchProfile(final AccessToken accessToken) {
+
+        final Profile profile = new Profile();
         if (isTest) {
-            return profileTest();
+            final HashMap<Integer, String> id2location = new HashMap<Integer, String>();
+            id2location.put(23039762, "Rostock, Germany");
+            id2location.put(23039761, "Nantes, France");
+            id2location.put(3392191, "Nantes, France");
+            id2location.put(23039657, "Nantes, France");
+
+            profile.setJson(profileTest());
+            profile.setId2location(id2location);
+            return profile;
 
         }
 
@@ -292,7 +303,8 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
                 ",languages:(language,proficiency)" + //
                 ",educations" + //
                 ")";
-        return fetchResponseBody(accessToken, detailedProfiled);
+        profile.setJson(fetchResponseBody(accessToken, detailedProfiled));
+        return profile;
     }
 
     private String fetchResponseBody(final AccessToken accessToken, final String profileUrl) {
