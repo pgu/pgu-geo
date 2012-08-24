@@ -36,7 +36,7 @@ function createXpTableRow(index, position) {
 	var locations = createListLocations(info_xp_id, position);
 	var dates = labelDates(position);
 	var title = labelTitle(position);
-	var summary = position.summary || '';
+	var summary = labelSummary(position);
 	
 	return '' 
 	+ '<tr>                                   '
@@ -51,9 +51,11 @@ function createXpTableRow(index, position) {
 	+ '      onclick="javascript:$(\'#' + info_xp_id + '\').popover(\'toggle\');"'
 	+ '      >                                '
 	+ '    <i id="' + info_xp_id + '" class="icon-info-sign icon-large"  '
+	+ '      data-animation="true"                            '
+	+ '      data-html="true"                                 '
+	+ '      data-placement="left"                            '
 	+ '      data-title="Experience"                          '
 	+ '      data-content="' + summary + '"                   '
-	+ '      data-placement="left"                            '
 	+ '     ></i>                                             '
 	+ '   </td>                                               '
 	+ '</tr>                                                  '
@@ -215,8 +217,27 @@ function createListLocations(info_xp_id, position) {
 		list.push(el);
 	}
 	
-	
 	return list.join('');
 }
 
+
+function labelSummary(position) { // http://softwaremaniacs.org/playground/showdown-highlight/
+	 var summary = position.summary || '';
+	 
+	 var html = getMarkdownConverter().makeHtml(summary);
+	 console.log(html);
+	 
+	 return html;
+}
+
+var _showdown_converter;
+
+function getMarkdownConverter() {
+	if (_showdown_converter) {
+		return _showdown_converter;
+	}
+	
+	_showdown_converter = new Showdown.converter();
+	return _showdown_converter;
+}
 
