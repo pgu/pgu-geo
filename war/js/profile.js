@@ -32,9 +32,8 @@ function createXpTableHead() {
 }
 
 function createXpTableRow(index, position) {
-	var id = "position_" + index;
-	var info_id = "info_" + id;
-	var loc = labelLocations(position);
+	var info_xp_id = "info_xp_" + index;
+	var locations = createListLocations(info_xp_id, position);
 	var dates = labelDates(position);
 	var title = labelTitle(position);
 	var summary = position.summary || '';
@@ -43,22 +42,15 @@ function createXpTableRow(index, position) {
 	+ '<tr>                                   '
 	+ '  <td>                                 '
 	+ '    <ul class="nav nav-pills">         '
-	+ '      <li>                             '
-	+ '        <a id="' + id + '"             '
-	+ '           href="javascript:;"         '
-	+ '           onclick="javascript:searchMapFor("'+ id +'", "'+ loc +'");return false;"'
-	+ '           >                           '
-	+ '           <b>' + loc + '</b>          '
-	+ '        </a>                           '
-	+ '      </li>                            '
+	+ locations
 	+ '    </ul>                              '
 	+ '  </td>                                '
 	+ '  <td>' + dates + '</td>               '
 	+ '  <td>' + title + '</td>               '
 	+ '  <td style="cursor:pointer"           '
-	+ '      onclick="javascript:$("#' + info_id + '").popover("toggle");"'
+	+ '      onclick="javascript:$(\'#' + info_xp_id + '\').popover(\'toggle\');"'
 	+ '      >                                '
-	+ '    <i id="' + info_id + '" class="icon-info-sign icon-large"  '
+	+ '    <i id="' + info_xp_id + '" class="icon-info-sign icon-large"  '
 	+ '      data-title="Experience"                          '
 	+ '      data-content="' + summary + '"                   '
 	+ '      data-placement="left"                            '
@@ -116,14 +108,6 @@ function labelDates(position) {
 		dates.push(start);
 	}
 
-	console.log('---');
-	console.log(startDate);
-	console.log(endDate);
-	console.log(startDate.year);
-	console.log(startDate.month);
-	console.log(endDate.year);
-	console.log(endDate.month);
-	
 	if (startDate && endDate) {
 		var diffD = '';
 		if (startDate.year 
@@ -206,22 +190,33 @@ function labelTitle(position) {
 	return title.join('');
 }
 
-function labelLocations(position) {
+function createListLocations(info_xp_id, position) {
 	var loc = position.location || '';
 	var names = loc.name || '';
-	
-	if (names.indexOf(";") == -1) {
-		return names;
+	var locations = names.split(";");
+
+	var list = [];
+	for (var i = 0, len = locations.length; i < len; i++) {
+		var id = info_xp_id + "_" + i;
+		var location = locations[i];
+		
+		var el = ''
+		+ '      <li>                             '
+		+ '        <a id="' + id + '"             '
+		+ '           href="javascript:;"         '
+		+ '           onclick="javascript:searchMapFor(\''+ id +'\', \''+ location +'\');return false;"'
+		+ '           >                           '
+		+ '           <b>' + location + '</b>     '
+		+ '        </a>                           '
+		+ '      </li>                            '
+		+ '      <br/>                            '
+		+ '';
+		
+		list.push(el);
 	}
 	
-	var parts = names.split(";");
-	var results = []; 
-	for (var i = 0, len = parts.length; i < len; i++) {
-		if (i > 0) {
-			results.push("<br/>");
-		}
-		results.push(parts[i].trim());
-	}
-	return results.join('');
+	
+	return list.join('');
 }
+
 
