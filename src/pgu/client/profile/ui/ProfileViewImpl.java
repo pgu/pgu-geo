@@ -1,12 +1,10 @@
 package pgu.client.profile.ui;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 import pgu.client.profile.ProfilePresenter;
 import pgu.client.profile.ProfileView;
-import pgu.shared.dto.Position;
 
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.Column;
@@ -167,23 +165,22 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     @Override
-    public void setProfile(final ArrayList<Position> positions) {
-        // basic information
+    public native void setProfile(final String profile) /*-{
+		var p = JSON.parse(profile);
 
-        // experience
-        final String experienceTable = displayTable(positions);
-        experiencesContainer.getElement().setInnerHTML(experienceTable);
+		console.log(p.firstName);
 
-        // education
+		var positions = p.positions;
+		for ( var i = 0, len = positions.length; i < len; i++) {
+			console.log(positions[i].title);
+		}
 
-    }
+		// basic information
 
-    private String displayTable(final ArrayList<Position> positions) {
-        final StringBuilder sb = new StringBuilder();
-        sb.append("<table class=\"table table-bordered table-striped\">");
-        sb.append("<thead><tr><th>Location</th><th>Dates</th><th>Position</th><th></th></tr></thead>");
+		// experience
 
-        return sb.toString();
-    }
+		// education
+
+    }-*/;
 
 }

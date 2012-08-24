@@ -1,7 +1,11 @@
 package pgu.server.service;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -259,11 +263,18 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         return new Gson().fromJson(body, Connections.class);
     }
 
+    private final boolean isTest = true;
+
     /**
      * https://developer.linkedin.com/documents/profile-api
      */
     @Override
     public String fetchProfile(final AccessToken accessToken) {
+        if (isTest) {
+            return profileTest();
+
+        }
+
         final String detailedProfiled = PROFILE_URL + //
                 ":(" + //
                 "id" + //
@@ -314,4 +325,21 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         return accessToken;
     }
 
+    private String profileTest() {
+
+        final InputStream is = getServletContext().getResourceAsStream("/WEB-INF/pgu/profile.json");
+        final BufferedReader br = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+
+        final StringBuilder sb = new StringBuilder();
+        String line = null;
+
+        try {
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+        } catch (final IOException e) {
+            log.error(this, e);
+        }
+        return sb.toString();
+    }
 }
