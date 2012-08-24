@@ -10,7 +10,6 @@ import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.Column;
 import com.github.gwtbootstrap.client.ui.FluidRow;
 import com.github.gwtbootstrap.client.ui.Heading;
-import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.Paragraph;
 import com.github.gwtbootstrap.client.ui.Popover;
 import com.github.gwtbootstrap.client.ui.Section;
@@ -48,9 +47,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     @UiField(provided = true)
     Section   overviewSection, experienceSection, educationSection;
     @UiField
-    HTMLPanel lgContainer, spContainer, locContainer, experiencesContainer;
-    @UiField
-    NavLink   positionLocation;
+    HTMLPanel lgContainer, spContainer, locContainer;
+
+    // @UiField
+    // NavLink positionLocation;
 
     public ProfileViewImpl() {
 
@@ -141,15 +141,15 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 		$wnd.searchMapFor = $entry(@pgu.client.profile.ui.ProfileViewImpl::searchMapFor(Ljava/lang/String;Ljava/lang/String;));
     }-*/;
 
-    @UiHandler("positionLocation")
-    public void clickPositionLocation(final ClickEvent e) {
-        positionLocation.setActive(!positionLocation.isActive());
-
-        if (positionLocation.isActive()) {
-            Window.scrollTo(0, 0);
-            presenter.searchForPosition("positionId", positionLocation.getText());
-        }
-    }
+    // @UiHandler("positionLocation")
+    // public void clickPositionLocation(final ClickEvent e) {
+    // positionLocation.setActive(!positionLocation.isActive());
+    //
+    // if (positionLocation.isActive()) {
+    // Window.scrollTo(0, 0);
+    // presenter.searchForPosition("positionId", positionLocation.getText());
+    // }
+    // }
 
     @UiHandler("summaryBasicBtn")
     public void clickSummaryBasic(final ClickEvent e) {
@@ -170,14 +170,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
 		console.log(p.firstName);
 
-		var positions = p.positions;
-		for ( var i = 0, len = positions.length; i < len; i++) {
-			console.log(positions[i].title);
-		}
-
 		// basic information
 
 		// experience
+		$wnd.createXpTable('profile:xp_table', p.positions.values);
 
 		// education
 

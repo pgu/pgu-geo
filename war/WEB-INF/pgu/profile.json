@@ -97,7 +97,7 @@
           "name": "SFEIR"
         },
         "isCurrent": true,
-        "location": {"name": "Paris (France)"},
+        "location": {"name": "Paris, France"},
         "startDate": {
           "month": 11,
           "year": 2011
@@ -118,7 +118,7 @@
           "year": 2011
         },
         "isCurrent": false,
-        "location": {"name": "Paris (France)"},
+        "location": {"name": "Paris, France"},
         "startDate": {
           "month": 8,
           "year": 2011
@@ -139,7 +139,7 @@
           "year": 2011
         },
         "isCurrent": false,
-        "location": {"name": "Paris (France)"},
+        "location": {"name": "Paris, France"},
         "startDate": {
           "month": 9,
           "year": 2010
@@ -160,7 +160,7 @@
           "year": 2010
         },
         "isCurrent": false,
-        "location": {"name": "Madrid (Spain), Lausanne (Switzerland)"},
+        "location": {"name": "Madrid, Spain; Lausanne, Switzerland"},
         "startDate": {
           "month": 10,
           "year": 2007
@@ -181,7 +181,7 @@
           "year": 2007
         },
         "isCurrent": false,
-        "location": {"name": "Madrid (Spain)"},
+        "location": {"name": "Madrid, Spain"},
         "startDate": {
           "month": 1,
           "year": 2006
@@ -203,7 +203,7 @@
           "year": 2005
         },
         "isCurrent": false,
-         "location": {"name": "Neuss (Düsseldorf, Germany)"},
+         "location": {"name": "Düsseldorf, Germany"},
         "startDate": {
           "month": 1,
           "year": 2005
@@ -221,7 +221,7 @@
           "year": 2004
         },
         "isCurrent": false,
-        "location": {"name": "Prague (Czech Republic)"},
+        "location": {"name": "Prague, Czech Republic"},
         "startDate": {
           "month": 1,
           "year": 2004
