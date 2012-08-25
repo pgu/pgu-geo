@@ -33,7 +33,9 @@
             <g:HTMLPanel addStyleNames="row-fluid">
                 <div class="span4">
                     <h6>Location</h6>
-                    <g:HTMLPanel ui:field="locContainer" />
+                    <b:NavPills>
+                        <b:NavLink ui:field="locContainer" addStyleNames="{style.location}"></b:NavLink>
+                    </b:NavPills>
                 </div>
                 <div class="span4">
                     <h6>Specialties</h6>

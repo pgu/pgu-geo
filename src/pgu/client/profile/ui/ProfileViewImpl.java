@@ -11,6 +11,7 @@ import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.Column;
 import com.github.gwtbootstrap.client.ui.FluidRow;
 import com.github.gwtbootstrap.client.ui.Heading;
+import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.Paragraph;
 import com.github.gwtbootstrap.client.ui.Popover;
 import com.github.gwtbootstrap.client.ui.Section;
@@ -49,10 +50,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     @UiField(provided = true)
     Section   overviewSection, experienceSection, educationSection;
     @UiField
-    HTMLPanel lgContainer, spContainer, locContainer;
+    HTMLPanel lgContainer, spContainer;
 
-    // @UiField
-    // NavLink positionLocation;
+    @UiField
+    NavLink   locContainer;
 
     public ProfileViewImpl() {
 
@@ -101,10 +102,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         }
 
         // <p>Paris Area, France</p>
-        final String location = "Paris Area, France";
-        for (final String loc : location.split(", ")) {
-            locContainer.add(new HTML(loc));
-        }
+        locContainer.setText("Paris Area, France");
 
         summaryBasic.setTrigger(Trigger.MANUAL);
         summaryBasic.setAnimation(true);
@@ -120,6 +118,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
         final Element anchor = DOM.getElementById(id);
         final com.google.gwt.dom.client.Element li = anchor.getParentElement();
+
         if (li.getClassName().contains("active")) {
             li.removeClassName("active");
             return;
@@ -127,12 +126,16 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
         li.addClassName("active");
 
+        searchForLocation(id, location);
+    }
+
+    private static void searchForLocation(final String itemId, final String location) {
         new Timer() {
 
             @Override
             public void run() {
                 Window.scrollTo(0, 0);
-                staticPresenter.searchForPosition("positionId", location);
+                staticPresenter.searchForLocation(itemId, location);
             }
 
         }.schedule(300);
@@ -147,6 +150,15 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     @UiHandler("summaryBasicBtn")
     public void clickSummaryBasic(final ClickEvent e) {
         summaryBasic.toggle();
+    }
+
+    @UiHandler("locContainer")
+    public void clickLocContainer(final ClickEvent e) {
+        locContainer.setActive(!locContainer.isActive());
+
+        if (locContainer.isActive()) {
+            searchForLocation("", locContainer.getText());
+        }
     }
 
     private ProfilePresenter presenter;

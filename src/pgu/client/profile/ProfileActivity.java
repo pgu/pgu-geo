@@ -51,7 +51,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     }
 
     @Override
-    public void searchForPosition(final String id, final String text) {
+    public void searchForLocation(final String id, final String text) {
         u.fire(eventBus, new LocationSearchEvent(id, text));
     }
 
