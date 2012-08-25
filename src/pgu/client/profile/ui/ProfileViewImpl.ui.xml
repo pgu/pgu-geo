@@ -72,58 +72,6 @@
             <g:HTMLPanel addStyleNames="row-fluid">
                 <div class="span12">
                     <div id="profile:edu_table">
-                        <table class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Location</th>
-                                    <th>Dates</th>
-                                    <th>Education</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><b>Rostock, Germany</b></td>
-                                    <td>2005<br/>2005</td>
-                                    <td>Universität Rostock<br/>International Trade</td>
-                                    <td>
-                                        <b:Popover>
-                                            <b:Button icon="PLUS" type="INFO" iconSize="SMALL" size="MINI" />
-                                        </b:Popover>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><b>Nantes, France</b></td>
-                                    <td>2005<br/>2004</td>
-                                    <td>Université de Nantes<br/>Master 2 International Trade</td>
-                                    <td>
-                                        <b:Popover>
-                                            <b:Button icon="PLUS" type="INFO" iconSize="SMALL" size="MINI" />
-                                        </b:Popover>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><b>Nantes, France</b></td>
-                                    <td>2004<br/>2001</td>
-                                    <td>Polytech'Nantes<br/>Software Engineer</td>
-                                    <td>
-                                        <b:Popover>
-                                            <b:Button icon="PLUS" type="INFO" iconSize="SMALL" size="MINI" />
-                                        </b:Popover>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><b>Nantes, France</b></td>
-                                    <td>2001<br/>1999</td>
-                                    <td>Lycée Clémenceau<br/>Prépa MP/MPSI</td>
-                                    <td>
-                                        <b:Popover>
-                                            <b:Button icon="PLUS" type="INFO" iconSize="SMALL" size="MINI" />
-                                        </b:Popover>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </g:HTMLPanel>

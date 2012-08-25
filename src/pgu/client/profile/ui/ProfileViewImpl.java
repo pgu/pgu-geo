@@ -1,6 +1,5 @@
 package pgu.client.profile.ui;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
@@ -18,8 +17,6 @@ import com.github.gwtbootstrap.client.ui.Section;
 import com.github.gwtbootstrap.client.ui.constants.Placement;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONString;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -170,39 +167,28 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     @Override
     public void setProfile(final Profile profile) {
-        final HashMap<Integer, String> id2location = profile.getId2location();
-        final JSONObject id2loc = new JSONObject();
-
-        for (final Entry<Integer, String> e : id2location.entrySet()) {
-            final String key = "" + e.getKey();
-            final JSONString value = new JSONString(e.getValue());
-
-            id2loc.put(key, value);
-        }
-
-        setProfile(profile.getJson(), id2loc);
+        setProfile(profile.getJson(), profile.getId2location());
     }
 
-    private native void setProfile(String jsonProfile, JSONObject id2loc) /*-{
+    private native void setProfile(String profile, String id2location) /*-{
 		var p = JSON.parse(profile);
-
-		console.log(p.firstName);
+		var id2loc = JSON.parse(id2location);
 
 		// basic information
 
-		var xp_table_id = '#profile:xp_table';
-		var edu_table_id = '#profile:edu_table';
+		var xp_table_id = 'profile:xp_table';
+		var edu_table_id = 'profile:edu_table';
 
 		if (p.positions && p.positions.values) {
 			$wnd.createXpTable(xp_table_id, p.positions.values);
 		} else {
-			$wnd.$(xp_table_id).html('No experience has been found');
+			$doc.getElementById('#' + xp_table_id).innerHTML = 'No experience has been found';
 		}
 
 		if (p.educations && p.educations.values) {
 			$wnd.createEduTable(edu_table_id, p.educations.values, id2loc);
 		} else {
-			$wnd.$(edu_table_id).html('No education has been found');
+			$doc.getElementById('#' + edu_table_id).innerHTML = 'No education has been found';
 		}
 
     }-*/;

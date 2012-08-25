@@ -12,7 +12,7 @@ function createXpTable(table_id, positions) {
 
 	xp_table.push(createXpTableFoot());
 
-	$(table_id).html(xp_table.join(''));
+	document.getElementById(table_id).innerHTML = xp_table.join('');
 }
 
 function createXpTableHead() {
@@ -225,8 +225,6 @@ function labelSummary(position) { // http://softwaremaniacs.org/playground/showd
 	 var summary = position.summary || '';
 	 
 	 var html = getMarkdownConverter().makeHtml(summary);
-	 console.log(html);
-	 
 	 return html;
 }
 
@@ -247,14 +245,14 @@ function createEduTable(table_id, educations, id2loc) {
 	
 	edu_table.push(createEduTableHead());
 	
-	for ( var i = 0, len = positions.length; i < len; i++) {
+	for ( var i = 0, len = educations.length; i < len; i++) {
 		
-		edu_table.push(createEduTableRow(i, positions[i], id2loc));
+		edu_table.push(createEduTableRow(i, educations[i], id2loc));
 	}
 
 	edu_table.push(createEduTableFoot());
 
-	$(table_id).html(edu_table.join(''));
+	document.getElementById(table_id).innerHTML = edu_table.join('');
 	
 }
 
@@ -318,6 +316,8 @@ function createEduTableRow(index, position, id2loc) {
 }
 
 function createEduListLocations(info_edu_id, position, id2loc) {
+	
+	console.log(id2loc);
 	
 	var id = "a_" + info_edu_id;
 	var location = id2loc[position.id];
