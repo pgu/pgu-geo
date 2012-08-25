@@ -199,7 +199,7 @@ function createListLocations(info_id, position) {
 
 	var list = [];
 	for (var i = 0, len = locations.length; i < len; i++) {
-		var id = info_id + "_" + i;
+		var id = "a_" +info_id + "_" + i;
 		var location = locations[i];
 		
 		var el = ''
@@ -284,7 +284,7 @@ function createEduTableFoot() {
 
 function createEduTableRow(index, position, id2loc) {
 	
-	var info_edu_id = "info_edu_" + index;
+	var info_edu_id = position.id || "info_edu_" + index;
 	var locations = createEduListLocations(info_edu_id, position, id2loc);
 	var dates = labelDates(position); // 2005<br/>2005
 //	var title = labelEduTitle(position); // Universität Rostock<br/>International Trade
@@ -317,33 +317,22 @@ function createEduTableRow(index, position, id2loc) {
 	
 }
 
-// TODO
 function createEduListLocations(info_edu_id, position, id2loc) {
-	var loc = position.location || '';
-	var names = loc.name || '';
-	var locations = names.split(";");
-
-	var list = [];
-	for (var i = 0, len = locations.length; i < len; i++) {
-		var id = info_id + "_" + i;
-		var location = locations[i];
-		
-		var el = ''
-		+ '      <li>                             '
-		+ '        <a id="' + id + '"             '
-		+ '           href="javascript:;"         '
-		+ '           onclick="javascript:searchMapFor(\''+ id +'\', \''+ location +'\');return false;"'
-		+ '           >                           '
-		+ '           <b>' + location + '</b>     '
-		+ '        </a>                           '
-		+ '      </li>                            '
-		+ '      <br/>                            '
-		+ '';
-		
-		list.push(el);
-	}
 	
-	return list.join('');
+	var id = "a_" + info_edu_id;
+	var location = id2loc[position.id];
+	
+	return ''
+	+ '      <li>                             '
+	+ '        <a id="' + id + '"             '
+	+ '           href="javascript:;"         '
+	+ '           onclick="javascript:searchMapFor(\''+ id +'\', \''+ location +'\');return false;"'
+	+ '           >                           '
+	+ '           <b>' + location + '</b>     '
+	+ '        </a>                           '
+	+ '      </li>                            '
+	+ '      <br/>                            '
+	+ '';
 }
 
 
