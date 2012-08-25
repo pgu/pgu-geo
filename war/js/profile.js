@@ -33,10 +33,10 @@ function createXpTableHead() {
 
 function createXpTableRow(index, position) {
 	var info_xp_id = "info_xp_" + index;
-	var locations = createListLocations(info_xp_id, position);
+	var locations = createXpListLocations(info_xp_id, position);
 	var dates = labelDates(position);
-	var title = labelTitle(position);
-	var summary = labelSummary(position);
+	var title = labelXpTitle(position);
+	var summary = labelXpSummary(position);
 	
 	return '' 
 	+ '<tr>                                   '
@@ -71,11 +71,11 @@ function createXpTableFoot() {
 	
 }
 
-function labelDates(position) {
+function labelDates(item) {
 //	October 2011<br/>August 2011<br/>(3 months)
 	var dates = [];
-	var endDate = position.endDate;
-	var startDate = position.startDate;
+	var endDate = item.endDate;
+	var startDate = item.startDate;
 	
 	if (endDate) {
 		var end = '';
@@ -172,34 +172,32 @@ function tslMonth(monthNb) { // temporary...
 	return month[monthNb - 1];
 }
 
-function labelTitle(position) {
+function labelXpTitle(position) {
 //	SFEIR<br/>Senior Web Java J2EE Engineer Developer
 	var title = [];
 	
 	if (position.company
 			&& position.company.name) {
 		
-		title.push(position.company.name)
+		title.push(position.company.name);
+		title.push('<br/>');
 	}
 	
 	if (position.title) {
-		if (title.length > 0) {
-			title.push('<br/>');
-		}
 		title.push(position.title);
 	}
 	
 	return title.join('');
 }
 
-function createListLocations(info_id, position) {
+function createXpListLocations(info_xp_id, position) {
 	var loc = position.location || '';
 	var names = loc.name || '';
 	var locations = names.split(";");
 
 	var list = [];
 	for (var i = 0, len = locations.length; i < len; i++) {
-		var id = "a_" +info_id + "_" + i;
+		var id = "a_" +info_xp_id + "_" + i;
 		var location = locations[i];
 		
 		var el = ''
@@ -221,7 +219,7 @@ function createListLocations(info_id, position) {
 }
 
 
-function labelSummary(position) { // http://softwaremaniacs.org/playground/showdown-highlight/
+function labelXpSummary(position) { // http://softwaremaniacs.org/playground/showdown-highlight/
 	 var summary = position.summary || '';
 	 
 	 var html = getMarkdownConverter().makeHtml(summary);
@@ -280,15 +278,13 @@ function createEduTableFoot() {
 	
 }
 
-function createEduTableRow(index, position, id2loc) {
+function createEduTableRow(index, education, id2loc) {
 	
-	var info_edu_id = position.id || "info_edu_" + index;
-	var locations = createEduListLocations(info_edu_id, position, id2loc);
-	var dates = labelDates(position); // 2005<br/>2005
-//	var title = labelEduTitle(position); // Universität Rostock<br/>International Trade
-	var title = "todo";
-//	var notes = labelNotes(position);
-	var notes = "todo";
+	var info_edu_id = education.id || "info_edu_" + index;
+	var locations = createEduListLocations(info_edu_id, education, id2loc);
+	var dates = labelDates(education);
+	var title = labelEduTitle(education); 
+	var notes = labelEduNotes(education);
 	
 	return '' 
 	+ '<tr>                                   '
@@ -315,12 +311,10 @@ function createEduTableRow(index, position, id2loc) {
 	
 }
 
-function createEduListLocations(info_edu_id, position, id2loc) {
-	
-	console.log(id2loc);
+function createEduListLocations(info_edu_id, education, id2loc) {
 	
 	var id = "a_" + info_edu_id;
-	var location = id2loc[position.id];
+	var location = id2loc[education.id];
 	
 	return ''
 	+ '      <li>                             '
@@ -334,6 +328,48 @@ function createEduListLocations(info_edu_id, position, id2loc) {
 	+ '      <br/>                            '
 	+ '';
 }
+
+function labelEduTitle(education) {
+	// Universität Rostock<br/>International Trade	
+	var title = [];
+	
+	if (education.schoolName) {
+		title.push(education.schoolName);
+		title.push('<br/>');
+	}
+	
+	if (education.fieldOfStudy) {
+		title.push(education.fieldOfStudy);
+	}
+	
+	return title.join('');
+}
+
+function labelEduNotes(education) {
+	 var notes = education.notes || '';
+	 
+	 var html = getMarkdownConverter().makeHtml(notes);
+	 return html;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
