@@ -10,6 +10,11 @@ public interface MenuView extends IsWidget {
     interface LogWidget extends HasVisibility, HasHref {
     }
 
+    interface ProfilePlayMenuWidget extends HasVisibility {
+
+        void init();
+    }
+
     void setPresenter(MenuPresenter presenter);
 
     HasVisibility getWaitingIndicator();
@@ -27,5 +32,7 @@ public interface MenuView extends IsWidget {
     HasText getLocationSearchWidget();
 
     void setItemId(String id);
+
+    ProfilePlayMenuWidget getProfilePlayMenuWidget();
 
 }

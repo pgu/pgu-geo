@@ -7,6 +7,7 @@ import pgu.shared.dto.LatLng;
 
 import com.github.gwtbootstrap.client.ui.Brand;
 import com.github.gwtbootstrap.client.ui.Button;
+import com.github.gwtbootstrap.client.ui.Nav;
 import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.NavSearch;
 import com.github.gwtbootstrap.client.ui.ProgressBar;
@@ -34,11 +35,19 @@ public class MenuViewImpl extends Composite implements MenuView {
     @UiField
     ProgressBar               progressBar;
     @UiField
-    NavLink                   adminBtn, logoutBtn, goToProfileBtn, goToContactsBtn, goToAppstatsBtn, mapSizeBtn;
+    NavLink                   adminBtn, logoutBtn, goToProfileBtn, goToContactsBtn, goToAppstatsBtn, mapSizeBtn //
+            , past2prstBtn, prst2pastBtn //
+            , stepBwdBtn, stepFwdBtn //
+            , playBtn, pauseBtn //
+            //
+            ;
     @UiField
     NavSearch                 locationSearchBox;
     @UiField
-    Button                    locationSearchBtn, locationSaveBtn;
+    Button                    locationSearchBtn, locationSaveBtn //
+            ;
+    @UiField
+    Nav                       profilePlayMenu;
 
     private MenuPresenter     presenter;
     private final ClientUtils u              = new ClientUtils();
@@ -62,7 +71,26 @@ public class MenuViewImpl extends Composite implements MenuView {
 
         progressBar.setVisible(false);
         locationSaveBtn.setVisible(false);
+
+        profilePlayMenu.setVisible(false);
+
+        past2prstBtn.setTitle(MSG_FROM_PAST_TO_PRESENT);
+        prst2pastBtn.setTitle(MSG_FROM_PRESENT_TO_PAST);
+        prst2pastBtn.setVisible(false);
+
+        stepBwdBtn.setTitle(MSG_GO_TO_PREVIOUS_LOCATION);
+        stepFwdBtn.setTitle(MSG_GO_TO_NEXT_LOCATION);
+
+        playBtn.setTitle(MSG_PLAY_PROFILE_LOCATIONS);
+        pauseBtn.setTitle(MSG_PAUSE);
     }
+
+    private static final String MSG_FROM_PAST_TO_PRESENT    = "From past to present";
+    private static final String MSG_FROM_PRESENT_TO_PAST    = "From present to past";
+    private static final String MSG_GO_TO_PREVIOUS_LOCATION = "Go to previous location";
+    private static final String MSG_GO_TO_NEXT_LOCATION     = "Go to next location";
+    private static final String MSG_PLAY_PROFILE_LOCATIONS  = "Play profile locations";
+    private static final String MSG_PAUSE                   = "Pause";
 
     @Override
     public void setPresenter(final MenuPresenter presenter) {
@@ -90,6 +118,37 @@ public class MenuViewImpl extends Composite implements MenuView {
             return;
         }
         searchLocationAndAddMarker(this, locationText);
+    }
+
+    @UiHandler("prst2pastBtn")
+    public void clickOnPrst2Past(final ClickEvent e) {
+        prst2pastBtn.setVisible(false);
+
+        past2prstBtn.setVisible(true);
+    }
+
+    @UiHandler("past2prstBtn")
+    public void clickOnPast2Prst(final ClickEvent e) {
+        past2prstBtn.setVisible(false);
+
+        prst2pastBtn.setVisible(true);
+    }
+
+    @UiHandler("pauseBtn")
+    public void clickOnPauseProfile(final ClickEvent e) {
+        pauseBtn.setVisible(false);
+
+        playBtn.setVisible(true);
+    }
+
+    @UiHandler("playBtn")
+    public void clickOnPlayProfile(final ClickEvent e) {
+        playBtn.setVisible(false);
+
+        pauseBtn.setVisible(true);
+
+        // get all the locations from the profile
+        // timer on each location
     }
 
     private LatLng latLng = null;
@@ -150,11 +209,13 @@ public class MenuViewImpl extends Composite implements MenuView {
             mapSizeBtn.setIcon(IconType.RESIZE_FULL);
             mapSizeBtn.setText("Show map");
             isMapDisplayed = false;
+            profilePlayMenu.setVisible(false);
 
         } else {
             mapSizeBtn.setIcon(IconType.RESIZE_SMALL);
             mapSizeBtn.setText("Hide map");
             isMapDisplayed = true;
+            profilePlayMenu.setVisible(true);
 
         }
     }
@@ -278,6 +339,29 @@ public class MenuViewImpl extends Composite implements MenuView {
     @Override
     public void setItemId(final String id) {
         itemId = id;
+    }
+
+    @Override
+    public ProfilePlayMenuWidget getProfilePlayMenuWidget() {
+        return new ProfilePlayMenuWidget() {
+
+            @Override
+            public boolean isVisible() {
+                return profilePlayMenu.isVisible();
+            }
+
+            @Override
+            public void setVisible(final boolean visible) {
+                profilePlayMenu.setVisible(visible);
+            }
+
+            @Override
+            public void init() {
+                playBtn.setVisible(true);
+                pauseBtn.setVisible(false);
+            }
+
+        };
     }
 
 }

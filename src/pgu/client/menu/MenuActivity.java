@@ -16,6 +16,8 @@ public class MenuActivity implements MenuPresenter //
         , ShowWaitingIndicatorEvent.Handler //
         , HideWaitingIndicatorEvent.Handler //
         , LocationSearchEvent.Handler //
+        , GoToProfileEvent.Handler //
+        , GoToContactsEvent.Handler //
 {
 
     private final MenuView    view;
@@ -36,6 +38,8 @@ public class MenuActivity implements MenuPresenter //
         eventBus.addHandler(ShowWaitingIndicatorEvent.TYPE, this);
         eventBus.addHandler(HideWaitingIndicatorEvent.TYPE, this);
         eventBus.addHandler(LocationSearchEvent.TYPE, this);
+        eventBus.addHandler(GoToProfileEvent.TYPE, this);
+        eventBus.addHandler(GoToContactsEvent.TYPE, this);
 
         view.getProfileWidget().setVisible(true);
         view.getContactsWidget().setVisible(true);
@@ -93,6 +97,17 @@ public class MenuActivity implements MenuPresenter //
     @Override
     public void saveLocationItem(final LatLng latLng, final String itemId, final String text) {
         // TODO PGU Aug 22, 2012 save item...
+    }
+
+    @Override
+    public void onGoToContacts(final GoToContactsEvent event) {
+        view.getProfilePlayMenuWidget().setVisible(false);
+    }
+
+    @Override
+    public void onGoToProfile(final GoToProfileEvent event) {
+        view.getProfilePlayMenuWidget().init();
+        view.getProfilePlayMenuWidget().setVisible(true);
     }
 
 }
