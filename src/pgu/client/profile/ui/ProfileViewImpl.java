@@ -15,6 +15,7 @@ import com.github.gwtbootstrap.client.ui.Paragraph;
 import com.github.gwtbootstrap.client.ui.Popover;
 import com.github.gwtbootstrap.client.ui.Section;
 import com.github.gwtbootstrap.client.ui.constants.Placement;
+import com.github.gwtbootstrap.client.ui.constants.Trigger;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -105,6 +106,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             locContainer.add(new HTML(loc));
         }
 
+        summaryBasic.setTrigger(Trigger.MANUAL);
         summaryBasic.setAnimation(true);
         summaryBasic.setPlacement(Placement.LEFT);
         summaryBasic.setHeading("Summary");
@@ -142,16 +144,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 		$wnd.searchMapFor = $entry(@pgu.client.profile.ui.ProfileViewImpl::searchMapFor(Ljava/lang/String;Ljava/lang/String;));
     }-*/;
 
-    // @UiHandler("positionLocation")
-    // public void clickPositionLocation(final ClickEvent e) {
-    // positionLocation.setActive(!positionLocation.isActive());
-    //
-    // if (positionLocation.isActive()) {
-    // Window.scrollTo(0, 0);
-    // presenter.searchForPosition("positionId", positionLocation.getText());
-    // }
-    // }
-
     @UiHandler("summaryBasicBtn")
     public void clickSummaryBasic(final ClickEvent e) {
         summaryBasic.toggle();
@@ -173,8 +165,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     private native void setProfile(String profile, String id2location) /*-{
 		var p = JSON.parse(profile);
 		var id2loc = JSON.parse(id2location);
-
-		// basic information
 
 		var xp_table_id = 'profile:xp_table';
 		var edu_table_id = 'profile:edu_table';
