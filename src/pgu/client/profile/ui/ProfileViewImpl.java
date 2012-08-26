@@ -111,6 +111,18 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         summaryBasic
                 .setText("A senior Java J2EE web developer with broad experience in web-based development, mainly with AJAX interface and Java-based frameworks such as J2EE, Spring and Hibernate. Resourceful, opened to different technologies, willing to join a state of the art web project to build up a successful career.");
 
+        // final ControlLabel label = new ControlLabel("Enter something");
+        // final TextBox txtbox = new TextBox();
+        // txtbox.setPlaceholder("Something...");
+        // final Button submitBtn = new Button("Submit");
+        //
+        // final WellForm wellForm = new WellForm();
+        // wellForm.add(label);
+        // wellForm.add(txtbox);
+        // wellForm.add(submitBtn);
+        //
+        // summaryBasic.setWidget(wellForm);
+
         exportMethod();
     }
 

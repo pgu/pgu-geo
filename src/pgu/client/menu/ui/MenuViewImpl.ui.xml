@@ -33,8 +33,8 @@
                 <b:NavLink icon="LOCK" ui:field="adminBtn" iconSize="LARGE" ></b:NavLink>
             </b:Nav>
             <b:Nav ui:field="profilePlayMenu" alignment="RIGHT"><!-- only for profile -->
-                <b:NavLink ui:field="past2prstBtn" icon="CHEVRON_RIGHT" iconSize="LARGE" />
-                <b:NavLink ui:field="prst2pastBtn" icon="CHEVRON_LEFT" iconSize="LARGE" />
+                <b:NavLink ui:field="past2prstBtn" icon="CIRCLE_ARROW_RIGHT" iconSize="LARGE" />
+                <b:NavLink ui:field="prst2pastBtn" icon="CIRCLE_ARROW_LEFT" iconSize="LARGE" />
                 <b:NavLink ui:field="stepBwdBtn" icon="STEP_BACKWARD" iconSize="LARGE" />
                 <b:NavLink ui:field="playBtn" icon="PLAY" iconSize="LARGE" />
                 <b:NavLink ui:field="pauseBtn" icon="PAUSE" iconSize="LARGE" />
