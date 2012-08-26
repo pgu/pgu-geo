@@ -3,6 +3,7 @@ package pgu.client.menu;
 import pgu.client.app.event.GoToContactsEvent;
 import pgu.client.app.event.GoToProfileEvent;
 import pgu.client.app.event.HideWaitingIndicatorEvent;
+import pgu.client.app.event.LocationEditEvent;
 import pgu.client.app.event.LocationSearchEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
@@ -10,12 +11,14 @@ import pgu.client.app.utils.ClientUtils;
 import pgu.shared.dto.LatLng;
 import pgu.shared.dto.LoginInfo;
 
+import com.google.gwt.core.client.GWT;
 import com.google.web.bindery.event.shared.EventBus;
 
 public class MenuActivity implements MenuPresenter //
         , ShowWaitingIndicatorEvent.Handler //
         , HideWaitingIndicatorEvent.Handler //
         , LocationSearchEvent.Handler //
+        , LocationEditEvent.Handler //
         , GoToProfileEvent.Handler //
         , GoToContactsEvent.Handler //
 {
@@ -37,6 +40,7 @@ public class MenuActivity implements MenuPresenter //
 
         eventBus.addHandler(ShowWaitingIndicatorEvent.TYPE, this);
         eventBus.addHandler(HideWaitingIndicatorEvent.TYPE, this);
+        eventBus.addHandler(LocationEditEvent.TYPE, this);
         eventBus.addHandler(LocationSearchEvent.TYPE, this);
         eventBus.addHandler(GoToProfileEvent.TYPE, this);
         eventBus.addHandler(GoToContactsEvent.TYPE, this);
@@ -95,8 +99,14 @@ public class MenuActivity implements MenuPresenter //
     }
 
     @Override
-    public void saveLocationItem(final LatLng latLng, final String itemId, final String text) {
-        // TODO PGU Aug 22, 2012 save item...
+    public void saveLocationItem(final LatLng latLng, final String itemId, final String locationLabel) {
+        GWT.log("save " + //
+                itemId + //
+                ", " + locationLabel + //
+                ", the found location: " + //
+                latLng //
+        );
+        // TODO PGU
     }
 
     @Override
@@ -108,6 +118,24 @@ public class MenuActivity implements MenuPresenter //
     public void onGoToProfile(final GoToProfileEvent event) {
         view.getProfilePlayMenuWidget().init();
         view.getProfilePlayMenuWidget().setVisible(true);
+    }
+
+    @Override
+    public void onLocationEdit(final LocationEditEvent event) {
+        final String locationId = event.getLocationId();
+
+        if (u.isVoid(locationId)) {
+
+            view.setItemId(event.getRowId());
+            view.getLocationSearchWidget().setText("");
+            view.getLocationSearchWidget().setFocus(true);
+            view.getSaveWidget().setVisible(true);
+            view.scrollToTop();
+
+        } else {
+            // TODO PGU show modal
+        }
+
     }
 
 }

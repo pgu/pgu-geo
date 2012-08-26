@@ -15,6 +15,12 @@ public interface MenuView extends IsWidget {
         void init();
     }
 
+    interface LocationSearchWidget extends HasText {
+
+        void setFocus(boolean isFocused);
+
+    }
+
     void setPresenter(MenuPresenter presenter);
 
     HasVisibility getWaitingIndicator();
@@ -29,10 +35,14 @@ public interface MenuView extends IsWidget {
 
     HasVisibility getContactsWidget();
 
-    HasText getLocationSearchWidget();
+    LocationSearchWidget getLocationSearchWidget();
 
     void setItemId(String id);
 
     ProfilePlayMenuWidget getProfilePlayMenuWidget();
+
+    HasVisibility getSaveWidget();
+
+    void scrollToTop();
 
 }

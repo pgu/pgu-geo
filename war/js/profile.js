@@ -44,6 +44,10 @@ function createXpTableRow(index, position) {
 	+ '    <ul class="nav nav-pills">         '
 	+ locations
 	+ '    </ul>                              '
+	+ '    <i class="icon-plus-sign icon-large add-location" '
+	+ '      onclick="javascript:addLocation(\'' + info_xp_id + '\');"'
+	+ '      >                               '
+	+ '    </i>                               '
 	+ '  </td>                                '
 	+ '  <td>' + dates + '</td>               '
 	+ '  <td>' + title + '</td>               '
@@ -292,6 +296,10 @@ function createEduTableRow(index, education, id2loc) {
 	+ '    <ul class="nav nav-pills">         '
 	+ locations
 	+ '    </ul>                              '
+	+ '    <i class="icon-plus-sign icon-large add-location" '
+	+ '      onclick="javascript:addLocation(\'' + info_edu_id + '\');"'
+	+ '      >                               '
+	+ '    </i>                               '
 	+ '  </td>                                '
 	+ '  <td>' + dates + '</td>               '
 	+ '  <td>' + title + '</td>               '

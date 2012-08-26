@@ -19,7 +19,6 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasVisibility;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -99,24 +98,30 @@ public class MenuViewImpl extends Composite implements MenuView {
 
     @UiHandler("locationSaveBtn")
     public void clickOnLocationSave(final ClickEvent e) {
-        GWT.log("save " + //
-                itemId + //
-                ", " + locationSearchBox.getTextBox().getText() + //
-                ", the found location: " + //
-                latLng //
-        );
+        final String locationLabel = locationSearchBox.getTextBox().getText();
 
-        presenter.saveLocationItem(latLng, itemId, locationSearchBox.getTextBox().getText());
+        if (u.isVoid(locationLabel)) {
+            return;
+        }
+
+        if (u.isVoid(lastSearchLatLng.getLat()) //
+                || u.isVoid(lastSearchLatLng.getLng())) {
+            return;
+        }
+
+        presenter.saveLocationItem(lastSearchLatLng, itemId, locationLabel);
         locationSaveBtn.setVisible(false);
-
     }
 
     @UiHandler("locationSearchBtn")
     public void clickOnLocationSearch(final ClickEvent e) {
+
         final String locationText = locationSearchBox.getTextBox().getText();
-        if (locationText.isEmpty()) {
+
+        if (u.isVoid(locationText)) {
             return;
         }
+
         searchLocationAndAddMarker(this, locationText);
     }
 
@@ -151,18 +156,13 @@ public class MenuViewImpl extends Composite implements MenuView {
         // timer on each location
     }
 
-    private LatLng latLng = null;
+    private LatLng lastSearchLatLng = null;
 
-    public void showSaveBtn(final String lat, final String lng) {
-        if (u.isVoid(itemId)) {
-            return;
-        }
+    public void saveSearchLatLng(final String lat, final String lng) {
+        lastSearchLatLng = new LatLng();
+        lastSearchLatLng.setLat(lat);
+        lastSearchLatLng.setLng(lng);
 
-        latLng = new LatLng();
-        latLng.setLat(lat);
-        latLng.setLng(lng);
-
-        locationSaveBtn.setVisible(true);
     }
 
     public static native void searchLocationAndAddMarker(MenuViewImpl menu, String locationText) /*-{
@@ -196,7 +196,7 @@ public class MenuViewImpl extends Composite implements MenuView {
 							var lat = loc.lat() + "";
 							var lng = loc.lng() + "";
 
-							menu.@pgu.client.menu.ui.MenuViewImpl::showSaveBtn(Ljava/lang/String;Ljava/lang/String;)(lat,lng);
+							menu.@pgu.client.menu.ui.MenuViewImpl::saveSearchLatLng(Ljava/lang/String;Ljava/lang/String;)(lat,lng);
 
 						});
 
@@ -330,8 +330,25 @@ public class MenuViewImpl extends Composite implements MenuView {
     }
 
     @Override
-    public HasText getLocationSearchWidget() {
-        return locationSearchBox.getTextBox();
+    public LocationSearchWidget getLocationSearchWidget() {
+        return new LocationSearchWidget() {
+
+            @Override
+            public String getText() {
+                return locationSearchBox.getTextBox().getText();
+            }
+
+            @Override
+            public void setText(final String text) {
+                locationSearchBox.getTextBox().setText(text);
+            }
+
+            @Override
+            public void setFocus(final boolean isFocused) {
+                locationSearchBox.getTextBox().setFocus(isFocused);
+            }
+
+        };
     }
 
     private String itemId;
@@ -362,6 +379,16 @@ public class MenuViewImpl extends Composite implements MenuView {
             }
 
         };
+    }
+
+    @Override
+    public HasVisibility getSaveWidget() {
+        return locationSaveBtn;
+    }
+
+    @Override
+    public void scrollToTop() {
+        Window.scrollTo(0, 0);
     }
 
 }

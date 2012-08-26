@@ -157,7 +157,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     public native static void exportMethod() /*-{
 		$wnd.searchMapFor = $entry(@pgu.client.profile.ui.ProfileViewImpl::searchMapFor(Ljava/lang/String;Ljava/lang/String;));
+		$wnd.addLocation = $entry(@pgu.client.profile.ui.ProfileViewImpl::addLocation(Ljava/lang/String;));
     }-*/;
+
+    public static void addLocation(final String rowId) {
+        staticPresenter.addLocation(rowId);
+    }
 
     @UiHandler("summaryBasicBtn")
     public void clickSummaryBasic(final ClickEvent e) {

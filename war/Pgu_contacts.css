@@ -137,6 +137,10 @@ section {
 
 }
 
-
+.add-location {
+    float: right;
+    padding-right: 5px;
+    cursor: pointer;
+}
 
 
