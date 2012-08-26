@@ -2,6 +2,7 @@ package pgu.client.profile;
 
 import pgu.client.app.event.HideWaitingIndicatorEvent;
 import pgu.client.app.event.LocationEditEvent;
+import pgu.client.app.event.LocationSaveEvent;
 import pgu.client.app.event.LocationSearchEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
@@ -14,7 +15,9 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-public class ProfileActivity extends AbstractActivity implements ProfilePresenter {
+public class ProfileActivity extends AbstractActivity implements ProfilePresenter //
+        , LocationSaveEvent.Handler //
+{
 
     private final ClientFactory        clientFactory;
     private final ProfileView          view;
@@ -34,6 +37,9 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
         this.eventBus = eventBus;
         view.setPresenter(this);
+
+        eventBus.addHandler(LocationSaveEvent.TYPE, this);
+
         panel.setWidget(view.asWidget());
 
         u.fire(eventBus, new ShowWaitingIndicatorEvent());
@@ -59,6 +65,12 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     @Override
     public void addLocation(final String rowId) {
         u.fire(eventBus, new LocationEditEvent(null, rowId));
+    }
+
+    @Override
+    public void onLocationSave(final LocationSaveEvent event) {
+        // TODO PGU add the new location to the list
+
     }
 
 }

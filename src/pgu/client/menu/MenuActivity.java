@@ -4,6 +4,7 @@ import pgu.client.app.event.GoToContactsEvent;
 import pgu.client.app.event.GoToProfileEvent;
 import pgu.client.app.event.HideWaitingIndicatorEvent;
 import pgu.client.app.event.LocationEditEvent;
+import pgu.client.app.event.LocationSaveEvent;
 import pgu.client.app.event.LocationSearchEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
@@ -106,7 +107,8 @@ public class MenuActivity implements MenuPresenter //
                 ", the found location: " + //
                 latLng //
         );
-        // TODO PGU
+
+        u.fire(eventBus, new LocationSaveEvent(latLng, itemId, locationLabel));
     }
 
     @Override
