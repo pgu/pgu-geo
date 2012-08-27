@@ -1,3 +1,4 @@
+var delay_to_call_geocoder = 5000;
 
 function createTable(type, items, itemId2locations, empty_message) {
 	
@@ -262,7 +263,7 @@ function createListLocations(item, itemId2locations) {
 	var list = [];
 	for (var i = 0, len = itemLocations.length; i < len; i++) {
 		
-		var location = itemLocations[i];
+		var itemLocation = itemLocations[i];
 		
 		var anchor_id = "loc_" + item.id + "_" + i;
 		
@@ -270,14 +271,20 @@ function createListLocations(item, itemId2locations) {
 		+ '      <li class="locationLi">          '
 		+ '        <a id="' + anchor_id + '"             '
 		+ '           href="javascript:;"         '
-		+ '           onclick="javascript:searchMapFor(\''+ item.id +'\', \'' + anchor_id +'\', \''+ location.name +'\');return false;"'
+		+ '           onclick="javascript:searchMapFor(\''+ item.id +'\', \'' + anchor_id +'\', \''+ itemLocation.name +'\');return false;"'
 		+ '           >                           '
-		+ '           <b>' + location.name + '</b>     '
+		+ '           <b>' + itemLocation.name + '</b>     '
 		+ '        </a>                           '
 		+ '      </li>                            '
 		+ '';
 		
 		list.push(el);
+		
+		if (!(itemLocation.lat && itemLocation.lng)) {
+			
+			setTimeout(function() { searchLatLng(itemLocation, anchor_id); }, delay_to_call_geocoder);
+			delay_to_call_geocoder += 1000;
+		}
 	}
 	
 	return list.join('');
@@ -299,7 +306,60 @@ function labelEduTitle(education) {
 	return title.join('<br/>');
 }
 
+var lastCall = 0 ;
 
+function searchLatLng(itemLocation, anchor_id) {
+
+	if (geocoder == undefined) {
+		setTimeout(function() { searchLatLng(itemLocation, anchor_id); }, 10000);
+		return;
+	}
+	
+	var currentCall = Math.round(Date.now() / 1000);
+	console.log("call at " + (currentCall - lastCall) + "s, " + itemLocation.name);
+	lastCall = currentCall;
+	
+	geocoder.geocode(
+			{
+				'address' : itemLocation.name
+			},
+			function(results, status) {
+				
+				
+				if (status == google.maps.GeocoderStatus.OK) {
+					
+					var loc = results[0].geometry.location;
+					console.log(itemLocation.name + ": " + loc);
+					
+					itemLocation.lat = loc.lat();
+					itemLocation.lng = loc.lng();
+					
+				} else if (status == google.maps.GeocoderStatus.ZERO_RESULTS) {
+					
+					var anchor = $('#' + anchor_id);
+					anchor.addClass('locationNotFound');
+					anchor.attr('title', 'Unknown location');
+					
+					console.log("Oups: " + status);
+					
+				} else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+					
+					console.log("over_query_limit... " + itemLocation.name);
+					
+					setTimeout(function() { searchLatLng(itemLocation, anchor_id); }, 5000);			
+					
+				} else {
+					
+					var anchor = $('#' + anchor_id);
+					anchor.addClass('locationNotFound_technicalError');
+					anchor.attr('title', 'Location not found because of a technical exception');
+					
+					console.log("Oups: " + status);
+				}
+				
+			}
+	);
+}
 
 
 

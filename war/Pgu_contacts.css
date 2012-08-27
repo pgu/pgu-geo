@@ -146,3 +146,12 @@ section {
 .locationLi {
     float: none !important;
 }
+
+.locationNotFound {
+    color: #F89406;
+}
+
+.locationNotFound_technicalError {
+    color: #BD362F;
+}
+

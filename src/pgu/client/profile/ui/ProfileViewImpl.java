@@ -205,6 +205,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 		, 'No experience has been found');
 
 		////////////////////////
+
 		$doc.getElementById('profile:edu_table').innerHTML = //
 		$wnd.createTable( //
 		'edu' //

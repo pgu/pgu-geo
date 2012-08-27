@@ -71,8 +71,6 @@ public class MenuViewImpl extends Composite implements MenuView {
         progressBar.setVisible(false);
         locationSaveBtn.setVisible(false);
 
-        profilePlayMenu.setVisible(false);
-
         past2prstBtn.setTitle(MSG_FROM_PAST_TO_PRESENT);
         prst2pastBtn.setTitle(MSG_FROM_PRESENT_TO_PAST);
         prst2pastBtn.setVisible(false);
@@ -82,6 +80,8 @@ public class MenuViewImpl extends Composite implements MenuView {
 
         playBtn.setTitle(MSG_PLAY_PROFILE_LOCATIONS);
         pauseBtn.setTitle(MSG_PAUSE);
+
+        getProfilePlayMenuWidget().init();
     }
 
     private static final String MSG_FROM_PAST_TO_PRESENT    = "From past to present";

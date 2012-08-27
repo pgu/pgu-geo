@@ -35,6 +35,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     @Override
     public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
+
         this.eventBus = eventBus;
         view.setPresenter(this);
 

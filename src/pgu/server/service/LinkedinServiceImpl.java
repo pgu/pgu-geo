@@ -368,7 +368,8 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
                     if (!u.isVoid(locName)) {
                         final String[] locationNames = locName.split(";");
 
-                        for (final String locationName : locationNames) {
+                        for (final String _locationName : locationNames) {
+                            final String locationName = _locationName.trim();
                             final String key = locationName.toLowerCase();
 
                             if (locationReferentiel.containsKey(key)) {

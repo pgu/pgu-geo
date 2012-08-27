@@ -2,7 +2,6 @@ package pgu.client;
 
 import pgu.client.app.AppActivity;
 import pgu.client.app.AppView;
-import pgu.client.app.event.GoToProfileEvent;
 import pgu.client.app.mvp.AppActivityMapper;
 import pgu.client.app.mvp.AppPlaceHistoryMapper;
 import pgu.client.app.mvp.ClientFactory;
@@ -52,8 +51,6 @@ public class Pgu_contacts implements EntryPoint {
 
                         RootPanel.get().add(appView);
                         historyHandler.handleCurrentHistory();
-
-                        eventBus.fireEvent(new GoToProfileEvent());
                     }
 
                 });
