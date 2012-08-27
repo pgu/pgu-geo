@@ -275,11 +275,11 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         final Profile profile = new Profile();
         if (isTest) {
 
-            final HashMap<Integer, String> id2location = new HashMap<Integer, String>();
-            id2location.put(23039762, "Rostock, Germany");
-            id2location.put(23039761, "Nantes, France");
-            id2location.put(3392191, "Nantes, France");
-            id2location.put(23039657, "Nantes, France");
+            final HashMap<Integer, ArrayList<String>> id2location = new HashMap<Integer, ArrayList<String>>();
+            id2location.put(23039762, u.list("Rostock, Germany"));
+            id2location.put(23039761, u.list("Nantes, France"));
+            id2location.put(3392191, u.list("Nantes, France"));
+            id2location.put(23039657, u.list("Nantes, France", "Madrid, Spain"));
 
             profile.setJson(profileTest());
             profile.setId2location(new Gson().toJson(id2location));

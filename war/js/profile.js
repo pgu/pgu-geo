@@ -205,7 +205,7 @@ function createXpListLocations(info_xp_id, position) {
 		var location = locations[i];
 		
 		var el = ''
-		+ '      <li>                             '
+		+ '      <li class="locationLi">          '
 		+ '        <a id="' + id + '"             '
 		+ '           href="javascript:;"         '
 		+ '           onclick="javascript:searchMapFor(\''+ id +'\', \''+ location +'\');return false;"'
@@ -213,7 +213,6 @@ function createXpListLocations(info_xp_id, position) {
 		+ '           <b>' + location + '</b>     '
 		+ '        </a>                           '
 		+ '      </li>                            '
-		+ '      <br/>                            '
 		+ '';
 		
 		list.push(el);
@@ -322,19 +321,29 @@ function createEduTableRow(index, education, id2loc) {
 function createEduListLocations(info_edu_id, education, id2loc) {
 	
 	var id = "a_" + info_edu_id;
-	var location = id2loc[education.id];
+	var locations = id2loc[education.id];
 	
-	return ''
-	+ '      <li>                             '
-	+ '        <a id="' + id + '"             '
-	+ '           href="javascript:;"         '
-	+ '           onclick="javascript:searchMapFor(\''+ id +'\', \''+ location +'\');return false;"'
-	+ '           >                           '
-	+ '           <b>' + location + '</b>     '
-	+ '        </a>                           '
-	+ '      </li>                            '
-	+ '      <br/>                            '
-	+ '';
+	var list = [];
+	for (var i = 0, len = locations.length; i < len; i++) {
+		var id = "a_" +info_edu_id + "_" + i;
+		var location = locations[i];
+		
+		var el = ''
+		+ '      <li class="locationLi">          '
+		+ '        <a id="' + id + '"             '
+		+ '           href="javascript:;"         '
+		+ '           onclick="javascript:searchMapFor(\''+ id +'\', \''+ location +'\');return false;"'
+		+ '           >                           '
+		+ '           <b>' + location + '</b>     '
+		+ '        </a>                           '
+		+ '      </li>                            '
+		+ '';
+		
+		list.push(el);
+	}
+	
+	return list.join('');
+	
 }
 
 function labelEduTitle(education) {

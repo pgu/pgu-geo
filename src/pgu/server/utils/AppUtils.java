@@ -1,6 +1,7 @@
 package pgu.server.utils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import pgu.shared.utils.DateUtils;
@@ -23,6 +24,19 @@ public class AppUtils {
 
     public String now() {
         return new SimpleDateFormat(DateUtils.FULL_DOT_FMT).format(new Date());
+    }
+
+    public ArrayList<String> list(final String... args) {
+
+        if (args == null) {
+            return new ArrayList<String>();
+        }
+
+        final ArrayList<String> a = new ArrayList<String>(args.length);
+        for (final String string : args) {
+            a.add(string);
+        }
+        return a;
     }
 
 }

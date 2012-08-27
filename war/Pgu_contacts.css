@@ -143,4 +143,6 @@ section {
     cursor: pointer;
 }
 
-
+.locationLi {
+    float: none !important;
+}
