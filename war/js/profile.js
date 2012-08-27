@@ -1,4 +1,12 @@
 var delay_to_call_geocoder = 5000;
+var cache_name2itemLocation = {};
+var lastCall = 0 ;
+var _showdown_converter;
+
+function RowConfig(item_id, prefix) {
+	this.item_id = item_id;
+	this.row_id = prefix + "_row_" + item_id;
+}
 
 function createTable(type, items, itemId2locations, empty_message) {
 	
@@ -56,11 +64,6 @@ function createTableHead(type) {
 	+ '  <tbody>                                          '
 	+ '';
 
-}
-
-function RowConfig(item_id, prefix) {
-	this.item_id = item_id;
-	this.row_id = prefix + "_row_" + item_id;
 }
 
 function createTableRow(type, item, itemId2locations) {
@@ -241,8 +244,6 @@ function labelXpTitle(position) {
 	return title.join('<br/>');
 }
 
-var _showdown_converter;
-
 function getMarkdownConverter() {
 	if (_showdown_converter) {
 		return _showdown_converter;
@@ -284,6 +285,17 @@ function createListLocations(item, itemId2locations) {
 			
 			setTimeout(function() { searchLatLng(itemLocation, anchor_id); }, delay_to_call_geocoder);
 			delay_to_call_geocoder += 1000;
+			
+		} else {
+			
+			if (cache_name2itemLocation[itemLocation.name] == undefined) {
+				var cacheItem = {};
+				cacheItem.name = itemLocation.name;
+				cacheItem.lat = itemLocation.lat;
+				cacheItem.lng = itemLocation.lng;
+				
+				cache_name2itemLocation[itemLocation.name] = cacheItem;
+			}
 		}
 	}
 	
@@ -306,8 +318,6 @@ function labelEduTitle(education) {
 	return title.join('<br/>');
 }
 
-var lastCall = 0 ;
-
 function searchLatLng(itemLocation, anchor_id) {
 
 	if (geocoder == undefined) {
@@ -318,6 +328,14 @@ function searchLatLng(itemLocation, anchor_id) {
 	var currentCall = Math.round(Date.now() / 1000);
 	console.log("call at " + (currentCall - lastCall) + "s, " + itemLocation.name);
 	lastCall = currentCall;
+	
+	var cacheItem = cache_name2itemLocation[itemLocation.name];
+	if (cacheItem) {
+		
+		itemLocation.lat = cacheItem.lat;
+		itemLocation.lng = cacheItem.lng;
+		return;
+	}
 	
 	geocoder.geocode(
 			{
@@ -333,7 +351,16 @@ function searchLatLng(itemLocation, anchor_id) {
 					
 					itemLocation.lat = loc.lat();
 					itemLocation.lng = loc.lng();
-					
+
+					if (cache_name2itemLocation[itemLocation.name] == undefined) {
+						var cacheItem = {};
+						cacheItem.name = itemLocation.name;
+						cacheItem.lat = itemLocation.lat;
+						cacheItem.lng = itemLocation.lng;
+						
+						cache_name2itemLocation[itemLocation.name] = cacheItem;
+					}
+
 				} else if (status == google.maps.GeocoderStatus.ZERO_RESULTS) {
 					
 					var anchor = $('#' + anchor_id);
