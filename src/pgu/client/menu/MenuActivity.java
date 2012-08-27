@@ -95,7 +95,7 @@ public class MenuActivity implements MenuPresenter //
 
     @Override
     public void onLocationSearch(final LocationSearchEvent event) {
-        view.setItemId(event.getId());
+        view.setItemId(event.getItemId());
         view.getLocationSearchWidget().setText(event.getText());
     }
 
@@ -128,7 +128,7 @@ public class MenuActivity implements MenuPresenter //
 
         if (u.isVoid(locationId)) {
 
-            view.setItemId(event.getRowId());
+            view.setItemId(event.getItemId());
             view.getLocationSearchWidget().setText("");
             view.getLocationSearchWidget().setFocus(true);
             view.getSaveWidget().setVisible(true);

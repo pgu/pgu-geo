@@ -17,11 +17,11 @@ public class LocationSearchEvent extends GwtEvent<LocationSearchEvent.Handler> {
 
     public static final Type<Handler> TYPE = new Type<Handler>();
 
-    private final String              id;
+    private final String              itemId;
     private final String              text;
 
-    public LocationSearchEvent(final String id, final String text) {
-        this.id = id;
+    public LocationSearchEvent(final String itemId, final String text) {
+        this.itemId = itemId;
         this.text = text;
     }
 
@@ -35,8 +35,8 @@ public class LocationSearchEvent extends GwtEvent<LocationSearchEvent.Handler> {
         handler.onLocationSearch(this);
     }
 
-    public String getId() {
-        return id;
+    public String getItemId() {
+        return itemId;
     }
 
     public String getText() {

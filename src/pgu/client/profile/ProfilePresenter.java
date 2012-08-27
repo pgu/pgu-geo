@@ -2,8 +2,8 @@ package pgu.client.profile;
 
 public interface ProfilePresenter {
 
-    void searchForLocation(String id, String text);
+    void searchForLocation(String itemId, String anchorId, String location);
 
-    void addLocation(String rowId);
+    void addLocation(String itemId);
 
 }

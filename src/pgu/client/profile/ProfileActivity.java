@@ -58,13 +58,13 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     }
 
     @Override
-    public void searchForLocation(final String id, final String text) {
-        u.fire(eventBus, new LocationSearchEvent(id, text));
+    public void searchForLocation(final String itemId, final String anchorId, final String text) {
+        u.fire(eventBus, new LocationSearchEvent(itemId, text));
     }
 
     @Override
-    public void addLocation(final String rowId) {
-        u.fire(eventBus, new LocationEditEvent(null, rowId));
+    public void addLocation(final String itemId) {
+        u.fire(eventBus, new LocationEditEvent(null, itemId));
     }
 
     @Override

@@ -126,9 +126,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         exportMethod();
     }
 
-    public static void searchMapFor(final String id, final String location) {
+    public static void searchMapFor(final String itemId, final String anchorId, final String location) {
 
-        final Element anchor = DOM.getElementById(id);
+        final Element anchor = DOM.getElementById(anchorId);
         final com.google.gwt.dom.client.Element li = anchor.getParentElement();
 
         if (li.getClassName().contains("active")) {
@@ -138,16 +138,16 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
         li.addClassName("active");
 
-        searchForLocation(id, location);
+        searchForLocation(itemId, anchorId, location);
     }
 
-    private static void searchForLocation(final String itemId, final String location) {
+    private static void searchForLocation(final String itemId, final String anchorId, final String location) {
         new Timer() {
 
             @Override
             public void run() {
                 Window.scrollTo(0, 0);
-                staticPresenter.searchForLocation(itemId, location);
+                staticPresenter.searchForLocation(itemId, anchorId, location);
             }
 
         }.schedule(300);
@@ -156,12 +156,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     private static ProfilePresenter staticPresenter = null;
 
     public native static void exportMethod() /*-{
-		$wnd.searchMapFor = $entry(@pgu.client.profile.ui.ProfileViewImpl::searchMapFor(Ljava/lang/String;Ljava/lang/String;));
+		$wnd.searchMapFor = $entry(@pgu.client.profile.ui.ProfileViewImpl::searchMapFor(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;));
 		$wnd.addLocation = $entry(@pgu.client.profile.ui.ProfileViewImpl::addLocation(Ljava/lang/String;));
     }-*/;
 
-    public static void addLocation(final String rowId) {
-        staticPresenter.addLocation(rowId);
+    public static void addLocation(final String itemId) {
+        staticPresenter.addLocation(itemId);
     }
 
     @UiHandler("summaryBasicBtn")
@@ -174,7 +174,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         locContainer.setActive(!locContainer.isActive());
 
         if (locContainer.isActive()) {
-            searchForLocation("", locContainer.getText());
+            searchForLocation(null, null, locContainer.getText());
         }
     }
 

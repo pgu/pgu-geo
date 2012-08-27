@@ -354,8 +354,8 @@ public class MenuViewImpl extends Composite implements MenuView {
     private String itemId;
 
     @Override
-    public void setItemId(final String id) {
-        itemId = id;
+    public void setItemId(final String itemId) {
+        this.itemId = itemId;
     }
 
     @Override

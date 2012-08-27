@@ -57,9 +57,9 @@ function createTableHead(type) {
 
 }
 
-function RowConfig(id, prefix) {
-	this.id = id;
-	this.row_id = prefix + "_row_" + id;
+function RowConfig(item_id, prefix) {
+	this.item_id = item_id;
+	this.row_id = prefix + "_row_" + item_id;
 }
 
 function createTableRow(type, item, itemId2locations) {
@@ -96,7 +96,7 @@ function createTableRow(type, item, itemId2locations) {
 	+ rowConfig.locations
 	+ '    </ul>                                                                        '
 	+ '    <i class="icon-plus-sign icon-large add-location"                            '
-	+ '      onclick="javascript:addLocation(\'' + rowConfig.id + '\');"                '
+	+ '      onclick="javascript:addLocation(\'' + rowConfig.item_id + '\');"                '
 	+ '      >                                                                          '
 	+ '    </i>                                                                         '
 	+ '  </td>                                                                          '
@@ -269,13 +269,13 @@ function createListLocations(item, itemId2locations) {
 		
 		var location = locations[i];
 		
-		var id = "loc_" + item.id + "_" + i;
+		var anchor_id = "loc_" + item.id + "_" + i;
 		
 		var el = ''
 		+ '      <li class="locationLi">          '
-		+ '        <a id="' + id + '"             '
+		+ '        <a id="' + anchor_id + '"             '
 		+ '           href="javascript:;"         '
-		+ '           onclick="javascript:searchMapFor(\''+ id +'\', \''+ location +'\');return false;"'
+		+ '           onclick="javascript:searchMapFor(\''+ item.id +'\', \'' + anchor_id +'\', \''+ location +'\');return false;"'
 		+ '           >                           '
 		+ '           <b>' + location + '</b>     '
 		+ '        </a>                           '

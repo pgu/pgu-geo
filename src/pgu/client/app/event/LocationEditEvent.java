@@ -18,11 +18,11 @@ public class LocationEditEvent extends GwtEvent<LocationEditEvent.Handler> {
     public static final Type<Handler> TYPE = new Type<Handler>();
 
     private final String              locationId;
-    private final String              rowId;
+    private final String              itemId;
 
-    public LocationEditEvent(final String locationId, final String rowId) {
+    public LocationEditEvent(final String locationId, final String itemId) {
         this.locationId = locationId;
-        this.rowId = rowId;
+        this.itemId = itemId;
     }
 
     @Override
@@ -39,8 +39,8 @@ public class LocationEditEvent extends GwtEvent<LocationEditEvent.Handler> {
         return locationId;
     }
 
-    public String getRowId() {
-        return rowId;
+    public String getItemId() {
+        return itemId;
     }
 
 }
