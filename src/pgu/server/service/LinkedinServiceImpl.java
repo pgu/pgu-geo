@@ -30,6 +30,14 @@ import pgu.server.utils.AppUtils;
 import pgu.shared.dto.AccessToken;
 import pgu.shared.dto.Connections;
 import pgu.shared.dto.Country;
+import pgu.shared.dto.Education;
+import pgu.shared.dto.EducationWithLocation;
+import pgu.shared.dto.Educations;
+import pgu.shared.dto.EducationsWithLocation;
+import pgu.shared.dto.ItemLocation;
+import pgu.shared.dto.ItemWithLocation;
+import pgu.shared.dto.ItemsWithLocation;
+import pgu.shared.dto.LinkedinProfile;
 import pgu.shared.dto.Location;
 import pgu.shared.dto.OauthAuthorizationStart;
 import pgu.shared.dto.Person;
@@ -264,7 +272,24 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         return new Gson().fromJson(body, Connections.class);
     }
 
-    private final boolean isTest = true;
+    private final boolean                        isTest               = true;
+
+    private static HashMap<String, ItemLocation> locationReferentiel  = new HashMap<String, ItemLocation>();
+    private static final HashMap<Long, String>   educationId2location = new HashMap<Long, String>();
+    static {
+
+        final ItemLocation nantesLocation = new ItemLocation();
+        nantesLocation.setName("Nantes, France");
+        nantesLocation.setLat("47.218371");
+        nantesLocation.setLng("-1.553621");
+
+        locationReferentiel.put(nantesLocation.getName().toLowerCase(), nantesLocation);
+
+        educationId2location.put(23039762L, "Rostock, Germany");
+        educationId2location.put(23039761L, "Nantes, France");
+        educationId2location.put(3392191L, "Nantes, France");
+        educationId2location.put(23039657L, "Nantes, France; Madrid, Spain");
+    }
 
     /**
      * https://developer.linkedin.com/documents/profile-api
@@ -272,17 +297,27 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
     @Override
     public Profile fetchProfile(final AccessToken accessToken) {
 
-        final Profile profile = new Profile();
         if (isTest) {
 
-            // item can be either an education or a position
-            final HashMap<Integer, String> itemId2locations = new HashMap<Integer, String>();
-            itemId2locations.put(23039762, "Rostock, Germany");
-            itemId2locations.put(23039761, "Nantes, France");
-            itemId2locations.put(3392191, "Nantes, France");
-            itemId2locations.put(23039657, "Nantes, France; Madrid, Spain");
+            // "item" can be either an education or a position
+            final HashMap<String, ArrayList<ItemLocation>> itemId2locations = new HashMap<String, ArrayList<ItemLocation>>();
 
-            profile.setJson(profileTest());
+            final String jsonProfile = profileTest();
+            final LinkedinProfile javaProfile = new Gson().fromJson(jsonProfile, LinkedinProfile.class);
+
+            final Educations educations = javaProfile.getEducations();
+            final EducationsWithLocation edsLoc = new EducationsWithLocation();
+
+            for (final Education ed : educations.getValues()) {
+                final EducationWithLocation edLoc = new EducationWithLocation(ed, educationId2location);
+                edsLoc.getValues().add(edLoc);
+            }
+
+            fillItemId2locations(javaProfile.getPositions(), itemId2locations);
+            fillItemId2locations(edsLoc, itemId2locations);
+
+            final Profile profile = new Profile();
+            profile.setJson(jsonProfile);
             profile.setItemId2locations(new Gson().toJson(itemId2locations));
             return profile;
 
@@ -305,8 +340,44 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
                 ",languages:(language,proficiency)" + //
                 ",educations" + //
                 ")";
+
+        final Profile profile = new Profile();
         profile.setJson(fetchResponseBody(accessToken, detailedProfiled));
         return profile;
+    }
+
+    private void fillItemId2locations(final ItemsWithLocation items,
+            final HashMap<String, ArrayList<ItemLocation>> itemId2locations) {
+
+        if (items != null) {
+            for (final ItemWithLocation item : items.getValues()) {
+
+                final ArrayList<ItemLocation> itemLocations = new ArrayList<ItemLocation>();
+                itemId2locations.put(String.valueOf(item.getId()), itemLocations);
+
+                final Location location = item.getLocation();
+                if (location != null) {
+                    final String locName = location.getName();
+                    if (!u.isVoid(locName)) {
+                        final String[] locationNames = locName.split(";");
+
+                        for (final String locationName : locationNames) {
+                            final String key = locationName.toLowerCase();
+
+                            if (locationReferentiel.containsKey(key)) {
+                                itemLocations.add(locationReferentiel.get(key).copy());
+
+                            } else {
+                                final ItemLocation itLoc = new ItemLocation();
+                                itLoc.setName(locationName);
+                                itemLocations.add(itLoc);
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private String fetchResponseBody(final AccessToken accessToken, final String profileUrl) {

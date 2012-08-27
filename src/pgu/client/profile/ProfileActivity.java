@@ -72,6 +72,9 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         // TODO PGU add the new location to the list
         // for education: education.id
         // for xp: position.id
+        // location: item.id, label, latlng,
+        // hashcode/equals by latlng and name
+        // itemLocation
 
     }
 

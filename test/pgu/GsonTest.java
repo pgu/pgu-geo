@@ -1,7 +1,13 @@
 package pgu;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import pgu.shared.dto.LinkedinProfile;
 
 import com.google.gson.Gson;
 
@@ -34,6 +40,34 @@ public class GsonTest {
 
         System.out.println(new Gson().toJson(id2locations));
 
+        // ///////
+        final String jsonProfile = new GsonTest().profileTest();
+        final LinkedinProfile linkedinProfile = new Gson().fromJson(jsonProfile, LinkedinProfile.class);
+        System.out.println(new Gson().toJson(linkedinProfile));
+
+    }
+
+    private String profileTest() {
+        // final InputStream is = this.getClass().getResourceAsStream("/WEB-INF/pgu/profile.json");
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new FileReader(
+                    "/home/pascal/bin/workspace_juno/pgu-contacts/war/WEB-INF/pgu/profile.json"));
+        } catch (final FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        final StringBuilder sb = new StringBuilder();
+        String line = null;
+
+        try {
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
+        }
+        return sb.toString();
     }
 
 }
