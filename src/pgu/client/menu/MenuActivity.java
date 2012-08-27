@@ -128,6 +128,7 @@ public class MenuActivity implements MenuPresenter //
 
         if (u.isVoid(locationId)) {
 
+            // TODO PGU show modal new EditLocationActivity -> editLocationViewImpl
             view.setItemId(event.getItemId());
             view.getLocationSearchWidget().setText("");
             view.getLocationSearchWidget().setFocus(true);

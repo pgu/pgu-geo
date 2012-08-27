@@ -283,7 +283,7 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         nantesLocation.setLat("47.218371");
         nantesLocation.setLng("-1.553621");
 
-        locationReferentiel.put(nantesLocation.getName().toLowerCase(), nantesLocation);
+        locationReferentiel.put(nantesLocation.getName(), nantesLocation);
 
         educationId2location.put(23039762L, "Rostock, Germany");
         educationId2location.put(23039761L, "Nantes, France");
@@ -370,10 +370,9 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
 
                         for (final String _locationName : locationNames) {
                             final String locationName = _locationName.trim();
-                            final String key = locationName.toLowerCase();
 
-                            if (locationReferentiel.containsKey(key)) {
-                                final ItemLocation itemLoc = locationReferentiel.get(key);
+                            if (locationReferentiel.containsKey(locationName)) {
+                                final ItemLocation itemLoc = locationReferentiel.get(locationName);
 
                                 final ItemLocation copy = new ItemLocation();
                                 copy.setLat(itemLoc.getLat());
