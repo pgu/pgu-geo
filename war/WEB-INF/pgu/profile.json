@@ -97,6 +97,7 @@
           "name": "SFEIR"
         },
         "isCurrent": true,
+        "id": "1",
         "location": {"name": "Paris, France"},
         "startDate": {
           "month": 11,
@@ -118,6 +119,7 @@
           "year": 2011
         },
         "isCurrent": false,
+        "id": "2",
         "location": {"name": "Paris, France"},
         "startDate": {
           "month": 8,
@@ -139,6 +141,7 @@
           "year": 2011
         },
         "isCurrent": false,
+        "id": "3",
         "location": {"name": "Paris, France"},
         "startDate": {
           "month": 9,
@@ -160,6 +163,7 @@
           "year": 2010
         },
         "isCurrent": false,
+        "id": "4",
         "location": {"name": "Madrid, Spain; Lausanne, Switzerland"},
         "startDate": {
           "month": 10,
@@ -181,6 +185,7 @@
           "year": 2007
         },
         "isCurrent": false,
+        "id": "5",
         "location": {"name": "Madrid, Spain"},
         "startDate": {
           "month": 1,
@@ -203,6 +208,7 @@
           "year": 2005
         },
         "isCurrent": false,
+        "id": "6",
          "location": {"name": "Düsseldorf, Germany"},
         "startDate": {
           "month": 1,
@@ -221,6 +227,7 @@
           "year": 2004
         },
         "isCurrent": false,
+        "id": "7",
         "location": {"name": "Prague, Czech Republic"},
         "startDate": {
           "month": 1,

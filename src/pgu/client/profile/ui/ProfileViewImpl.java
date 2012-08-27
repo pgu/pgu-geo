@@ -188,27 +188,29 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     @Override
     public void setProfile(final Profile profile) {
-        setProfile(profile.getJson(), profile.getId2location());
+        setProfile(profile.getJson(), profile.getItemId2locations());
     }
 
-    private native void setProfile(String profile, String id2location) /*-{
-		var p = JSON.parse(profile);
-		var id2loc = JSON.parse(id2location);
+    private native void setProfile(String profile, String itemId2locations) /*-{
+		var j_profile = JSON.parse(profile);
+		var j_itemId2locations = JSON.parse(itemId2locations);
 
-		var xp_table_id = 'profile:xp_table';
-		var edu_table_id = 'profile:edu_table';
+		////////////////////////
 
-		if (p.positions && p.positions.values) {
-			$wnd.createXpTable(xp_table_id, p.positions.values);
-		} else {
-			$doc.getElementById('#' + xp_table_id).innerHTML = 'No experience has been found';
-		}
+		$doc.getElementById('profile:xp_table').innerHTML = //
+		$wnd.createTable( //
+		'xp' //
+		, j_profile.positions //
+		, j_itemId2locations //
+		, 'No experience has been found');
 
-		if (p.educations && p.educations.values) {
-			$wnd.createEduTable(edu_table_id, p.educations.values, id2loc);
-		} else {
-			$doc.getElementById('#' + edu_table_id).innerHTML = 'No education has been found';
-		}
+		////////////////////////
+		$doc.getElementById('profile:edu_table').innerHTML = //
+		$wnd.createTable( //
+		'edu' //
+		, j_profile.educations //
+		, j_itemId2locations //
+		, 'No education has been found');
 
     }-*/;
 

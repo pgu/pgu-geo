@@ -5,7 +5,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class Profile implements IsSerializable {
 
     private String json;
-    private String id2location;
+    private String itemId2locations;
 
     public String getJson() {
         return json;
@@ -15,12 +15,12 @@ public class Profile implements IsSerializable {
         this.json = json;
     }
 
-    public String getId2location() {
-        return id2location;
+    public String getItemId2locations() {
+        return itemId2locations;
     }
 
-    public void setId2location(final String id2location) {
-        this.id2location = id2location;
+    public void setItemId2locations(final String itemId2locations) {
+        this.itemId2locations = itemId2locations;
     }
 
 }

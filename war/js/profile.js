@@ -1,28 +1,54 @@
 
-function createXpTable(table_id, positions) {
+function createTable(type, items, itemId2locations, empty_message) {
 	
-	var xp_table = [];
-	
-	xp_table.push(createXpTableHead());
-	
-	for ( var i = 0, len = positions.length; i < len; i++) {
+	var _items = items || {};
+	if (_items.values) {
+
+		var values = _items.values;
+		var table = [];
 		
-		xp_table.push(createXpTableRow(i, positions[i]));
+		table.push(createTableHead(type));
+		
+		for ( var i = 0, len = values.length; i < len; i++) {
+			
+			table.push(createTableRow(type, values[i], itemId2locations));
+		}
+
+		table.push(createTableFoot());
+
+		return table.join('');
+
+	} else {
+		return empty_message;
 	}
-
-	xp_table.push(createXpTableFoot());
-
-	document.getElementById(table_id).innerHTML = xp_table.join('');
+	
 }
 
-function createXpTableHead() {
+function isEdu(type) {
+	return type == 'edu';
+}
+function isXp(type) {
+	return type == 'xp';
+}
+
+function createTableHead(type) {
+	var title = '';
+	
+	if (isEdu(type)) {
+		title = 'Education';
+		
+	} else if (isXp(type)) {
+		title = 'Position';
+		
+	}
+	
 	return ''
 	+ '<table class="table table-bordered table-striped"> '
 	+ '   <thead>                                         '
 	+ '      <tr>                                         '
 	+ '          <th>Location</th>                        '
 	+ '          <th>Dates</th>                           '
-	+ '          <th>Position</th>                        '
+	+ '          <th>' + title + '</th>                   '
 	+ '          <th></th>                                '
 	+ '      </tr>                                        '
 	+ '  </thead>                                         '
@@ -31,43 +57,68 @@ function createXpTableHead() {
 
 }
 
-function createXpTableRow(index, position) {
-	var info_xp_id = "info_xp_" + index;
-	var locations = createXpListLocations(info_xp_id, position);
-	var dates = labelDates(position);
-	var title = labelXpTitle(position);
-	var summary = labelXpSummary(position);
+function RowConfig(id, prefix) {
+	this.id = id;
+	this.row_id = prefix + "_row_" + id;
+}
+
+function createTableRow(type, item, itemId2locations) {
+	
+	var rowConfig = {};
+	
+	if (isEdu(type)) {
+		
+		rowConfig = new RowConfig(item.id, type);
+		rowConfig.locations = createListLocations(item, itemId2locations);
+		rowConfig.dates = labelDates(item);
+		rowConfig.short_content = labelEduTitle(item);
+		rowConfig.content_title = "Education";
+		rowConfig.long_content = labelMkdown(item.notes);
+		
+	} else if (isXp(type)) {
+		
+		var location = item.location || {};
+		itemId2locations[item.id] = location.name;
+		
+		rowConfig = new RowConfig(item.id, type);
+		rowConfig.locations = createListLocations(item, itemId2locations);
+		rowConfig.dates = labelDates(item);
+		rowConfig.short_content = labelXpTitle(item);
+		rowConfig.content_title = "Experience";
+		rowConfig.long_content = labelMkdown(item.summary);
+	}
+	
 	
 	return '' 
-	+ '<tr>                                   '
-	+ '  <td>                                 '
-	+ '    <ul class="nav nav-pills">         '
-	+ locations
-	+ '    </ul>                              '
-	+ '    <i class="icon-plus-sign icon-large add-location" '
-	+ '      onclick="javascript:addLocation(\'' + info_xp_id + '\');"'
-	+ '      >                               '
-	+ '    </i>                               '
-	+ '  </td>                                '
-	+ '  <td>' + dates + '</td>               '
-	+ '  <td>' + title + '</td>               '
-	+ '  <td style="cursor:pointer"           '
-	+ '      onclick="javascript:$(\'#' + info_xp_id + '\').popover(\'toggle\');"'
-	+ '      >                                '
-	+ '    <i id="' + info_xp_id + '" class="icon-info-sign icon-large"  '
-	+ '      data-animation="true"                            '
-	+ '      data-html="true"                                 '
-	+ '      data-placement="left"                            '
-	+ '      data-title="Experience"                          '
-	+ '      data-content="' + summary + '"                   '
-	+ '     ></i>                                             '
-	+ '   </td>                                               '
-	+ '</tr>                                                  '
+	+ '<tr>                                                                             '
+	+ '  <td>                                                                           '
+	+ '    <ul class="nav nav-pills">                                                   '
+	+ rowConfig.locations
+	+ '    </ul>                                                                        '
+	+ '    <i class="icon-plus-sign icon-large add-location"                            '
+	+ '      onclick="javascript:addLocation(\'' + rowConfig.id + '\');"                '
+	+ '      >                                                                          '
+	+ '    </i>                                                                         '
+	+ '  </td>                                                                          '
+	+ '  <td>' + rowConfig.dates + '</td>                                               '
+	+ '  <td>' + rowConfig.short_content + '</td>                                       '
+	+ '  <td style="cursor:pointer"                                                     '
+	+ '      onclick="javascript:$(\'#' + rowConfig.row_id + '\').popover(\'toggle\');" '
+	+ '      >                                                                          '
+	+ '    <i id="' + rowConfig.row_id + '" class="icon-info-sign icon-large"           '
+	+ '      data-animation="true"                                                      '
+	+ '      data-html="true"                                                           '
+	+ '      data-placement="left"                                                      '
+	+ '      data-title="' + rowConfig.content_title + '"                               '
+	+ '      data-content="' + rowConfig.long_content + '"                              '
+	+ '     ></i>                                                                       '
+	+ '   </td>                                                                         '
+	+ '</tr>                                                                            '
 	+ '';
 	
 }
 
-function createXpTableFoot() {
+function createTableFoot() {
 	return ''
 		+ '  </tbody>                                        '
 		+ '</table>                                          '
@@ -184,49 +235,13 @@ function labelXpTitle(position) {
 			&& position.company.name) {
 		
 		title.push(position.company.name);
-		title.push('<br/>');
 	}
 	
 	if (position.title) {
 		title.push(position.title);
 	}
 	
-	return title.join('');
-}
-
-function createXpListLocations(info_xp_id, position) {
-	var loc = position.location || '';
-	var names = loc.name || '';
-	var locations = names.split(";");
-
-	var list = [];
-	for (var i = 0, len = locations.length; i < len; i++) {
-		var id = "a_" +info_xp_id + "_" + i;
-		var location = locations[i];
-		
-		var el = ''
-		+ '      <li class="locationLi">          '
-		+ '        <a id="' + id + '"             '
-		+ '           href="javascript:;"         '
-		+ '           onclick="javascript:searchMapFor(\''+ id +'\', \''+ location +'\');return false;"'
-		+ '           >                           '
-		+ '           <b>' + location + '</b>     '
-		+ '        </a>                           '
-		+ '      </li>                            '
-		+ '';
-		
-		list.push(el);
-	}
-	
-	return list.join('');
-}
-
-
-function labelXpSummary(position) { // http://softwaremaniacs.org/playground/showdown-highlight/
-	 var summary = position.summary || '';
-	 
-	 var html = getMarkdownConverter().makeHtml(summary);
-	 return html;
+	return title.join('<br/>');
 }
 
 var _showdown_converter;
@@ -240,93 +255,21 @@ function getMarkdownConverter() {
 	return _showdown_converter;
 }
 
-function createEduTable(table_id, educations, id2loc) {
-	
-	var edu_table = [];
-	
-	edu_table.push(createEduTableHead());
-	
-	for ( var i = 0, len = educations.length; i < len; i++) {
-		
-		edu_table.push(createEduTableRow(i, educations[i], id2loc));
-	}
-
-	edu_table.push(createEduTableFoot());
-
-	document.getElementById(table_id).innerHTML = edu_table.join('');
-	
+function labelMkdown(text) { // http://softwaremaniacs.org/playground/showdown-highlight/
+	return getMarkdownConverter().makeHtml(text || '');
 }
 
-function createEduTableHead() {
-	return ''
-	+ '<table class="table table-bordered table-striped"> '
-	+ '  <thead>                                          '
-	+ '    <tr>                                           '
-	+ '      <th>Location</th>                            '
-	+ '      <th>Dates</th>                               '
-	+ '      <th>Education</th>                           '
-	+ '      <th></th>                                    '
-	+ '    </tr>                                          '
-	+ '  </thead>                                         '
-	+ '<tbody>                                            '
-	+ '';
+function createListLocations(item, itemId2locations) {
 	
-}
-
-function createEduTableFoot() {
-	return ''
-	+ '  </tbody>                                        '
-	+ '</table>                                          '
-	+ '';
-	
-}
-
-function createEduTableRow(index, education, id2loc) {
-	
-	var info_edu_id = education.id || "info_edu_" + index;
-	var locations = createEduListLocations(info_edu_id, education, id2loc);
-	var dates = labelDates(education);
-	var title = labelEduTitle(education); 
-	var notes = labelEduNotes(education);
-	
-	return '' 
-	+ '<tr>                                   '
-	+ '  <td>                                 '
-	+ '    <ul class="nav nav-pills">         '
-	+ locations
-	+ '    </ul>                              '
-	+ '    <i class="icon-plus-sign icon-large add-location" '
-	+ '      onclick="javascript:addLocation(\'' + info_edu_id + '\');"'
-	+ '      >                               '
-	+ '    </i>                               '
-	+ '  </td>                                '
-	+ '  <td>' + dates + '</td>               '
-	+ '  <td>' + title + '</td>               '
-	+ '  <td style="cursor:pointer"           '
-	+ '      onclick="javascript:$(\'#' + info_edu_id + '\').popover(\'toggle\');"'
-	+ '      >                                '
-	+ '    <i id="' + info_edu_id + '" class="icon-info-sign icon-large"  '
-	+ '      data-animation="true"                            '
-	+ '      data-html="true"                                 '
-	+ '      data-placement="left"                            '
-	+ '      data-title="Education"                          '
-	+ '      data-content="' + notes + '"                   '
-	+ '     ></i>                                             '
-	+ '   </td>                                               '
-	+ '</tr>                                                  '
-	+ '';
-	
-}
-
-function createEduListLocations(info_edu_id, education, id2loc) {
-	
-	var id = "a_" + info_edu_id;
-	var locations = id2loc[education.id];
+	var locationsLabel = itemId2locations[item.id] || ''; 
+	var locations = locationsLabel.split(";");
 	
 	var list = [];
 	for (var i = 0, len = locations.length; i < len; i++) {
-		var id = "a_" +info_edu_id + "_" + i;
+		
 		var location = locations[i];
+		
+		var id = "loc_" + item.id + "_" + i;
 		
 		var el = ''
 		+ '      <li class="locationLi">          '
@@ -352,21 +295,13 @@ function labelEduTitle(education) {
 	
 	if (education.schoolName) {
 		title.push(education.schoolName);
-		title.push('<br/>');
 	}
 	
 	if (education.fieldOfStudy) {
 		title.push(education.fieldOfStudy);
 	}
 	
-	return title.join('');
-}
-
-function labelEduNotes(education) {
-	 var notes = education.notes || '';
-	 
-	 var html = getMarkdownConverter().makeHtml(notes);
-	 return html;
+	return title.join('<br/>');
 }
 
 

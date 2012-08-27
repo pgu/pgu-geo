@@ -70,6 +70,8 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     @Override
     public void onLocationSave(final LocationSaveEvent event) {
         // TODO PGU add the new location to the list
+        // for education: education.id
+        // for xp: position.id
 
     }
 

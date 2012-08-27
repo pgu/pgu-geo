@@ -275,14 +275,15 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         final Profile profile = new Profile();
         if (isTest) {
 
-            final HashMap<Integer, ArrayList<String>> id2location = new HashMap<Integer, ArrayList<String>>();
-            id2location.put(23039762, u.list("Rostock, Germany"));
-            id2location.put(23039761, u.list("Nantes, France"));
-            id2location.put(3392191, u.list("Nantes, France"));
-            id2location.put(23039657, u.list("Nantes, France", "Madrid, Spain"));
+            // item can be either an education or a position
+            final HashMap<Integer, String> itemId2locations = new HashMap<Integer, String>();
+            itemId2locations.put(23039762, "Rostock, Germany");
+            itemId2locations.put(23039761, "Nantes, France");
+            itemId2locations.put(3392191, "Nantes, France");
+            itemId2locations.put(23039657, "Nantes, France; Madrid, Spain");
 
             profile.setJson(profileTest());
-            profile.setId2location(new Gson().toJson(id2location));
+            profile.setItemId2locations(new Gson().toJson(itemId2locations));
             return profile;
 
         }
@@ -300,7 +301,7 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
                 ",specialties" + //
                 ",picture-url" + //
                 ",public-profile-url" + //
-                ",positions:(company,endDate,isCurrent,startDate,summary,title,location)" + //
+                ",positions:(id,company,endDate,isCurrent,startDate,summary,title,location)" + //
                 ",languages:(language,proficiency)" + //
                 ",educations" + //
                 ")";
