@@ -325,9 +325,9 @@ function searchLatLng(itemLocation, anchor_id) {
 		return;
 	}
 	
-	var currentCall = Math.round(Date.now() / 1000);
-	console.log("call at " + (currentCall - lastCall) + "s, " + itemLocation.name);
-	lastCall = currentCall;
+//	var currentCall = Math.round(Date.now() / 1000);
+//	console.log("call at " + (currentCall - lastCall) + "s, " + itemLocation.name);
+//	lastCall = currentCall;
 	
 	var cacheItem = cache_name2itemLocation[itemLocation.name];
 	if (cacheItem) {
@@ -347,7 +347,7 @@ function searchLatLng(itemLocation, anchor_id) {
 				if (status == google.maps.GeocoderStatus.OK) {
 					
 					var loc = results[0].geometry.location;
-					console.log(itemLocation.name + ": " + loc);
+//					console.log(itemLocation.name + ": " + loc);
 					
 					itemLocation.lat = loc.lat();
 					itemLocation.lng = loc.lng();
@@ -366,22 +366,19 @@ function searchLatLng(itemLocation, anchor_id) {
 					var anchor = $('#' + anchor_id);
 					anchor.addClass('locationNotFound');
 					anchor.attr('title', 'Unknown location');
-					
-					console.log("Oups: " + status);
+//					console.log("Oups: " + status);
 					
 				} else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
 					
-					console.log("over_query_limit... " + itemLocation.name);
-					
 					setTimeout(function() { searchLatLng(itemLocation, anchor_id); }, 5000);			
+//					console.log("over_query_limit... " + itemLocation.name);
 					
 				} else {
 					
 					var anchor = $('#' + anchor_id);
 					anchor.addClass('locationNotFound_technicalError');
-					anchor.attr('title', 'Location not found because of a technical exception');
-					
-					console.log("Oups: " + status);
+					anchor.attr('title', 'Location not found because of a technical exception: ' + status);
+//					console.log("Oups: " + status);
 				}
 				
 			}
