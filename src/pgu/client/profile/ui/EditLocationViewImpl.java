@@ -1,5 +1,7 @@
 package pgu.client.profile.ui;
 
+import pgu.client.profile.EditLocationView;
+
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.Modal;
 import com.github.gwtbootstrap.client.ui.ProgressBar;
@@ -12,7 +14,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class EditLocationViewImpl extends Composite {
+public class EditLocationViewImpl extends Composite implements EditLocationView {
 
     private static EditLocationViewImplUiBinder uiBinder = GWT.create(EditLocationViewImplUiBinder.class);
 

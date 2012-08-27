@@ -9,7 +9,9 @@ import pgu.client.menu.MenuView;
 import pgu.client.menu.ui.MenuViewImpl;
 import pgu.client.oauth.OAuthView;
 import pgu.client.oauth.ui.OAuthViewImpl;
+import pgu.client.profile.EditLocationView;
 import pgu.client.profile.ProfileView;
+import pgu.client.profile.ui.EditLocationViewImpl;
 import pgu.client.profile.ui.ProfileViewImpl;
 import pgu.client.service.LinkedinService;
 import pgu.client.service.LinkedinServiceAsync;
@@ -24,18 +26,19 @@ import com.google.web.bindery.event.shared.SimpleEventBus;
 
 public class ClientFactoryImpl implements ClientFactory {
 
-    private static EventBus             eventBus        = new SimpleEventBus();
-    private static PlaceController      placeController = new PlaceController(eventBus);
-    private static AppView              appView         = new AppViewImpl();
-    private static MenuView             menuView        = new MenuViewImpl();
-    private static ContactsView         contactsView    = new ContactsViewImpl();
-    private static ProfileView          profileView     = new ProfileViewImpl();
-    private static OAuthView            oauthView       = new OAuthViewImpl();
+    private static EventBus             eventBus         = new SimpleEventBus();
+    private static PlaceController      placeController  = new PlaceController(eventBus);
+    private static AppView              appView          = new AppViewImpl();
+    private static MenuView             menuView         = new MenuViewImpl();
+    private static ContactsView         contactsView     = new ContactsViewImpl();
+    private static ProfileView          profileView      = new ProfileViewImpl();
+    private static OAuthView            oauthView        = new OAuthViewImpl();
+    private static EditLocationView     editLocationView = new EditLocationViewImpl();
 
-    private static LinkedinServiceAsync linkedinService = GWT.create(LinkedinService.class);
-    private static LoginServiceAsync    loginService    = GWT.create(LoginService.class);
+    private static LinkedinServiceAsync linkedinService  = GWT.create(LinkedinService.class);
+    private static LoginServiceAsync    loginService     = GWT.create(LoginService.class);
 
-    private static AppState             appState        = new AppState();
+    private static AppState             appState         = new AppState();
     private LoginInfo                   loginInfo;
 
     @Override
@@ -96,6 +99,11 @@ public class ClientFactoryImpl implements ClientFactory {
     @Override
     public OAuthView getOAuthView() {
         return oauthView;
+    }
+
+    @Override
+    public EditLocationView getEditLocationView() {
+        return editLocationView;
     }
 
 }

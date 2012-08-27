@@ -9,6 +9,7 @@ import pgu.client.app.event.LocationSearchEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.ClientUtils;
+import pgu.client.profile.EditLocationActivity;
 import pgu.shared.dto.LatLng;
 import pgu.shared.dto.LoginInfo;
 
@@ -24,12 +25,14 @@ public class MenuActivity implements MenuPresenter //
         , GoToContactsEvent.Handler //
 {
 
-    private final MenuView    view;
-    private EventBus          eventBus;
-    private final LoginInfo   loginInfo;
-    private final ClientUtils u = new ClientUtils();
+    private final MenuView      view;
+    private EventBus            eventBus;
+    private final LoginInfo     loginInfo;
+    private final ClientUtils   u = new ClientUtils();
+    private final ClientFactory clientFactory;
 
     public MenuActivity(final ClientFactory clientFactory) {
+        this.clientFactory = clientFactory;
         view = clientFactory.getMenuView();
         loginInfo = clientFactory.getLoginInfo();
     }
@@ -128,7 +131,9 @@ public class MenuActivity implements MenuPresenter //
 
         if (u.isVoid(locationId)) {
 
-            // TODO PGU show modal new EditLocationActivity -> editLocationViewImpl
+            final EditLocationActivity editLocationActivity = new EditLocationActivity(clientFactory);
+            editLocationActivity.start(eventBus);
+
             view.setItemId(event.getItemId());
             view.getLocationSearchWidget().setText("");
             view.getLocationSearchWidget().setFocus(true);
