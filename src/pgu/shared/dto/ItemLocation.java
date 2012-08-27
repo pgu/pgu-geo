@@ -37,12 +37,4 @@ public class ItemLocation implements IsSerializable {
         this.lng = lng;
     }
 
-    public ItemLocation copy() {
-        final ItemLocation copy = new ItemLocation();
-        copy.setLat(lat);
-        copy.setLng(lng);
-        copy.setName(name);
-        return copy;
-    }
-
 }

@@ -64,28 +64,24 @@ function RowConfig(item_id, prefix) {
 
 function createTableRow(type, item, itemId2locations) {
 	
-	var rowConfig = {};
+	var rowConfig = new RowConfig(item.id, type);
+	rowConfig.locations = createListLocations(item, itemId2locations);
+	rowConfig.dates = labelDates(item);
 	
 	if (isEdu(type)) {
 		
-		rowConfig = new RowConfig(item.id, type);
-		rowConfig.locations = createListLocations(item, itemId2locations);
-		rowConfig.dates = labelDates(item);
 		rowConfig.short_content = labelEduTitle(item);
 		rowConfig.content_title = "Education";
 		rowConfig.long_content = labelMkdown(item.notes);
 		
 	} else if (isXp(type)) {
 		
-		var location = item.location || {};
-		itemId2locations[item.id] = location.name;
-		
-		rowConfig = new RowConfig(item.id, type);
-		rowConfig.locations = createListLocations(item, itemId2locations);
-		rowConfig.dates = labelDates(item);
 		rowConfig.short_content = labelXpTitle(item);
 		rowConfig.content_title = "Experience";
 		rowConfig.long_content = labelMkdown(item.summary);
+		
+	} else {
+		rowConfig = {};
 	}
 	
 	
@@ -261,13 +257,12 @@ function labelMkdown(text) { // http://softwaremaniacs.org/playground/showdown-h
 
 function createListLocations(item, itemId2locations) {
 	
-	var locationsLabel = itemId2locations[item.id] || ''; 
-	var locations = locationsLabel.split(";");
+	var itemLocations = itemId2locations[item.id] || ''; 
 	
 	var list = [];
-	for (var i = 0, len = locations.length; i < len; i++) {
+	for (var i = 0, len = itemLocations.length; i < len; i++) {
 		
-		var location = locations[i];
+		var location = itemLocations[i];
 		
 		var anchor_id = "loc_" + item.id + "_" + i;
 		
@@ -275,9 +270,9 @@ function createListLocations(item, itemId2locations) {
 		+ '      <li class="locationLi">          '
 		+ '        <a id="' + anchor_id + '"             '
 		+ '           href="javascript:;"         '
-		+ '           onclick="javascript:searchMapFor(\''+ item.id +'\', \'' + anchor_id +'\', \''+ location +'\');return false;"'
+		+ '           onclick="javascript:searchMapFor(\''+ item.id +'\', \'' + anchor_id +'\', \''+ location.name +'\');return false;"'
 		+ '           >                           '
-		+ '           <b>' + location + '</b>     '
+		+ '           <b>' + location.name + '</b>     '
 		+ '        </a>                           '
 		+ '      </li>                            '
 		+ '';

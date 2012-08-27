@@ -309,7 +309,14 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
             final EducationsWithLocation edsLoc = new EducationsWithLocation();
 
             for (final Education ed : educations.getValues()) {
-                final EducationWithLocation edLoc = new EducationWithLocation(ed, educationId2location);
+
+                final EducationWithLocation edLoc = new EducationWithLocation(ed);
+
+                final String locationName = educationId2location.get(ed.getId());
+                if (!u.isVoid(locationName)) {
+                    edLoc.getLocation().setName(locationName);
+                }
+
                 edsLoc.getValues().add(edLoc);
             }
 
@@ -365,7 +372,14 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
                             final String key = locationName.toLowerCase();
 
                             if (locationReferentiel.containsKey(key)) {
-                                itemLocations.add(locationReferentiel.get(key).copy());
+                                final ItemLocation itemLoc = locationReferentiel.get(key);
+
+                                final ItemLocation copy = new ItemLocation();
+                                copy.setLat(itemLoc.getLat());
+                                copy.setLng(itemLoc.getLng());
+                                copy.setName(itemLoc.getName());
+
+                                itemLocations.add(copy);
 
                             } else {
                                 final ItemLocation itLoc = new ItemLocation();
