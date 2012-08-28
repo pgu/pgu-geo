@@ -8,7 +8,7 @@
             <b:ProgressBar ui:field="progressBar" type="ANIMATED" percent="100"/>
             <g:HTMLPanel ui:field="notification" />
             <b:WellForm>
-                <b:Button ui:field="addBtn" block="true" type="PRIMARY">Add a new location</b:Button>
+                <b:Button ui:field="addBtn" type="PRIMARY">Add a new location</b:Button>
             </b:WellForm>
             <b:ModalFooter>
                 <b:Button ui:field="cancelBtn" icon="UNDO" iconSize="LARGE" >Cancel</b:Button>

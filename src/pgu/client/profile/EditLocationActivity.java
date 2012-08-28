@@ -18,6 +18,9 @@ public class EditLocationActivity {
     public void start(final EventBus eventBus) {
         this.eventBus = eventBus;
         // TODO PGU Aug 27, 2012 behaviour of the view
+        // click on a location: popup with: information: name, lat, lng; actions: show on the map, delete it
+        // click on new location: popup with: btn add a new location (redirects to the map), btn for each existing
+        // location, btn for save selected locations
     }
 
 }
