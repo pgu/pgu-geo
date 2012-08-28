@@ -7,26 +7,25 @@
         <b:Modal ui:field="container" backdrop="STATIC" keyboard="true" animation="true">
             <b:ProgressBar ui:field="progressBar" type="ANIMATED" percent="100"/>
             <g:HTMLPanel ui:field="notification" />
-            <g:HTMLPanel ui:field="addPanel">
-                <b:WellForm>
-                    <b:Button ui:field="addBtn" type="PRIMARY">Add a new location</b:Button>
-                    <g:HTMLPanel ui:field="btnsContainer"></g:HTMLPanel>
-                </b:WellForm>
-                <b:ModalFooter>
-                    <b:Button ui:field="saveBtn" icon="SAVE" iconSize="LARGE" type="PRIMARY">Save</b:Button>
-                </b:ModalFooter>
-            </g:HTMLPanel>
-            <g:HTMLPanel ui:field="editPanel">
+            
+            <b:WellForm ui:field="addPanel">
+                <b:Button ui:field="addBtn" type="PRIMARY">Add a new location</b:Button>
+                <g:HTMLPanel ui:field="btnsContainer"></g:HTMLPanel>
+            </b:WellForm>
+            
+            <b:WellForm ui:field="editPanel">
                 <b:Label ui:field="locationNameUI"></b:Label>
                 <b:Label>Latitude</b:Label>
                 <b:Label ui:field="locationLatUI"></b:Label>
                 <b:Label>Longitude</b:Label>
                 <b:Label ui:field="locationLngUI"></b:Label>
-                <b:ModalFooter>
-                    <b:Button ui:field="displayOnMapBtn" icon="MAP_MARKER" iconSize="LARGE" type="PRIMARY">Display on the map</b:Button>
-                    <b:Button ui:field="deleteBtn" icon="REMOVE_SIGN" iconSize="LARGE" type="DANGER">Delete</b:Button>
-                </b:ModalFooter>
-            </g:HTMLPanel>
+            </b:WellForm>
+            
+            <b:ModalFooter>
+                <b:Button ui:field="saveBtn" icon="SAVE" iconSize="LARGE" type="PRIMARY">Save</b:Button>
+                <b:Button ui:field="displayOnMapBtn" icon="MAP_MARKER" iconSize="LARGE" type="PRIMARY">Display on the map</b:Button>
+                <b:Button ui:field="deleteBtn" icon="REMOVE_SIGN" iconSize="LARGE" type="DANGER">Delete</b:Button>
+            </b:ModalFooter>
         </b:Modal>
     </g:HTMLPanel>
 </ui:UiBinder> 

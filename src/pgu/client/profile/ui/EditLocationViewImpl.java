@@ -1,6 +1,8 @@
 package pgu.client.profile.ui;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import pgu.client.app.utils.Notification;
@@ -10,6 +12,7 @@ import pgu.shared.dto.ItemLocation;
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.Modal;
 import com.github.gwtbootstrap.client.ui.ProgressBar;
+import com.github.gwtbootstrap.client.ui.WellForm;
 import com.github.gwtbootstrap.client.ui.base.HasVisibleHandlers;
 import com.github.gwtbootstrap.client.ui.constants.ButtonType;
 import com.google.gwt.core.client.GWT;
@@ -22,7 +25,6 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasText;
-import com.google.gwt.user.client.ui.HasVisibility;
 import com.google.gwt.user.client.ui.Widget;
 
 public class EditLocationViewImpl extends Composite implements EditLocationView {
@@ -35,12 +37,13 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
     @UiField
     Modal                                 container;
     @UiField
-    Button                                saveBtn, addBtn;
+    Button                                saveBtn, addBtn, displayOnMapBtn, deleteBtn;
     @UiField
     ProgressBar                           progressBar;
     @UiField
-    HTMLPanel                             notification, btnsContainer //
-            , addPanel, editPanel;
+    HTMLPanel                             notification, btnsContainer;
+    @UiField
+    WellForm                              addPanel, editPanel;
 
     private final ArrayList<Notification> notifications = new ArrayList<Notification>();
 
@@ -78,25 +81,32 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
         container.show();
     }
 
-    @Override
-    public HasVisibility getNewLocationWidget() {
-        return addPanel;
-    }
+    private final ArrayList<ItemLocation>         otherItemLocations = new ArrayList<ItemLocation>();
 
-    @Override
-    public HasVisibility getEditLocationWidget() {
-        return editPanel;
-    }
+    private final HashMap<String, ItemLocation>   selecteds          = new HashMap<String, ItemLocation>();
 
-    private final ArrayList<ItemLocation>       otherItemLocations = new ArrayList<ItemLocation>();
+    private static final Comparator<ItemLocation> BY_NAME            = new Comparator<ItemLocation>() {
 
-    private final HashMap<String, ItemLocation> selecteds          = new HashMap<String, ItemLocation>();
+                                                                         @Override
+                                                                         public int compare(final ItemLocation loc1,
+                                                                                 final ItemLocation loc2) {
+                                                                             return loc1
+                                                                                     .getName()
+                                                                                     .toLowerCase()
+                                                                                     .compareTo(
+                                                                                             loc2.getName()
+                                                                                                     .toLowerCase());
+                                                                         }
+
+                                                                     };
 
     @Override
     public void showOtherExistingItemLocations(final String itemId) {
         retrieveOtherExistingItemLocations(itemId);
 
         btnsContainer.clear();
+        Collections.sort(otherItemLocations, BY_NAME);
+
         for (final ItemLocation loc : otherItemLocations) {
             final Button btn = new Button();
             btn.setText(loc.getName());
@@ -139,7 +149,7 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
         
 		var cache_all = $wnd.cache_name2itemLocation;
 
-		for ( var key in cache_all) {
+		for (var key in cache_all) {
 			if (cache_all.hasOwnProperty(key)) {
 				
 				if ($wnd.$.inArray(key, locationNames) == -1) {
@@ -186,6 +196,26 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
             }
 
         };
+    }
+
+    @Override
+    public void displayNewLocationWidget() {
+        addPanel.setVisible(true);
+        editPanel.setVisible(false);
+
+        saveBtn.setVisible(true);
+        displayOnMapBtn.setVisible(false);
+        deleteBtn.setVisible(false);
+    }
+
+    @Override
+    public void displayEditLocationWidget() {
+        addPanel.setVisible(false);
+        editPanel.setVisible(true);
+
+        saveBtn.setVisible(false);
+        displayOnMapBtn.setVisible(true);
+        deleteBtn.setVisible(true);
     }
 
 }

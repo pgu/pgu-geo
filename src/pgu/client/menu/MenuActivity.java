@@ -127,6 +127,7 @@ public class MenuActivity implements MenuPresenter //
     @Override
     public void onLocationAddNew(final LocationAddNewEvent event) {
 
+        view.showMap();
         view.setItemId(event.getItemId());
         view.getLocationSearchWidget().setText("");
         view.getLocationSearchWidget().setFocus(true);

@@ -80,18 +80,19 @@ public class EditLocationActivity {
     public void start(final ItemLocation itemLocation, final String itemId) {
 
         final boolean isNew = itemLocation == null;
-        view.getNewLocationWidget().setVisible(isNew);
-        view.getEditLocationWidget().setVisible(!isNew);
 
         if (isNew) {
 
-            view.getFormTitle().setText("Add locations");
             handlerRegs.add(addAddHandler(itemId));
             view.showOtherExistingItemLocations(itemId);
+
+            view.getFormTitle().setText("Add locations");
+            view.displayNewLocationWidget();
 
         } else {
 
             view.getFormTitle().setText(itemLocation.getName());
+            view.displayEditLocationWidget();
             // TODO PGU Aug 28, 2012 edit location
             // click on a location: popup with: information: name, lat, lng; actions: show on the map, delete it
         }

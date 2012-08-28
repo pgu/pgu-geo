@@ -45,4 +45,6 @@ public interface MenuView extends IsWidget {
 
     void scrollToTop();
 
+    void showMap();
+
 }
