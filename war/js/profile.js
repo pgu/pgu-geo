@@ -285,7 +285,7 @@ function createListLocations(item) {
 		if (!(itemLocation.lat && itemLocation.lng)) {
 			
 			setTimeout(function() { searchLatLng(itemLocation, anchor_id); }, delay_to_call_geocoder);
-			delay_to_call_geocoder += 1000;
+			delay_to_call_geocoder += 500;
 			
 		} else {
 			
@@ -343,7 +343,7 @@ function labelEduTitle(education) {
 function searchLatLng(itemLocation, anchor_id) {
 
 	if (geocoder == undefined) {
-		setTimeout(function() { searchLatLng(itemLocation, anchor_id); }, 10000);
+		setTimeout(function() { searchLatLng(itemLocation, anchor_id); }, 1000);
 		return;
 	}
 	
@@ -385,7 +385,7 @@ function searchLatLng(itemLocation, anchor_id) {
 					
 				} else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
 					
-					setTimeout(function() { searchLatLng(itemLocation, anchor_id); }, 5000);			
+					setTimeout(function() { searchLatLng(itemLocation, anchor_id); }, 1000);			
 //					console.log("over_query_limit... " + itemLocation.name);
 					
 				} else {

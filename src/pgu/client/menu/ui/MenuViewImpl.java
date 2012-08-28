@@ -212,20 +212,32 @@ public class MenuViewImpl extends Composite implements MenuView {
             profilePlayMenu.setVisible(false);
 
         } else {
-            showMap();
+            updateMenuOnDisplayingMap();
 
         }
     }
 
     @Override
     public void showMap() {
-        if (!isMapDisplayed) {
-            mapSizeBtn.setIcon(IconType.RESIZE_SMALL);
-            mapSizeBtn.setText("Hide map");
-            isMapDisplayed = true;
-            profilePlayMenu.setVisible(true);
+        if (isMapDisplayed) {
+            return;
         }
+
+        showMapProg();
+        updateMenuOnDisplayingMap();
     }
+
+    private void updateMenuOnDisplayingMap() {
+
+        mapSizeBtn.setIcon(IconType.RESIZE_SMALL);
+        mapSizeBtn.setText("Hide map");
+        isMapDisplayed = true;
+        profilePlayMenu.setVisible(true);
+    }
+
+    public static native void showMapProg() /*-{
+		$wnd.$('#map_canvas_container').collapse('show');
+    }-*/;
 
     @UiHandler("goToContactsBtn")
     public void clickGoToContacts(final ClickEvent e) {
