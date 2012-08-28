@@ -3,13 +3,12 @@ package pgu.client.menu;
 import pgu.client.app.event.GoToContactsEvent;
 import pgu.client.app.event.GoToProfileEvent;
 import pgu.client.app.event.HideWaitingIndicatorEvent;
-import pgu.client.app.event.LocationEditEvent;
+import pgu.client.app.event.LocationAddNewEvent;
 import pgu.client.app.event.LocationSaveEvent;
 import pgu.client.app.event.LocationSearchEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.ClientUtils;
-import pgu.client.profile.EditLocationActivity;
 import pgu.shared.dto.LatLng;
 import pgu.shared.dto.LoginInfo;
 
@@ -19,8 +18,8 @@ import com.google.web.bindery.event.shared.EventBus;
 public class MenuActivity implements MenuPresenter //
         , ShowWaitingIndicatorEvent.Handler //
         , HideWaitingIndicatorEvent.Handler //
+        , LocationAddNewEvent.Handler //
         , LocationSearchEvent.Handler //
-        , LocationEditEvent.Handler //
         , GoToProfileEvent.Handler //
         , GoToContactsEvent.Handler //
 {
@@ -44,7 +43,7 @@ public class MenuActivity implements MenuPresenter //
 
         eventBus.addHandler(ShowWaitingIndicatorEvent.TYPE, this);
         eventBus.addHandler(HideWaitingIndicatorEvent.TYPE, this);
-        eventBus.addHandler(LocationEditEvent.TYPE, this);
+        eventBus.addHandler(LocationAddNewEvent.TYPE, this);
         eventBus.addHandler(LocationSearchEvent.TYPE, this);
         eventBus.addHandler(GoToProfileEvent.TYPE, this);
         eventBus.addHandler(GoToContactsEvent.TYPE, this);
@@ -126,23 +125,13 @@ public class MenuActivity implements MenuPresenter //
     }
 
     @Override
-    public void onLocationEdit(final LocationEditEvent event) {
-        final String locationId = event.getLocationId();
+    public void onLocationAddNew(final LocationAddNewEvent event) {
 
-        if (u.isVoid(locationId)) {
-
-            final EditLocationActivity editLocationActivity = new EditLocationActivity(clientFactory);
-            editLocationActivity.start(eventBus);
-
-            view.setItemId(event.getItemId());
-            view.getLocationSearchWidget().setText("");
-            view.getLocationSearchWidget().setFocus(true);
-            view.getSaveWidget().setVisible(true);
-            view.scrollToTop();
-
-        } else {
-            // TODO PGU show modal
-        }
+        view.setItemId(event.getItemId());
+        view.getLocationSearchWidget().setText("");
+        view.getLocationSearchWidget().setFocus(true);
+        view.getSaveWidget().setVisible(true);
+        view.scrollToTop();
 
     }
 

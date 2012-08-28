@@ -4,6 +4,6 @@ public interface ProfilePresenter {
 
     void searchForLocation(String itemId, String anchorId, String location);
 
-    void addLocation(String itemId);
+    void addNewLocation(String itemId);
 
 }

@@ -5,23 +5,21 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
-public class LocationEditEvent extends GwtEvent<LocationEditEvent.Handler> {
+public class LocationAddNewEvent extends GwtEvent<LocationAddNewEvent.Handler> {
 
-    public interface HasLocationEditHandlers extends HasHandlers {
-        HandlerRegistration addLocationEditHandler(LocationEditEvent.Handler handler);
+    public interface HasLocationAddNewHandlers extends HasHandlers {
+        HandlerRegistration addLocationAddNewHandler(LocationAddNewEvent.Handler handler);
     }
 
     public interface Handler extends EventHandler {
-        void onLocationEdit(LocationEditEvent event);
+        void onLocationAddNew(LocationAddNewEvent event);
     }
 
     public static final Type<Handler> TYPE = new Type<Handler>();
 
-    private final String              locationId;
     private final String              itemId;
 
-    public LocationEditEvent(final String locationId, final String itemId) {
-        this.locationId = locationId;
+    public LocationAddNewEvent(final String itemId) {
         this.itemId = itemId;
     }
 
@@ -32,11 +30,7 @@ public class LocationEditEvent extends GwtEvent<LocationEditEvent.Handler> {
 
     @Override
     protected void dispatch(final Handler handler) {
-        handler.onLocationEdit(this);
-    }
-
-    public String getLocationId() {
-        return locationId;
+        handler.onLocationAddNew(this);
     }
 
     public String getItemId() {

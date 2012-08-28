@@ -157,11 +157,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     public native static void exportMethod() /*-{
 		$wnd.searchMapFor = $entry(@pgu.client.profile.ui.ProfileViewImpl::searchMapFor(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;));
-		$wnd.addLocation = $entry(@pgu.client.profile.ui.ProfileViewImpl::addLocation(Ljava/lang/String;));
+		$wnd.addNewLocation = $entry(@pgu.client.profile.ui.ProfileViewImpl::addNewLocation(Ljava/lang/String;));
     }-*/;
 
-    public static void addLocation(final String itemId) {
-        staticPresenter.addLocation(itemId);
+    public static void addNewLocation(final String itemId) {
+        staticPresenter.addNewLocation(itemId);
     }
 
     @UiHandler("summaryBasicBtn")
@@ -193,7 +193,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     private native void setProfile(String profile, String itemId2locations) /*-{
 		var j_profile = JSON.parse(profile);
-		var j_itemId2locations = JSON.parse(itemId2locations);
+
+		$wnd.cache_itemId2locations = JSON.parse(itemId2locations);
 
 		////////////////////////
 
@@ -201,7 +202,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 		$wnd.createTable( //
 		'xp' //
 		, j_profile.positions //
-		, j_itemId2locations //
 		, 'No experience has been found');
 
 		////////////////////////
@@ -210,7 +210,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 		$wnd.createTable( //
 		'edu' //
 		, j_profile.educations //
-		, j_itemId2locations //
 		, 'No education has been found');
 
     }-*/;

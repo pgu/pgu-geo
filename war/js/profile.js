@@ -1,5 +1,6 @@
 var delay_to_call_geocoder = 5000;
 var cache_name2itemLocation = {};
+var cache_itemId2locations = {};
 var lastCall = 0 ;
 var _showdown_converter;
 
@@ -8,7 +9,7 @@ function RowConfig(item_id, prefix) {
 	this.row_id = prefix + "_row_" + item_id;
 }
 
-function createTable(type, items, itemId2locations, empty_message) {
+function createTable(type, items, empty_message) {
 	
 	var _items = items || {};
 	if (_items.values) {
@@ -20,7 +21,7 @@ function createTable(type, items, itemId2locations, empty_message) {
 		
 		for ( var i = 0, len = values.length; i < len; i++) {
 			
-			table.push(createTableRow(type, values[i], itemId2locations));
+			table.push(createTableRow(type, values[i]));
 		}
 
 		table.push(createTableFoot());
@@ -66,10 +67,10 @@ function createTableHead(type) {
 
 }
 
-function createTableRow(type, item, itemId2locations) {
+function createTableRow(type, item) {
 	
 	var rowConfig = new RowConfig(item.id, type);
-	rowConfig.locations = createListLocations(item, itemId2locations);
+	rowConfig.locations = createListLocations(item);
 	rowConfig.dates = labelDates(item);
 	
 	if (isEdu(type)) {
@@ -96,7 +97,7 @@ function createTableRow(type, item, itemId2locations) {
 	+ rowConfig.locations
 	+ '    </ul>                                                                        '
 	+ '    <i class="icon-plus-sign icon-large add-location"                            '
-	+ '      onclick="javascript:addLocation(\'' + rowConfig.item_id + '\');"                '
+	+ '      onclick="javascript:addNewLocation(\'' + rowConfig.item_id + '\');"                '
 	+ '      >                                                                          '
 	+ '    </i>                                                                         '
 	+ '  </td>                                                                          '
@@ -257,9 +258,9 @@ function labelMkdown(text) { // http://softwaremaniacs.org/playground/showdown-h
 	return getMarkdownConverter().makeHtml(text || '');
 }
 
-function createListLocations(item, itemId2locations) {
+function createListLocations(item) {
 	
-	var itemLocations = itemId2locations[item.id] || ''; 
+	var itemLocations = cache_itemId2locations[item.id] || ''; 
 	
 	var list = [];
 	for (var i = 0, len = itemLocations.length; i < len; i++) {
@@ -288,19 +289,40 @@ function createListLocations(item, itemId2locations) {
 			
 		} else {
 			
-			if (cache_name2itemLocation[itemLocation.name] == undefined) {
-				var cacheItem = {};
-				cacheItem.name = itemLocation.name;
-				cacheItem.lat = itemLocation.lat;
-				cacheItem.lng = itemLocation.lng;
-				
-				cache_name2itemLocation[itemLocation.name] = cacheItem;
-			}
+			updateCache_name2itemLocation(itemLocation);
 		}
 	}
 	
 	return list.join('');
 	
+}
+
+function updateCache_name2itemLocation(itemLocation) {
+	
+	if (cache_name2itemLocation[itemLocation.name] == undefined) {
+		
+		var cacheItem = {};
+		cacheItem.name = itemLocation.name;
+		cacheItem.lat = itemLocation.lat;
+		cacheItem.lng = itemLocation.lng;
+		
+		cache_name2itemLocation[itemLocation.name] = cacheItem;
+	}
+	
+	// update items' locations
+	for (var key in cache_itemId2locations) {
+		if (cache_itemId2locations.hasOwnProperty(key)) {
+			
+			var itemLocations = cache_itemId2locations[key];
+			for (var i = 0, len = itemLocations.length; i < len; i++) {
+				var loc = itemLocations[i];
+				if (loc.name == itemLocation.name) {
+					loc.lat = itemLocation.lat;
+					loc.lng = itemLocation.lng;
+				}
+			}
+		}
+	}
 }
 
 function labelEduTitle(education) {
@@ -352,14 +374,7 @@ function searchLatLng(itemLocation, anchor_id) {
 					itemLocation.lat = loc.lat();
 					itemLocation.lng = loc.lng();
 
-					if (cache_name2itemLocation[itemLocation.name] == undefined) {
-						var cacheItem = {};
-						cacheItem.name = itemLocation.name;
-						cacheItem.lat = itemLocation.lat;
-						cacheItem.lng = itemLocation.lng;
-						
-						cache_name2itemLocation[itemLocation.name] = cacheItem;
-					}
+					updateCache_name2itemLocation(itemLocation);
 
 				} else if (status == google.maps.GeocoderStatus.ZERO_RESULTS) {
 					
