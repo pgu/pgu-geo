@@ -102,6 +102,7 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
 
     @Override
     public void showOtherExistingItemLocations(final String itemId) {
+
         retrieveOtherExistingItemLocations(itemId);
 
         btnsContainer.clear();
@@ -177,11 +178,6 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
     }
 
     @Override
-    public ArrayList<ItemLocation> getSelectedItemLocations() {
-        return new ArrayList<ItemLocation>(selecteds.values());
-    }
-
-    @Override
     public HasText getFormTitle() {
         return new HasText() {
 
@@ -216,6 +212,36 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
         saveBtn.setVisible(false);
         displayOnMapBtn.setVisible(true);
         deleteBtn.setVisible(true);
+    }
+
+    @Override
+    public String getLocationsJson(final String itemId) {
+        final ArrayList<ItemLocation> newLocations = new ArrayList<ItemLocation>(selecteds.values());
+        for (final ItemLocation loc : newLocations) {
+            addLocationToItemId(itemId, loc.getName(), loc.getLat(), loc.getLng());
+
+        }
+        return fetchLocationsJson(itemId);
+    }
+
+    private native void addLocationToItemId(String itemId, String name, String lat, String lng) /*-{
+
+		var loc = {};
+		loc.name = name;
+		loc.lat = lat;
+		loc.lng = lng;
+
+		$wnd.cache_itemId2locations[itemId].push(loc);
+
+    }-*/;
+
+    private native String fetchLocationsJson(String itemId) /*-{
+		return JSON.stringify($wnd.cache_itemId2locations[itemId]);
+    }-*/;
+
+    @Override
+    public void hide() {
+        container.hide();
     }
 
 }

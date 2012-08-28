@@ -371,8 +371,8 @@ function searchLatLng(itemLocation, anchor_id) {
 					var loc = results[0].geometry.location;
 //					console.log(itemLocation.name + ": " + loc);
 					
-					itemLocation.lat = loc.lat();
-					itemLocation.lng = loc.lng();
+					itemLocation.lat = loc.lat() + '';
+					itemLocation.lng = loc.lng() + '';
 
 					updateCache_name2itemLocation(itemLocation);
 

@@ -66,18 +66,21 @@ public class EditLocationActivity {
 
             @Override
             public void onClick(final ClickEvent event) {
-                final ArrayList<ItemLocation> locations = view.getSelectedItemLocations();
+                final String locations = view.getLocationsJson(itemId);
 
                 GWT.log("------------");
-                for (final ItemLocation itemLocation : locations) {
-                    GWT.log("> " + itemLocation);
-                }
+                GWT.log("> " + locations);
+                // TODO PGU Aug 28, 2012 linkedinservice.save(itemId, locations);
+                view.hide();
             }
 
         });
     }
 
+    private String itemId = null;
+
     public void start(final ItemLocation itemLocation, final String itemId) {
+        this.itemId = itemId;
 
         final boolean isNew = itemLocation == null;
 

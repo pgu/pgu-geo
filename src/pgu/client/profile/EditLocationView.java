@@ -3,7 +3,6 @@ package pgu.client.profile;
 import java.util.ArrayList;
 
 import pgu.client.app.utils.Notification;
-import pgu.shared.dto.ItemLocation;
 
 import com.github.gwtbootstrap.client.ui.base.HasVisibleHandlers;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -23,12 +22,14 @@ public interface EditLocationView {
 
     HasClickHandlers getSaveWidget();
 
-    ArrayList<ItemLocation> getSelectedItemLocations();
-
     HasText getFormTitle();
 
     void displayNewLocationWidget();
 
     void displayEditLocationWidget();
+
+    String getLocationsJson(String itemId);
+
+    void hide();
 
 }
