@@ -6,10 +6,12 @@ import pgu.client.app.event.HideWaitingIndicatorEvent;
 import pgu.client.app.event.LocationAddNewEvent;
 import pgu.client.app.event.LocationSearchEvent;
 import pgu.client.app.event.LocationsSuccessSaveEvent;
+import pgu.client.app.event.NotificationEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
+import pgu.client.app.utils.Level;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.shared.dto.ItemLocation;
 import pgu.shared.dto.LoginInfo;
@@ -143,6 +145,13 @@ public class MenuActivity implements MenuPresenter //
 
                         view.getSaveWidget().setVisible(false);
                         u.fire(eventBus, new LocationsSuccessSaveEvent(itemId, itemLocation));
+
+                        final StringBuilder msg = new StringBuilder();
+                        msg.append("The location \"");
+                        msg.append(itemLocation.getName());
+                        msg.append("\" has been successfully added.");
+
+                        u.fire(eventBus, new NotificationEvent(Level.SUCCESS, msg.toString()));
                     }
 
                 });
