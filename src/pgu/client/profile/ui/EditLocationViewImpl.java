@@ -196,9 +196,6 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
 
     @Override
     public void displayNewLocationWidget() {
-        selecteds.clear();
-        btnsContainer.clear();
-
         addPanel.setVisible(true);
         editPanel.setVisible(false);
 
@@ -241,7 +238,21 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
 		for ( var key in orig) {
 			if (orig.hasOwnProperty(key)) {
 
-				copy[key] = orig[key];
+				var copyLocs = [];
+				var locs = orig[key];
+
+				for ( var i = 0, len = locs.length; i < len; i++) {
+					var loc = locs[i];
+
+					var copyLoc = {};
+					copyLoc.name = loc.name;
+					copyLoc.lat = loc.lat;
+					copyLoc.lng = loc.lng;
+
+					copyLocs.push(copyLoc);
+				}
+
+				copy[key] = copyLocs;
 			}
 		}
 
@@ -298,7 +309,6 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
 
         // rollback selected locations
         selecteds.clear();
-        // TODO PGU Aug 29, 2012 remove locations from the cache
     }
 
     private void setEnableOnCreationForm(final boolean isEnabled) {

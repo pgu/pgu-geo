@@ -71,7 +71,7 @@ function createTableHead(type) {
 function createTableRow(type, item) {
 	
 	var rowConfig = new RowConfig(item.id, type);
-	rowConfig.locations = createListLocations(item);
+	rowConfig.locations = createListLocations(item.id);
 	rowConfig.dates = labelDates(item);
 	
 	if (isEdu(type)) {
@@ -259,22 +259,22 @@ function labelMkdown(text) { // http://softwaremaniacs.org/playground/showdown-h
 	return getMarkdownConverter().makeHtml(text || '');
 }
 
-function createListLocations(item) {
+function createListLocations(item_id) {
 	
-	var itemLocations = cache_itemId2locations[item.id] || ''; 
+	var itemLocations = cache_itemId2locations[item_id] || ''; 
 	
 	var list = [];
 	for (var i = 0, len = itemLocations.length; i < len; i++) {
 		
 		var itemLocation = itemLocations[i];
 		
-		var anchor_id = "loc_" + item.id + "_" + i;
+		var anchor_id = "loc_" + item_id + "_" + i;
 		
 		var el = ''
 		+ '      <li class="locationLi">          '
 		+ '        <a id="' + anchor_id + '"             '
 		+ '           href="javascript:;"         '
-		+ '           onclick="javascript:searchMapFor(\''+ item.id +'\', \'' + anchor_id +'\', \''+ itemLocation.name +'\');return false;"'
+		+ '           onclick="javascript:searchMapFor(\''+ item_id +'\', \'' + anchor_id +'\', \''+ itemLocation.name +'\');return false;"'
 		+ '           >                           '
 		+ '           ' + itemLocation.name + '   '
 		+ '        </a>                           '

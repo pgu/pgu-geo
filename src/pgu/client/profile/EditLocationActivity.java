@@ -98,21 +98,21 @@ public class EditLocationActivity {
 
                                 u.fire(eventBus, new RefreshLocationsEvent(itemId));
 
-                                final Notification notification = view.newNotification();
-                                notification.setHeading("Success");
-                                notification.setLevel(Level.SUCCESS);
-
+                                String msg = "";
                                 if (selectedLocations.size() == 1) {
-                                    notification.setHTML( //
-                                            "The location \"" //
-                                                    + selectedLocations.get(0).getName()//
-                                                    + "\" has been added successfully");
+                                    msg = "The location \"" //
+                                            + selectedLocations.get(0).getName()//
+                                            + "\" has been added successfully";
 
                                 } else {
-                                    notification.setHTML("The locations have been added successfully");
+                                    msg = "The locations have been added successfully";
 
                                 }
 
+                                final Notification notification = view.newNotification();
+                                notification.setHeading("Success");
+                                notification.setHTML(msg);
+                                notification.setLevel(Level.SUCCESS);
                                 notification.show();
 
                                 new Timer() {
@@ -123,7 +123,7 @@ public class EditLocationActivity {
 
                                     }
 
-                                }.schedule(2000);
+                                }.schedule(3000);
                             }
 
                             @Override
