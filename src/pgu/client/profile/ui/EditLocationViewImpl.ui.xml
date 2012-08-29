@@ -9,7 +9,7 @@
             <g:HTMLPanel ui:field="notification" />
             
             <b:WellForm ui:field="addPanel">
-                <b:Button ui:field="addBtn" type="PRIMARY">Add a new location</b:Button>
+                <b:Button ui:field="addBtn" icon="MAP_MARKER" iconSize="LARGE" type="PRIMARY">Add a new location</b:Button>
                 <b:NavPills ui:field="otherLocationsContainer" />
             </b:WellForm>
             

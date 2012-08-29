@@ -105,20 +105,28 @@ public class EditLocationActivity {
 
                                 u.fire(eventBus, new RefreshLocationsEvent(itemId));
 
-                                String msg = "";
+                                final StringBuilder msg = new StringBuilder();
+
                                 if (selectedLocations.size() == 1) {
-                                    msg = "The location \"" //
-                                            + selectedLocations.get(0).getName()//
-                                            + "\" has been added successfully";
+                                    msg.append("The location \"");
+                                    msg.append(selectedLocations.get(0).getName());
+                                    msg.append("\" has been successfully added.");
 
                                 } else {
-                                    msg = "The locations have been added successfully";
+                                    msg.append("The locations <ul>");
+                                    for (final ItemLocation loc : selectedLocations) {
+                                        msg.append("<li>\"");
+                                        msg.append(loc.getName());
+                                        msg.append("\"</li>");
+                                    }
+
+                                    msg.append("</ul>have been successfully added.");
 
                                 }
 
                                 final Notification notification = view.newNotification();
                                 notification.setHeading("Success");
-                                notification.setHTML(msg);
+                                notification.setHTML(msg.toString());
                                 notification.setLevel(Level.SUCCESS);
                                 notification.show();
 
