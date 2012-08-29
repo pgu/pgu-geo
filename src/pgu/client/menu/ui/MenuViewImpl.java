@@ -14,6 +14,9 @@ import com.github.gwtbootstrap.client.ui.ProgressBar;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -54,6 +57,19 @@ public class MenuViewImpl extends Composite implements MenuView {
 
     public MenuViewImpl() {
         initWidget(uiBinder.createAndBindUi(this));
+
+        locationSearchBox.getTextBox().addKeyPressHandler(new KeyPressHandler() {
+
+            @Override
+            public void onKeyPress(final KeyPressEvent event) {
+                if (event.getCharCode() == KeyCodes.KEY_ENTER) {
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    searchLocation();
+                }
+            }
+        });
 
         mapSizeBtn.getElement().setAttribute("data-toggle", "collapse");
         mapSizeBtn.getElement().setAttribute("data-target", "#map_canvas_container");
@@ -98,9 +114,9 @@ public class MenuViewImpl extends Composite implements MenuView {
 
     @UiHandler("locationSaveBtn")
     public void clickOnLocationSave(final ClickEvent e) {
-        final String locationLabel = locationSearchBox.getTextBox().getText();
+        final String locationName = locationSearchBox.getTextBox().getText();
 
-        if (u.isVoid(locationLabel)) {
+        if (u.isVoid(locationName)) {
             return;
         }
 
@@ -109,13 +125,16 @@ public class MenuViewImpl extends Composite implements MenuView {
             return;
         }
 
-        presenter.saveLocationItem(lastSearchLatLng, itemId, locationLabel);
+        presenter.saveLocation(lastSearchLatLng, locationName);
         locationSaveBtn.setVisible(false);
     }
 
     @UiHandler("locationSearchBtn")
     public void clickOnLocationSearch(final ClickEvent e) {
+        searchLocation();
+    }
 
+    private void searchLocation() {
         final String locationText = locationSearchBox.getTextBox().getText();
 
         if (u.isVoid(locationText)) {
@@ -165,7 +184,7 @@ public class MenuViewImpl extends Composite implements MenuView {
 
     }
 
-    public static native void searchLocationAndAddMarker(MenuViewImpl menu, String locationText) /*-{
+    public native void searchLocationAndAddMarker(MenuViewImpl menu, String locationText) /*-{
 
 		$wnd.geocoder
 				.geocode(
@@ -183,8 +202,8 @@ public class MenuViewImpl extends Composite implements MenuView {
 
 							var loc = results[0].geometry.location;
 
-							$wnd.map.setCenter(loc);
-							$wnd.console.log(loc);
+							//							$wnd.map.setCenter(loc);
+							//							$wnd.console.log(loc);
 
 							var marker = new $wnd.google.maps.Marker({
 								map : $wnd.map,
@@ -193,8 +212,8 @@ public class MenuViewImpl extends Composite implements MenuView {
 								title : locationText
 							});
 
-							var lat = loc.lat() + "";
-							var lng = loc.lng() + "";
+							var lat = loc.lat() + '';
+							var lng = loc.lng() + '';
 
 							menu.@pgu.client.menu.ui.MenuViewImpl::saveSearchLatLng(Ljava/lang/String;Ljava/lang/String;)(lat,lng);
 
@@ -368,13 +387,6 @@ public class MenuViewImpl extends Composite implements MenuView {
             }
 
         };
-    }
-
-    private String itemId;
-
-    @Override
-    public void setItemId(final String itemId) {
-        this.itemId = itemId;
     }
 
     @Override

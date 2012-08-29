@@ -37,8 +37,6 @@ public interface MenuView extends IsWidget {
 
     LocationSearchWidget getLocationSearchWidget();
 
-    void setItemId(String id);
-
     ProfilePlayMenuWidget getProfilePlayMenuWidget();
 
     HasVisibility getSaveWidget();

@@ -29,6 +29,7 @@ public class MenuActivity implements MenuPresenter //
     private final LoginInfo     loginInfo;
     private final ClientUtils   u = new ClientUtils();
     private final ClientFactory clientFactory;
+    private String              itemId;
 
     public MenuActivity(final ClientFactory clientFactory) {
         this.clientFactory = clientFactory;
@@ -97,12 +98,12 @@ public class MenuActivity implements MenuPresenter //
 
     @Override
     public void onLocationSearch(final LocationSearchEvent event) {
-        view.setItemId(event.getItemId());
+        itemId = event.getItemId();
         view.getLocationSearchWidget().setText(event.getText());
     }
 
     @Override
-    public void saveLocationItem(final LatLng latLng, final String itemId, final String locationLabel) {
+    public void saveLocation(final LatLng latLng, final String locationLabel) {
         GWT.log("save " + //
                 itemId + //
                 ", " + locationLabel + //
@@ -126,9 +127,9 @@ public class MenuActivity implements MenuPresenter //
 
     @Override
     public void onLocationAddNew(final LocationAddNewEvent event) {
+        itemId = event.getItemId();
 
         view.showMap();
-        view.setItemId(event.getItemId());
         view.getLocationSearchWidget().setText("");
         view.getLocationSearchWidget().setFocus(true);
         view.getSaveWidget().setVisible(true);

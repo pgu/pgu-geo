@@ -8,6 +8,6 @@ public interface MenuPresenter {
 
     void goToContacts();
 
-    void saveLocationItem(LatLng latLng, String itemId, String text);
+    void saveLocation(LatLng latLng, String locationName);
 
 }
