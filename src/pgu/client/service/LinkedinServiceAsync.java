@@ -19,4 +19,6 @@ public interface LinkedinServiceAsync {
     void fetchProfile(AccessToken accessToken, AsyncCallback<Profile> asyncCallbackApp);
 
     void getAccessToken(String oauthCode, RequestToken requestToken, AsyncCallback<AccessToken> callbackApp);
+
+    void saveLocations(String userId, String locations, AsyncCallback<Void> callbackApp);
 }

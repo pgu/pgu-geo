@@ -441,4 +441,10 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         }
         return sb.toString();
     }
+
+    @Override
+    public void saveLocations(final String userId, final String locations) {
+        // TODO PGU Aug 29, 2012 missing userId
+        log.info(this, "user[%s]\n%s", userId, locations);
+    }
 }

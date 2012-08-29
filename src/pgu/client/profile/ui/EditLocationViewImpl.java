@@ -221,7 +221,7 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
             addLocationToItemId(itemId, loc.getName(), loc.getLat(), loc.getLng());
 
         }
-        return fetchLocationsJson(itemId);
+        return fetchAllItemId2locationsJson();
     }
 
     private native void addLocationToItemId(String itemId, String name, String lat, String lng) /*-{
@@ -233,10 +233,12 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
 
 		$wnd.cache_itemId2locations[itemId].push(loc);
 
+		// add <li> for each new location to the item's row
+
     }-*/;
 
-    private native String fetchLocationsJson(String itemId) /*-{
-		return JSON.stringify($wnd.cache_itemId2locations[itemId]);
+    private native String fetchAllItemId2locationsJson() /*-{
+		return JSON.stringify($wnd.cache_itemId2locations);
     }-*/;
 
     @Override

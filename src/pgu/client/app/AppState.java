@@ -4,6 +4,7 @@ import pgu.shared.dto.AccessToken;
 
 public class AppState {
 
+    private String      userId = "Qjrp4c3fc3";
     private AccessToken accessToken;
     private boolean     hasUser;
 
@@ -21,6 +22,14 @@ public class AppState {
 
     public void setAccessToken(final AccessToken accessToken) {
         this.accessToken = accessToken;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(final String userId) {
+        this.userId = userId;
     }
 
 }

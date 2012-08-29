@@ -4,13 +4,14 @@ import java.util.ArrayList;
 
 import pgu.client.app.event.LocationAddNewEvent;
 import pgu.client.app.mvp.ClientFactory;
+import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.Notification;
+import pgu.client.service.LinkedinServiceAsync;
 import pgu.shared.dto.ItemLocation;
 
 import com.github.gwtbootstrap.client.ui.event.HiddenEvent;
 import com.github.gwtbootstrap.client.ui.event.HiddenHandler;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.web.bindery.event.shared.EventBus;
@@ -22,10 +23,15 @@ public class EditLocationActivity {
     private final EventBus                       eventBus;
     private final ClientUtils                    u           = new ClientUtils();
     private final ArrayList<HandlerRegistration> handlerRegs = new ArrayList<HandlerRegistration>();
+    private final LinkedinServiceAsync           linkedinService;
+    private final ClientFactory                  clientFactory;
 
     public EditLocationActivity(final ClientFactory clientFactory) {
+        this.clientFactory = clientFactory;
         eventBus = clientFactory.getEventBus();
         view = clientFactory.getEditLocationView();
+        linkedinService = clientFactory.getLinkedinService();
+
         handlerRegs.add(addSaveHandler());
         handlerRegs.add(addCloseHandler());
     }
@@ -68,10 +74,19 @@ public class EditLocationActivity {
             public void onClick(final ClickEvent event) {
                 final String locations = view.getLocationsJson(itemId);
 
-                GWT.log("------------");
-                GWT.log("> " + locations);
-                // TODO PGU Aug 28, 2012 linkedinservice.save(itemId, locations);
-                view.hide();
+                linkedinService.saveLocations( //
+                        clientFactory.getAppState().getUserId() //
+                        , locations //
+                        , new AsyncCallbackApp<Void>(eventBus) {
+
+                            @Override
+                            public void onSuccess(final Void result) {
+                                // TODO PGU Aug 29, 2012 hide progress bar
+                                // TODO PGU Aug 29, 2012 show notification of success
+                                view.hide();
+                            }
+
+                        });
             }
 
         });
