@@ -326,6 +326,7 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
             final Profile profile = new Profile();
             profile.setJson(jsonProfile);
             profile.setItemId2locations(new Gson().toJson(itemId2locations));
+            profile.setLocation(javaProfile.getLocation());
             return profile;
 
         }

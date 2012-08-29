@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 
 import pgu.client.profile.ProfilePresenter;
 import pgu.client.profile.ProfileView;
+import pgu.shared.dto.Location;
 import pgu.shared.dto.Profile;
 
 import com.github.gwtbootstrap.client.ui.Button;
@@ -22,10 +23,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -62,6 +59,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         educationSection = new Section("profile:education");
 
         initWidget(uiBinder.createAndBindUi(this));
+
+        locContainer.getElement().setId("el_profile_location");
 
         // http://www.linkedin.com/pub/pascal-guilcher/2/3b1/955
         nameBasic.setText("Pascal Guilcher");
@@ -126,39 +125,16 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         exportMethod();
     }
 
-    public static void searchMapFor(final String itemId, final String anchorId, final String location) {
-
-        final Element anchor = DOM.getElementById(anchorId);
-        final com.google.gwt.dom.client.Element li = anchor.getParentElement();
-
-        if (li.getClassName().contains("active")) {
-            li.removeClassName("active");
-            return;
-        }
-
-        li.addClassName("active");
-
-        searchForLocation(itemId, anchorId, location);
-    }
-
-    private static void searchForLocation(final String itemId, final String anchorId, final String location) {
-        new Timer() {
-
-            @Override
-            public void run() {
-                Window.scrollTo(0, 0);
-                staticPresenter.searchForLocation(itemId, anchorId, location);
-            }
-
-        }.schedule(300);
-    }
-
     private static ProfilePresenter staticPresenter = null;
 
     public native static void exportMethod() /*-{
-		$wnd.searchMapFor = $entry(@pgu.client.profile.ui.ProfileViewImpl::searchMapFor(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;));
 		$wnd.addNewLocation = $entry(@pgu.client.profile.ui.ProfileViewImpl::addNewLocation(Ljava/lang/String;));
+		$wnd.editLocation = $entry(@pgu.client.profile.ui.ProfileViewImpl::editLocation(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;));
     }-*/;
+
+    public static void editLocation(final String itemId, final String locName, final String locLat, final String locLng) {
+        staticPresenter.editLocation(itemId, locName, locLat, locLng);
+    }
 
     public static void addNewLocation(final String itemId) {
         staticPresenter.addNewLocation(itemId);
@@ -171,11 +147,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     @UiHandler("locContainer")
     public void clickLocContainer(final ClickEvent e) {
-        locContainer.setActive(!locContainer.isActive());
-
-        if (locContainer.isActive()) {
-            searchForLocation(null, null, locContainer.getText());
-        }
+        presenter.searchForLocation(locContainer.getText());
     }
 
     private ProfilePresenter presenter;
@@ -188,12 +160,27 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     @Override
     public void setProfile(final Profile profile) {
+
+        setProfileLocation(profile);
+
         setProfile(profile.getJson(), profile.getItemId2locations());
     }
 
-    private native void setProfile(String profile, String itemId2locations) /*-{
-		var j_profile = JSON.parse(profile);
+    private void setProfileLocation(final Profile profile) {
+        final Location profileLocation = profile.getLocation();
+        if (profileLocation == null) {
+            locContainer.setText("");
 
+        } else {
+            final String name = profileLocation.getName();
+            locContainer.setText(name == null ? "" : name);
+
+        }
+    }
+
+    private native void setProfile(String profile, String itemId2locations) /*-{
+
+		var j_profile = JSON.parse(profile);
 		$wnd.cache_itemId2locations = JSON.parse(itemId2locations);
 
 		////////////////////////

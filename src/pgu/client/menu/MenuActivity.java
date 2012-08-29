@@ -103,8 +103,8 @@ public class MenuActivity implements MenuPresenter //
 
     @Override
     public void onLocationSearch(final LocationSearchEvent event) {
-        itemId = event.getItemId();
-        view.getLocationSearchWidget().setText(event.getText());
+        view.getLocationSearchWidget().setText(event.getLocationName());
+        // TODO PGU show map + starts search automatically
     }
 
     @Override
@@ -132,6 +132,11 @@ public class MenuActivity implements MenuPresenter //
 
     @Override
     public void saveLocation(final ItemLocation itemLocation) {
+
+        if (u.isVoid(itemId)) {
+            return;
+        }
+
         u.fire(eventBus, new ShowWaitingIndicatorEvent());
 
         linkedinService.saveLocations( //

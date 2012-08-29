@@ -8,6 +8,7 @@ import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.service.LinkedinServiceAsync;
+import pgu.shared.dto.ItemLocation;
 import pgu.shared.dto.Profile;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -58,11 +59,6 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     }
 
     @Override
-    public void searchForLocation(final String itemId, final String anchorId, final String text) {
-        u.fire(eventBus, new LocationSearchEvent(itemId, text));
-    }
-
-    @Override
     public void addNewLocation(final String itemId) {
         // itemId for a position or an education
 
@@ -72,9 +68,26 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     }
 
     @Override
+    public void editLocation(final String itemId, final String locName, final String locLat, final String locLng) {
+
+        final ItemLocation itemLocation = new ItemLocation();
+        itemLocation.setName(locName);
+        itemLocation.setLat(locLat);
+        itemLocation.setLng(locLng);
+
+        final EditLocationActivity editLocationActivity = new EditLocationActivity(clientFactory);
+        editLocationActivity.start(itemLocation, itemId);
+    }
+
+    @Override
     public void onLocationsSuccessSave(final LocationsSuccessSaveEvent event) {
         // TODO PGU Aug 29, 2012 check on the lat/lng
         u.addNewLocationsToItem(event.getItemId(), event.getNewItemLocations());
+    }
+
+    @Override
+    public void searchForLocation(final String locationName) {
+        u.fire(eventBus, new LocationSearchEvent(locationName));
     }
 
 }

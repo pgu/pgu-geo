@@ -36,7 +36,6 @@ public class EditLocationActivity {
         view = clientFactory.getEditLocationView();
         linkedinService = clientFactory.getLinkedinService();
 
-        handlerRegs.add(addSaveHandler());
         handlerRegs.add(addCloseHandler());
     }
 
@@ -77,7 +76,7 @@ public class EditLocationActivity {
         });
     }
 
-    private HandlerRegistration addSaveHandler() {
+    private HandlerRegistration addSaveHandler(final String itemId) {
         return view.getSaveWidget().addClickHandler(new ClickHandler() {
 
             @Override
@@ -162,24 +161,33 @@ public class EditLocationActivity {
         });
     }
 
-    private String itemId = null;
-
     public void start(final ItemLocation itemLocation, final String itemId) {
-        this.itemId = itemId;
 
         final boolean isNew = itemLocation == null;
 
         if (isNew) {
 
+            handlerRegs.add(addSaveHandler(itemId));
             handlerRegs.add(addAddHandler(itemId));
             view.displayNewLocationWidget(itemId);
 
         } else {
 
-            view.displayEditLocationWidget(itemLocation, itemId);
-            // TODO PGU Aug 28, 2012 edit location
             // click on a location: popup with: information: name, lat, lng; actions: show on the map, delete it
+            handlerRegs.add(addDeleteHandler(itemLocation, itemId));
+            handlerRegs.add(addShowOnMapHandler(itemLocation));
+            view.displayEditLocationWidget(itemLocation, itemId);
         }
         view.show();
+    }
+
+    private HandlerRegistration addShowOnMapHandler(final ItemLocation itemLocation) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    private HandlerRegistration addDeleteHandler(final ItemLocation itemLocation, final String itemId) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

@@ -274,7 +274,7 @@ function createListLocations(item_id) {
 		+ '      <li class="locationLi">          '
 		+ '        <a id="' + anchor_id + '"             '
 		+ '           href="javascript:;"         '
-		+ '           onclick="javascript:searchMapFor(\''+ item_id +'\', \'' + anchor_id +'\', \''+ itemLocation.name +'\');return false;"'
+		+ '           onclick="javascript:_editLocation(\''+ item_id +'\', \''+ itemLocation.name +'\');return false;"'
 		+ '           >                           '
 		+ '           ' + itemLocation.name + '   '
 		+ '        </a>                           '
@@ -296,6 +296,16 @@ function createListLocations(item_id) {
 	
 	return list.join('');
 	
+}
+
+function _editLocation(itemId, locationName) {
+	
+	var itemLocation = cache_name2itemLocation[itemLocation.name];
+	if (itemLocation == undefined) {
+		return;
+	}
+	
+	editLocation(itemId, itemLocation.name, itemLocation.lat, itemLocation.lng);
 }
 
 function updateCache_name2itemLocation(itemLocation) {
