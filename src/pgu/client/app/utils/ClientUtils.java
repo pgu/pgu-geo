@@ -1,7 +1,10 @@
 package pgu.client.app.utils;
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import pgu.shared.dto.ItemLocation;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.GwtEvent;
@@ -38,5 +41,39 @@ public class ClientUtils {
             }
         });
     }
+
+    public void addLocationToItem(final String itemId, final ItemLocation itemLocation) {
+        final ArrayList<ItemLocation> locs = new ArrayList<ItemLocation>();
+        locs.add(itemLocation);
+
+        addLocationsToItem(itemId, locs);
+    }
+
+    public void addLocationsToItem(final String itemId, final ArrayList<ItemLocation> locations) {
+        for (final ItemLocation loc : locations) {
+
+            addLocationToItem(itemId, loc.getName(), loc.getLat(), loc.getLng());
+        }
+
+        refreshLocationsForItem(itemId);
+    }
+
+    private native void addLocationToItem(String itemId, String name, String lat, String lng) /*-{
+
+		var loc = {};
+		loc.name = name;
+		loc.lat = lat;
+		loc.lng = lng;
+
+		$wnd.cache_itemId2locations[itemId].push(loc);
+
+    }-*/;
+
+    private native void refreshLocationsForItem(final String itemId) /*-{
+
+		var html_locations = $wnd.createListLocations(itemId);
+		$doc.getElementById("locations_" + itemId).innerHTML = html_locations;
+
+    }-*/;
 
 }

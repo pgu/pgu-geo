@@ -214,12 +214,4 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     }-*/;
 
-    @Override
-    public native void refreshLocationsForItem(final String itemId) /*-{
-
-		var html_locations = $wnd.createListLocations(itemId);
-		$doc.getElementById("locations_" + itemId).innerHTML = html_locations;
-
-    }-*/;
-
 }

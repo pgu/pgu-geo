@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 
+import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.Notification;
 import pgu.client.app.utils.NotificationImpl;
 import pgu.client.profile.EditLocationView;
@@ -52,6 +53,7 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
     private final ArrayList<Notification>             notifications      = new ArrayList<Notification>();
     private final ArrayList<ItemLocation>             otherItemLocations = new ArrayList<ItemLocation>();
     private final LinkedHashMap<String, ItemLocation> selecteds          = new LinkedHashMap<String, ItemLocation>();
+    private final ClientUtils                         u                  = new ClientUtils();
 
     public EditLocationViewImpl() {
         initWidget(uiBinder.createAndBindUi(this));
@@ -337,25 +339,11 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
         addBtn.setEnabled(true);
         otherLocationsContainer.clear();
 
-        // commit locations to the cache
+        // commit locations
         final ArrayList<ItemLocation> newLocations = new ArrayList<ItemLocation>(selecteds.values());
-        for (final ItemLocation newLoc : newLocations) {
-
-            addLocationToItemId(itemId, newLoc.getName(), newLoc.getLat(), newLoc.getLng());
-        }
+        u.addLocationsToItem(itemId, newLocations);
 
     }
-
-    private native void addLocationToItemId(String itemId, String name, String lat, String lng) /*-{
-
-		var loc = {};
-		loc.name = name;
-		loc.lat = lat;
-		loc.lng = lng;
-
-		$wnd.cache_itemId2locations[itemId].push(loc);
-
-    }-*/;
 
     @Override
     public HasVisibility getCloseWidget() {

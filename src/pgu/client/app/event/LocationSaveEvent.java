@@ -1,6 +1,6 @@
 package pgu.client.app.event;
 
-import pgu.shared.dto.LatLng;
+import pgu.shared.dto.ItemLocation;
 
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
@@ -19,14 +19,12 @@ public class LocationSaveEvent extends GwtEvent<LocationSaveEvent.Handler> {
 
     public static final Type<Handler> TYPE = new Type<Handler>();
 
-    private final LatLng              latLng;
     private final String              itemId;
-    private final String              locationLabel;
+    private final ItemLocation        itemLocation;
 
-    public LocationSaveEvent(final LatLng latLng, final String itemId, final String locationLabel) {
-        this.latLng = latLng;
+    public LocationSaveEvent(final String itemId, final ItemLocation itemLocation) {
         this.itemId = itemId;
-        this.locationLabel = locationLabel;
+        this.itemLocation = itemLocation;
     }
 
     @Override
@@ -39,16 +37,12 @@ public class LocationSaveEvent extends GwtEvent<LocationSaveEvent.Handler> {
         handler.onLocationSave(this);
     }
 
-    public LatLng getLatLng() {
-        return latLng;
-    }
-
     public String getItemId() {
         return itemId;
     }
 
-    public String getLocationLabel() {
-        return locationLabel;
+    public ItemLocation getItemLocation() {
+        return itemLocation;
     }
 
 }

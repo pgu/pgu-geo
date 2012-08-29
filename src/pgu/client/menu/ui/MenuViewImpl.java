@@ -3,7 +3,7 @@ package pgu.client.menu.ui;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.menu.MenuPresenter;
 import pgu.client.menu.MenuView;
-import pgu.shared.dto.LatLng;
+import pgu.shared.dto.ItemLocation;
 
 import com.github.gwtbootstrap.client.ui.Brand;
 import com.github.gwtbootstrap.client.ui.Button;
@@ -107,6 +107,8 @@ public class MenuViewImpl extends Composite implements MenuView {
     private static final String MSG_PLAY_PROFILE_LOCATIONS  = "Play profile locations";
     private static final String MSG_PAUSE                   = "Pause";
 
+    private ItemLocation        lastSearchItemLocation      = null;
+
     @Override
     public void setPresenter(final MenuPresenter presenter) {
         this.presenter = presenter;
@@ -114,18 +116,16 @@ public class MenuViewImpl extends Composite implements MenuView {
 
     @UiHandler("locationSaveBtn")
     public void clickOnLocationSave(final ClickEvent e) {
-        final String locationName = locationSearchBox.getTextBox().getText();
 
-        if (u.isVoid(locationName)) {
+        if (u.isVoid(lastSearchItemLocation.getName()) //
+                || u.isVoid(lastSearchItemLocation.getLat()) //
+                || u.isVoid(lastSearchItemLocation.getLng())) {
+
+            lastSearchItemLocation = null;
             return;
         }
 
-        if (u.isVoid(lastSearchLatLng.getLat()) //
-                || u.isVoid(lastSearchLatLng.getLng())) {
-            return;
-        }
-
-        presenter.saveLocation(lastSearchLatLng, locationName);
+        presenter.saveLocation(lastSearchItemLocation);
         locationSaveBtn.setVisible(false);
     }
 
@@ -138,6 +138,7 @@ public class MenuViewImpl extends Composite implements MenuView {
         final String locationText = locationSearchBox.getTextBox().getText();
 
         if (u.isVoid(locationText)) {
+            lastSearchItemLocation = null;
             return;
         }
 
@@ -175,21 +176,19 @@ public class MenuViewImpl extends Composite implements MenuView {
         // timer on each location
     }
 
-    private LatLng lastSearchLatLng = null;
-
-    public void saveSearchLatLng(final String lat, final String lng) {
-        lastSearchLatLng = new LatLng();
-        lastSearchLatLng.setLat(lat);
-        lastSearchLatLng.setLng(lng);
-
+    public void saveSearchedLocation(final String name, final String lat, final String lng) {
+        lastSearchItemLocation = new ItemLocation();
+        lastSearchItemLocation.setName(name);
+        lastSearchItemLocation.setLat(lat);
+        lastSearchItemLocation.setLng(lng);
     }
 
-    public native void searchLocationAndAddMarker(MenuViewImpl menu, String locationText) /*-{
+    public native void searchLocationAndAddMarker(MenuViewImpl menu, String name) /*-{
 
 		$wnd.geocoder
 				.geocode(
 						{
-							'address' : locationText
+							'address' : name
 						},
 						function(results, status) {
 
@@ -209,13 +208,13 @@ public class MenuViewImpl extends Composite implements MenuView {
 								map : $wnd.map,
 								position : loc,
 								animation : $wnd.google.maps.Animation.DROP,
-								title : locationText
+								title : name
 							});
 
 							var lat = loc.lat() + '';
 							var lng = loc.lng() + '';
 
-							menu.@pgu.client.menu.ui.MenuViewImpl::saveSearchLatLng(Ljava/lang/String;Ljava/lang/String;)(lat,lng);
+							menu.@pgu.client.menu.ui.MenuViewImpl::saveSearchedLocation(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(name,lat,lng);
 
 						});
 

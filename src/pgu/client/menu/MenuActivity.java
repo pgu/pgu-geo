@@ -9,10 +9,9 @@ import pgu.client.app.event.LocationSearchEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.ClientUtils;
-import pgu.shared.dto.LatLng;
+import pgu.shared.dto.ItemLocation;
 import pgu.shared.dto.LoginInfo;
 
-import com.google.gwt.core.client.GWT;
 import com.google.web.bindery.event.shared.EventBus;
 
 public class MenuActivity implements MenuPresenter //
@@ -103,18 +102,6 @@ public class MenuActivity implements MenuPresenter //
     }
 
     @Override
-    public void saveLocation(final LatLng latLng, final String locationLabel) {
-        GWT.log("save " + //
-                itemId + //
-                ", " + locationLabel + //
-                ", the found location: " + //
-                latLng //
-        );
-
-        u.fire(eventBus, new LocationSaveEvent(latLng, itemId, locationLabel));
-    }
-
-    @Override
     public void onGoToContacts(final GoToContactsEvent event) {
         view.getProfilePlayMenuWidget().setVisible(false);
     }
@@ -135,6 +122,11 @@ public class MenuActivity implements MenuPresenter //
         view.getSaveWidget().setVisible(true);
         view.scrollToTop();
 
+    }
+
+    @Override
+    public void saveLocation(final ItemLocation itemLocation) {
+        u.fire(eventBus, new LocationSaveEvent(itemId, itemLocation));
     }
 
 }

@@ -3,7 +3,6 @@ package pgu.client.profile;
 import pgu.client.app.event.HideWaitingIndicatorEvent;
 import pgu.client.app.event.LocationSaveEvent;
 import pgu.client.app.event.LocationSearchEvent;
-import pgu.client.app.event.RefreshLocationsEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
@@ -17,7 +16,6 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 public class ProfileActivity extends AbstractActivity implements ProfilePresenter //
         , LocationSaveEvent.Handler //
-        , RefreshLocationsEvent.Handler //
 {
 
     private final ClientFactory        clientFactory;
@@ -41,7 +39,6 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         view.setPresenter(this);
 
         eventBus.addHandler(LocationSaveEvent.TYPE, this);
-        eventBus.addHandler(RefreshLocationsEvent.TYPE, this);
 
         panel.setWidget(view.asWidget());
 
@@ -76,18 +73,8 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     @Override
     public void onLocationSave(final LocationSaveEvent event) {
-        // TODO PGU add the new location to the list
-        // for education: education.id
-        // for xp: position.id
-        // location: item.id, label, latlng,
-        // hashcode/equals by latlng and name
-        // itemLocation
-
-    }
-
-    @Override
-    public void onRefreshLocations(final RefreshLocationsEvent event) {
-        view.refreshLocationsForItem(event.getItemId());
+        // TODO PGU Aug 29, 2012 check on the lat/lng
+        u.addLocationToItem(event.getItemId(), event.getItemLocation());
     }
 
 }

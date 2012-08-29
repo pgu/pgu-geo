@@ -3,7 +3,6 @@ package pgu.client.profile;
 import java.util.ArrayList;
 
 import pgu.client.app.event.LocationAddNewEvent;
-import pgu.client.app.event.RefreshLocationsEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
@@ -102,8 +101,6 @@ public class EditLocationActivity {
                             public void onSuccess(final Void result) {
                                 view.getWaitingIndicator().setVisible(false);
                                 view.removeCreationFormAndCommitNewLocations(itemId);
-
-                                u.fire(eventBus, new RefreshLocationsEvent(itemId));
 
                                 final StringBuilder msg = new StringBuilder();
 
