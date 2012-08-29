@@ -42,23 +42,16 @@ public class ClientUtils {
         });
     }
 
-    public void addLocationToItem(final String itemId, final ItemLocation itemLocation) {
-        final ArrayList<ItemLocation> locs = new ArrayList<ItemLocation>();
-        locs.add(itemLocation);
-
-        addLocationsToItem(itemId, locs);
-    }
-
-    public void addLocationsToItem(final String itemId, final ArrayList<ItemLocation> locations) {
+    public void addNewLocationsToItem(final String itemId, final ArrayList<ItemLocation> locations) {
         for (final ItemLocation loc : locations) {
 
-            addLocationToItem(itemId, loc.getName(), loc.getLat(), loc.getLng());
+            addNewLocationToItem(itemId, loc.getName(), loc.getLat(), loc.getLng());
         }
 
-        refreshLocationsForItem(itemId);
+        refreshHtmlLocationsForItem(itemId);
     }
 
-    private native void addLocationToItem(String itemId, String name, String lat, String lng) /*-{
+    private native void addNewLocationToItem(String itemId, String name, String lat, String lng) /*-{
 
 		var loc = {};
 		loc.name = name;
@@ -69,11 +62,79 @@ public class ClientUtils {
 
     }-*/;
 
-    private native void refreshLocationsForItem(final String itemId) /*-{
+    private native void refreshHtmlLocationsForItem(final String itemId) /*-{
 
 		var html_locations = $wnd.createListLocations(itemId);
 		$doc.getElementById("locations_" + itemId).innerHTML = html_locations;
 
+    }-*/;
+
+    public String getCopyCacheWithNewLocationsJson(final String itemId, final ItemLocation itemLocation) {
+        final ArrayList<ItemLocation> arr = new ArrayList<ItemLocation>();
+        arr.add(itemLocation);
+        return getCopyCacheWithNewLocationsJson(itemId, arr);
+    }
+
+    public String getCopyCacheWithNewLocationsJson(final String itemId, final ArrayList<ItemLocation> newLocations) {
+
+        initTemporaryCache();
+
+        for (final ItemLocation newLoc : newLocations) {
+
+            addNewLocationToTemporaryCache(itemId, newLoc.getName(), newLoc.getLat(), newLoc.getLng());
+        }
+
+        return fetchAllFromTemporaryCacheJson();
+    }
+
+    private native void initTemporaryCache() /*-{
+
+		$wnd.__tmp_cache_itemId2locations = {};
+
+		var orig = $wnd.cache_itemId2locations;
+		var copy = $wnd.__tmp_cache_itemId2locations;
+
+		for ( var key in orig) {
+			if (orig.hasOwnProperty(key)) {
+
+				var copyLocs = [];
+				var locs = orig[key];
+
+				for ( var i = 0, len = locs.length; i < len; i++) {
+					var loc = locs[i];
+
+					var copyLoc = {};
+					copyLoc.name = loc.name;
+					copyLoc.lat = loc.lat;
+					copyLoc.lng = loc.lng;
+
+					copyLocs.push(copyLoc);
+				}
+
+				copy[key] = copyLocs;
+			}
+		}
+
+    }-*/;
+
+    private native void addNewLocationToTemporaryCache(String itemId, String name, String lat, String lng) /*-{
+
+		var loc = {};
+		loc.name = name;
+		loc.lat = lat;
+		loc.lng = lng;
+
+		$wnd.__tmp_cache_itemId2locations[itemId].push(loc);
+
+    }-*/;
+
+    private native String fetchAllFromTemporaryCacheJson() /*-{
+
+		var tmp_cache_json = JSON.stringify($wnd.__tmp_cache_itemId2locations);
+
+		$wnd.__tmp_cache_itemId2locations = null;
+
+		return tmp_cache_json;
     }-*/;
 
 }

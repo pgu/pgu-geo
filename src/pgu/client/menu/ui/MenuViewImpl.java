@@ -126,7 +126,6 @@ public class MenuViewImpl extends Composite implements MenuView {
         }
 
         presenter.saveLocation(lastSearchItemLocation);
-        locationSaveBtn.setVisible(false);
     }
 
     @UiHandler("locationSearchBtn")

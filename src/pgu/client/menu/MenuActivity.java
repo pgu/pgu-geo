@@ -4,11 +4,13 @@ import pgu.client.app.event.GoToContactsEvent;
 import pgu.client.app.event.GoToProfileEvent;
 import pgu.client.app.event.HideWaitingIndicatorEvent;
 import pgu.client.app.event.LocationAddNewEvent;
-import pgu.client.app.event.LocationSaveEvent;
 import pgu.client.app.event.LocationSearchEvent;
+import pgu.client.app.event.LocationsSuccessSaveEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
+import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
+import pgu.client.service.LinkedinServiceAsync;
 import pgu.shared.dto.ItemLocation;
 import pgu.shared.dto.LoginInfo;
 
@@ -23,17 +25,19 @@ public class MenuActivity implements MenuPresenter //
         , GoToContactsEvent.Handler //
 {
 
-    private final MenuView      view;
-    private EventBus            eventBus;
-    private final LoginInfo     loginInfo;
-    private final ClientUtils   u = new ClientUtils();
-    private final ClientFactory clientFactory;
-    private String              itemId;
+    private final MenuView             view;
+    private EventBus                   eventBus;
+    private final LoginInfo            loginInfo;
+    private final ClientUtils          u = new ClientUtils();
+    private final ClientFactory        clientFactory;
+    private String                     itemId;
+    private final LinkedinServiceAsync linkedinService;
 
     public MenuActivity(final ClientFactory clientFactory) {
         this.clientFactory = clientFactory;
         view = clientFactory.getMenuView();
         loginInfo = clientFactory.getLoginInfo();
+        linkedinService = clientFactory.getLinkedinService();
     }
 
     public void start(final EventBus eventBus) {
@@ -126,7 +130,23 @@ public class MenuActivity implements MenuPresenter //
 
     @Override
     public void saveLocation(final ItemLocation itemLocation) {
-        u.fire(eventBus, new LocationSaveEvent(itemId, itemLocation));
+        u.fire(eventBus, new ShowWaitingIndicatorEvent());
+
+        linkedinService.saveLocations( //
+                clientFactory.getAppState().getUserId() //
+                , u.getCopyCacheWithNewLocationsJson(itemId, itemLocation) //
+                , new AsyncCallbackApp<Void>(eventBus) {
+
+                    @Override
+                    public void onSuccess(final Void result) {
+                        u.fire(eventBus, new HideWaitingIndicatorEvent());
+
+                        view.getSaveWidget().setVisible(false);
+                        u.fire(eventBus, new LocationsSuccessSaveEvent(itemId, itemLocation));
+                    }
+
+                });
+
     }
 
 }

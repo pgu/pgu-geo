@@ -218,70 +218,6 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
     }
 
     @Override
-    public String getAllItemsWithAllLocationsJson(final String itemId) {
-
-        initTemporaryCache();
-
-        final ArrayList<ItemLocation> newLocations = new ArrayList<ItemLocation>(selecteds.values());
-        for (final ItemLocation newLoc : newLocations) {
-
-            addNewLocationToTemporaryCache(itemId, newLoc.getName(), newLoc.getLat(), newLoc.getLng());
-        }
-
-        return fetchAllFromTemporaryCacheJson();
-    }
-
-    private native void initTemporaryCache() /*-{
-
-		$wnd.__tmp_cache_itemId2locations = {};
-
-		var orig = $wnd.cache_itemId2locations;
-		var copy = $wnd.__tmp_cache_itemId2locations;
-
-		for ( var key in orig) {
-			if (orig.hasOwnProperty(key)) {
-
-				var copyLocs = [];
-				var locs = orig[key];
-
-				for ( var i = 0, len = locs.length; i < len; i++) {
-					var loc = locs[i];
-
-					var copyLoc = {};
-					copyLoc.name = loc.name;
-					copyLoc.lat = loc.lat;
-					copyLoc.lng = loc.lng;
-
-					copyLocs.push(copyLoc);
-				}
-
-				copy[key] = copyLocs;
-			}
-		}
-
-    }-*/;
-
-    private native void addNewLocationToTemporaryCache(String itemId, String name, String lat, String lng) /*-{
-
-		var loc = {};
-		loc.name = name;
-		loc.lat = lat;
-		loc.lng = lng;
-
-		$wnd.__tmp_cache_itemId2locations[itemId].push(loc);
-
-    }-*/;
-
-    private native String fetchAllFromTemporaryCacheJson() /*-{
-
-		var tmp_cache_json = JSON.stringify($wnd.__tmp_cache_itemId2locations);
-
-		$wnd.__tmp_cache_itemId2locations = null;
-
-		return tmp_cache_json;
-    }-*/;
-
-    @Override
     public void hide() {
         container.hide();
     }
@@ -328,7 +264,7 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
     }
 
     @Override
-    public void removeCreationFormAndCommitNewLocations(final String itemId) {
+    public void removeCreationForm(final String itemId) {
         // remove creation form
         addPanel.setVisible(false);
         saveBtn.setVisible(false);
@@ -338,11 +274,6 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
         saveBtn.setEnabled(true);
         addBtn.setEnabled(true);
         otherLocationsContainer.clear();
-
-        // commit locations
-        final ArrayList<ItemLocation> newLocations = new ArrayList<ItemLocation>(selecteds.values());
-        u.addLocationsToItem(itemId, newLocations);
-
     }
 
     @Override

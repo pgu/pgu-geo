@@ -3,6 +3,7 @@ package pgu.client.profile;
 import java.util.ArrayList;
 
 import pgu.client.app.event.LocationAddNewEvent;
+import pgu.client.app.event.LocationsSuccessSaveEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
@@ -90,17 +91,16 @@ public class EditLocationActivity {
                 view.getWaitingIndicator().setVisible(true);
                 view.disableCreationForm();
 
-                final String allItemsWithAllLocations = view.getAllItemsWithAllLocationsJson(itemId);
-
                 linkedinService.saveLocations( //
                         clientFactory.getAppState().getUserId() //
-                        , allItemsWithAllLocations //
+                        , u.getCopyCacheWithNewLocationsJson(itemId, selectedLocations) //
                         , new AsyncCallbackApp<Void>(eventBus) {
 
                             @Override
                             public void onSuccess(final Void result) {
                                 view.getWaitingIndicator().setVisible(false);
-                                view.removeCreationFormAndCommitNewLocations(itemId);
+                                view.removeCreationForm(itemId);
+                                u.fire(eventBus, new LocationsSuccessSaveEvent(itemId, selectedLocations));
 
                                 final StringBuilder msg = new StringBuilder();
 

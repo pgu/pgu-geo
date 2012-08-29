@@ -1,8 +1,8 @@
 package pgu.client.profile;
 
 import pgu.client.app.event.HideWaitingIndicatorEvent;
-import pgu.client.app.event.LocationSaveEvent;
 import pgu.client.app.event.LocationSearchEvent;
+import pgu.client.app.event.LocationsSuccessSaveEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
@@ -15,7 +15,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 public class ProfileActivity extends AbstractActivity implements ProfilePresenter //
-        , LocationSaveEvent.Handler //
+        , LocationsSuccessSaveEvent.Handler //
 {
 
     private final ClientFactory        clientFactory;
@@ -38,7 +38,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         this.eventBus = eventBus;
         view.setPresenter(this);
 
-        eventBus.addHandler(LocationSaveEvent.TYPE, this);
+        eventBus.addHandler(LocationsSuccessSaveEvent.TYPE, this);
 
         panel.setWidget(view.asWidget());
 
@@ -72,9 +72,9 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     }
 
     @Override
-    public void onLocationSave(final LocationSaveEvent event) {
+    public void onLocationsSuccessSave(final LocationsSuccessSaveEvent event) {
         // TODO PGU Aug 29, 2012 check on the lat/lng
-        u.addLocationToItem(event.getItemId(), event.getItemLocation());
+        u.addNewLocationsToItem(event.getItemId(), event.getNewItemLocations());
     }
 
 }

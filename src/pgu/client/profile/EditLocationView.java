@@ -23,8 +23,6 @@ public interface EditLocationView {
 
     void displayEditLocationWidget(ItemLocation itemLocation, String itemId);
 
-    String getAllItemsWithAllLocationsJson(String itemId);
-
     void hide();
 
     HasVisibility getWaitingIndicator();
@@ -37,7 +35,7 @@ public interface EditLocationView {
 
     ArrayList<ItemLocation> getSelectedLocations();
 
-    void removeCreationFormAndCommitNewLocations(String itemId);
+    void removeCreationForm(String itemId);
 
     void displayNewLocationWidget(String itemId);
 
