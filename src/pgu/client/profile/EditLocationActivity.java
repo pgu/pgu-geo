@@ -3,9 +3,11 @@ package pgu.client.profile;
 import java.util.ArrayList;
 
 import pgu.client.app.event.LocationAddNewEvent;
+import pgu.client.app.event.RefreshLocationsEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
+import pgu.client.app.utils.Level;
 import pgu.client.app.utils.Notification;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.shared.dto.ItemLocation;
@@ -14,6 +16,7 @@ import com.github.gwtbootstrap.client.ui.event.HiddenEvent;
 import com.github.gwtbootstrap.client.ui.event.HiddenHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
@@ -72,18 +75,73 @@ public class EditLocationActivity {
 
             @Override
             public void onClick(final ClickEvent event) {
-                final String locations = view.getLocationsJson(itemId);
+
+                final ArrayList<ItemLocation> selectedLocations = view.getSelectedLocations();
+                if (selectedLocations.isEmpty()) {
+                    return;
+                }
+
+                view.getWaitingIndicator().setVisible(true);
+                view.disableCreationForm();
+
+                final String allItemsWithAllLocations = view.getAllItemsWithAllLocationsJson(itemId);
 
                 linkedinService.saveLocations( //
                         clientFactory.getAppState().getUserId() //
-                        , locations //
+                        , allItemsWithAllLocations //
                         , new AsyncCallbackApp<Void>(eventBus) {
 
                             @Override
                             public void onSuccess(final Void result) {
-                                // TODO PGU Aug 29, 2012 hide progress bar
-                                // TODO PGU Aug 29, 2012 show notification of success
-                                view.hide();
+                                view.getWaitingIndicator().setVisible(false);
+                                view.removeCreationFormAndCommitNewLocations(itemId);
+
+                                u.fire(eventBus, new RefreshLocationsEvent(itemId));
+
+                                final Notification notification = view.newNotification();
+                                notification.setHeading("Success");
+                                notification.setLevel(Level.SUCCESS);
+
+                                if (selectedLocations.size() == 1) {
+                                    notification.setHTML( //
+                                            "The location \"" //
+                                                    + selectedLocations.get(0).getName()//
+                                                    + "\" has been added successfully");
+
+                                } else {
+                                    notification.setHTML("The locations have been added successfully");
+
+                                }
+
+                                notification.show();
+
+                                new Timer() {
+
+                                    @Override
+                                    public void run() {
+                                        view.hide();
+
+                                    }
+
+                                }.schedule(2000);
+                            }
+
+                            @Override
+                            public void onFailure(final Throwable caught) {
+                                view.getWaitingIndicator().setVisible(false);
+                                view.resetCreationForm();
+
+                                final Notification notification = view.newNotification();
+                                notification.setHTML( //
+                                        "Oops! Something wrong happened: <br>" //
+                                                + caught.getMessage());
+                                notification.setHeading("Error");
+                                notification.setLevel(Level.ERROR);
+
+                                notification.show();
+
+                                super.onFailure(caught);
+
                             }
 
                         });

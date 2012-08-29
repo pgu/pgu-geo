@@ -214,4 +214,16 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     }-*/;
 
+    @Override
+    public native void refreshLocationsForItem(final String itemId) /*-{
+        
+        // $wnd.cache_itemId2locations
+        
+        // get the <ul> #'locations_' + itemId
+        // parcourir ses <li>, and stock the location.name
+        // appendchild <li> for the other locations that are not in the previously stocked location.names
+        // 
+        
+    }-*/;
+
 }

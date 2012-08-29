@@ -10,4 +10,6 @@ public interface ProfileView extends IsWidget {
 
     void setProfile(Profile profile);
 
+    void refreshLocationsForItem(String itemId);
+
 }

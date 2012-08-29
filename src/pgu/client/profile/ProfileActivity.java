@@ -3,6 +3,7 @@ package pgu.client.profile;
 import pgu.client.app.event.HideWaitingIndicatorEvent;
 import pgu.client.app.event.LocationSaveEvent;
 import pgu.client.app.event.LocationSearchEvent;
+import pgu.client.app.event.RefreshLocationsEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
@@ -16,6 +17,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 public class ProfileActivity extends AbstractActivity implements ProfilePresenter //
         , LocationSaveEvent.Handler //
+        , RefreshLocationsEvent.Handler //
 {
 
     private final ClientFactory        clientFactory;
@@ -39,6 +41,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         view.setPresenter(this);
 
         eventBus.addHandler(LocationSaveEvent.TYPE, this);
+        eventBus.addHandler(RefreshLocationsEvent.TYPE, this);
 
         panel.setWidget(view.asWidget());
 
@@ -80,6 +83,11 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         // hashcode/equals by latlng and name
         // itemLocation
 
+    }
+
+    @Override
+    public void onRefreshLocations(final RefreshLocationsEvent event) {
+        view.refreshLocationsForItem(event.getItemId());
     }
 
 }

@@ -3,9 +3,10 @@ package pgu.client.profile.ui;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import pgu.client.app.utils.Notification;
+import pgu.client.app.utils.NotificationImpl;
 import pgu.client.profile.EditLocationView;
 import pgu.shared.dto.ItemLocation;
 
@@ -25,6 +26,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasText;
+import com.google.gwt.user.client.ui.HasVisibility;
 import com.google.gwt.user.client.ui.Widget;
 
 public class EditLocationViewImpl extends Composite implements EditLocationView {
@@ -35,17 +37,19 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
     }
 
     @UiField
-    Modal                                 container;
+    Modal                                             container;
     @UiField
-    Button                                saveBtn, addBtn, displayOnMapBtn, deleteBtn;
+    Button                                            saveBtn, addBtn, displayOnMapBtn, deleteBtn;
     @UiField
-    ProgressBar                           progressBar;
+    ProgressBar                                       progressBar;
     @UiField
-    HTMLPanel                             notification, btnsContainer;
+    HTMLPanel                                         notification, btnsContainer;
     @UiField
-    WellForm                              addPanel, editPanel;
+    WellForm                                          addPanel, editPanel;
 
-    private final ArrayList<Notification> notifications = new ArrayList<Notification>();
+    private final ArrayList<Notification>             notifications      = new ArrayList<Notification>();
+    private final ArrayList<ItemLocation>             otherItemLocations = new ArrayList<ItemLocation>();
+    private final LinkedHashMap<String, ItemLocation> selecteds          = new LinkedHashMap<String, ItemLocation>();
 
     public EditLocationViewImpl() {
         initWidget(uiBinder.createAndBindUi(this));
@@ -81,24 +85,16 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
         container.show();
     }
 
-    private final ArrayList<ItemLocation>         otherItemLocations = new ArrayList<ItemLocation>();
+    private static final Comparator<ItemLocation> BY_NAME = new Comparator<ItemLocation>() {
 
-    private final HashMap<String, ItemLocation>   selecteds          = new HashMap<String, ItemLocation>();
+                                                              @Override
+                                                              public int compare(final ItemLocation loc1,
+                                                                      final ItemLocation loc2) {
+                                                                  return loc1.getName().toLowerCase()
+                                                                          .compareTo(loc2.getName().toLowerCase());
+                                                              }
 
-    private static final Comparator<ItemLocation> BY_NAME            = new Comparator<ItemLocation>() {
-
-                                                                         @Override
-                                                                         public int compare(final ItemLocation loc1,
-                                                                                 final ItemLocation loc2) {
-                                                                             return loc1
-                                                                                     .getName()
-                                                                                     .toLowerCase()
-                                                                                     .compareTo(
-                                                                                             loc2.getName()
-                                                                                                     .toLowerCase());
-                                                                         }
-
-                                                                     };
+                                                          };
 
     @Override
     public void showOtherExistingItemLocations(final String itemId) {
@@ -106,11 +102,15 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
         retrieveOtherExistingItemLocations(itemId);
 
         btnsContainer.clear();
+        selecteds.clear();
+
         Collections.sort(otherItemLocations, BY_NAME);
 
         for (final ItemLocation loc : otherItemLocations) {
             final Button btn = new Button();
+            btn.setType(ButtonType.DEFAULT);
             btn.setText(loc.getName());
+
             btnsContainer.add(btn);
 
             btn.addClickHandler(new ClickHandler() {
@@ -196,6 +196,9 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
 
     @Override
     public void displayNewLocationWidget() {
+        selecteds.clear();
+        btnsContainer.clear();
+
         addPanel.setVisible(true);
         editPanel.setVisible(false);
 
@@ -215,13 +218,118 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
     }
 
     @Override
-    public String getLocationsJson(final String itemId) {
-        final ArrayList<ItemLocation> newLocations = new ArrayList<ItemLocation>(selecteds.values());
-        for (final ItemLocation loc : newLocations) {
-            addLocationToItemId(itemId, loc.getName(), loc.getLat(), loc.getLng());
+    public String getAllItemsWithAllLocationsJson(final String itemId) {
 
+        initTemporaryCache();
+
+        final ArrayList<ItemLocation> newLocations = new ArrayList<ItemLocation>(selecteds.values());
+        for (final ItemLocation newLoc : newLocations) {
+
+            addNewLocationToTemporaryCache(itemId, newLoc.getName(), newLoc.getLat(), newLoc.getLng());
         }
-        return fetchAllItemId2locationsJson();
+
+        return fetchAllFromTemporaryCacheJson();
+    }
+
+    private native void initTemporaryCache() /*-{
+
+		$wnd.__tmp_cache_itemId2locations = {};
+
+		var orig = $wnd.cache_itemId2locations;
+		var copy = $wnd.__tmp_cache_itemId2locations;
+
+		for ( var key in orig) {
+			if (orig.hasOwnProperty(key)) {
+
+				copy[key] = orig[key];
+			}
+		}
+
+    }-*/;
+
+    private native void addNewLocationToTemporaryCache(String itemId, String name, String lat, String lng) /*-{
+
+		var loc = {};
+		loc.name = name;
+		loc.lat = lat;
+		loc.lng = lng;
+
+		$wnd.__tmp_cache_itemId2locations[itemId].push(loc);
+
+    }-*/;
+
+    private native String fetchAllFromTemporaryCacheJson() /*-{
+
+		var tmp_cache_json = JSON.stringify($wnd.__tmp_cache_itemId2locations);
+
+		$wnd.__tmp_cache_itemId2locations = null;
+
+		return tmp_cache_json;
+    }-*/;
+
+    @Override
+    public void hide() {
+        container.hide();
+    }
+
+    @Override
+    public HasVisibility getWaitingIndicator() {
+        return progressBar;
+    }
+
+    @Override
+    public Notification newNotification() {
+        final NotificationImpl notif = new NotificationImpl(notification, 3000);
+        notifications.add(notif);
+        return notif;
+    }
+
+    @Override
+    public void disableCreationForm() {
+        setEnableOnCreationForm(false);
+    }
+
+    @Override
+    public void resetCreationForm() {
+        setEnableOnCreationForm(true);
+        for (int i = 0; i < btnsContainer.getWidgetCount(); i++) {
+            ((Button) btnsContainer.getWidget(i)).setType(ButtonType.DEFAULT);
+        }
+
+        // rollback selected locations
+        selecteds.clear();
+        // TODO PGU Aug 29, 2012 remove locations from the cache
+    }
+
+    private void setEnableOnCreationForm(final boolean isEnabled) {
+        saveBtn.setEnabled(isEnabled);
+        addBtn.setEnabled(isEnabled);
+        for (int i = 0; i < btnsContainer.getWidgetCount(); i++) {
+            ((Button) btnsContainer.getWidget(i)).setEnabled(isEnabled);
+        }
+    }
+
+    @Override
+    public ArrayList<ItemLocation> getSelectedLocations() {
+        return new ArrayList<ItemLocation>(selecteds.values());
+    }
+
+    @Override
+    public void removeCreationFormAndCommitNewLocations(final String itemId) {
+        // remove creation form
+        addPanel.setVisible(false);
+
+        saveBtn.setEnabled(true);
+        addBtn.setEnabled(true);
+        btnsContainer.clear();
+
+        // commit locations to the cache
+        final ArrayList<ItemLocation> newLocations = new ArrayList<ItemLocation>(selecteds.values());
+        for (final ItemLocation newLoc : newLocations) {
+
+            addLocationToItemId(itemId, newLoc.getName(), newLoc.getLat(), newLoc.getLng());
+        }
+
     }
 
     private native void addLocationToItemId(String itemId, String name, String lat, String lng) /*-{
@@ -233,17 +341,6 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
 
 		$wnd.cache_itemId2locations[itemId].push(loc);
 
-		// add <li> for each new location to the item's row
-
     }-*/;
-
-    private native String fetchAllItemId2locationsJson() /*-{
-		return JSON.stringify($wnd.cache_itemId2locations);
-    }-*/;
-
-    @Override
-    public void hide() {
-        container.hide();
-    }
 
 }

@@ -145,6 +145,7 @@ section {
 
 .locationLi {
     float: none !important;
+    font-weight: bold;
 }
 
 .locationNotFound {

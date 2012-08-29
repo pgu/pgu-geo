@@ -4,9 +4,10 @@ var cache_itemId2locations = {};
 var lastCall = 0 ;
 var _showdown_converter;
 
-function RowConfig(item_id, prefix) {
+function RowConfig(item_id) {
 	this.item_id = item_id;
-	this.row_id = prefix + "_row_" + item_id;
+	this.info_id = "info_" + item_id;
+	this.locations_cell_id = "locations_" + item_id;
 }
 
 function createTable(type, items, empty_message) {
@@ -91,30 +92,30 @@ function createTableRow(type, item) {
 	
 	
 	return '' 
-	+ '<tr>                                                                             '
-	+ '  <td>                                                                           '
-	+ '    <ul class="nav nav-pills">                                                   '
+	+ '<tr>                                                                              '
+	+ '  <td>                                                                            '
+	+ '    <ul id="' + rowConfig.locations_cell_id + '" class="nav nav-pills">           '
 	+ rowConfig.locations
-	+ '    </ul>                                                                        '
-	+ '    <i class="icon-plus-sign icon-large add-location"                            '
-	+ '      onclick="javascript:addNewLocation(\'' + rowConfig.item_id + '\');"                '
-	+ '      >                                                                          '
-	+ '    </i>                                                                         '
-	+ '  </td>                                                                          '
-	+ '  <td>' + rowConfig.dates + '</td>                                               '
-	+ '  <td>' + rowConfig.short_content + '</td>                                       '
-	+ '  <td style="cursor:pointer"                                                     '
-	+ '      onclick="javascript:$(\'#' + rowConfig.row_id + '\').popover(\'toggle\');" '
-	+ '      >                                                                          '
-	+ '    <i id="' + rowConfig.row_id + '" class="icon-info-sign icon-large"           '
-	+ '      data-animation="true"                                                      '
-	+ '      data-html="true"                                                           '
-	+ '      data-placement="left"                                                      '
-	+ '      data-title="' + rowConfig.content_title + '"                               '
-	+ '      data-content="' + rowConfig.long_content + '"                              '
-	+ '     ></i>                                                                       '
-	+ '   </td>                                                                         '
-	+ '</tr>                                                                            '
+	+ '    </ul>                                                                         '
+	+ '    <i class="icon-plus-sign icon-large add-location"                             '
+	+ '      onclick="javascript:addNewLocation(\'' + rowConfig.item_id + '\');"         '
+	+ '      >                                                                           '
+	+ '    </i>                                                                          '
+	+ '  </td>                                                                           '
+	+ '  <td>' + rowConfig.dates + '</td>                                                '
+	+ '  <td>' + rowConfig.short_content + '</td>                                        '
+	+ '  <td style="cursor:pointer"                                                      '
+	+ '      onclick="javascript:$(\'#' + rowConfig.info_id + '\').popover(\'toggle\');" '
+	+ '      >                                                                           '
+	+ '    <i id="' + rowConfig.info_id + '" class="icon-info-sign icon-large"           '
+	+ '      data-animation="true"                                                       '
+	+ '      data-html="true"                                                            '
+	+ '      data-placement="left"                                                       '
+	+ '      data-title="' + rowConfig.content_title + '"                                '
+	+ '      data-content="' + rowConfig.long_content + '"                               '
+	+ '     ></i>                                                                        '
+	+ '   </td>                                                                          '
+	+ '</tr>                                                                             '
 	+ '';
 	
 }
@@ -275,7 +276,7 @@ function createListLocations(item) {
 		+ '           href="javascript:;"         '
 		+ '           onclick="javascript:searchMapFor(\''+ item.id +'\', \'' + anchor_id +'\', \''+ itemLocation.name +'\');return false;"'
 		+ '           >                           '
-		+ '           <b>' + itemLocation.name + '</b>     '
+		+ '           ' + itemLocation.name + '   '
 		+ '        </a>                           '
 		+ '      </li>                            '
 		+ '';
