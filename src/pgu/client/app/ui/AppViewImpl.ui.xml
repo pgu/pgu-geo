@@ -5,7 +5,7 @@
     
     <g:HTMLPanel>
         <g:SimplePanel ui:field="header" />
-        <g:HTMLPanel ui:field="notification" />
+        <g:HTMLPanel ui:field="notification" addStyleNames="container-fluid" />
         <g:HTMLPanel addStyleNames="container-fluid">
             <g:SimplePanel ui:field="body" />
         </g:HTMLPanel>
