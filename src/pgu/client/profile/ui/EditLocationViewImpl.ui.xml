@@ -10,7 +10,7 @@
             
             <b:WellForm ui:field="addPanel">
                 <b:Button ui:field="addBtn" type="PRIMARY">Add a new location</b:Button>
-                <g:HTMLPanel ui:field="btnsContainer"></g:HTMLPanel>
+                <b:NavPills ui:field="otherLocationsContainer" />
             </b:WellForm>
             
             <b:WellForm ui:field="editPanel">
@@ -22,6 +22,7 @@
             </b:WellForm>
             
             <b:ModalFooter>
+                <b:Button ui:field="closeBtn" icon="REMOVE" iconSize="LARGE" type="PRIMARY">Close</b:Button>
                 <b:Button ui:field="saveBtn" icon="SAVE" iconSize="LARGE" type="PRIMARY">Save</b:Button>
                 <b:Button ui:field="displayOnMapBtn" icon="MAP_MARKER" iconSize="LARGE" type="PRIMARY">Display on the map</b:Button>
                 <b:Button ui:field="deleteBtn" icon="REMOVE_SIGN" iconSize="LARGE" type="DANGER">Delete</b:Button>

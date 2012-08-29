@@ -7,7 +7,6 @@ import pgu.shared.dto.ItemLocation;
 
 import com.github.gwtbootstrap.client.ui.base.HasVisibleHandlers;
 import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasVisibility;
 
 public interface EditLocationView {
@@ -20,15 +19,9 @@ public interface EditLocationView {
 
     void show();
 
-    void showOtherExistingItemLocations(String itemId);
-
     HasClickHandlers getSaveWidget();
 
-    HasText getFormTitle();
-
-    void displayNewLocationWidget();
-
-    void displayEditLocationWidget();
+    void displayEditLocationWidget(ItemLocation itemLocation, String itemId);
 
     String getAllItemsWithAllLocationsJson(String itemId);
 
@@ -45,5 +38,9 @@ public interface EditLocationView {
     ArrayList<ItemLocation> getSelectedLocations();
 
     void removeCreationFormAndCommitNewLocations(String itemId);
+
+    void displayNewLocationWidget(String itemId);
+
+    HasVisibility getCloseWidget();
 
 }

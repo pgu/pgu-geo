@@ -24,10 +24,11 @@ public class EditLocationActivity {
 
     private final EditLocationView               view;
     private final EventBus                       eventBus;
-    private final ClientUtils                    u           = new ClientUtils();
-    private final ArrayList<HandlerRegistration> handlerRegs = new ArrayList<HandlerRegistration>();
+    private final ClientUtils                    u              = new ClientUtils();
+    private final ArrayList<HandlerRegistration> handlerRegs    = new ArrayList<HandlerRegistration>();
     private final LinkedinServiceAsync           linkedinService;
     private final ClientFactory                  clientFactory;
+    private Timer                                timerCloseView = null;
 
     public EditLocationActivity(final ClientFactory clientFactory) {
         this.clientFactory = clientFactory;
@@ -54,6 +55,8 @@ public class EditLocationActivity {
 
             @Override
             public void onHidden(final HiddenEvent hiddenEvent) {
+                view.getCloseWidget().setVisible(false);
+
                 for (final Notification notif : view.getNotifications()) {
                     if (notif != null) {
                         notif.removeFromParent();
@@ -65,6 +68,10 @@ public class EditLocationActivity {
                     handlerReg = null;
                 }
                 handlerRegs.clear();
+
+                if (timerCloseView != null) {
+                    timerCloseView.cancel();
+                }
             }
 
         });
@@ -115,7 +122,7 @@ public class EditLocationActivity {
                                 notification.setLevel(Level.SUCCESS);
                                 notification.show();
 
-                                new Timer() {
+                                timerCloseView = new Timer() {
 
                                     @Override
                                     public void run() {
@@ -123,7 +130,8 @@ public class EditLocationActivity {
 
                                     }
 
-                                }.schedule(3000);
+                                };
+                                timerCloseView.schedule(3000);
                             }
 
                             @Override
@@ -160,19 +168,14 @@ public class EditLocationActivity {
         if (isNew) {
 
             handlerRegs.add(addAddHandler(itemId));
-            view.showOtherExistingItemLocations(itemId);
-
-            view.getFormTitle().setText("Add locations");
-            view.displayNewLocationWidget();
+            view.displayNewLocationWidget(itemId);
 
         } else {
 
-            view.getFormTitle().setText(itemLocation.getName());
-            view.displayEditLocationWidget();
+            view.displayEditLocationWidget(itemLocation, itemId);
             // TODO PGU Aug 28, 2012 edit location
             // click on a location: popup with: information: name, lat, lng; actions: show on the map, delete it
         }
         view.show();
     }
-
 }

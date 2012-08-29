@@ -12,10 +12,11 @@ import pgu.shared.dto.ItemLocation;
 
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.Modal;
+import com.github.gwtbootstrap.client.ui.NavLink;
+import com.github.gwtbootstrap.client.ui.NavPills;
 import com.github.gwtbootstrap.client.ui.ProgressBar;
 import com.github.gwtbootstrap.client.ui.WellForm;
 import com.github.gwtbootstrap.client.ui.base.HasVisibleHandlers;
-import com.github.gwtbootstrap.client.ui.constants.ButtonType;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -25,7 +26,6 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasVisibility;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -39,13 +39,15 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
     @UiField
     Modal                                             container;
     @UiField
-    Button                                            saveBtn, addBtn, displayOnMapBtn, deleteBtn;
+    Button                                            saveBtn, addBtn, displayOnMapBtn, deleteBtn, closeBtn;
     @UiField
     ProgressBar                                       progressBar;
     @UiField
-    HTMLPanel                                         notification, btnsContainer;
+    HTMLPanel                                         notification;
     @UiField
     WellForm                                          addPanel, editPanel;
+    @UiField
+    NavPills                                          otherLocationsContainer;
 
     private final ArrayList<Notification>             notifications      = new ArrayList<Notification>();
     private final ArrayList<ItemLocation>             otherItemLocations = new ArrayList<ItemLocation>();
@@ -53,12 +55,18 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
 
     public EditLocationViewImpl() {
         initWidget(uiBinder.createAndBindUi(this));
+        closeBtn.setVisible(false);
         progressBar.setVisible(false);
     }
 
     public native static void exportMethod() /*-{
         $wnd.searchMapFor = $entry(@pgu.client.profile.ui.ProfileViewImpl::searchMapFor(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;));
     }-*/;
+
+    @UiHandler("closeBtn")
+    public void clickClose(final ClickEvent e) {
+        container.hide();
+    }
 
     @UiHandler("addBtn")
     public void clickAdd(final ClickEvent e) {
@@ -96,36 +104,35 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
 
                                                           };
 
-    @Override
-    public void showOtherExistingItemLocations(final String itemId) {
+    private void showOtherExistingItemLocations(final String itemId) {
 
         retrieveOtherExistingItemLocations(itemId);
 
-        btnsContainer.clear();
+        otherLocationsContainer.clear();
         selecteds.clear();
 
         Collections.sort(otherItemLocations, BY_NAME);
 
         for (final ItemLocation loc : otherItemLocations) {
-            final Button btn = new Button();
-            btn.setType(ButtonType.DEFAULT);
-            btn.setText(loc.getName());
 
-            btnsContainer.add(btn);
+            final NavLink otherLocationWidget = new NavLink();
+            otherLocationWidget.setText(loc.getName());
+            otherLocationWidget.getElement().addClassName("locationLi");
+            otherLocationsContainer.add(otherLocationWidget);
 
-            btn.addClickHandler(new ClickHandler() {
+            otherLocationWidget.addClickHandler(new ClickHandler() {
 
                 @Override
                 public void onClick(final ClickEvent event) {
-                    final ButtonType type = btn.getType();
 
-                    if (ButtonType.DEFAULT == type) {
-                        btn.setType(ButtonType.SUCCESS);
+                    if (!otherLocationWidget.isActive()) {
+
                         selecteds.put(loc.getName(), loc);
+                        otherLocationWidget.setActive(true);
 
                     } else {
-                        btn.setType(ButtonType.DEFAULT);
                         selecteds.remove(loc.getName());
+                        otherLocationWidget.setActive(false);
 
                     }
                 }
@@ -178,37 +185,31 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
     }
 
     @Override
-    public HasText getFormTitle() {
-        return new HasText() {
+    public void displayNewLocationWidget(final String itemId) {
 
-            @Override
-            public String getText() {
-                return container.getTitle();
-            }
+        container.setTitle("Add locations");
 
-            @Override
-            public void setText(final String text) {
-                container.setTitle(text);
-            }
+        showOtherExistingItemLocations(itemId);
 
-        };
-    }
-
-    @Override
-    public void displayNewLocationWidget() {
+        // ///////////////
         addPanel.setVisible(true);
         editPanel.setVisible(false);
 
+        addBtn.setVisible(true);
         saveBtn.setVisible(true);
         displayOnMapBtn.setVisible(false);
         deleteBtn.setVisible(false);
     }
 
     @Override
-    public void displayEditLocationWidget() {
+    public void displayEditLocationWidget(final ItemLocation itemLocation, final String itemId) {
+        container.setTitle(itemLocation.getName());
+
+        // ///////////////
         addPanel.setVisible(false);
         editPanel.setVisible(true);
 
+        addBtn.setVisible(false);
         saveBtn.setVisible(false);
         displayOnMapBtn.setVisible(true);
         deleteBtn.setVisible(true);
@@ -303,8 +304,8 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
     @Override
     public void resetCreationForm() {
         setEnableOnCreationForm(true);
-        for (int i = 0; i < btnsContainer.getWidgetCount(); i++) {
-            ((Button) btnsContainer.getWidget(i)).setType(ButtonType.DEFAULT);
+        for (int i = 0; i < otherLocationsContainer.getWidgetCount(); i++) {
+            ((NavLink) otherLocationsContainer.getWidget(i)).setActive(false);
         }
 
         // rollback selected locations
@@ -314,8 +315,8 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
     private void setEnableOnCreationForm(final boolean isEnabled) {
         saveBtn.setEnabled(isEnabled);
         addBtn.setEnabled(isEnabled);
-        for (int i = 0; i < btnsContainer.getWidgetCount(); i++) {
-            ((Button) btnsContainer.getWidget(i)).setEnabled(isEnabled);
+        for (int i = 0; i < otherLocationsContainer.getWidgetCount(); i++) {
+            ((NavLink) otherLocationsContainer.getWidget(i)).setDisabled(!isEnabled);
         }
     }
 
@@ -328,10 +329,13 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
     public void removeCreationFormAndCommitNewLocations(final String itemId) {
         // remove creation form
         addPanel.setVisible(false);
+        saveBtn.setVisible(false);
+        addBtn.setVisible(false);
+        closeBtn.setVisible(true);
 
         saveBtn.setEnabled(true);
         addBtn.setEnabled(true);
-        btnsContainer.clear();
+        otherLocationsContainer.clear();
 
         // commit locations to the cache
         final ArrayList<ItemLocation> newLocations = new ArrayList<ItemLocation>(selecteds.values());
@@ -352,5 +356,10 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
 		$wnd.cache_itemId2locations[itemId].push(loc);
 
     }-*/;
+
+    @Override
+    public HasVisibility getCloseWidget() {
+        return closeBtn;
+    }
 
 }
