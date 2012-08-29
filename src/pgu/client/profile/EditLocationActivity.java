@@ -121,7 +121,6 @@ public class EditLocationActivity {
                                     }
 
                                     msg.append("</ul>have been successfully added.");
-
                                 }
 
                                 final Notification notification = view.newNotification();
