@@ -61,10 +61,6 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
         progressBar.setVisible(false);
     }
 
-    public native static void exportMethod() /*-{
-        $wnd.searchMapFor = $entry(@pgu.client.profile.ui.ProfileViewImpl::searchMapFor(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;));
-    }-*/;
-
     @UiHandler("closeBtn")
     public void clickClose(final ClickEvent e) {
         container.hide();
