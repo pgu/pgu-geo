@@ -300,7 +300,7 @@ function createListLocations(item_id) {
 
 function _editLocation(itemId, locationName) {
 	
-	var itemLocation = cache_name2itemLocation[itemLocation.name];
+	var itemLocation = cache_name2itemLocation[locationName];
 	if (itemLocation == undefined) {
 		return;
 	}

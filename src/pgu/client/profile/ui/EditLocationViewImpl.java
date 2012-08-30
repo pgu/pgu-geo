@@ -16,7 +16,6 @@ import com.github.gwtbootstrap.client.ui.Modal;
 import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.NavPills;
 import com.github.gwtbootstrap.client.ui.ProgressBar;
-import com.github.gwtbootstrap.client.ui.WellForm;
 import com.github.gwtbootstrap.client.ui.base.HasVisibleHandlers;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -26,6 +25,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasVisibility;
 import com.google.gwt.user.client.ui.Widget;
@@ -44,11 +44,11 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
     @UiField
     ProgressBar                                       progressBar;
     @UiField
-    HTMLPanel                                         notification;
-    @UiField
-    WellForm                                          addPanel, editPanel;
+    HTMLPanel                                         notification, editPanel, addPanel;
     @UiField
     NavPills                                          otherLocationsContainer;
+    @UiField
+    HTML                                              locationLatUI, locationLngUI;
 
     private final ArrayList<Notification>             notifications      = new ArrayList<Notification>();
     private final ArrayList<ItemLocation>             otherItemLocations = new ArrayList<ItemLocation>();
@@ -199,9 +199,13 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
         deleteBtn.setVisible(false);
     }
 
+    // click on a location: popup with: information: name, lat, lng; actions: show on the map, delete it
     @Override
     public void displayEditLocationWidget(final ItemLocation itemLocation, final String itemId) {
         container.setTitle(itemLocation.getName());
+
+        locationLatUI.setText(itemLocation.getLat());
+        locationLngUI.setText(itemLocation.getLng());
 
         // ///////////////
         addPanel.setVisible(false);

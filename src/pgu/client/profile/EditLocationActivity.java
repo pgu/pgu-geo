@@ -173,7 +173,6 @@ public class EditLocationActivity {
 
         } else {
 
-            // click on a location: popup with: information: name, lat, lng; actions: show on the map, delete it
             handlerRegs.add(addDeleteHandler(itemLocation, itemId));
             handlerRegs.add(addShowOnMapHandler(itemLocation));
             view.displayEditLocationWidget(itemLocation, itemId);

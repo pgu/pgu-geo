@@ -8,21 +8,26 @@
             <b:ProgressBar ui:field="progressBar" type="ANIMATED" percent="100"/>
             <g:HTMLPanel ui:field="notification" />
             
-            <b:WellForm ui:field="addPanel">
+            <g:HTMLPanel ui:field="addPanel" addStyleNames="well">
                 <b:Button ui:field="addBtn" icon="MAP_MARKER" iconSize="LARGE" type="PRIMARY">Add a new location</b:Button>
                 <b:NavList>
                     <b:Divider />
                 </b:NavList>
                 <b:NavPills ui:field="otherLocationsContainer" />
-            </b:WellForm>
+            </g:HTMLPanel>
             
-            <b:WellForm ui:field="editPanel">
-                <b:Label ui:field="locationNameUI"></b:Label>
-                <b:Label>Latitude</b:Label>
-                <b:Label ui:field="locationLatUI"></b:Label>
-                <b:Label>Longitude</b:Label>
-                <b:Label ui:field="locationLngUI"></b:Label>
-            </b:WellForm>
+            <g:HTMLPanel ui:field="editPanel">
+                <table class="table table-bordered">
+                    <tr class="info">
+                        <td>Latitude</td>
+                        <td><g:HTML ui:field="locationLatUI" /></td>
+                    </tr>
+                    <tr class="info">
+                        <td>Longitude</td>
+                        <td><g:HTML ui:field="locationLngUI" /></td>
+                    </tr>
+                </table>
+            </g:HTMLPanel>
             
             <b:ModalFooter>
                 <b:Button ui:field="closeBtn" icon="REMOVE" iconSize="LARGE" type="PRIMARY">Close</b:Button>
