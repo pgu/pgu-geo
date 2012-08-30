@@ -57,7 +57,7 @@ function createTableHead(type) {
 	+ '<table class="table table-bordered table-striped"> '
 	+ '   <thead>                                         '
 	+ '      <tr>                                         '
-	+ '          <th>Location</th>                        '
+	+ '          <th>Locations</th>                        '
 	+ '          <th>Dates</th>                           '
 	+ '          <th>' + title + '</th>                   '
 	+ '          <th></th>                                '
