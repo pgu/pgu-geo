@@ -41,7 +41,7 @@ public class MenuViewImpl extends Composite implements MenuView {
             , past2prstBtn, prst2pastBtn //
             , stepBwdBtn, stepFwdBtn //
             , playBtn, pauseBtn //
-            //
+            , clearMarkersBtn //
             ;
     @UiField
     NavSearch                 locationSearchBox;
@@ -113,6 +113,15 @@ public class MenuViewImpl extends Composite implements MenuView {
     public void setPresenter(final MenuPresenter presenter) {
         this.presenter = presenter;
     }
+
+    @UiHandler("clearMarkersBtn")
+    public void clickOnClearMarkersBtn(final ClickEvent e) {
+        deleteMarkers();
+    }
+
+    public native void deleteMarkers() /*-{
+		$wnd.deleteOverlays();
+    }-*/;
 
     @UiHandler("locationSaveBtn")
     public void clickOnLocationSave(final ClickEvent e) {
@@ -209,6 +218,8 @@ public class MenuViewImpl extends Composite implements MenuView {
 								animation : $wnd.google.maps.Animation.DROP,
 								title : name
 							});
+
+							$wnd.markersArray.push(marker);
 
 							var lat = loc.lat() + '';
 							var lng = loc.lng() + '';
@@ -434,6 +445,7 @@ public class MenuViewImpl extends Composite implements MenuView {
 			animation : $wnd.google.maps.Animation.DROP,
 			title : name
 		});
+		$wnd.markersArray.push(marker);
 
     }-*/;
 
