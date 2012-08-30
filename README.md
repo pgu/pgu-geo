@@ -1,6 +1,14 @@
 <a href="http://pgu-contacts.appspot.com/"><strong>&#8594; Go to the website</strong></a><br/>
 gson, oauth, gwt-bootstrap, objectify
 
+TODOs
+=======
+* clear markers
+* show all markers
+* play profile locations
+* persistence + review js cache
+* get information from profile
+
 linkedin rest:
 https://developer.linkedin.com/rest
 https://developer.linkedin.com/documents/profile-fields
