@@ -1,11 +1,13 @@
 package pgu.client.profile;
 
+import pgu.shared.dto.ItemLocation;
+
 public interface ProfilePresenter {
 
     void addNewLocation(String itemId);
 
     void editLocation(String itemId, String locName, String locLat, String locLng);
 
-    void searchForLocation(String locationName);
+    void showLocationOnMap(ItemLocation itemLocation);
 
 }

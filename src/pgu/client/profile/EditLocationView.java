@@ -17,11 +17,15 @@ public interface EditLocationView {
 
     HasClickHandlers getAddHandler();
 
-    void show();
-
     HasClickHandlers getSaveWidget();
 
+    HasClickHandlers getShowOnMapHandler();
+
+    HasClickHandlers getDeleteHandler();
+
     void displayEditLocationWidget(ItemLocation itemLocation, String itemId);
+
+    void show();
 
     void hide();
 

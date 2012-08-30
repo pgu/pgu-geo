@@ -1,7 +1,7 @@
 package pgu.client.profile;
 
 import pgu.client.app.event.HideWaitingIndicatorEvent;
-import pgu.client.app.event.LocationSearchEvent;
+import pgu.client.app.event.LocationShowOnMapEvent;
 import pgu.client.app.event.LocationsSuccessSaveEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
@@ -86,8 +86,8 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     }
 
     @Override
-    public void searchForLocation(final String locationName) {
-        u.fire(eventBus, new LocationSearchEvent(locationName));
+    public void showLocationOnMap(final ItemLocation itemLocation) {
+        u.fire(eventBus, new LocationShowOnMapEvent(itemLocation));
     }
 
 }

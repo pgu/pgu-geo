@@ -175,7 +175,7 @@ public class MenuViewImpl extends Composite implements MenuView {
         // timer on each location
     }
 
-    public void saveSearchedLocation(final String name, final String lat, final String lng) {
+    public void cacheLastSearchedLocation(final String name, final String lat, final String lng) {
         lastSearchItemLocation = new ItemLocation();
         lastSearchItemLocation.setName(name);
         lastSearchItemLocation.setLat(lat);
@@ -213,7 +213,7 @@ public class MenuViewImpl extends Composite implements MenuView {
 							var lat = loc.lat() + '';
 							var lng = loc.lng() + '';
 
-							menu.@pgu.client.menu.ui.MenuViewImpl::saveSearchedLocation(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(name,lat,lng);
+							menu.@pgu.client.menu.ui.MenuViewImpl::cacheLastSearchedLocation(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(name,lat,lng);
 
 						});
 
@@ -242,6 +242,7 @@ public class MenuViewImpl extends Composite implements MenuView {
 
         showMapProg();
         updateMenuOnDisplayingMap();
+        Window.scrollTo(0, 0);
     }
 
     private void updateMenuOnDisplayingMap() {
@@ -416,8 +417,24 @@ public class MenuViewImpl extends Composite implements MenuView {
     }
 
     @Override
-    public void scrollToTop() {
+    public void showOnMap(final ItemLocation itemLocation) {
         Window.scrollTo(0, 0);
+        showMap();
+
+        addMarker(itemLocation.getName(), itemLocation.getLat(), itemLocation.getLng());
     }
+
+    public native void addMarker(String name, String lat, String lng) /*-{
+
+		var loc = new $wnd.google.maps.LatLng(parseFloat(lat), parseFloat(lng));
+
+		var marker = new $wnd.google.maps.Marker({
+			map : $wnd.map,
+			position : loc,
+			animation : $wnd.google.maps.Animation.DROP,
+			title : name
+		});
+
+    }-*/;
 
 }

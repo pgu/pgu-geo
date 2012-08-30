@@ -3,6 +3,7 @@ package pgu.client.profile;
 import java.util.ArrayList;
 
 import pgu.client.app.event.LocationAddNewEvent;
+import pgu.client.app.event.LocationShowOnMapEvent;
 import pgu.client.app.event.LocationsSuccessSaveEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
@@ -181,12 +182,26 @@ public class EditLocationActivity {
     }
 
     private HandlerRegistration addShowOnMapHandler(final ItemLocation itemLocation) {
-        // TODO Auto-generated method stub
-        return null;
+        return view.getShowOnMapHandler().addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(final ClickEvent event) {
+                u.fire(eventBus, new LocationShowOnMapEvent(itemLocation));
+                view.hide();
+            }
+
+        });
     }
 
     private HandlerRegistration addDeleteHandler(final ItemLocation itemLocation, final String itemId) {
-        // TODO Auto-generated method stub
-        return null;
+        return view.getDeleteHandler().addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(final ClickEvent event) {
+                // TODO PGU Aug 30, 2012 delete from cache + from ui
+                view.hide();
+            }
+
+        });
     }
 }

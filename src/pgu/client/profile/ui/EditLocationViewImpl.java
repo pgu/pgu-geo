@@ -246,7 +246,6 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
             ((NavLink) otherLocationsContainer.getWidget(i)).setActive(false);
         }
 
-        // rollback selected locations
         selecteds.clear();
     }
 
@@ -265,7 +264,7 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
 
     @Override
     public void removeCreationForm(final String itemId) {
-        // remove creation form
+
         addPanel.setVisible(false);
         saveBtn.setVisible(false);
         addBtn.setVisible(false);
@@ -273,12 +272,23 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
 
         saveBtn.setEnabled(true);
         addBtn.setEnabled(true);
+
         otherLocationsContainer.clear();
     }
 
     @Override
     public HasVisibility getCloseWidget() {
         return closeBtn;
+    }
+
+    @Override
+    public HasClickHandlers getShowOnMapHandler() {
+        return displayOnMapBtn;
+    }
+
+    @Override
+    public HasClickHandlers getDeleteHandler() {
+        return deleteBtn;
     }
 
 }

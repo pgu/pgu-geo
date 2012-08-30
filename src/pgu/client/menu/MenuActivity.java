@@ -4,7 +4,7 @@ import pgu.client.app.event.GoToContactsEvent;
 import pgu.client.app.event.GoToProfileEvent;
 import pgu.client.app.event.HideWaitingIndicatorEvent;
 import pgu.client.app.event.LocationAddNewEvent;
-import pgu.client.app.event.LocationSearchEvent;
+import pgu.client.app.event.LocationShowOnMapEvent;
 import pgu.client.app.event.LocationsSuccessSaveEvent;
 import pgu.client.app.event.NotificationEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
@@ -22,7 +22,7 @@ public class MenuActivity implements MenuPresenter //
         , ShowWaitingIndicatorEvent.Handler //
         , HideWaitingIndicatorEvent.Handler //
         , LocationAddNewEvent.Handler //
-        , LocationSearchEvent.Handler //
+        , LocationShowOnMapEvent.Handler //
         , GoToProfileEvent.Handler //
         , GoToContactsEvent.Handler //
 {
@@ -50,7 +50,7 @@ public class MenuActivity implements MenuPresenter //
         eventBus.addHandler(ShowWaitingIndicatorEvent.TYPE, this);
         eventBus.addHandler(HideWaitingIndicatorEvent.TYPE, this);
         eventBus.addHandler(LocationAddNewEvent.TYPE, this);
-        eventBus.addHandler(LocationSearchEvent.TYPE, this);
+        eventBus.addHandler(LocationShowOnMapEvent.TYPE, this);
         eventBus.addHandler(GoToProfileEvent.TYPE, this);
         eventBus.addHandler(GoToContactsEvent.TYPE, this);
 
@@ -102,9 +102,8 @@ public class MenuActivity implements MenuPresenter //
     }
 
     @Override
-    public void onLocationSearch(final LocationSearchEvent event) {
-        view.getLocationSearchWidget().setText(event.getLocationName());
-        // TODO PGU show map + starts search automatically
+    public void onLocationShowOnMap(final LocationShowOnMapEvent event) {
+        view.showOnMap(event.getItemLocation());
     }
 
     @Override
@@ -126,7 +125,6 @@ public class MenuActivity implements MenuPresenter //
         view.getLocationSearchWidget().setText("");
         view.getLocationSearchWidget().setFocus(true);
         view.getSaveWidget().setVisible(true);
-        view.scrollToTop();
 
     }
 

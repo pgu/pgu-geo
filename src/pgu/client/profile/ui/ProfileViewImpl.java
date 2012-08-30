@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 
 import pgu.client.profile.ProfilePresenter;
 import pgu.client.profile.ProfileView;
+import pgu.shared.dto.ItemLocation;
 import pgu.shared.dto.Location;
 import pgu.shared.dto.Profile;
 
@@ -147,7 +148,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     @UiHandler("locContainer")
     public void clickLocContainer(final ClickEvent e) {
-        presenter.searchForLocation(locContainer.getText());
+
+        // TODO PGU Aug 30, 2012 itemLocation
+        final ItemLocation i = new ItemLocation();
+        i.setName(locContainer.getText());
+
+        presenter.showLocationOnMap(i);
     }
 
     private ProfilePresenter presenter;
