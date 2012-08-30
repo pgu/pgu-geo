@@ -69,6 +69,29 @@ public class ClientUtils {
 
     }-*/;
 
+    public void removeLocationFromItem(final String itemId, final ItemLocation deletedItemLocation) {
+        removeLocationFromItem(itemId, deletedItemLocation.getName());
+        refreshHtmlLocationsForItem(itemId);
+    }
+
+    private native void removeLocationFromItem(String itemId, String locationName) /*-{
+
+		var locations = $wnd.cache_itemId2locations[itemId];
+		var updateds = [];
+
+		for ( var i = 0, len = locations.length; i < len; i++) {
+			var location = locations[i];
+
+			if (location.name === locationName) {
+				continue;
+			}
+
+			updateds.push(location);
+		}
+
+		$wnd.cache_itemId2locations[itemId] = updateds;
+    }-*/;
+
     public String getCopyCacheWithNewLocationsJson(final String itemId, final ItemLocation itemLocation) {
         final ArrayList<ItemLocation> arr = new ArrayList<ItemLocation>();
         arr.add(itemLocation);
@@ -138,9 +161,29 @@ public class ClientUtils {
     }-*/;
 
     public String getCopyCacheWithoutLocationJson(final String itemId, final ItemLocation itemLocation) {
-        // TODO Auto-generated method stub
-        return null;
+
+        initTemporaryCache();
+        removeLocationFromTemporaryCache(itemId, itemLocation.getName());
+        return fetchAllFromTemporaryCacheJson();
     }
+
+    private native void removeLocationFromTemporaryCache(String itemId, String name) /*-{
+
+		var locations = $wnd.__tmp_cache_itemId2locations[itemId];
+		var updateds = [];
+
+		for ( var i = 0, len = locations.length; i < len; i++) {
+			var location = locations[i];
+
+			if (location.name === name) {
+				continue;
+			}
+
+			updateds.push(location);
+		}
+
+		$wnd.__tmp_cache_itemId2locations[itemId] = updateds;
+    }-*/;
 
     public void showNotificationError(final Throwable t, final HasNotifications view) {
 

@@ -2,6 +2,7 @@ package pgu.client.profile;
 
 import pgu.client.app.event.HideWaitingIndicatorEvent;
 import pgu.client.app.event.LocationShowOnMapEvent;
+import pgu.client.app.event.LocationSuccessDeleteEvent;
 import pgu.client.app.event.LocationsSuccessSaveEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
@@ -17,6 +18,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 public class ProfileActivity extends AbstractActivity implements ProfilePresenter //
         , LocationsSuccessSaveEvent.Handler //
+        , LocationSuccessDeleteEvent.Handler //
 {
 
     private final ClientFactory        clientFactory;
@@ -40,6 +42,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         view.setPresenter(this);
 
         eventBus.addHandler(LocationsSuccessSaveEvent.TYPE, this);
+        eventBus.addHandler(LocationSuccessDeleteEvent.TYPE, this);
 
         panel.setWidget(view.asWidget());
 
@@ -88,6 +91,11 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     @Override
     public void showLocationOnMap(final ItemLocation itemLocation) {
         u.fire(eventBus, new LocationShowOnMapEvent(itemLocation));
+    }
+
+    @Override
+    public void onLocationSuccessDelete(final LocationSuccessDeleteEvent event) {
+        u.removeLocationFromItem(event.getItemId(), event.getDeletedItemLocation());
     }
 
 }

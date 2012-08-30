@@ -33,7 +33,7 @@
                 <b:Button ui:field="closeBtn" icon="REMOVE" iconSize="LARGE" type="PRIMARY">Close</b:Button>
                 <b:Button ui:field="saveBtn" icon="SAVE" iconSize="LARGE" type="PRIMARY">Save</b:Button>
                 <b:Button ui:field="displayOnMapBtn" icon="MAP_MARKER" iconSize="LARGE" type="PRIMARY">Display on the map</b:Button>
-                <b:Button ui:field="deleteBtn" icon="REMOVE_SIGN" iconSize="LARGE" type="DANGER">Delete</b:Button>
+                <b:Button ui:field="deleteBtn" icon="REMOVE_SIGN" iconSize="LARGE" type="DANGER">Remove</b:Button>
             </b:ModalFooter>
         </b:Modal>
     </g:HTMLPanel>
