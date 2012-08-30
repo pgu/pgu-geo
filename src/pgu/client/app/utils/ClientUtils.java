@@ -137,4 +137,36 @@ public class ClientUtils {
 		return tmp_cache_json;
     }-*/;
 
+    public String getCopyCacheWithoutLocationJson(final String itemId, final ItemLocation itemLocation) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public void showNotificationError(final Throwable t, final HasNotifications view) {
+
+        final StringBuilder sb = new StringBuilder();
+        sb.append(t.getMessage());
+        sb.append("<br>");
+
+        for (final StackTraceElement ste : t.getStackTrace()) {
+            sb.append(ste);
+            sb.append("<br>");
+        }
+
+        final Notification notification = view.newNotification();
+        notification.setHeading("Technical Error");
+        notification.setText(sb.toString());
+        notification.setLevel(pgu.client.app.utils.Level.ERROR);
+        notification.show();
+    }
+
+    public void showNotificationSuccess(final StringBuilder msg, final HasNotifications view) {
+
+        final Notification notification = view.newNotification();
+        notification.setHeading("Success");
+        notification.setHTML(msg.toString());
+        notification.setLevel(pgu.client.app.utils.Level.SUCCESS);
+        notification.show();
+    }
+
 }

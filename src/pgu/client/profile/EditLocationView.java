@@ -2,6 +2,7 @@ package pgu.client.profile;
 
 import java.util.ArrayList;
 
+import pgu.client.app.utils.HasNotifications;
 import pgu.client.app.utils.Notification;
 import pgu.shared.dto.ItemLocation;
 
@@ -9,7 +10,7 @@ import com.github.gwtbootstrap.client.ui.base.HasVisibleHandlers;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.HasVisibility;
 
-public interface EditLocationView {
+public interface EditLocationView extends HasNotifications {
 
     HasVisibleHandlers getCloseHandler();
 
@@ -31,18 +32,22 @@ public interface EditLocationView {
 
     HasVisibility getWaitingIndicator();
 
-    Notification newNotification();
-
     void disableCreationForm();
 
     void resetCreationForm();
 
     ArrayList<ItemLocation> getSelectedLocations();
 
-    void removeCreationForm(String itemId);
+    void removeCreationFormAndShowClose(String itemId);
 
     void displayNewLocationWidget(String itemId);
 
     HasVisibility getCloseWidget();
+
+    void disableEditionForm();
+
+    void enableEditionForm();
+
+    void removeEditionFormAndShowClose();
 
 }

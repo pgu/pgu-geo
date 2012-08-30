@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 import pgu.client.app.event.LocationAddNewEvent;
 import pgu.client.app.event.LocationShowOnMapEvent;
+import pgu.client.app.event.LocationSuccessDeleteEvent;
 import pgu.client.app.event.LocationsSuccessSaveEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
-import pgu.client.app.utils.Level;
 import pgu.client.app.utils.Notification;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.shared.dto.ItemLocation;
@@ -98,10 +98,19 @@ public class EditLocationActivity {
 
                             @Override
                             public void onSuccess(final Void result) {
+
                                 view.getWaitingIndicator().setVisible(false);
-                                view.removeCreationForm(itemId);
+                                view.removeCreationFormAndShowClose(itemId);
+
                                 u.fire(eventBus, new LocationsSuccessSaveEvent(itemId, selectedLocations));
 
+                                final StringBuilder msg = getSuccessMessage(selectedLocations);
+                                u.showNotificationSuccess(msg, view);
+
+                                hideViewWithDelay();
+                            }
+
+                            private StringBuilder getSuccessMessage(final ArrayList<ItemLocation> selectedLocations) {
                                 final StringBuilder msg = new StringBuilder();
 
                                 if (selectedLocations.size() == 1) {
@@ -119,23 +128,7 @@ public class EditLocationActivity {
 
                                     msg.append("</ul>have been successfully added.");
                                 }
-
-                                final Notification notification = view.newNotification();
-                                notification.setHeading("Success");
-                                notification.setHTML(msg.toString());
-                                notification.setLevel(Level.SUCCESS);
-                                notification.show();
-
-                                timerCloseView = new Timer() {
-
-                                    @Override
-                                    public void run() {
-                                        view.hide();
-
-                                    }
-
-                                };
-                                timerCloseView.schedule(3000);
+                                return msg;
                             }
 
                             @Override
@@ -143,14 +136,7 @@ public class EditLocationActivity {
                                 view.getWaitingIndicator().setVisible(false);
                                 view.resetCreationForm();
 
-                                final Notification notification = view.newNotification();
-                                notification.setHTML( //
-                                        "Oops! Something wrong happened: <br>" //
-                                                + caught.getMessage());
-                                notification.setHeading("Error");
-                                notification.setLevel(Level.ERROR);
-
-                                notification.show();
+                                u.showNotificationError(caught, view);
 
                                 super.onFailure(caught);
 
@@ -198,10 +184,65 @@ public class EditLocationActivity {
 
             @Override
             public void onClick(final ClickEvent event) {
-                // TODO PGU Aug 30, 2012 delete from cache + from ui
-                view.hide();
+
+                view.getWaitingIndicator().setVisible(true);
+                view.disableEditionForm();
+
+                linkedinService.saveLocations( //
+                        clientFactory.getAppState().getUserId() //
+                        , u.getCopyCacheWithoutLocationJson(itemId, itemLocation) //
+                        , new AsyncCallbackApp<Void>(eventBus) {
+
+                            @Override
+                            public void onSuccess(final Void result) {
+
+                                view.getWaitingIndicator().setVisible(false);
+                                view.removeEditionFormAndShowClose();
+
+                                u.fire(eventBus, new LocationSuccessDeleteEvent(itemId, itemLocation));
+
+                                final StringBuilder msg = getSuccessMessage(itemLocation);
+                                u.showNotificationSuccess(msg, view);
+
+                                hideViewWithDelay();
+                            }
+
+                            private StringBuilder getSuccessMessage(final ItemLocation itemLocation) {
+                                final StringBuilder msg = new StringBuilder();
+                                msg.append("The location \"");
+                                msg.append(itemLocation.getName());
+                                msg.append("\" has been successfully removed.");
+                                return msg;
+                            }
+
+                            @Override
+                            public void onFailure(final Throwable caught) {
+                                view.getWaitingIndicator().setVisible(false);
+                                view.enableEditionForm();
+
+                                u.showNotificationError(caught, view);
+
+                                super.onFailure(caught);
+
+                            }
+
+                        });
             }
 
         });
     }
+
+    private void hideViewWithDelay() {
+        timerCloseView = new Timer() {
+
+            @Override
+            public void run() {
+                view.hide();
+
+            }
+
+        };
+        timerCloseView.schedule(3000);
+    }
+
 }

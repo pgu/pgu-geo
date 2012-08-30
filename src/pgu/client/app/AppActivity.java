@@ -54,22 +54,7 @@ public class AppActivity implements //
 
     @Override
     public void onTechnicalError(final TechnicalErrorEvent event) {
-        final Throwable th = event.getThrowable();
-        final StringBuilder sb = new StringBuilder();
-        sb.append(th.getMessage());
-        sb.append("<br>");
-
-        for (final StackTraceElement ste : th.getStackTrace()) {
-            sb.append(ste);
-            sb.append("<br>");
-        }
-
-        final Notification notif = view.newNotification();
-        notif.setHeading("Technical Error");
-        notif.setText(sb.toString());
-        notif.setLevel(Level.ERROR);
-        notif.show();
-
+        u.showNotificationError(event.getThrowable(), view);
     }
 
     @Override

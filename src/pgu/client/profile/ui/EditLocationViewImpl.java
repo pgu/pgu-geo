@@ -263,7 +263,7 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
     }
 
     @Override
-    public void removeCreationForm(final String itemId) {
+    public void removeCreationFormAndShowClose(final String itemId) {
 
         addPanel.setVisible(false);
         saveBtn.setVisible(false);
@@ -289,6 +289,29 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
     @Override
     public HasClickHandlers getDeleteHandler() {
         return deleteBtn;
+    }
+
+    @Override
+    public void disableEditionForm() {
+        displayOnMapBtn.setEnabled(false);
+        deleteBtn.setEnabled(false);
+    }
+
+    @Override
+    public void enableEditionForm() {
+        displayOnMapBtn.setEnabled(true);
+        deleteBtn.setEnabled(true);
+    }
+
+    @Override
+    public void removeEditionFormAndShowClose() {
+        editPanel.setVisible(false);
+        displayOnMapBtn.setVisible(false);
+        deleteBtn.setVisible(false);
+        closeBtn.setVisible(true);
+
+        displayOnMapBtn.setEnabled(true);
+        deleteBtn.setEnabled(true);
     }
 
 }
