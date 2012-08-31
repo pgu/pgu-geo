@@ -5,7 +5,7 @@ var cache_itemId2config = {};
 var itemConfigs = [];
 var lastCall = 0 ;
 var _showdown_converter;
-var currentIndex = 0;
+var pgu_currentIndex = 0;
 
 function RowConfig(item_id) {
 	this.item_id = item_id;
@@ -14,21 +14,9 @@ function RowConfig(item_id) {
 }
 
 
-function showNextProfileItemOnMap(isPresentToPast) {
+function showNextProfileItemOnMap(isPastToPresent) {
 	
-	var nextIndex = 0;
-	if (isPresentToPast) {
-		nextIndex = --currentIndex;
-	} else {
-		nextIndex = ++currentIndex;
-	}
-	
-	if (nextIndex < 0 //
-			|| nextIndex >= itemConfigs.length) {
-		return false;
-	}
-	
-	var itemConfig = itemConfigs[nextIndex];
+	var itemConfig = itemConfigs[pgu_currentIndex];
 	var locations = cache_itemId2locations[itemConfig.item_id];
 	
 	for (var i in locations) {
@@ -45,7 +33,26 @@ function showNextProfileItemOnMap(isPresentToPast) {
 
 		markersArray.push(marker);
 	}
-	return true;
+	
+	console.log('');
+	console.log(typeof isPastToPresent);
+	
+	if (isPastToPresent) {
+		console.log("is true");
+	} else {
+		console.log("is false");
+	}
+	
+	
+	if (isPastToPresent) {
+		pgu_currentIndex++;
+	} else {
+		pgu_currentIndex--;
+	}
+	console.log(pgu_currentIndex);
+	
+	return pgu_currentIndex < 0 //
+			|| pgu_currentIndex >= itemConfigs.length;
 	
 }
 
@@ -66,7 +73,9 @@ function createTable(type, items, empty_message) {
 
 		table.push(createTableFoot());
 
-		sortItemConfigsByDate();
+		if (isEdu(type)) {
+			sortItemConfigsByDate();
+		}
 		
 		return table.join('');
 

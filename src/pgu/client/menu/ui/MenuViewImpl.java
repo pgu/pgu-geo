@@ -1,5 +1,7 @@
 package pgu.client.menu.ui;
 
+import java.util.Date;
+
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.menu.MenuPresenter;
 import pgu.client.menu.MenuView;
@@ -91,7 +93,9 @@ public class MenuViewImpl extends Composite implements MenuView {
 
         past2prstBtn.setTitle(MSG_FROM_PAST_TO_PRESENT);
         prst2pastBtn.setTitle(MSG_FROM_PRESENT_TO_PAST);
-        prst2pastBtn.setVisible(false);
+
+        isPastToPresent = true;
+        past2prstBtn.setActive(true);
 
         stepBwdBtn.setTitle(MSG_GO_TO_PREVIOUS_LOCATION);
         stepFwdBtn.setTitle(MSG_GO_TO_NEXT_LOCATION);
@@ -157,68 +161,118 @@ public class MenuViewImpl extends Composite implements MenuView {
 
     @UiHandler("prst2pastBtn")
     public void clickOnPrst2Past(final ClickEvent e) {
-        prst2pastBtn.setVisible(false);
-        isPresentToPast = true;
+        GWT.log(" >>>>>>> click PRES to past (set false)");
 
-        past2prstBtn.setVisible(true);
+        prst2pastBtn.setActive(true);
+
+        past2prstBtn.setActive(false);
+        isPastToPresent = false;
     }
 
     @UiHandler("past2prstBtn")
     public void clickOnPast2Prst(final ClickEvent e) {
-        past2prstBtn.setVisible(false);
-        isPresentToPast = false;
+        GWT.log(" >>>>>>> click PAST to pres (set true)");
 
-        prst2pastBtn.setVisible(true);
+        past2prstBtn.setActive(true);
+        isPastToPresent = true;
+
+        prst2pastBtn.setActive(false);
     }
 
     @UiHandler("stopBtn")
     public void clickOnStopProfile(final ClickEvent e) {
-        isPlayingProfile = false;
+        clickOnPause();
+        isPausing = false;
 
-        // TODO PGU Aug 31, 2012 reset
         deleteMarkers();
+        initIndex(isPastToPresent);
     }
 
     @UiHandler("pauseBtn")
     public void clickOnPauseProfile(final ClickEvent e) {
+        clickOnPause();
+    }
+
+    private void clickOnPause() {
         pauseBtn.setVisible(false);
         isPlayingProfile = false;
+        isPausing = true;
 
         playBtn.setVisible(true);
     }
 
-    private boolean isPresentToPast  = false;
+    private boolean isPastToPresent  = true;
     private boolean isPlayingProfile = false;
+    private boolean isPausing        = false;
 
     @UiHandler("playBtn")
     public void clickOnPlayProfile(final ClickEvent e) {
         playBtn.setVisible(false);
-
         pauseBtn.setVisible(true);
 
+        lastCall = new Date();
         isPlayingProfile = true;
-        deleteMarkers();
 
+        if (!isPausing) {
+            deleteMarkers();
+            GWT.log("isPastToPresent " + isPastToPresent);
+            initIndex(isPastToPresent);
+        }
+
+        isPausing = false;
+
+        // final boolean isNotDone = goToNextProfileItemOnMap();
+        //
+        // if (isNotDone) {
+
+        GWT.log("> " + lastCall.getTime());
         Scheduler.get().scheduleFixedPeriod(new RepeatingCommand() {
 
             @Override
             public boolean execute() {
-
-                if (isPlayingProfile) {
-                    // go to next item
-                    final boolean isDone = showNextProfileItemOnMap(isPresentToPast);
-
-                    return !isDone;
-                }
-
-                return false;
+                return goToNextProfileItemOnMap();
             }
 
         }, 3000);
+        // }
     }
 
-    private native boolean showNextProfileItemOnMap(boolean isPresentToPast) /*-{
-		return $wnd.showNextProfileItemOnMap(isPresentToPast);
+    private native void initIndex(boolean isPastToPresent) /*-{
+		$wnd.console.log(isPastToPresent);
+
+		$wnd.pgu_currentIndex = isPastToPresent ? 0
+				: $wnd.itemConfigs.length - 1;
+
+		$wnd.console.log($wnd.pgu_currentIndex);
+    }-*/;
+
+    private Date lastCall = new Date();
+
+    private boolean goToNextProfileItemOnMap() {
+        final Date now = new Date();
+        GWT.log("> " + (now.getTime() - lastCall.getTime()));
+        lastCall = now;
+
+        GWT.log("is past to present " + isPastToPresent);
+
+        if (isPlayingProfile) {
+
+            // go to next item
+            final boolean isDone = showNextProfileItemOnMap(isPastToPresent);
+
+            if (isDone) {
+                clickOnPause();
+                isPausing = false;
+            }
+
+            return !isDone;
+        }
+
+        return false;
+    }
+
+    private native boolean showNextProfileItemOnMap(boolean isPastToPresent) /*-{
+		return $wnd.showNextProfileItemOnMap(isPastToPresent);
     }-*/;
 
     public void cacheLastSearchedLocation(final String name, final String lat, final String lng) {
