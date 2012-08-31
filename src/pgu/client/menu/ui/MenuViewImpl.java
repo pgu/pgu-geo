@@ -97,6 +97,7 @@ public class MenuViewImpl extends Composite implements MenuView {
 
         stepBwdBtn.setTitle(MSG_GO_TO_PREVIOUS_LOCATION);
         stepFwdBtn.setTitle(MSG_GO_TO_NEXT_LOCATION);
+        stepBwdBtn.setVisible(false);
 
         playBtn.setTitle(MSG_PLAY_PROFILE_LOCATIONS);
         pauseBtn.setTitle(MSG_PAUSE);
@@ -184,6 +185,28 @@ public class MenuViewImpl extends Composite implements MenuView {
         initIndex(isPastToPresent);
     }
 
+    @UiHandler("stepBwdBtn")
+    public void clickOnStepBwdBtn(final ClickEvent e) {
+        clickOnPause();
+        decrementIndex(isPastToPresent);
+        showProfileItemOnMap();
+    }
+
+    @UiHandler("stepFwdBtn")
+    public void clickOnStepFwdBtn(final ClickEvent e) {
+        clickOnPause();
+        incrementIndex(isPastToPresent);
+        showProfileItemOnMap();
+    }
+
+    private native void decrementIndex(boolean isPastToPresent) /*-{
+		$wnd.decrementIndex(isPastToPresent);
+    }-*/;
+
+    private native void incrementIndex(boolean isPastToPresent) /*-{
+		$wnd.incrementIndex(isPastToPresent);
+    }-*/;
+
     @UiHandler("pauseBtn")
     public void clickOnPauseProfile(final ClickEvent e) {
         clickOnPause();
@@ -229,8 +252,7 @@ public class MenuViewImpl extends Composite implements MenuView {
 
     private native void initIndex(boolean isPastToPresent) /*-{
 
-		$wnd.pgu_currentIndex = isPastToPresent ? 0
-				: $wnd.itemConfigs.length - 1;
+		$wnd.pgu_currentIndex = isPastToPresent ? -1 : $wnd.itemConfigs.length;
 
     }-*/;
 
@@ -238,13 +260,8 @@ public class MenuViewImpl extends Composite implements MenuView {
 
         if (isPlayingProfile) {
 
-            // go to next item
-            final boolean isDone = showNextProfileItemOnMap(isPastToPresent);
-
-            if (isDone) {
-                clickOnPause();
-                isPausing = false;
-            }
+            incrementIndex(isPastToPresent);
+            final boolean isDone = showProfileItemOnMap();
 
             return !isDone;
         }
@@ -252,8 +269,30 @@ public class MenuViewImpl extends Composite implements MenuView {
         return false;
     }
 
-    private native boolean showNextProfileItemOnMap(boolean isPastToPresent) /*-{
-		return $wnd.showNextProfileItemOnMap(isPastToPresent);
+    private boolean showProfileItemOnMap() {
+        final boolean isDone = _showProfileItemOnMap(isPastToPresent);
+
+        if (isDone) {
+            clickOnPause();
+            isPausing = false;
+        }
+
+        stepFwdBtn.setVisible(showFwdBtn(isPastToPresent));
+        stepBwdBtn.setVisible(showBwdBtn(isPastToPresent));
+
+        return isDone;
+    }
+
+    private native boolean showFwdBtn(boolean isPastToPresent) /*-{
+		return $wnd.showFwdBtn(isPastToPresent);
+    }-*/;
+
+    private native boolean showBwdBtn(boolean isPastToPresent) /*-{
+		return $wnd.showBwdBtn(isPastToPresent);
+    }-*/;
+
+    private native boolean _showProfileItemOnMap(boolean isPastToPresent) /*-{
+		return $wnd.showProfileItemOnMap(isPastToPresent);
     }-*/;
 
     public void cacheLastSearchedLocation(final String name, final String lat, final String lng) {

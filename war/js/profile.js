@@ -5,7 +5,7 @@ var cache_itemId2config = {};
 var itemConfigs = [];
 var lastCall = 0 ;
 var _showdown_converter;
-var pgu_currentIndex = 0;
+var pgu_currentIndex = -1;
 
 function RowConfig(item_id) {
 	this.item_id = item_id;
@@ -13,8 +13,16 @@ function RowConfig(item_id) {
 	this.locations_cell_id = "locations_" + item_id;
 }
 
+function isIndexOutOfBounds() {
+	return pgu_currentIndex < 0 //
+	|| pgu_currentIndex >= itemConfigs.length;
+}
 
-function showNextProfileItemOnMap(isPastToPresent) {
+function showProfileItemOnMap(isPastToPresent) {
+	
+	if (isIndexOutOfBounds()) {
+		return true;
+	}
 	
 	var itemConfig = itemConfigs[pgu_currentIndex];
 	var locations = cache_itemId2locations[itemConfig.item_id];
@@ -34,14 +42,56 @@ function showNextProfileItemOnMap(isPastToPresent) {
 		markersArray.push(marker);
 	}
 	
+	return false;
+}
+
+function showBwdBtn(isPastToPresent) {
+	
 	if (isPastToPresent) {
+		return pgu_currentIndex > 0;
+	} else {
+		return pgu_currentIndex < itemConfigs.length -1;
+	}
+}
+
+function showFwdBtn(isPastToPresent) {
+	
+	if (isPastToPresent) {
+		return pgu_currentIndex < itemConfigs.length -1;
+	} else {
+		return pgu_currentIndex > 0;
+	}
+}
+
+function incrementIndex(isPastToPresent) {
+	
+	if (isPastToPresent) {
+		if (pgu_currentIndex >= itemConfigs.length) {
+			return;
+		}
 		pgu_currentIndex++;
 	} else {
+		if (pgu_currentIndex < 0) {
+			return;
+		}
 		pgu_currentIndex--;
 	}
 	
-	return pgu_currentIndex < 0 //
-			|| pgu_currentIndex >= itemConfigs.length;
+}
+
+function decrementIndex(isPastToPresent) {
+	
+	if (isPastToPresent) {
+		if (pgu_currentIndex < 0) {
+			return;
+		}
+		pgu_currentIndex--;
+	} else {
+		if (pgu_currentIndex >= itemConfigs.length) {
+			return;
+		}
+		pgu_currentIndex++;
+	}
 	
 }
 
