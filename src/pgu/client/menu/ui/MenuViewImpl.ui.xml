@@ -32,7 +32,7 @@
                 <b:NavLink icon="LOCK" ui:field="adminBtn" iconSize="LARGE" ></b:NavLink>
             </b:Nav>
             <b:Nav alignment="RIGHT">
-                <b:NavLink ui:field="clearMarkersBtn" icon="REMOVE" iconSize="LARGE" ></b:NavLink>
+                <b:NavLink ui:field="clearMarkersBtn" icon="REMOVE" iconSize="LARGE" >Clear map</b:NavLink>
                 <b:NavLink ui:field="mapSizeBtn" iconSize="LARGE" ></b:NavLink>
             </b:Nav>
             <b:Nav ui:field="profilePlayMenu" alignment="RIGHT"><!-- only for profile -->
