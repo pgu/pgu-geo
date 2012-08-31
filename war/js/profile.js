@@ -1,13 +1,52 @@
 var delay_to_call_geocoder = 5000;
 var cache_name2itemLocation = {};
 var cache_itemId2locations = {};
+var cache_itemId2config = {};
+var itemConfigs = [];
 var lastCall = 0 ;
 var _showdown_converter;
+var currentIndex = 0;
 
 function RowConfig(item_id) {
 	this.item_id = item_id;
 	this.info_id = "info_" + item_id;
 	this.locations_cell_id = "locations_" + item_id;
+}
+
+
+function showNextProfileItemOnMap(isPresentToPast) {
+	
+	var nextIndex = 0;
+	if (isPresentToPast) {
+		nextIndex = --currentIndex;
+	} else {
+		nextIndex = ++currentIndex;
+	}
+	
+	if (nextIndex < 0 //
+			|| nextIndex >= itemConfigs.length) {
+		return false;
+	}
+	
+	var itemConfig = itemConfigs[nextIndex];
+	var locations = cache_itemId2locations[itemConfig.item_id];
+	
+	for (var i in locations) {
+		var location = locations[i];
+		
+		var loc = new google.maps.LatLng(parseFloat(location.lat), parseFloat(location.lng));
+		var marker = new google.maps.Marker({
+			map : map,
+			position : loc,
+			animation : google.maps.Animation.DROP,
+			title : location.name
+		});
+		// TODO add the item's content
+
+		markersArray.push(marker);
+	}
+	return true;
+	
 }
 
 function createTable(type, items, empty_message) {
@@ -27,12 +66,26 @@ function createTable(type, items, empty_message) {
 
 		table.push(createTableFoot());
 
+		sortItemConfigsByDate();
+		
 		return table.join('');
 
 	} else {
 		return empty_message;
 	}
 	
+}
+
+function sortItemConfigsByDate() {
+	
+	for (var key in cache_itemId2config) {
+		if (cache_itemId2config.hasOwnProperty(key)) {
+			var config = cache_itemId2config[key];
+			itemConfigs.push(config);
+		}
+	}
+	
+	itemConfigs.sort(function(a,b) { return a.startD.getTime() - b.startD.getTime() } );
 }
 
 function isEdu(type) {
@@ -90,6 +143,18 @@ function createTableRow(type, item) {
 		rowConfig = {};
 	}
 	
+	
+	if (item.startDate //
+			&& item.startDate.year) {
+		
+		var startDate = item.startDate;
+		var month = startDate.month || 1;
+		
+		var startD = new Date(startDate.year, month - 1, 1);
+		rowConfig.startD = startD;
+	} 
+	
+	cache_itemId2config[item.id] = rowConfig;
 	
 	return '' 
 	+ '<tr>                                                                              '

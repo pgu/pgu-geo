@@ -3,8 +3,6 @@ gson, oauth, gwt-bootstrap, objectify
 
 TODOs
 =======
-* clear markers
-* show all markers
 * play profile locations
 * persistence + review js cache
 * get information from profile

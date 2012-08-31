@@ -13,6 +13,8 @@ import com.github.gwtbootstrap.client.ui.NavSearch;
 import com.github.gwtbootstrap.client.ui.ProgressBar;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
@@ -40,7 +42,7 @@ public class MenuViewImpl extends Composite implements MenuView {
     NavLink                   adminBtn, logoutBtn, goToProfileBtn, goToContactsBtn, goToAppstatsBtn, mapSizeBtn //
             , past2prstBtn, prst2pastBtn //
             , stepBwdBtn, stepFwdBtn //
-            , playBtn, pauseBtn //
+            , playBtn, pauseBtn, stopBtn //
             , clearMarkersBtn //
             ;
     @UiField
@@ -156,6 +158,7 @@ public class MenuViewImpl extends Composite implements MenuView {
     @UiHandler("prst2pastBtn")
     public void clickOnPrst2Past(final ClickEvent e) {
         prst2pastBtn.setVisible(false);
+        isPresentToPast = true;
 
         past2prstBtn.setVisible(true);
     }
@@ -163,16 +166,29 @@ public class MenuViewImpl extends Composite implements MenuView {
     @UiHandler("past2prstBtn")
     public void clickOnPast2Prst(final ClickEvent e) {
         past2prstBtn.setVisible(false);
+        isPresentToPast = false;
 
         prst2pastBtn.setVisible(true);
+    }
+
+    @UiHandler("stopBtn")
+    public void clickOnStopProfile(final ClickEvent e) {
+        isPlayingProfile = false;
+
+        // TODO PGU Aug 31, 2012 reset
+        deleteMarkers();
     }
 
     @UiHandler("pauseBtn")
     public void clickOnPauseProfile(final ClickEvent e) {
         pauseBtn.setVisible(false);
+        isPlayingProfile = false;
 
         playBtn.setVisible(true);
     }
+
+    private boolean isPresentToPast  = false;
+    private boolean isPlayingProfile = false;
 
     @UiHandler("playBtn")
     public void clickOnPlayProfile(final ClickEvent e) {
@@ -180,9 +196,30 @@ public class MenuViewImpl extends Composite implements MenuView {
 
         pauseBtn.setVisible(true);
 
-        // get all the locations from the profile
-        // timer on each location
+        isPlayingProfile = true;
+        deleteMarkers();
+
+        Scheduler.get().scheduleFixedPeriod(new RepeatingCommand() {
+
+            @Override
+            public boolean execute() {
+
+                if (isPlayingProfile) {
+                    // go to next item
+                    final boolean isDone = showNextProfileItemOnMap(isPresentToPast);
+
+                    return !isDone;
+                }
+
+                return false;
+            }
+
+        }, 3000);
     }
+
+    private native boolean showNextProfileItemOnMap(boolean isPresentToPast) /*-{
+		return $wnd.showNextProfileItemOnMap(isPresentToPast);
+    }-*/;
 
     public void cacheLastSearchedLocation(final String name, final String lat, final String lng) {
         lastSearchItemLocation = new ItemLocation();
@@ -201,6 +238,7 @@ public class MenuViewImpl extends Composite implements MenuView {
 						function(results, status) {
 
 							if (status != $wnd.google.maps.GeocoderStatus.OK) {
+								// TODO replace this by the app's notification
 								$wnd
 										.alert("Geocode was not successful for the following reason: "
 												+ status);
@@ -247,13 +285,14 @@ public class MenuViewImpl extends Composite implements MenuView {
 
     @Override
     public void showMap() {
+        Window.scrollTo(0, 0);
+
         if (isMapDisplayed) {
             return;
         }
 
         showMapProg();
         updateMenuOnDisplayingMap();
-        Window.scrollTo(0, 0);
     }
 
     private void updateMenuOnDisplayingMap() {
@@ -429,7 +468,6 @@ public class MenuViewImpl extends Composite implements MenuView {
 
     @Override
     public void showOnMap(final ItemLocation itemLocation) {
-        Window.scrollTo(0, 0);
         showMap();
 
         addMarker(itemLocation.getName(), itemLocation.getLat(), itemLocation.getLng());

@@ -39,6 +39,7 @@
                 <b:NavLink ui:field="past2prstBtn" icon="CIRCLE_ARROW_RIGHT" iconSize="LARGE" />
                 <b:NavLink ui:field="prst2pastBtn" icon="CIRCLE_ARROW_LEFT" iconSize="LARGE" />
                 <b:NavLink ui:field="stepBwdBtn" icon="STEP_BACKWARD" iconSize="LARGE" />
+                <b:NavLink ui:field="stopBtn" icon="STOP" iconSize="LARGE" />
                 <b:NavLink ui:field="playBtn" icon="PLAY" iconSize="LARGE" />
                 <b:NavLink ui:field="pauseBtn" icon="PAUSE" iconSize="LARGE" />
                 <b:NavLink ui:field="stepFwdBtn" icon="STEP_FORWARD" iconSize="LARGE" />
