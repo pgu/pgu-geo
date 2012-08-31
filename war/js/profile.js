@@ -34,22 +34,11 @@ function showNextProfileItemOnMap(isPastToPresent) {
 		markersArray.push(marker);
 	}
 	
-	console.log('');
-	console.log(typeof isPastToPresent);
-	
-	if (isPastToPresent) {
-		console.log("is true");
-	} else {
-		console.log("is false");
-	}
-	
-	
 	if (isPastToPresent) {
 		pgu_currentIndex++;
 	} else {
 		pgu_currentIndex--;
 	}
-	console.log(pgu_currentIndex);
 	
 	return pgu_currentIndex < 0 //
 			|| pgu_currentIndex >= itemConfigs.length;

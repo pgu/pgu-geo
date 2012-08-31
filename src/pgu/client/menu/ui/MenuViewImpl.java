@@ -1,7 +1,5 @@
 package pgu.client.menu.ui;
 
-import java.util.Date;
-
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.menu.MenuPresenter;
 import pgu.client.menu.MenuView;
@@ -161,7 +159,6 @@ public class MenuViewImpl extends Composite implements MenuView {
 
     @UiHandler("prst2pastBtn")
     public void clickOnPrst2Past(final ClickEvent e) {
-        GWT.log(" >>>>>>> click PRES to past (set false)");
 
         prst2pastBtn.setActive(true);
 
@@ -171,7 +168,6 @@ public class MenuViewImpl extends Composite implements MenuView {
 
     @UiHandler("past2prstBtn")
     public void clickOnPast2Prst(final ClickEvent e) {
-        GWT.log(" >>>>>>> click PAST to pres (set true)");
 
         past2prstBtn.setActive(true);
         isPastToPresent = true;
@@ -210,22 +206,15 @@ public class MenuViewImpl extends Composite implements MenuView {
         playBtn.setVisible(false);
         pauseBtn.setVisible(true);
 
-        lastCall = new Date();
         isPlayingProfile = true;
 
         if (!isPausing) {
             deleteMarkers();
-            GWT.log("isPastToPresent " + isPastToPresent);
             initIndex(isPastToPresent);
         }
 
         isPausing = false;
 
-        // final boolean isNotDone = goToNextProfileItemOnMap();
-        //
-        // if (isNotDone) {
-
-        GWT.log("> " + lastCall.getTime());
         Scheduler.get().scheduleFixedPeriod(new RepeatingCommand() {
 
             @Override
@@ -234,26 +223,18 @@ public class MenuViewImpl extends Composite implements MenuView {
             }
 
         }, 3000);
-        // }
+
+        goToNextProfileItemOnMap();
     }
 
     private native void initIndex(boolean isPastToPresent) /*-{
-		$wnd.console.log(isPastToPresent);
 
 		$wnd.pgu_currentIndex = isPastToPresent ? 0
 				: $wnd.itemConfigs.length - 1;
 
-		$wnd.console.log($wnd.pgu_currentIndex);
     }-*/;
 
-    private Date lastCall = new Date();
-
     private boolean goToNextProfileItemOnMap() {
-        final Date now = new Date();
-        GWT.log("> " + (now.getTime() - lastCall.getTime()));
-        lastCall = now;
-
-        GWT.log("is past to present " + isPastToPresent);
 
         if (isPlayingProfile) {
 
