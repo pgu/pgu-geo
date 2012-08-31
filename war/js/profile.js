@@ -6,6 +6,7 @@ var itemConfigs = [];
 var lastCall = 0 ;
 var _showdown_converter;
 var pgu_currentIndex = -1;
+var current_info_window;
 
 function RowConfig(item_id) {
 	this.item_id = item_id;
@@ -37,8 +38,22 @@ function showProfileItemOnMap(isPastToPresent) {
 			animation : google.maps.Animation.DROP,
 			title : location.name
 		});
-		// TODO add the item's content
 
+		if (i ===  "0") {
+			map.setCenter(loc);
+			var infowindow = new google.maps.InfoWindow({
+			    content: itemConfig.short_content + "<br/><br/>" + itemConfig.long_content
+			});
+			
+			if (current_info_window) {
+				current_info_window.close();
+				current_info_window = null;
+			}
+			
+			infowindow.open(map, marker);
+			current_info_window = infowindow;
+		}
+		
 		markersArray.push(marker);
 	}
 	
@@ -198,8 +213,7 @@ function createTableRow(type, item) {
 		var startDate = item.startDate;
 		var month = startDate.month || 1;
 		
-		var startD = new Date(startDate.year, month - 1, 1);
-		rowConfig.startD = startD;
+		rowConfig.startD = new Date(startDate.year, month - 1, 1);
 	} 
 	
 	cache_itemId2config[item.id] = rowConfig;
