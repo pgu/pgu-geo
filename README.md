@@ -3,7 +3,6 @@ gson, oauth, gwt-bootstrap, objectify
 
 TODOs
 =======
-* play profile locations
 * persistence + review js cache
 * get information from profile
 
