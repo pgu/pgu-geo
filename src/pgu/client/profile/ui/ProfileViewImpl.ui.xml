@@ -12,7 +12,7 @@
                 <!-- play profile -->
                 
     <g:HTMLPanel>
-        <g:HTMLPanel ui:field="submenu" styleName="subnav subnav-fixed">
+        <g:HTMLPanel ui:field="submenu" styleName="subnav">
             <b:NavPills>
                 <b:NavLink href="#profile:overview">Overview</b:NavLink>
                 <b:NavLink href="#profile:experience">Experience</b:NavLink>
