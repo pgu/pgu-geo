@@ -23,7 +23,7 @@ public class ClientUtils {
     }-*/;
 
     private static native void initShowdownConverter() /*-{
-		$wnd.geocv.showdown_converter = new Showdown.converter();
+		$wnd.geocv.showdown_converter = new $wnd.Showdown.converter();
     }-*/;
 
     public native String markdown(String text) /*-{

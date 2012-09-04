@@ -273,9 +273,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 		for ( var i in language_values) {
 
 			var // 
-			language = language_values[i] //
+			language_value = language_values[i] //
+			//
+			, language = language_value.language || {} //
 			, language_name = language.name || '' //
-			, language_proficiency = language.proficiency || {} //
+			//
+			, language_proficiency = language_value.proficiency || {} //
 			, language_level = language_proficiency.level || '' //
 			;
 			view.@pgu.client.profile.ui.ProfileViewImpl::addPersonLanguage(Ljava/lang/String;Ljava/lang/String;)(language_name, language_level);
