@@ -99,20 +99,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         summaryBasic.setAnimation(true);
         summaryBasic.setPlacement(Placement.LEFT);
         summaryBasic.setHeading("Summary");
-        summaryBasic
-                .setText("A senior Java J2EE web developer with broad experience in web-based development, mainly with AJAX interface and Java-based frameworks such as J2EE, Spring and Hibernate. Resourceful, opened to different technologies, willing to join a state of the art web project to build up a successful career.");
-
-        // final ControlLabel label = new ControlLabel("Enter something");
-        // final TextBox txtbox = new TextBox();
-        // txtbox.setPlaceholder("Something...");
-        // final Button submitBtn = new Button("Submit");
-        //
-        // final WellForm wellForm = new WellForm();
-        // wellForm.add(label);
-        // wellForm.add(txtbox);
-        // wellForm.add(submitBtn);
-        //
-        // summaryBasic.setWidget(wellForm);
 
         exportMethod();
     }
@@ -184,6 +170,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         locContainer.setText(u.isVoid(locationName) ? "" : locationName);
     }
 
+    private void setPersonSummary(final String summary) {
+        summaryBasic.setText(u.markdown(summary));
+    }
+
     private native void setProfile(ProfileViewImpl view, String profile, String itemId2locations) /*-{
 
 		var j_profile = JSON.parse(profile);
@@ -196,6 +186,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 		, headline = j_profile.headline //
 		, specialties = j_profile.specialties //
 		, location_name = "" //
+		, summary = j_profile.summary //
 		;
 
 		var profile_location = j_profile.location || {};
@@ -205,6 +196,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 		view.@pgu.client.profile.ui.ProfileViewImpl::setPersonHeadline(Ljava/lang/String;)(headline);
 		view.@pgu.client.profile.ui.ProfileViewImpl::setPersonSpecialties(Ljava/lang/String;)(specialties);
 		view.@pgu.client.profile.ui.ProfileViewImpl::setPersonLocation(Ljava/lang/String;)(location_name);
+		view.@pgu.client.profile.ui.ProfileViewImpl::setPersonSummary(Ljava/lang/String;)(summary);
 
 		////////////////////////
 

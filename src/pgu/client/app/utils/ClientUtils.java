@@ -13,6 +13,23 @@ import com.google.gwt.user.client.Command;
 
 public class ClientUtils {
 
+    static {
+        initAppContext();
+        initShowdownConverter();
+    }
+
+    private static native void initAppContext() /*-{
+		$wnd.geocv = {};
+    }-*/;
+
+    private static native void initShowdownConverter() /*-{
+		$wnd.geocv.showdown_converter = new Showdown.converter();
+    }-*/;
+
+    public native String markdown(String text) /*-{
+		return $wnd.geocv.showdown_converter.makeHtml(text || '');
+    }-*/;
+
     public void info(final String message) {
         if (LogConfiguration.loggingIsEnabled()) {
             final Logger logger = Logger.getLogger("pgu");
