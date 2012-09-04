@@ -20,8 +20,6 @@ import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.Paragraph;
 import com.github.gwtbootstrap.client.ui.Popover;
 import com.github.gwtbootstrap.client.ui.Section;
-import com.github.gwtbootstrap.client.ui.constants.Placement;
-import com.github.gwtbootstrap.client.ui.constants.Trigger;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -87,15 +85,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
         initWidget(uiBinder.createAndBindUi(this));
 
-        summaryBasic.setTrigger(Trigger.MANUAL);
-        summaryBasic.setAnimation(true);
-        summaryBasic.setPlacement(Placement.LEFT);
-        summaryBasic.setHeading("Summary");
-
         // TODO PGU Sep 4, 2012 is this id still useful?
         locContainer.getElement().setId("el_profile_location");
-
+        // TODO PGU Sep 4, 2012 how to present the public profile?
         // http://www.linkedin.com/pub/pascal-guilcher/2/3b1/955
+
         exportMethod();
     }
 

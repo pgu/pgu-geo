@@ -22,7 +22,7 @@
     
         <b:Section ui:field="overviewSection">
             <b:Hero>
-                <b:Popover ui:field="summaryBasic">
+                <b:Popover ui:field="summaryBasic" trigger="MANUAL" animation="true" placement="LEFT" heading="Summary">
                     <b:Button ui:field="summaryBasicBtn" icon="INFO_SIGN" type="INFO" iconSize="LARGE" addStyleNames="pull-right" />
                 </b:Popover>
                 <b:Heading size="2" ui:field="nameBasic" />
