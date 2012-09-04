@@ -158,7 +158,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     @Override
     public void setProfile(final Profile profile) {
 
-        setProfile(profile.getJson(), profile.getItemId2locations());
+        setProfile(this, profile.getJson(), profile.getItemId2locations());
     }
 
     private void setPersonName(final String firstname, final String lastname) {
@@ -184,7 +184,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         locContainer.setText(u.isVoid(locationName) ? "" : locationName);
     }
 
-    private native void setProfile(String profile, String itemId2locations) /*-{
+    private native void setProfile(ProfileViewImpl view, String profile, String itemId2locations) /*-{
 
 		var j_profile = JSON.parse(profile);
 		$wnd.cache_itemId2locations = JSON.parse(itemId2locations);
