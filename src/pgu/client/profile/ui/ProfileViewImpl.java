@@ -3,10 +3,10 @@ package pgu.client.profile.ui;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
+import pgu.client.app.utils.ClientUtils;
 import pgu.client.profile.ProfilePresenter;
 import pgu.client.profile.ProfileView;
 import pgu.shared.dto.ItemLocation;
-import pgu.shared.dto.Location;
 import pgu.shared.dto.Profile;
 
 import com.github.gwtbootstrap.client.ui.Button;
@@ -37,21 +37,23 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     @UiField
-    Heading   nameBasic;
+    Heading                   nameBasic;
     @UiField
-    Paragraph headlineBasic;
+    Paragraph                 headlineBasic;
     @UiField
-    Popover   summaryBasic;
+    Popover                   summaryBasic;
     @UiField
-    Button    summaryBasicBtn;
+    Button                    summaryBasicBtn;
 
     @UiField(provided = true)
-    Section   overviewSection, experienceSection, educationSection;
+    Section                   overviewSection, experienceSection, educationSection;
     @UiField
-    HTMLPanel lgContainer, spContainer;
+    HTMLPanel                 lgContainer, spContainer;
 
     @UiField
-    NavLink   locContainer;
+    NavLink                   locContainer;
+
+    private final ClientUtils u = new ClientUtils();
 
     public ProfileViewImpl() {
 
@@ -61,6 +63,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
         initWidget(uiBinder.createAndBindUi(this));
 
+        // TODO PGU Sep 4, 2012 is this id still useful?
         locContainer.getElement().setId("el_profile_location");
 
         // http://www.linkedin.com/pub/pascal-guilcher/2/3b1/955
@@ -91,15 +94,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
             lgContainer.add(row);
         }
-
-        // <p>Ajax, J2EE, Java, Javascript, Eclipse</p>
-        final String specialties = "Ajax, J2EE, Java, Javascript, Eclipse";
-        for (final String sp : specialties.split(", ")) {
-            spContainer.add(new HTML(sp));
-        }
-
-        // <p>Paris Area, France</p>
-        locContainer.setText("Paris Area, France");
 
         summaryBasic.setTrigger(Trigger.MANUAL);
         summaryBasic.setAnimation(true);
@@ -164,21 +158,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     @Override
     public void setProfile(final Profile profile) {
 
-        setProfileLocation(profile);
-
         setProfile(profile.getJson(), profile.getItemId2locations());
-    }
-
-    private void setProfileLocation(final Profile profile) {
-        final Location profileLocation = profile.getLocation();
-        if (profileLocation == null) {
-            locContainer.setText("");
-
-        } else {
-            final String name = profileLocation.getName();
-            locContainer.setText(name == null ? "" : name);
-
-        }
     }
 
     private void setPersonName(final String firstname, final String lastname) {
@@ -189,15 +169,42 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         headlineBasic.setText(headline);
     }
 
+    private void setPersonSpecialties(final String specialtiesLabel) {
+        for (final String specialty : specialtiesLabel.split(", ")) {
+
+            if (u.isVoid(specialty)) {
+                continue;
+            }
+
+            spContainer.add(new HTML(specialty));
+        }
+    }
+
+    private void setPersonLocation(final String locationName) {
+        locContainer.setText(u.isVoid(locationName) ? "" : locationName);
+    }
+
     private native void setProfile(String profile, String itemId2locations) /*-{
 
 		var j_profile = JSON.parse(profile);
 		$wnd.cache_itemId2locations = JSON.parse(itemId2locations);
 
 		////////////////////////
+		var //
+		first_name = j_profile.firstName //
+		, last_name = j_profile.lastName //
+		, headline = j_profile.headline //
+		, specialties = j_profile.specialties //
+		, location_name = "" //
+		;
 
-		view.@pgu.client.profile.ui.ProfileViewImpl::setPersonName(Ljava/lang/String;Ljava/lang/String;)(j_profile.firstName, j_profile.lastName);
-		view.@pgu.client.profile.ui.ProfileViewImpl::setPersonHeadline(Ljava/lang/String;)(j_profile.headline);
+		var profile_location = j_profile.location || {};
+		location_name = profile_location.name;
+
+		view.@pgu.client.profile.ui.ProfileViewImpl::setPersonName(Ljava/lang/String;Ljava/lang/String;)(first_name, last_name);
+		view.@pgu.client.profile.ui.ProfileViewImpl::setPersonHeadline(Ljava/lang/String;)(headline);
+		view.@pgu.client.profile.ui.ProfileViewImpl::setPersonSpecialties(Ljava/lang/String;)(specialties);
+		view.@pgu.client.profile.ui.ProfileViewImpl::setPersonLocation(Ljava/lang/String;)(location_name);
 
 		////////////////////////
 
