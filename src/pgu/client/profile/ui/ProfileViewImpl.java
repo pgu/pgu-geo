@@ -1,6 +1,9 @@
 package pgu.client.profile.ui;
 
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.EnumMap;
 import java.util.Map.Entry;
 
 import pgu.client.app.utils.ClientUtils;
@@ -37,23 +40,44 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     @UiField
-    Heading                   nameBasic;
+    Heading                                                 nameBasic;
     @UiField
-    Paragraph                 headlineBasic;
+    Paragraph                                               headlineBasic;
     @UiField
-    Popover                   summaryBasic;
+    Popover                                                 summaryBasic;
     @UiField
-    Button                    summaryBasicBtn;
+    Button                                                  summaryBasicBtn;
 
     @UiField(provided = true)
-    Section                   overviewSection, experienceSection, educationSection;
+    Section                                                 overviewSection, experienceSection, educationSection;
     @UiField
-    HTMLPanel                 lgContainer, spContainer;
+    HTMLPanel                                               lgContainer, spContainer;
 
     @UiField
-    NavLink                   locContainer;
+    NavLink                                                 locContainer;
 
-    private final ClientUtils u = new ClientUtils();
+    private final ClientUtils                               u               = new ClientUtils();
+    private final EnumMap<LanguageLevel, ArrayList<String>> level2languages = new EnumMap<LanguageLevel, ArrayList<String>>(
+                                                                                    LanguageLevel.class);
+    private static final String                             trophy          = " <i class=\"icon-trophy\"></i> ";
+
+    private enum LanguageLevel {
+        // TODO PGU Sep 4, 2012 a completer les languages levels
+        native_or_bilingual(4) //
+        , full_professional(3) //
+        , professional_working(2) //
+        , unknown(0);
+
+        private int nbTrophies;
+
+        LanguageLevel(final int nbTrophies) {
+            this.nbTrophies = nbTrophies;
+        }
+
+        public int getNbTrophies() {
+            return nbTrophies;
+        }
+    }
 
     public ProfileViewImpl() {
 
@@ -63,43 +87,15 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
         initWidget(uiBinder.createAndBindUi(this));
 
-        // TODO PGU Sep 4, 2012 is this id still useful?
-        locContainer.getElement().setId("el_profile_location");
-
-        // http://www.linkedin.com/pub/pascal-guilcher/2/3b1/955
-        final String trophy = " <i class=\"icon-trophy\"></i> ";
-
-        final LinkedHashMap<String, Integer> lg2level = new LinkedHashMap<String, Integer>();
-        lg2level.put("French", 4);
-        lg2level.put("English", 3);
-        lg2level.put("Spanish", 3);
-        lg2level.put("German", 2);
-
-        for (final Entry<String, Integer> e : lg2level.entrySet()) {
-
-            final Column labelCol = new Column(3);
-            final Column levelCol = new Column(3);
-
-            labelCol.getElement().setInnerHTML(e.getKey());
-
-            final StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < e.getValue(); i++) {
-                sb.append(trophy);
-            }
-            levelCol.getElement().setInnerHTML(sb.toString());
-
-            final FluidRow row = new FluidRow();
-            row.add(labelCol);
-            row.add(levelCol);
-
-            lgContainer.add(row);
-        }
-
         summaryBasic.setTrigger(Trigger.MANUAL);
         summaryBasic.setAnimation(true);
         summaryBasic.setPlacement(Placement.LEFT);
         summaryBasic.setHeading("Summary");
 
+        // TODO PGU Sep 4, 2012 is this id still useful?
+        locContainer.getElement().setId("el_profile_location");
+
+        // http://www.linkedin.com/pub/pascal-guilcher/2/3b1/955
         exportMethod();
     }
 
@@ -174,6 +170,79 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         summaryBasic.setText(u.markdown(summary));
     }
 
+    private void clearPersonLanguages() {
+        lgContainer.clear();
+        level2languages.clear();
+    }
+
+    private void addPersonLanguage(final String languageName, final String languageLevel) {
+
+        final LanguageLevel level = getLanguageLevel(languageLevel);
+        addLanguageAndLevelToCache(languageName, level);
+    }
+
+    private void addLanguageAndLevelToCache(final String languageName, final LanguageLevel level) {
+        if (level2languages.containsKey(level)) {
+            level2languages.get(level).add(languageName);
+        } else {
+            final ArrayList<String> names = new ArrayList<String>();
+            names.add(languageName);
+            level2languages.put(level, names);
+        }
+    }
+
+    private LanguageLevel getLanguageLevel(final String languageLevel) {
+        try {
+            return LanguageLevel.valueOf(languageLevel);
+        } catch (final IllegalArgumentException e) {
+            return LanguageLevel.unknown;
+        }
+    }
+
+    private static final Comparator<String> LEXICO = new Comparator<String>() {
+
+                                                       @Override
+                                                       public int compare(final String s1, final String s2) {
+                                                           return s1.compareToIgnoreCase(s2);
+                                                       }
+
+                                                   };
+
+    private void showPersonLanguages() {
+
+        for (final Entry<LanguageLevel, ArrayList<String>> e : level2languages.entrySet()) {
+            final LanguageLevel level = e.getKey();
+            final ArrayList<String> names = e.getValue();
+
+            final int nbTrophies = level.getNbTrophies();
+            Collections.sort(names, LEXICO);
+
+            for (final String name : names) {
+                addLanguageRow(nbTrophies, name);
+            }
+        }
+    }
+
+    private void addLanguageRow(final int nbTrophies, final String name) {
+
+        final StringBuilder trophies = new StringBuilder();
+        for (int i = 0; i < nbTrophies; i++) {
+            trophies.append(trophy);
+        }
+
+        final Column labelCol = new Column(3);
+        final Column levelCol = new Column(3);
+
+        labelCol.getElement().setInnerHTML(name);
+        levelCol.getElement().setInnerHTML(trophies.toString());
+
+        final FluidRow row = new FluidRow();
+        row.add(labelCol);
+        row.add(levelCol);
+
+        lgContainer.add(row);
+    }
+
     private native void setProfile(ProfileViewImpl view, String profile, String itemId2locations) /*-{
 
 		var j_profile = JSON.parse(profile);
@@ -181,12 +250,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
 		////////////////////////
 		var //
-		first_name = j_profile.firstName //
-		, last_name = j_profile.lastName //
-		, headline = j_profile.headline //
-		, specialties = j_profile.specialties //
-		, location_name = "" //
-		, summary = j_profile.summary //
+		first_name = j_profile.firstName || '' //
+		, last_name = j_profile.lastName || '' //
+		, headline = j_profile.headline || '' //
+		, specialties = j_profile.specialties || '' //
+		, location_name = '' //
+		, summary = j_profile.summary || '' //
+		, languages = j_profile.languages || {} //
 		;
 
 		var profile_location = j_profile.location || {};
@@ -197,6 +267,20 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 		view.@pgu.client.profile.ui.ProfileViewImpl::setPersonSpecialties(Ljava/lang/String;)(specialties);
 		view.@pgu.client.profile.ui.ProfileViewImpl::setPersonLocation(Ljava/lang/String;)(location_name);
 		view.@pgu.client.profile.ui.ProfileViewImpl::setPersonSummary(Ljava/lang/String;)(summary);
+
+		view.@pgu.client.profile.ui.ProfileViewImpl::clearPersonLanguages()();
+		var language_values = languages.values || [];
+		for ( var i in language_values) {
+
+			var // 
+			language = language_values[i] //
+			, language_name = language.name || '' //
+			, language_proficiency = language.proficiency || {} //
+			, language_level = language_proficiency.level || '' //
+			;
+			view.@pgu.client.profile.ui.ProfileViewImpl::addPersonLanguage(Ljava/lang/String;Ljava/lang/String;)(language_name, language_level);
+		}
+		view.@pgu.client.profile.ui.ProfileViewImpl::showPersonLanguages()();
 
 		////////////////////////
 
