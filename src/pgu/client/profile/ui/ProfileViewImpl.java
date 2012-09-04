@@ -64,9 +64,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         locContainer.getElement().setId("el_profile_location");
 
         // http://www.linkedin.com/pub/pascal-guilcher/2/3b1/955
-        nameBasic.setText("Pascal Guilcher");
-        headlineBasic.setText("Senior Web Java J2EE Engineer Developer at SFEIR");
-
         final String trophy = " <i class=\"icon-trophy\"></i> ";
 
         final LinkedHashMap<String, Integer> lg2level = new LinkedHashMap<String, Integer>();
@@ -184,10 +181,23 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         }
     }
 
+    private void setPersonName(final String firstname, final String lastname) {
+        nameBasic.setText(firstname + " " + lastname);
+    }
+
+    private void setPersonHeadline(final String headline) {
+        headlineBasic.setText(headline);
+    }
+
     private native void setProfile(String profile, String itemId2locations) /*-{
 
 		var j_profile = JSON.parse(profile);
 		$wnd.cache_itemId2locations = JSON.parse(itemId2locations);
+
+		////////////////////////
+
+		view.@pgu.client.profile.ui.ProfileViewImpl::setPersonName(Ljava/lang/String;Ljava/lang/String;)(j_profile.firstName, j_profile.lastName);
+		view.@pgu.client.profile.ui.ProfileViewImpl::setPersonHeadline(Ljava/lang/String;)(j_profile.headline);
 
 		////////////////////////
 
