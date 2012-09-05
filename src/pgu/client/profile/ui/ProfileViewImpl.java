@@ -161,7 +161,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     private void setPersonSummary(final String summary) {
-        summaryBasic.setText(u.markdown(summary));
+        summaryBasic.getElement().getFirstChildElement().setAttribute("data-content", u.markdown(summary));
     }
 
     private void clearPersonLanguages() {
