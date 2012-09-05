@@ -85,11 +85,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
         initWidget(uiBinder.createAndBindUi(this));
 
-        // TODO PGU Sep 4, 2012 is this id still useful?
-        locContainer.getElement().setId("el_profile_location");
-        // TODO PGU Sep 4, 2012 how to present the public profile?
-        // http://www.linkedin.com/pub/pascal-guilcher/2/3b1/955
-
         exportMethod();
     }
 
