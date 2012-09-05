@@ -297,6 +297,9 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
     @Override
     public Profile fetchProfile(final AccessToken accessToken) {
 
+        // TODO PGU Sep 5, 2012 for an education or a position, we decorate them with a list of locations names
+        // as it is forbidden to store the latitude and longitude, they will be defined by the geocoder
+
         if (isTest) {
 
             // "item" can be either an education or a position
@@ -304,6 +307,8 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
 
             final String jsonProfile = profileTest();
             final LinkedinProfile javaProfile = new Gson().fromJson(jsonProfile, LinkedinProfile.class);
+
+            // TODO PGU Sep 5, 2012 get items by user id
 
             final Educations educations = javaProfile.getEducations();
             final EducationsWithLocation edsLoc = new EducationsWithLocation();
@@ -326,7 +331,6 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
             final Profile profile = new Profile();
             profile.setJson(jsonProfile);
             profile.setItemId2locations(new Gson().toJson(itemId2locations));
-            profile.setLocation(javaProfile.getLocation());
             return profile;
 
         }
@@ -445,6 +449,19 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
 
     @Override
     public void saveLocations(final String userId, final String locations) {
+        // what will we be stocking?
+        //
+        // user#id: json profile
+        // ____-> profile document // async
+        //
+        // decoration: json: map<item_id, location names>
+        // ____-> locations document
+        //
+        // profile document: user_id, profile (json)
+        // locations document: user_id, locations (json)
+        //
+        // TODO PGU Sep 5, 2012 test fulltext on json
+
         // TODO PGU Aug 29, 2012 missing userId
         log.info(this, "user[%s]\n%s", userId, locations);
     }

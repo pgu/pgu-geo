@@ -98,4 +98,9 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         u.removeLocationFromItem(event.getItemId(), event.getDeletedItemLocation());
     }
 
+    @Override
+    public void setProfileId(final String id) {
+        clientFactory.getAppState().setUserId(id);
+    }
+
 }

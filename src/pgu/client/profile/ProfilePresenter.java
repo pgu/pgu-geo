@@ -10,4 +10,6 @@ public interface ProfilePresenter {
 
     void showLocationOnMap(ItemLocation itemLocation);
 
+    void setProfileId(String id);
+
 }

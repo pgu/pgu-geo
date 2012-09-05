@@ -131,15 +131,15 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         setProfile(this, profile.getJson(), profile.getItemId2locations());
     }
 
-    private void setPersonName(final String firstname, final String lastname) {
+    private void setProfileName(final String firstname, final String lastname) {
         nameBasic.setText(firstname + " " + lastname);
     }
 
-    private void setPersonHeadline(final String headline) {
+    private void setProfileHeadline(final String headline) {
         headlineBasic.setText(headline);
     }
 
-    private void setPersonSpecialties(final String specialtiesLabel) {
+    private void setProfileSpecialties(final String specialtiesLabel) {
         for (final String specialty : specialtiesLabel.split(", ")) {
 
             if (u.isVoid(specialty)) {
@@ -150,20 +150,20 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         }
     }
 
-    private void setPersonLocation(final String locationName) {
+    private void setProfileLocation(final String locationName) {
         locContainer.setText(u.isVoid(locationName) ? "" : locationName);
     }
 
-    private void setPersonSummary(final String summary) {
+    private void setProfileSummary(final String summary) {
         summaryBasic.getElement().getFirstChildElement().setAttribute("data-content", u.markdown(summary));
     }
 
-    private void clearPersonLanguages() {
+    private void clearProfileLanguages() {
         lgContainer.clear();
         level2languages.clear();
     }
 
-    private void addPersonLanguage(final String languageName, final String languageLevel) {
+    private void addProfileLanguage(final String languageName, final String languageLevel) {
 
         final LanguageLevel level = getLanguageLevel(languageLevel);
         addLanguageAndLevelToCache(languageName, level);
@@ -196,7 +196,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
                                                    };
 
-    private void showPersonLanguages() {
+    private void showProfileLanguages() {
 
         for (final Entry<LanguageLevel, ArrayList<String>> e : level2languages.entrySet()) {
             final LanguageLevel level = e.getKey();
@@ -231,6 +231,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         lgContainer.add(row);
     }
 
+    private void setProfileId(final String id) {
+        presenter.setProfileId(id);
+    }
+
     private native void setProfile(ProfileViewImpl view, String profile, String itemId2locations) /*-{
 
 		var j_profile = JSON.parse(profile);
@@ -238,7 +242,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
 		////////////////////////
 		var //
-		first_name = j_profile.firstName || '' //
+		profile_id = j_profile.id || '' //
+		, first_name = j_profile.firstName || '' //
 		, last_name = j_profile.lastName || '' //
 		, headline = j_profile.headline || '' //
 		, specialties = j_profile.specialties || '' //
@@ -250,13 +255,14 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 		var profile_location = j_profile.location || {};
 		location_name = profile_location.name;
 
-		view.@pgu.client.profile.ui.ProfileViewImpl::setPersonName(Ljava/lang/String;Ljava/lang/String;)(first_name, last_name);
-		view.@pgu.client.profile.ui.ProfileViewImpl::setPersonHeadline(Ljava/lang/String;)(headline);
-		view.@pgu.client.profile.ui.ProfileViewImpl::setPersonSpecialties(Ljava/lang/String;)(specialties);
-		view.@pgu.client.profile.ui.ProfileViewImpl::setPersonLocation(Ljava/lang/String;)(location_name);
-		view.@pgu.client.profile.ui.ProfileViewImpl::setPersonSummary(Ljava/lang/String;)(summary);
+		view.@pgu.client.profile.ui.ProfileViewImpl::setProfileId(Ljava/lang/String;)(profile_id);
+		view.@pgu.client.profile.ui.ProfileViewImpl::setProfileName(Ljava/lang/String;Ljava/lang/String;)(first_name, last_name);
+		view.@pgu.client.profile.ui.ProfileViewImpl::setProfileHeadline(Ljava/lang/String;)(headline);
+		view.@pgu.client.profile.ui.ProfileViewImpl::setProfileSpecialties(Ljava/lang/String;)(specialties);
+		view.@pgu.client.profile.ui.ProfileViewImpl::setProfileLocation(Ljava/lang/String;)(location_name);
+		view.@pgu.client.profile.ui.ProfileViewImpl::setProfileSummary(Ljava/lang/String;)(summary);
 
-		view.@pgu.client.profile.ui.ProfileViewImpl::clearPersonLanguages()();
+		view.@pgu.client.profile.ui.ProfileViewImpl::clearProfileLanguages()();
 		var language_values = languages.values || [];
 		for ( var i in language_values) {
 
@@ -269,9 +275,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 			, language_proficiency = language_value.proficiency || {} //
 			, language_level = language_proficiency.level || '' //
 			;
-			view.@pgu.client.profile.ui.ProfileViewImpl::addPersonLanguage(Ljava/lang/String;Ljava/lang/String;)(language_name, language_level);
+			view.@pgu.client.profile.ui.ProfileViewImpl::addProfileLanguage(Ljava/lang/String;Ljava/lang/String;)(language_name, language_level);
 		}
-		view.@pgu.client.profile.ui.ProfileViewImpl::showPersonLanguages()();
+		view.@pgu.client.profile.ui.ProfileViewImpl::showProfileLanguages()();
 
 		////////////////////////
 

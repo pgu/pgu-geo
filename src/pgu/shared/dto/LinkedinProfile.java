@@ -4,7 +4,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class LinkedinProfile implements IsSerializable {
 
-    private Location   location;
+    private String     id;
     private Educations educations;
     private Positions  positions;
 
@@ -24,12 +24,12 @@ public class LinkedinProfile implements IsSerializable {
         this.positions = positions;
     }
 
-    public Location getLocation() {
-        return location;
+    public String getId() {
+        return id;
     }
 
-    public void setLocation(final Location location) {
-        this.location = location;
+    public void setId(final String id) {
+        this.id = id;
     }
 
 }
