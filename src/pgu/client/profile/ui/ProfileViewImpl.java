@@ -128,7 +128,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     @Override
     public void setProfile(final Profile profile) {
-
         setProfile(this, profile.getJson(), profile.getItemId2locations());
     }
 
