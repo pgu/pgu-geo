@@ -44,6 +44,14 @@ import pgu.shared.dto.Person;
 import pgu.shared.dto.Profile;
 import pgu.shared.dto.RequestToken;
 
+import com.google.appengine.api.search.Document;
+import com.google.appengine.api.search.Field;
+import com.google.appengine.api.search.Index;
+import com.google.appengine.api.search.IndexSpec;
+import com.google.appengine.api.search.QueryOptions;
+import com.google.appengine.api.search.Results;
+import com.google.appengine.api.search.ScoredDocument;
+import com.google.appengine.api.search.SearchServiceFactory;
 import com.google.gson.Gson;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -447,6 +455,16 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         return sb.toString();
     }
 
+    private Index locationsIdx;
+
+    private Index getLocationsIdx() {
+        if (locationsIdx == null) {
+            locationsIdx = SearchServiceFactory.getSearchService().getIndex(
+                    IndexSpec.newBuilder().setName("locations_index"));
+        }
+        return locationsIdx;
+    }
+
     @Override
     public void saveLocations(final String userId, final String locations) {
         // what will we be stocking?
@@ -457,12 +475,51 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         // decoration: json: map<item_id, location names>
         // ____-> locations document
         //
-        // profile document: user_id, profile (json)
+        // public profile document: user_id, profile (json)
         // locations document: user_id, locations (json)
         //
-        // TODO PGU Sep 5, 2012 test fulltext on json
 
-        // TODO PGU Aug 29, 2012 missing userId
         log.info(this, "user[%s]\n%s", userId, locations);
+
+        final QueryOptions mainQueryOptions = QueryOptions.newBuilder() //
+                .setReturningIdsOnly(true) //
+                .build();
+
+        final com.google.appengine.api.search.Query userLocations = com.google.appengine.api.search.Query.newBuilder() //
+                .setOptions(mainQueryOptions) //
+                .build("user_id:" + userId);
+
+        final Results<ScoredDocument> docs = getLocationsIdx().search(userLocations);
+
+        final int nbResults = docs.getResults().size();
+        if (nbResults > 1) {
+            final UnsupportedOperationException e = new UnsupportedOperationException( //
+                    String.format( //
+                            "Only one document should have been found for the user [%s] and we've found [%s]" //
+                            , userId //
+                            , nbResults //
+                    ));
+            log.error(this, e);
+            throw e;
+
+        }
+
+        if (nbResults == 1) {
+            final ScoredDocument doc = docs.getResults().iterator().next();
+            getLocationsIdx().removeAsync(doc.getId());
+        }
+
+        final Document.Builder docBuilder = Document.newBuilder();
+        docBuilder.addField(Field.newBuilder().setName("user_id").setText(userId));
+        docBuilder.addField(Field.newBuilder().setName("locations").setText(locations));
+        getLocationsIdx().add(docBuilder.build());
+
+        //
+        //
+        //
+        //
+
+        // TODO PGU geopoints https://developers.google.com/appengine/docs/java/search/overview
+
     }
 }
