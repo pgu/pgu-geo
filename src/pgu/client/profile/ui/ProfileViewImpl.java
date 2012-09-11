@@ -60,11 +60,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     private static final String                             trophy          = " <i class=\"icon-trophy\"></i> ";
 
     private enum LanguageLevel {
-        // TODO PGU Sep 4, 2012 a completer les languages levels
         native_or_bilingual(4) //
         , full_professional(3) //
         , professional_working(2) //
-        , unknown(0);
+        , limited_working(1) //
+        , elementary(0) //
+        ;
 
         private int nbTrophies;
 
@@ -182,8 +183,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     private LanguageLevel getLanguageLevel(final String languageLevel) {
         try {
             return LanguageLevel.valueOf(languageLevel);
+
         } catch (final IllegalArgumentException e) {
-            return LanguageLevel.unknown;
+            return LanguageLevel.elementary;
         }
     }
 
