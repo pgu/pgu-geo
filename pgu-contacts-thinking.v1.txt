@@ -1,0 +1,58 @@
+// write: enables async constructs for "read" operations and geolocalization search
+
+user locations: 
+{"userId":"123456",
+ [{"itemId":"888888","locations":["Paris","London","Berlin"]}
+ ,{"itemId":"999999","locations":["London"]}]}
+&&
+user locations referentiel:
+{"userId":"123456",
+ [{"name":"Paris", "lat":1.2354, "lng":4.5687}
+ ,{"name":"London", "lat":2.2354, "lng":3.5687}
+ ,{"name":"Berlin", "lat":3.2354, "lng":2.5687}]}
+
+-> in DB: c'est déjà bien structuré en json, pas besoin de recréer un schema DB
+userId:"123456";item2locations:"json string";location2geopoints:"json string";
+
+-> then in async:
+
+1.1) for each locations through profile/experiences/education, do
+       create a document with user_id,item_id,item_type,item_location
+     thus, we can make geolocalized search on it.
+
+1.2) prepare the read version: in DB: (it could be in the same table, just another field)
+     user_id: for each item, for each location, associate the geopoint
+     DB: "user_id", "items_with_locations_with_geopoints"
+
+1.3) prepare the read version of the public profile
+
+// read: objective: fast => all the information is ready
+
+A) if profile from linkedin, async:save profile json in a document
+"user_id","json_profile": this will enable search on its profile
+
+B) pour un profile donné, il y a peu de locations, so let's get it with geopoints
+DB: "user_id", "items_with_locations_with_geopoints"
+{"user_id": "98989898",
+ [ {"item_id":"111",
+    [{"name":"Paris", "lat":1.2354, "lng":4.5687}
+    ,{"name":"London", "lat":2.2354, "lng":3.5687}
+    ,{"name":"Berlin", "lat":3.2354, "lng":2.5687}]}
+  ,{"item_id":"222",
+    [{"name":"Paris", "lat":1.2354, "lng":4.5687}]}
+ ]
+}
+
+C) read profile:
+from linkedin or from index: {"id":"123456",...}
+
+///////////////// search
+recherche de profils around one point: geolocalization search
+- had an experience
+- currently around there
+- has this location as a wish
+
+recherche de jobs around one point: geolocalization search
+
+
+

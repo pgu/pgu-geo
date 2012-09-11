@@ -1,0 +1,42 @@
+============ READ ============
+A) First login:
+
+-> fetch profile from linkedin
+-> async: save profile in index: [user_id,json_profile,date?]
+----> in the UI, the locations will be associated with geopoints by the geocoder
+
+A') Existing login:
+
+-> fetch profile from index
+-> fetch user locations referential from DB: [user_id,item_id_to_locations,json_locations_referential]
+----> in the UI, the locations will be associated with geopoints from the referential and from the geocoder when no geopoint is present in the referential
+
+B) Existing login and refresh from linkedin:
+-> fetch profile from linkedin
+-> async: save profile in index: [user_id,json_profile,date?]
+-> fetch user locations referential from DB: [user_id,item_id_to_locations,json_locations_referential]
+----> in the UI, the locations will be associated with geopoints from the referential and from the geocoder when no geopoint is present in the referential
+
+C) Public profile:
+-> fetch profile from index
+-> fetch user locations referential from DB: [user_id,item_id_to_locations,json_locations_referential]
+----> in the UI, the locations will be associated with geopoints from the referential and from the geocoder when no geopoint is present in the referential
+
+============ WRITE ============
+Input: user_id, item_id_to_locations, location_to_geopoint
+-> save in DB [user_id,item_id_to_locations,json_locations_referential]
+-> async: build documents for search: from document "profile" and DB locations
+
+============ SEARCH ============
+Normal search:
+A) profiles with any keyword for anything in their profile
+
+Geolocalization search: 
+Z) profiles with any keyword for anything in their profile with a list of geopoints, ex: java with an experience in Paris
+A) profiles with experience around one location: [user_id,type=experience,json_experience,geopoint]
+B) profiles with education around one location: [user_id,type=education,json_education,geopoint]
+C) profiles currently around one location: [user_id,type=current_location,geopoint]
+D) profiles with wish locations around one location: [user_id,type=wish_location,geopoint]
+E,F,..) profiles with ../keywords/or other bloc from linkedin/holiday/.. around one location: [user_id,type=other_bloc,value,geopoint]
+NOTES: These records can be used for normal search by fields
+
