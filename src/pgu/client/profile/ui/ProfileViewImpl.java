@@ -11,6 +11,7 @@ import pgu.client.profile.ProfilePresenter;
 import pgu.client.profile.ProfileView;
 import pgu.shared.dto.ItemLocation;
 import pgu.shared.dto.Profile;
+import pgu.shared.model.UserAndLocations;
 
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.Column;
@@ -129,7 +130,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     @Override
     public void setProfile(final Profile profile) {
-        setProfile(this, profile.getJson(), profile.getItemId2locations());
+        final UserAndLocations userAndLocations = profile.getUserAndLocations();
+        u.initCacheItems2Locations(userAndLocations.getItems2locations());
+        u.initCacheReferentialLocations(userAndLocations.getReferentialLocations());
+
+        setProfile(this, profile.getJson());
     }
 
     private void setProfileName(final String firstname, final String lastname) {
@@ -237,10 +242,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         presenter.setProfileId(id);
     }
 
-    private native void setProfile(ProfileViewImpl view, String profile, String itemId2locations) /*-{
+    private native void setProfile(ProfileViewImpl view, String profile) /*-{
 
 		var j_profile = JSON.parse(profile);
-		$wnd.cache_itemId2locations = JSON.parse(itemId2locations);
 
 		////////////////////////
 		var //
@@ -283,16 +287,16 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
 		////////////////////////
 
-		$doc.getElementById('profile:xp_table').innerHTML = //
-		$wnd.createTable( //
+		$doc.getElementById('pgu_geo.profile:xp_table').innerHTML = //
+		$wnd.pgu_geo.createTable( //
 		'xp' //
 		, j_profile.positions //
 		, 'No experience has been found');
 
 		////////////////////////
 
-		$doc.getElementById('profile:edu_table').innerHTML = //
-		$wnd.createTable( //
+		$doc.getElementById('pgu_geo.profile:edu_table').innerHTML = //
+		$wnd.pgu_geo.createTable( //
 		'edu' //
 		, j_profile.educations //
 		, 'No education has been found');

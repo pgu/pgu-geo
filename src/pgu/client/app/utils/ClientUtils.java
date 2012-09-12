@@ -19,15 +19,15 @@ public class ClientUtils {
     }
 
     private static native void initAppContext() /*-{
-		$wnd.geocv = {};
+		$wnd.pgu_geo = {};
     }-*/;
 
     private static native void initShowdownConverter() /*-{
-		$wnd.geocv.showdown_converter = new $wnd.Showdown.converter();
+		$wnd.pgu_geo.showdown_converter = new $wnd.Showdown.converter();
     }-*/;
 
     public native String markdown(String text) /*-{
-		return $wnd.geocv.showdown_converter.makeHtml(text || '');
+		return $wnd.pgu_geo.showdown_converter.makeHtml(text || '');
     }-*/;
 
     public void info(final String message) {
@@ -228,5 +228,14 @@ public class ClientUtils {
         notification.setLevel(pgu.client.app.utils.Level.SUCCESS);
         notification.show();
     }
+
+    public native void initCacheItems2Locations(final String items2locations) /*-{
+		$wnd.pgu_geo.cache_items2locations = JSON.parse(items2locations);
+    }-*/;
+
+    public native void initCacheReferentialLocations(final String referentialLocations) /*-{
+		$wnd.pgu_geo.cache_referentialLocations = JSON
+				.parse(referentialLocations);
+    }-*/;
 
 }

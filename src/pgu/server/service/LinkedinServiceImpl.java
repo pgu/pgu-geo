@@ -25,15 +25,12 @@ import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
 import pgu.client.service.LinkedinService;
+import pgu.server.access.DAO;
 import pgu.server.app.AppLog;
 import pgu.server.utils.AppUtils;
 import pgu.shared.dto.AccessToken;
 import pgu.shared.dto.Connections;
 import pgu.shared.dto.Country;
-import pgu.shared.dto.Education;
-import pgu.shared.dto.EducationWithLocation;
-import pgu.shared.dto.Educations;
-import pgu.shared.dto.EducationsWithLocation;
 import pgu.shared.dto.ItemLocation;
 import pgu.shared.dto.ItemWithLocation;
 import pgu.shared.dto.ItemsWithLocation;
@@ -43,6 +40,7 @@ import pgu.shared.dto.OauthAuthorizationStart;
 import pgu.shared.dto.Person;
 import pgu.shared.dto.Profile;
 import pgu.shared.dto.RequestToken;
+import pgu.shared.model.UserAndLocations;
 
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Field;
@@ -66,6 +64,7 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
 
     private final AppUtils      u               = new AppUtils();
     private final AppLog        log             = new AppLog();
+    private final DAO           dao             = new DAO();
 
     private OAuthService        oauthService    = null;
 
@@ -306,39 +305,40 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
     public Profile fetchProfile(final AccessToken accessToken) {
 
         // TODO PGU Sep 5, 2012 for an education or a position, we decorate them with a list of locations names
-        // as it is forbidden to store the latitude and longitude, they will be defined by the geocoder
 
         if (isTest) {
 
             // "item" can be either an education or a position
-            final HashMap<String, ArrayList<ItemLocation>> itemId2locations = new HashMap<String, ArrayList<ItemLocation>>();
+            // final HashMap<String, ArrayList<ItemLocation>> itemId2locations = new HashMap<String,
+            // ArrayList<ItemLocation>>();
+
+            // final Educations educations = javaProfile.getEducations();
+            // final EducationsWithLocation edsLoc = new EducationsWithLocation();
+            //
+            // for (final Education ed : educations.getValues()) {
+            //
+            // final EducationWithLocation edLoc = new EducationWithLocation(ed);
+            //
+            // final String locationName = educationId2location.get(ed.getId());
+            // if (!u.isVoid(locationName)) {
+            // edLoc.getLocation().setName(locationName);
+            // }
+            //
+            // edsLoc.getValues().add(edLoc);
+            // }
+            //
+            // fillItemId2locations(javaProfile.getPositions(), itemId2locations);
+            // fillItemId2locations(edsLoc, itemId2locations);
+            //
+            // profile.setItemId2locations(new Gson().toJson(itemId2locations));
 
             final String jsonProfile = profileTest();
             final LinkedinProfile javaProfile = new Gson().fromJson(jsonProfile, LinkedinProfile.class);
-
-            // TODO PGU Sep 5, 2012 get items by user id
-
-            final Educations educations = javaProfile.getEducations();
-            final EducationsWithLocation edsLoc = new EducationsWithLocation();
-
-            for (final Education ed : educations.getValues()) {
-
-                final EducationWithLocation edLoc = new EducationWithLocation(ed);
-
-                final String locationName = educationId2location.get(ed.getId());
-                if (!u.isVoid(locationName)) {
-                    edLoc.getLocation().setName(locationName);
-                }
-
-                edsLoc.getValues().add(edLoc);
-            }
-
-            fillItemId2locations(javaProfile.getPositions(), itemId2locations);
-            fillItemId2locations(edsLoc, itemId2locations);
+            final UserAndLocations userAndLocations = dao.ofy().find(UserAndLocations.class, javaProfile.getId());
 
             final Profile profile = new Profile();
             profile.setJson(jsonProfile);
-            profile.setItemId2locations(new Gson().toJson(itemId2locations));
+            profile.setUserAndLocations(userAndLocations);
             return profile;
 
         }
@@ -455,6 +455,31 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         return sb.toString();
     }
 
+    @Override
+    public void saveLocations(final String userId, final String items2locations, final String referentialLocations) {
+        log.info(this, "(\nuser[%s]\n%s\n\n%s\n)", userId, items2locations, referentialLocations);
+
+        final UserAndLocations userAndLocations = getCurrentUserAndLocations(userId);
+
+        userAndLocations.setItems2locations(items2locations);
+        userAndLocations.setReferentialLocations(referentialLocations);
+        dao.ofy().put(userAndLocations);
+
+        // TODO PGU Sep 12, 2012 async: complete document profile with locations
+    }
+
+    private UserAndLocations getCurrentUserAndLocations(final String userId) {
+
+        final UserAndLocations existingUserAndLocations = dao.ofy().find(UserAndLocations.class, userId);
+        if (existingUserAndLocations != null) {
+            return existingUserAndLocations;
+        }
+
+        final UserAndLocations userAndLocations = new UserAndLocations();
+        userAndLocations.setUserId(userId);
+        return userAndLocations;
+    }
+
     private Index locationsIdx;
 
     private Index getLocationsIdx() {
@@ -465,22 +490,7 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         return locationsIdx;
     }
 
-    @Override
-    public void saveLocations(final String userId, final String locations) {
-        // what will we be stocking?
-        //
-        // user#id: json profile
-        // ____-> profile document // async
-        //
-        // decoration: json: map<item_id, location names>
-        // ____-> locations document
-        //
-        // public profile document: user_id, profile (json)
-        // locations document: user_id, locations (json)
-        //
-
-        log.info(this, "user[%s]\n%s", userId, locations);
-
+    private void backup(final String userId, final String locations) {
         final QueryOptions mainQueryOptions = QueryOptions.newBuilder() //
                 .setReturningIdsOnly(true) //
                 .build();

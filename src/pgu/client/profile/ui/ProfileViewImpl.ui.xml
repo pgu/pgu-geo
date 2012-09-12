@@ -57,7 +57,7 @@
             </g:HTMLPanel>
             <g:HTMLPanel addStyleNames="row-fluid">
                 <div class="span12">
-                    <div id="profile:xp_table">
+                    <div id="pgu_geo.profile:xp_table">
                     </div>
                 </div>
             </g:HTMLPanel>
@@ -73,7 +73,7 @@
             </g:HTMLPanel>
             <g:HTMLPanel addStyleNames="row-fluid">
                 <div class="span12">
-                    <div id="profile:edu_table">
+                    <div id="pgu_geo.profile:edu_table">
                     </div>
                 </div>
             </g:HTMLPanel>

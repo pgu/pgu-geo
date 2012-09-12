@@ -20,5 +20,6 @@ public interface LinkedinServiceAsync {
 
     void getAccessToken(String oauthCode, RequestToken requestToken, AsyncCallback<AccessToken> callbackApp);
 
-    void saveLocations(String userId, String locations, AsyncCallback<Void> callbackApp);
+    void saveLocations(String userId, final String items2locations, final String referentialLocations,
+            AsyncCallback<Void> callbackApp);
 }
