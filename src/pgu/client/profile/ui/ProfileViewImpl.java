@@ -94,12 +94,23 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     private static ProfilePresenter staticPresenter = null;
 
-    public native static void exportMethod() /*-{
-		$wnd.addNewLocation = $entry(@pgu.client.profile.ui.ProfileViewImpl::addNewLocation(Ljava/lang/String;));
-		$wnd.editLocation = $entry(@pgu.client.profile.ui.ProfileViewImpl::editLocation(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;));
+    public native void exportMethod() /*-{
+          $wnd.pgu_geo.addNewLocation = $entry(@pgu.client.profile.ui.ProfileViewImpl::addNewLocation(Ljava/lang/String;));
+          $wnd.pgu_geo.editLocation = $entry(@pgu.client.profile.ui.ProfileViewImpl::editLocation(Ljava/lang/String;Ljava/lang/String;));
     }-*/;
 
-    public static void editLocation(final String itemId, final String locName, final String locLat, final String locLng) {
+    public static native void editLocation(final String item_id, final String location_name) /*-{
+		var geopoint = $wnd.pgu_geo.cache_referentialLocations[location_name];
+		if (geopoint == undefined) {
+			return;
+		}
+
+		@pgu.client.profile.ui.ProfileViewImpl::editItemLocation(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(item_id, location_name, geopoint.lat, geopoint.lng);
+    }-*/;
+
+    public static void editItemLocation(final String itemId, final String locName, final String locLat,
+            final String locLng) {
+
         staticPresenter.editLocation(itemId, locName, locLat, locLng);
     }
 
@@ -287,22 +298,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 		}
 		view.@pgu.client.profile.ui.ProfileViewImpl::showProfileLanguages()();
 
-		////////////////////////
-
-		//		$doc.getElementById('pgu_geo.profile:xp_table').innerHTML = //
-		//		$wnd.pgu_geo.createTable( //
-		//		'xp' //
-		//		, j_profile.positions //
-		//		, 'No experience has been found');
-
-		////////////////////////
-
-		//		$doc.getElementById('pgu_geo.profile:edu_table').innerHTML = //
-		//		$wnd.pgu_geo.createTable( //
-		//		'edu' //
-		//		, j_profile.educations //
-		//		, 'No education has been found');
-
 		var positions = j_profile.positions;
 		$doc.getElementById('pgu_geo.profile:xp_table').innerHTML = //
 		view.@pgu.client.profile.ui.ProfileViewImpl::createExperienceTable(Lcom/google/gwt/core/client/JavaScriptObject;)(positions);
@@ -310,6 +305,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 		var educations = j_profile.educations;
 		$doc.getElementById('pgu_geo.profile:edu_table').innerHTML = //
 		view.@pgu.client.profile.ui.ProfileViewImpl::createEducationTable(Lcom/google/gwt/core/client/JavaScriptObject;)(educations);
+
     }-*/;
 
     public String createExperienceTable(final JavaScriptObject jsonExperiences) {
@@ -320,8 +316,125 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         return createTable(ItemType.education, jsonEducations, "No education has been found");
     }
 
-    private native String createTable(String prefix, JavaScriptObject jsonItems, String messageNothing) /*-{
-		// TODO PGU
-		return '';
+    private native String createTable(String type, JavaScriptObject json_items, String empty_message) /*-{
+
+		var items = json_items || {};
+		if (items.values) {
+
+			var values = items.values;
+			var table = [];
+
+			var tableHead = @pgu.client.profile.ui.ProfileViewImpl::createTableHead(Ljava/lang/String;)(type);
+			table.push(tableHead);
+
+			for ( var i in values) {
+				var tableRow = @pgu.client.profile.ui.ProfileViewImpl::createTableRow(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;)(type, values[i]);
+				table.push(tableRow);
+			}
+
+			var tableFoot = @pgu.client.profile.ui.ProfileViewImpl::createTableFoot()();
+			table.push(tableFoot);
+
+			@pgu.client.profile.ui.ProfileViewImpl::sortItemConfigsByDate()();
+
+			return table.join('');
+
+		} else {
+			return empty_message;
+		}
+
     }-*/;
+
+    public static boolean isEdu(final String itemType) {
+        return ItemType.education.equals(itemType);
+    }
+
+    public static boolean isXp(final String itemType) {
+        return ItemType.experience.equals(itemType);
+    }
+
+    public static native String createTableHead(final String type) /*-{
+		var title = '';
+
+		if (@pgu.client.profile.ui.ProfileViewImpl::isEdu(Ljava/lang/String;)(type)) {
+			title = 'Education';
+
+		} else if (@pgu.client.profile.ui.ProfileViewImpl::isXp(Ljava/lang/String;)(type)) {
+			title = 'Position';
+
+		}
+
+		return '' + '<table class="table table-bordered table-striped"> '
+				+ '   <thead>                                         '
+				+ '      <tr>                                         '
+				+ '          <th>Locations</th>                        '
+				+ '          <th>Dates</th>                           '
+				+ '          <th>' + title + '</th>                   '
+				+ '          <th></th>                                '
+				+ '      </tr>                                        '
+				+ '  </thead>                                         '
+				+ '  <tbody>                                          ' + '';
+
+    }-*/;
+
+    public static native String createTableFoot() /*-{
+		return '' + //
+		'  </tbody>                                        ' + //
+		'</table>                                          ' + //
+		'';
+
+    }-*/;
+
+    public static native String createTableRow(final String type, final JavaScriptObject item) /*-{
+		var rowConfig = {};
+		rowConfig.id = item.id;
+		rowConfig.locations = @pgu.client.profile.ui.ProfileViewImpl::createListLocations(Ljava/lang/String;Ljava/lang/String;)(type,item.id);
+		//		rowConfig.dates = labelDates(item);
+		// TODO PGU...
+
+    }-*/;
+
+    public static native String createListLocations(String type, String item_id) /*-{
+		var itemLocations = @pgu.client.app.utils.ClientUtils::getLocationsForItem(Ljava/lang/String;Ljava/lang/String;)(type, item_id);
+
+		var list = [];
+
+		for ( var i in itemLocations) {
+			var itemLocation = itemLocations[i];
+
+			var anchor_id = "loc_" + item_id + "_" + i;
+
+			var el = '' + //
+			'      <li class="locationLi">          ' + //
+			'        <a id="' + anchor_id + '"      ' + //
+			'           href="javascript:;"         ' + //
+			'           onclick="javascript:' + //
+			'pgu_geo.editLocation(\'' + item_id + '\', \'' + itemLocation.name
+					+ '\');' + //
+					'return false;"' + //
+					' >                             ' + //
+					itemLocation.name + //
+					'        </a>                           ' + //
+					'      </li>                            ' + //
+					'';
+
+			list.push(el);
+
+			if (!(itemLocation.lat && itemLocation.lng)) {
+
+				setTimeout(function() {
+					searchLatLng(itemLocation, anchor_id);
+				}, delay_to_call_geocoder);
+				delay_to_call_geocoder += 500;
+
+			} else {
+
+				updateCache_name2itemLocation(itemLocation);
+			}
+
+		}
+
+		return list.join('');
+    }-*/;
+
 }

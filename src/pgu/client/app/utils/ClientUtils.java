@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import pgu.shared.dto.ItemLocation;
 
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.logging.client.LogConfiguration;
@@ -229,13 +230,40 @@ public class ClientUtils {
         notification.show();
     }
 
+    // {"education,1":["Paris","Nantes"],"experience,1":["Madrid"]}
     public native void initCacheItems2Locations(final String items2locations) /*-{
 		$wnd.pgu_geo.cache_items2locations = JSON.parse(items2locations);
     }-*/;
 
+    // {"Paris":{"lat":1.2323,"lng":4.5555},"Nantes":{"lat":9.99,"lng":2.22}]
     public native void initCacheReferentialLocations(final String referentialLocations) /*-{
 		$wnd.pgu_geo.cache_referentialLocations = JSON
 				.parse(referentialLocations);
+    }-*/;
+
+    public static native JavaScriptObject getLocationsForItem(String type, String itemId) /*-{
+		var itemLocations = [];
+
+		var fullId = type + ',' + itemId;
+		var locationNames = $wnd.pgu_geo.cache_items2locations[fullId];
+
+		for ( var i in locationNames) {
+
+			var locationName = locationNames[i];
+			var geopoint = $wnd.pgu_geo.cache_referentialLocations[locationName];
+
+			var itemLocation = {};
+			itemLocation.name = locationName;
+
+			if (geopoint) {
+				itemLocation.lat = geopoint.lat;
+				itemLocation.lng = geopoint.lng;
+			}
+
+			itemLocations.push(itemLocation);
+		}
+
+		return itemLocations;
     }-*/;
 
 }
