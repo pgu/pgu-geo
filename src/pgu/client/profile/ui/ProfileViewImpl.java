@@ -24,10 +24,13 @@ import com.github.gwtbootstrap.client.ui.Popover;
 import com.github.gwtbootstrap.client.ui.Section;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -92,7 +95,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         exportMethod();
     }
 
-    private static ProfilePresenter staticPresenter = null;
+    private static ProfilePresenter staticPresenter;
 
     public native void exportMethod() /*-{
           $wnd.pgu_geo.addNewLocation = $entry(@pgu.client.profile.ui.ProfileViewImpl::addNewLocation(Ljava/lang/String;));
@@ -146,6 +149,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         final UserAndLocations userAndLocations = profile.getUserAndLocations();
         u.initCacheItems2Locations(userAndLocations.getItems2locations());
         u.initCacheReferentialLocations(userAndLocations.getReferentialLocations());
+        initCacheLocation2AnchorIds();
 
         setProfile(this, profile.getJson());
     }
@@ -298,6 +302,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 		}
 		view.@pgu.client.profile.ui.ProfileViewImpl::showProfileLanguages()();
 
+		$wnd.pgu_geo.delay_to_call_geocoder = 3000;
+
 		var positions = j_profile.positions;
 		$doc.getElementById('pgu_geo.profile:xp_table').innerHTML = //
 		view.@pgu.client.profile.ui.ProfileViewImpl::createExperienceTable(Lcom/google/gwt/core/client/JavaScriptObject;)(positions);
@@ -305,6 +311,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 		var educations = j_profile.educations;
 		$doc.getElementById('pgu_geo.profile:edu_table').innerHTML = //
 		view.@pgu.client.profile.ui.ProfileViewImpl::createEducationTable(Lcom/google/gwt/core/client/JavaScriptObject;)(educations);
+
+		// TODO refresh css anchors according to locations found or not
 
     }-*/;
 
@@ -395,46 +403,133 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }-*/;
 
     public static native String createListLocations(String type, String item_id) /*-{
-		var itemLocations = @pgu.client.app.utils.ClientUtils::getLocationsForItem(Ljava/lang/String;Ljava/lang/String;)(type, item_id);
+		var location_names = @pgu.client.app.utils.ClientUtils::getLocationNamesForItem(Ljava/lang/String;Ljava/lang/String;)(type, item_id);
 
 		var list = [];
 
-		for ( var i in itemLocations) {
-			var itemLocation = itemLocations[i];
+		for ( var i in location_names) {
 
+			var location_name = location_names[i];
 			var anchor_id = "loc_" + item_id + "_" + i;
+
+			var anchor_ids = $wnd.pgu_geo.cache_location2anchorIds[location_name]
+					|| [];
+			anchor_ids.push(anchor_id);
+			$wnd.pgu_geo.cache_location2anchorIds[location_name] = anchor_ids;
 
 			var el = '' + //
 			'      <li class="locationLi">          ' + //
 			'        <a id="' + anchor_id + '"      ' + //
 			'           href="javascript:;"         ' + //
 			'           onclick="javascript:' + //
-			'pgu_geo.editLocation(\'' + item_id + '\', \'' + itemLocation.name
+			'pgu_geo.editLocation(\'' + item_id + '\', \'' + location_name
 					+ '\');' + //
 					'return false;"' + //
-					' >                             ' + //
-					itemLocation.name + //
-					'        </a>                           ' + //
+					' >' + location_name + '</a>             ' + //
 					'      </li>                            ' + //
 					'';
 
 			list.push(el);
 
-			if (!(itemLocation.lat && itemLocation.lng)) {
+			var geopoint = $wnd.pgu_geo.cache_referentialLocations[location_name];
+			if (!geopoint) {
 
-				setTimeout(function() {
-					searchLatLng(itemLocation, anchor_id);
-				}, delay_to_call_geocoder);
-				delay_to_call_geocoder += 500;
+				var delayMillis = $wnd.pgu_geo.delay_to_call_geocoder;
+				@pgu.client.profile.ui.ProfileViewImpl::searchGeopointWithDelay(Ljava/lang/String;I)(location_name,delayMillis);
 
-			} else {
-
-				updateCache_name2itemLocation(itemLocation);
+				$wnd.pgu_geo.delay_to_call_geocoder += 300;
 			}
 
 		}
 
 		return list.join('');
+    }-*/;
+
+    private native void initCacheLocation2AnchorIds() /*-{
+		$wnd.pgu_geo.cache_location2anchorIds = {};
+    }-*/;
+
+    public static void searchGeopointWithDelay(final String locationName, final int delayMillis) {
+        new Timer() {
+
+            @Override
+            public void run() {
+                Scheduler.get().scheduleDeferred(new Command() {
+                    @Override
+                    public void execute() {
+                        searchGeopoint(locationName);
+                    }
+                });
+            }
+
+        }.schedule(delayMillis);
+    }
+
+    private static native boolean isGeocoderAvailable() /*-{
+		return $wnd.geocoder === undefined;
+    }-*/;
+
+    public static void searchGeopoint(final String locationName) {
+
+        if (!isGeocoderAvailable()) {
+            searchGeopointWithDelay(locationName, 1000);
+            return;
+        }
+
+        if (ClientUtils.isLocationInReferential(locationName)) {
+            return;
+        }
+
+        geocode(locationName);
+
+    }
+
+    private static native void geocode(String locationName) /*-{
+		$wnd.geocoder
+				.geocode(
+
+						{
+							'address' : locationName
+						}, //
+						function(results, status) {
+
+							if (status == google.maps.GeocoderStatus.OK) {
+
+								var loc = results[0].geometry.location;
+								var lat = loc.lat() + '';
+								var lng = loc.lng() + '';
+
+								@pgu.client.app.utils.ClientUtils::updateLocationReferential(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(locationName,lat,lng);
+
+							} else if (status == google.maps.GeocoderStatus.ZERO_RESULTS) {
+
+								//								var anchor = $('#' + anchor_id);
+								//								anchor.addClass('locationNotFound');
+								//								anchor.attr('title', 'Unknown location');
+								$wnd.console.log("Unknown location: "
+										+ locationName + ", " + status);
+
+							} else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+
+								@pgu.client.profile.ui.ProfileViewImpl::searchGeopointWithDelay(Ljava/lang/String;I)(location_name,1000);
+
+								$wnd.console.log("over_query_limit... "
+										+ itemLocation.name);
+
+							} else {
+
+								//								var anchor = $('#' + anchor_id);
+								//								anchor
+								//										.addClass('locationNotFound_technicalError');
+								//								anchor.attr('title',
+								//										'Location not found because of a technical exception: '
+								//												+ status);
+								$wnd.console.log("Oups: " + status);
+							}
+
+						}
+
+				);
     }-*/;
 
 }
