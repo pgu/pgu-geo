@@ -12,6 +12,7 @@ import pgu.client.profile.ProfileView;
 import pgu.shared.dto.ItemLocation;
 import pgu.shared.dto.Profile;
 import pgu.shared.model.UserAndLocations;
+import pgu.shared.utils.ItemType;
 
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.Column;
@@ -22,6 +23,7 @@ import com.github.gwtbootstrap.client.ui.Paragraph;
 import com.github.gwtbootstrap.client.ui.Popover;
 import com.github.gwtbootstrap.client.ui.Section;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -287,20 +289,39 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
 		////////////////////////
 
-		$doc.getElementById('pgu_geo.profile:xp_table').innerHTML = //
-		$wnd.pgu_geo.createTable( //
-		'xp' //
-		, j_profile.positions //
-		, 'No experience has been found');
+		//		$doc.getElementById('pgu_geo.profile:xp_table').innerHTML = //
+		//		$wnd.pgu_geo.createTable( //
+		//		'xp' //
+		//		, j_profile.positions //
+		//		, 'No experience has been found');
 
 		////////////////////////
 
-		$doc.getElementById('pgu_geo.profile:edu_table').innerHTML = //
-		$wnd.pgu_geo.createTable( //
-		'edu' //
-		, j_profile.educations //
-		, 'No education has been found');
+		//		$doc.getElementById('pgu_geo.profile:edu_table').innerHTML = //
+		//		$wnd.pgu_geo.createTable( //
+		//		'edu' //
+		//		, j_profile.educations //
+		//		, 'No education has been found');
 
+		var positions = j_profile.positions;
+		$doc.getElementById('pgu_geo.profile:xp_table').innerHTML = //
+		view.@pgu.client.profile.ui.ProfileViewImpl::createExperienceTable(Lcom/google/gwt/core/client/JavaScriptObject;)(positions);
+
+		var educations = j_profile.educations;
+		$doc.getElementById('pgu_geo.profile:edu_table').innerHTML = //
+		view.@pgu.client.profile.ui.ProfileViewImpl::createEducationTable(Lcom/google/gwt/core/client/JavaScriptObject;)(educations);
     }-*/;
 
+    public String createExperienceTable(final JavaScriptObject jsonExperiences) {
+        return createTable(ItemType.experience, jsonExperiences, "No experience has been found");
+    }
+
+    public String createEducationTable(final JavaScriptObject jsonEducations) {
+        return createTable(ItemType.education, jsonEducations, "No education has been found");
+    }
+
+    private native String createTable(String prefix, JavaScriptObject jsonItems, String messageNothing) /*-{
+		// TODO PGU
+		return '';
+    }-*/;
 }
