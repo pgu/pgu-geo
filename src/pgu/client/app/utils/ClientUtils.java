@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import pgu.shared.dto.ItemLocation;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.GwtEvent;
@@ -243,7 +244,7 @@ public class ClientUtils {
 
     public static native JavaScriptObject getLocationNamesForItem(String type, String itemId) /*-{
 		var fullId = type + ',' + itemId;
-		return $wnd.pgu_geo.cache_items2locations[fullId];
+		return $wnd.pgu_geo.cache_items2locations[fullId] || [];
     }-*/;
 
     public static native boolean isLocationInReferential(String locationName) /*-{
@@ -259,5 +260,9 @@ public class ClientUtils {
 		$wnd.pgu_geo.cache_referentialLocations[locationName] = location;
 
     }-*/;
+
+    public static void log(final String msg) {
+        GWT.log(msg);
+    }
 
 }
