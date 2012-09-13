@@ -11,15 +11,12 @@ public class ProfileDateUtils {
 		var endDate = item.endDate;
 		var startDate = item.startDate;
 
-        $wnd.console.log("1");
-
 		if (endDate) {
-
-		    $wnd.console.log("2");
 
 			var end = '';
 			if (endDate.month) {
-				end += @pgu.client.profile.ui.ProfileDateUtils::tslMonth(I)(endDate.month) + ' ';
+				end += @pgu.client.profile.ui.ProfileDateUtils::tslMonth(I)(endDate.month)
+						+ ' ';
 			}
 			if (endDate.year) {
 				end += endDate.year;
@@ -27,8 +24,6 @@ public class ProfileDateUtils {
 			dates.push(end);
 
 		} else {
-
-		    $wnd.console.log("3");
 
 			dates.push('Present');
 
@@ -38,11 +33,7 @@ public class ProfileDateUtils {
 			endDate.year = now.getFullYear();
 		}
 
-        $wnd.console.log("A");
-
 		if (startDate) {
-
-		    $wnd.console.log("4");
 
 			var start = '';
 			if (endDate) {
@@ -58,24 +49,16 @@ public class ProfileDateUtils {
 			dates.push(start);
 		}
 
-         $wnd.console.log("B");
-
 		if (startDate && endDate) {
-
-		    $wnd.console.log("5");
 
 			var diffD = '';
 			if (startDate.year && startDate.month && endDate.year
 					&& endDate.month) {
 
-                $wnd.console.log("6");
-
 				var endD = new Date(endDate.year, endDate.month - 1, 1);
 				var startD = new Date(startDate.year, startDate.month - 1, 1);
 
 				var diffDtime = @pgu.client.profile.ui.ProfileDateUtils::monthDiff(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(startD, endD);
-
-                $wnd.console.log("7");
 
 				if (diffDtime > 0) {
 					var years = Math.floor(diffDtime / 12);
@@ -98,27 +81,25 @@ public class ProfileDateUtils {
 			dates.push(diffD);
 		}
 
-        $wnd.console.log("8");
-
 		return dates.join('');
 
     }-*/;
 
     public static final String[] months = { //
-        //
-        "January" //
-        , "February" //
-        , "March" //
-        , "April" //
-        , "May" //
-        , "June" //
-        , "July" //
-        , "August" //
-        , "September" //
-        , "October" //
-        , "November" //
-        , "December" //
-    };
+                                        //
+            "January" //
+            , "February" //
+            , "March" //
+            , "April" //
+            , "May" //
+            , "June" //
+            , "July" //
+            , "August" //
+            , "September" //
+            , "October" //
+            , "November" //
+            , "December" //
+                                        };
 
     public static String tslMonth(final int monthNb) {
         final Integer monthIdx = monthNb - 1;
