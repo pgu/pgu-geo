@@ -12,6 +12,7 @@ import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.Level;
+import pgu.client.app.utils.LocationsUtils;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.shared.dto.ItemLocation;
 import pgu.shared.dto.LoginInfo;
@@ -19,12 +20,12 @@ import pgu.shared.dto.LoginInfo;
 import com.google.web.bindery.event.shared.EventBus;
 
 public class MenuActivity implements MenuPresenter //
-        , ShowWaitingIndicatorEvent.Handler //
-        , HideWaitingIndicatorEvent.Handler //
-        , LocationAddNewEvent.Handler //
-        , LocationShowOnMapEvent.Handler //
-        , GoToProfileEvent.Handler //
-        , GoToContactsEvent.Handler //
+, ShowWaitingIndicatorEvent.Handler //
+, HideWaitingIndicatorEvent.Handler //
+, LocationAddNewEvent.Handler //
+, LocationShowOnMapEvent.Handler //
+, GoToProfileEvent.Handler //
+, GoToContactsEvent.Handler //
 {
 
     private final MenuView             view;
@@ -138,8 +139,11 @@ public class MenuActivity implements MenuPresenter //
         u.fire(eventBus, new ShowWaitingIndicatorEvent());
 
         linkedinService.saveLocations( //
+                //
                 clientFactory.getAppState().getUserId() //
-                , u.getCopyCacheWithNewLocationsJson(itemId, itemLocation) //
+                , LocationsUtils.json_items2locations() //
+                , LocationsUtils.json_referentialLocations() //
+                //
                 , new AsyncCallbackApp<Void>(eventBus) {
 
                     @Override
@@ -159,6 +163,11 @@ public class MenuActivity implements MenuPresenter //
 
                 });
 
+    }
+
+    @Override
+    public void showNotificationWarning(final String msg) {
+        u.fire(eventBus, new NotificationEvent(Level.WARNING, msg));
     }
 
 }

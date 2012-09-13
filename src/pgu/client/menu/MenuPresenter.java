@@ -10,4 +10,6 @@ public interface MenuPresenter {
 
     void saveLocation(ItemLocation itemLocation);
 
+    void showNotificationWarning(String msg);
+
 }

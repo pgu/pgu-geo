@@ -9,6 +9,7 @@ import pgu.client.app.event.LocationsSuccessSaveEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
+import pgu.client.app.utils.LocationsUtils;
 import pgu.client.app.utils.Notification;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.shared.dto.ItemLocation;
@@ -92,8 +93,11 @@ public class EditLocationActivity {
                 view.disableCreationForm();
 
                 linkedinService.saveLocations( //
+                        //
                         clientFactory.getAppState().getUserId() //
-                        , u.getCopyCacheWithNewLocationsJson(itemId, selectedLocations) //
+                        , LocationsUtils.json_items2locations() //
+                        , LocationsUtils.json_referentialLocations() //
+                        //
                         , new AsyncCallbackApp<Void>(eventBus) {
 
                             @Override
@@ -189,8 +193,11 @@ public class EditLocationActivity {
                 view.disableEditionForm();
 
                 linkedinService.saveLocations( //
+                        //
                         clientFactory.getAppState().getUserId() //
-                        , u.getCopyCacheWithoutLocationJson(itemId, itemLocation) //
+                        , LocationsUtils.json_items2locations() //
+                        , LocationsUtils.json_referentialLocations() //
+                        //
                         , new AsyncCallbackApp<Void>(eventBus) {
 
                             @Override

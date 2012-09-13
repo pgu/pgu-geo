@@ -1,6 +1,7 @@
 package pgu.client.menu.ui;
 
 import pgu.client.app.utils.ClientUtils;
+import pgu.client.app.utils.MarkersUtils;
 import pgu.client.menu.MenuPresenter;
 import pgu.client.menu.MenuView;
 import pgu.shared.dto.ItemLocation;
@@ -40,16 +41,16 @@ public class MenuViewImpl extends Composite implements MenuView {
     ProgressBar               progressBar;
     @UiField
     NavLink                   adminBtn, logoutBtn, goToProfileBtn, goToContactsBtn, goToAppstatsBtn, mapSizeBtn //
-            , past2prstBtn, prst2pastBtn //
-            , stepBwdBtn, stepFwdBtn //
-            , playBtn, pauseBtn, stopBtn //
-            , clearMarkersBtn //
-            ;
+    , past2prstBtn, prst2pastBtn //
+    , stepBwdBtn, stepFwdBtn //
+    , playBtn, pauseBtn, stopBtn //
+    , clearMarkersBtn //
+    ;
     @UiField
     NavSearch                 locationSearchBox;
     @UiField
     Button                    locationSearchBtn, locationSaveBtn //
-            ;
+    ;
     @UiField
     Nav                       profilePlayMenu;
 
@@ -121,19 +122,13 @@ public class MenuViewImpl extends Composite implements MenuView {
 
     @UiHandler("clearMarkersBtn")
     public void clickOnClearMarkersBtn(final ClickEvent e) {
-        deleteMarkers();
+        MarkersUtils.deleteMarkers();
     }
-
-    public native void deleteMarkers() /*-{
-		$wnd.deleteOverlays();
-    }-*/;
 
     @UiHandler("locationSaveBtn")
     public void clickOnLocationSave(final ClickEvent e) {
 
-        if (u.isVoid(lastSearchItemLocation.getName()) //
-                || u.isVoid(lastSearchItemLocation.getLat()) //
-                || u.isVoid(lastSearchItemLocation.getLng())) {
+        if (u.isVoid(lastSearchItemLocation.getName())) {
 
             lastSearchItemLocation = null;
             return;
@@ -155,7 +150,7 @@ public class MenuViewImpl extends Composite implements MenuView {
             return;
         }
 
-        searchLocationAndAddMarker(this, locationText);
+        MenuViewUtils.searchLocationAndAddMarker(this, locationText);
     }
 
     @UiHandler("prst2pastBtn")
@@ -181,31 +176,23 @@ public class MenuViewImpl extends Composite implements MenuView {
         clickOnPause();
         isPausing = false;
 
-        deleteMarkers();
-        initIndex(isPastToPresent);
+        MarkersUtils.deleteMarkers();
+        MenuViewUtils.initIndex(isPastToPresent);
     }
 
     @UiHandler("stepBwdBtn")
     public void clickOnStepBwdBtn(final ClickEvent e) {
         clickOnPause();
-        decrementIndex(isPastToPresent);
+        MenuViewUtils.decrementIndex(isPastToPresent);
         showProfileItemOnMap();
     }
 
     @UiHandler("stepFwdBtn")
     public void clickOnStepFwdBtn(final ClickEvent e) {
         clickOnPause();
-        incrementIndex(isPastToPresent);
+        MenuViewUtils.incrementIndex(isPastToPresent);
         showProfileItemOnMap();
     }
-
-    private native void decrementIndex(boolean isPastToPresent) /*-{
-		$wnd.decrementIndex(isPastToPresent);
-    }-*/;
-
-    private native void incrementIndex(boolean isPastToPresent) /*-{
-		$wnd.incrementIndex(isPastToPresent);
-    }-*/;
 
     @UiHandler("pauseBtn")
     public void clickOnPauseProfile(final ClickEvent e) {
@@ -232,8 +219,8 @@ public class MenuViewImpl extends Composite implements MenuView {
         isPlayingProfile = true;
 
         if (!isPausing) {
-            deleteMarkers();
-            initIndex(isPastToPresent);
+            MarkersUtils.deleteMarkers();
+            MenuViewUtils.initIndex(isPastToPresent);
         }
 
         isPausing = false;
@@ -250,17 +237,11 @@ public class MenuViewImpl extends Composite implements MenuView {
         goToNextProfileItemOnMap();
     }
 
-    private native void initIndex(boolean isPastToPresent) /*-{
-
-		$wnd.pgu_currentIndex = isPastToPresent ? -1 : $wnd.itemConfigs.length;
-
-    }-*/;
-
     private boolean goToNextProfileItemOnMap() {
 
         if (isPlayingProfile) {
 
-            incrementIndex(isPastToPresent);
+            MenuViewUtils.incrementIndex(isPastToPresent);
             final boolean isDone = showProfileItemOnMap();
 
             return !isDone;
@@ -270,77 +251,23 @@ public class MenuViewImpl extends Composite implements MenuView {
     }
 
     private boolean showProfileItemOnMap() {
-        final boolean isDone = _showProfileItemOnMap(isPastToPresent);
+        final boolean isDone = MenuViewUtils.showProfileItemOnMap(isPastToPresent);
 
         if (isDone) {
             clickOnPause();
             isPausing = false;
         }
 
-        stepFwdBtn.setVisible(showFwdBtn(isPastToPresent));
-        stepBwdBtn.setVisible(showBwdBtn(isPastToPresent));
+        stepFwdBtn.setVisible(MenuViewUtils.showFwdBtn(isPastToPresent));
+        stepBwdBtn.setVisible(MenuViewUtils.showBwdBtn(isPastToPresent));
 
         return isDone;
     }
 
-    private native boolean showFwdBtn(boolean isPastToPresent) /*-{
-		return $wnd.showFwdBtn(isPastToPresent);
-    }-*/;
-
-    private native boolean showBwdBtn(boolean isPastToPresent) /*-{
-		return $wnd.showBwdBtn(isPastToPresent);
-    }-*/;
-
-    private native boolean _showProfileItemOnMap(boolean isPastToPresent) /*-{
-		return $wnd.showProfileItemOnMap(isPastToPresent);
-    }-*/;
-
-    public void cacheLastSearchedLocation(final String name, final String lat, final String lng) {
+    public void cacheLastSearchedLocation(final String name) {
         lastSearchItemLocation = new ItemLocation();
         lastSearchItemLocation.setName(name);
-        lastSearchItemLocation.setLat(lat);
-        lastSearchItemLocation.setLng(lng);
     }
-
-    public native void searchLocationAndAddMarker(MenuViewImpl menu, String name) /*-{
-
-		$wnd.geocoder
-				.geocode(
-						{
-							'address' : name
-						},
-						function(results, status) {
-
-							if (status != $wnd.google.maps.GeocoderStatus.OK) {
-								// TODO replace this by the app's notification
-								$wnd
-										.alert("Geocode was not successful for the following reason: "
-												+ status);
-								return;
-							}
-
-							var loc = results[0].geometry.location;
-
-							//							$wnd.map.setCenter(loc);
-							//							$wnd.console.log(loc);
-
-							var marker = new $wnd.google.maps.Marker({
-								map : $wnd.map,
-								position : loc,
-								animation : $wnd.google.maps.Animation.DROP,
-								title : name
-							});
-
-							$wnd.markersArray.push(marker);
-
-							var lat = loc.lat() + '';
-							var lng = loc.lng() + '';
-
-							menu.@pgu.client.menu.ui.MenuViewImpl::cacheLastSearchedLocation(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(name,lat,lng);
-
-						});
-
-    }-*/;
 
     @UiHandler("mapSizeBtn")
     public void clickMapSize(final ClickEvent e) {
@@ -544,21 +471,11 @@ public class MenuViewImpl extends Composite implements MenuView {
     public void showOnMap(final ItemLocation itemLocation) {
         showMap();
 
-        addMarker(itemLocation.getName(), itemLocation.getLat(), itemLocation.getLng());
+        MarkersUtils.createMarker(itemLocation.getName());
     }
 
-    public native void addMarker(String name, String lat, String lng) /*-{
-
-		var loc = new $wnd.google.maps.LatLng(parseFloat(lat), parseFloat(lng));
-
-		var marker = new $wnd.google.maps.Marker({
-			map : $wnd.map,
-			position : loc,
-			animation : $wnd.google.maps.Animation.DROP,
-			title : name
-		});
-		$wnd.markersArray.push(marker);
-
-    }-*/;
+    public void showNotificationWarning(final String msg) {
+        presenter.showNotificationWarning(msg);
+    }
 
 }
