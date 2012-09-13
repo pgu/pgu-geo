@@ -100,6 +100,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }-*/;
 
     public static native void editLocation(final String item_id, final String location_name) /*-{
+        // TODO review
 		var geopoint = $wnd.pgu_geo.cache_referentialLocations[location_name];
 		if (!geopoint) {
 			return;

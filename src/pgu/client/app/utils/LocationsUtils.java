@@ -27,7 +27,7 @@ public class LocationsUtils {
     }-*/;
 
     public static native boolean isLocationInReferential(String locationName) /*-{
-        return !$wnd.pgu_geo.cache_referentialLocations[locationName];
+        return undefined !== $wnd.pgu_geo.cache_referentialLocations[locationName];
     }-*/;
 
     public static native void updateLocationReferential(String locationName, String lat, String lng) /*-{
@@ -51,4 +51,5 @@ public class LocationsUtils {
     public static native String json_referentialLocations() /*-{
         return JSON.stringify($wnd.pgu_geo.cache_referentialLocations);
     }-*/;
+
 }
