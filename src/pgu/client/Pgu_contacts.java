@@ -21,6 +21,15 @@ import com.google.web.bindery.event.shared.EventBus;
 
 public class Pgu_contacts implements EntryPoint {
 
+    static {
+        initAppContext();
+    }
+
+    private static native void initAppContext() /*-{
+        $wnd.pgu_geo = {};
+    }-*/;
+
+
     @Override
     public void onModuleLoad() {
 
@@ -31,29 +40,29 @@ public class Pgu_contacts implements EntryPoint {
         clientFactory.getLoginService().getLoginInfo(GWT.getHostPageBaseURL(),
                 new AsyncCallbackApp<LoginInfo>(eventBus) {
 
-                    @Override
-                    public void onSuccess(final LoginInfo loginInfo) {
-                        clientFactory.setLoginInfo(loginInfo);
+            @Override
+            public void onSuccess(final LoginInfo loginInfo) {
+                clientFactory.setLoginInfo(loginInfo);
 
-                        final AppView appView = clientFactory.getAppView();
-                        final AppActivity appActivity = new AppActivity(placeController, clientFactory);
-                        appActivity.start(eventBus);
+                final AppView appView = clientFactory.getAppView();
+                final AppActivity appActivity = new AppActivity(placeController, clientFactory);
+                appActivity.start(eventBus);
 
-                        final Place defaultPlace = new ProfilePlace();
+                final Place defaultPlace = new ProfilePlace();
 
-                        final ActivityMapper activityMapper = new AppActivityMapper(clientFactory);
-                        final ActivityManager activityManager = new ActivityManager(activityMapper, eventBus);
-                        activityManager.setDisplay(appView);
+                final ActivityMapper activityMapper = new AppActivityMapper(clientFactory);
+                final ActivityManager activityManager = new ActivityManager(activityMapper, eventBus);
+                activityManager.setDisplay(appView);
 
-                        final AppPlaceHistoryMapper historyMapper = GWT.create(AppPlaceHistoryMapper.class);
-                        final PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
-                        historyHandler.register(placeController, eventBus, defaultPlace);
+                final AppPlaceHistoryMapper historyMapper = GWT.create(AppPlaceHistoryMapper.class);
+                final PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
+                historyHandler.register(placeController, eventBus, defaultPlace);
 
-                        RootPanel.get().add(appView);
-                        historyHandler.handleCurrentHistory();
-                    }
+                RootPanel.get().add(appView);
+                historyHandler.handleCurrentHistory();
+            }
 
-                });
+        });
     }
 
 }

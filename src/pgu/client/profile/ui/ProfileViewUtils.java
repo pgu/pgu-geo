@@ -1,6 +1,6 @@
 package pgu.client.profile.ui;
 
-import pgu.client.app.utils.ClientUtils;
+import pgu.client.app.utils.LocationsUtils;
 import pgu.shared.utils.ItemType;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -20,12 +20,10 @@ public class ProfileViewUtils {
         delayForCallingGeocoder += 300;
     }
 
-    public static native void initCacheLocation2AnchorIds() /*-{
+    public static native void initCaches() /*-{
 		$wnd.pgu_geo.cache_location2anchorIds = {};
-    }-*/;
-
-    public static native void initCacheItemId2Config() /*-{
-		$wnd.pgu_geo.cache_itemId2config = {};
+        $wnd.pgu_geo.cache_item2config = {};
+        $wnd.pgu_geo.itemConfigs = [];
     }-*/;
 
     public static String createExperienceTable(final JavaScriptObject jsonExperiences) {
@@ -117,13 +115,13 @@ public class ProfileViewUtils {
 
 			rowConfig.short_content = @pgu.client.profile.ui.ProfileViewUtils::labelEduTitle(Lcom/google/gwt/core/client/JavaScriptObject;)(item);
 			rowConfig.content_title = "Education";
-			rowConfig.long_content = @pgu.client.app.utils.ClientUtils::markdown(Ljava/lang/String;)(item.notes);
+			rowConfig.long_content = @pgu.client.app.utils.MarkdownUtils::markdown(Ljava/lang/String;)(item.notes);
 
 		} else if (@pgu.client.profile.ui.ProfileViewUtils::isXp(Ljava/lang/String;)(type)) {
 
 			rowConfig.short_content = @pgu.client.profile.ui.ProfileViewUtils::labelXpTitle(Lcom/google/gwt/core/client/JavaScriptObject;)(item);
 			rowConfig.content_title = "Experience";
-			rowConfig.long_content = @pgu.client.app.utils.ClientUtils::markdown(Ljava/lang/String;)(item.summary);
+			rowConfig.long_content = @pgu.client.app.utils.MarkdownUtils::markdown(Ljava/lang/String;)(item.summary);
 
 		} else {
 
@@ -143,7 +141,7 @@ public class ProfileViewUtils {
 			rowConfig.startD = new Date(startDate.year, month - 1, 1);
 		}
 
-		$wnd.pgu_geo.cache_itemId2config[item.id] = rowConfig;
+		$wnd.pgu_geo.cache_item2config[type + ',' + item.id] = rowConfig;
 
 		return ''
 				+ '<tr>                                                                              '
@@ -152,7 +150,7 @@ public class ProfileViewUtils {
 				+ rowConfig.locations
 				+ '    </ul>                                                                         '
 				+ '    <i class="icon-plus-sign icon-large add-location"                             '
-				+ '      onclick="javascript:addNewLocation(\'' + rowConfig.item_id + '\');"         '
+				+ '      onclick="javascript:pgu_geo.addNewLocation(\'' + rowConfig.item_id + '\');"         '
 				+ '      >                                                                           '
 				+ '    </i>                                                                          '
 				+ '  </td>                                                                           '
@@ -205,19 +203,22 @@ public class ProfileViewUtils {
     }-*/;
 
     public static native String createListLocations(String type, String item_id) /*-{
-		var location_names = @pgu.client.app.utils.ClientUtils::getLocationNamesForItem(Ljava/lang/String;Ljava/lang/String;)(type, item_id);
-
-		var list = [];
+		var
+		  location_names = @pgu.client.app.utils.LocationsUtils::getLocationNamesForItem(Ljava/lang/String;Ljava/lang/String;)(type, item_id)
+		, list = []
+		, cache_anchor = $wnd.pgu_geo.cache_location2anchorIds
+		, cache_geo = $wnd.pgu_geo.cache_referentialLocations;
 
 		for ( var i in location_names) {
 
 			var location_name = location_names[i];
 			var anchor_id = "loc_" + item_id + "_" + i;
 
-			var anchor_ids = $wnd.pgu_geo.cache_location2anchorIds[location_name]
-					|| [];
-			anchor_ids.push(anchor_id);
-			$wnd.pgu_geo.cache_location2anchorIds[location_name] = anchor_ids;
+			var anchor_ids = cache_anchor[location_name];
+			if (!anchor_ids) {
+			    cache_anchor[location_name] = [];
+			}
+			cache_anchor[location_name].push(anchor_id);
 
 			var el = '' +
 			'      <li class="locationLi">                                        ' +
@@ -232,8 +233,7 @@ public class ProfileViewUtils {
 
 			list.push(el);
 
-			var geopoint = $wnd.pgu_geo.cache_referentialLocations[location_name];
-			if (!geopoint) {
+			if (!cache_geo[location_name]) {
 
 				var delayMillis = @pgu.client.profile.ui.ProfileViewUtils::delayForCallingGeocoder;
 				@pgu.client.profile.ui.ProfileViewUtils::searchGeopointWithDelay(Ljava/lang/String;I)(location_name,delayMillis);
@@ -272,7 +272,7 @@ public class ProfileViewUtils {
             return;
         }
 
-        if (ClientUtils.isLocationInReferential(locationName)) {
+        if (LocationsUtils.isLocationInReferential(locationName)) {
             return;
         }
 
@@ -295,7 +295,7 @@ public class ProfileViewUtils {
                             var lat = loc.lat() + '';
                             var lng = loc.lng() + '';
 
-                            @pgu.client.app.utils.ClientUtils::updateLocationReferential(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(locationName,lat,lng);
+                            @pgu.client.app.utils.LocationsUtils::updateLocationReferential(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(locationName,lat,lng);
 
                         } else if (status == google.maps.GeocoderStatus.ZERO_RESULTS) {
 
@@ -326,6 +326,21 @@ public class ProfileViewUtils {
                     }
             );
         }-*/;
+
+    public static native void sortItemConfigsByDate() /*-{
+        var
+          configs = $wnd.pgu_geo.itemConfigs
+        , item2configs = $wnd.pgu_geo.cache_item2config;
+
+        for (var key in item2configs) {
+            if (item2configs.hasOwnProperty(key)) {
+
+                configs.push(item2configs[key]);
+            }
+        }
+
+        configs.sort(function(a,b) { return a.startD.getTime() - b.startD.getTime() } );
+    }-*/;
 
 }
 

@@ -7,6 +7,8 @@ import java.util.EnumMap;
 import java.util.Map.Entry;
 
 import pgu.client.app.utils.ClientUtils;
+import pgu.client.app.utils.LocationsUtils;
+import pgu.client.app.utils.MarkdownUtils;
 import pgu.client.profile.ProfilePresenter;
 import pgu.client.profile.ProfileView;
 import pgu.shared.dto.ItemLocation;
@@ -57,7 +59,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     private final ClientUtils                               u               = new ClientUtils();
     private final EnumMap<LanguageLevel, ArrayList<String>> level2languages = new EnumMap<LanguageLevel, ArrayList<String>>(
-                                                                                    LanguageLevel.class);
+            LanguageLevel.class);
     private static final String                             trophy          = " <i class=\"icon-trophy\"></i> ";
 
     private enum LanguageLevel {
@@ -99,7 +101,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     public static native void editLocation(final String item_id, final String location_name) /*-{
 		var geopoint = $wnd.pgu_geo.cache_referentialLocations[location_name];
-		if (geopoint == undefined) {
+		if (!geopoint) {
 			return;
 		}
 
@@ -141,11 +143,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     @Override
     public void setProfile(final Profile profile) {
-        final UserAndLocations userAndLocations = profile.getUserAndLocations();
-        u.initCacheItems2Locations(userAndLocations.getItems2locations());
-        u.initCacheReferentialLocations(userAndLocations.getReferentialLocations());
-        ProfileViewUtils.initCacheLocation2AnchorIds();
-        ProfileViewUtils.initCacheItemId2Config();
+        final UserAndLocations ual = profile.getUserAndLocations();
+        LocationsUtils.initCaches(ual.getItems2locations(), ual.getReferentialLocations());
+        ProfileViewUtils.initCaches();
 
         setProfile(this, profile.getJson());
     }
@@ -174,7 +174,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     private void setProfileSummary(final String summary) {
-        summaryBasic.getElement().getFirstChildElement().setAttribute("data-content", ClientUtils.markdown(summary));
+        summaryBasic.getElement().getFirstChildElement().setAttribute("data-content", MarkdownUtils.markdown(summary));
     }
 
     private void clearProfileLanguages() {
@@ -209,12 +209,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     private static final Comparator<String> LEXICO = new Comparator<String>() {
 
-                                                       @Override
-                                                       public int compare(final String s1, final String s2) {
-                                                           return s1.compareToIgnoreCase(s2);
-                                                       }
+        @Override
+        public int compare(final String s1, final String s2) {
+            return s1.compareToIgnoreCase(s2);
+        }
 
-                                                   };
+    };
 
     private void showProfileLanguages() {
 
@@ -284,7 +284,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 		var language_values = languages.values || [];
 		for ( var i in language_values) {
 
-			var // 
+			var //
 			language_value = language_values[i] //
 			//
 			, language = language_value.language || {} //

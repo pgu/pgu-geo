@@ -7,30 +7,12 @@ import java.util.logging.Logger;
 import pgu.shared.dto.ItemLocation;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.logging.client.LogConfiguration;
 import com.google.gwt.user.client.Command;
 
 public class ClientUtils {
-
-    static {
-        initAppContext();
-        initShowdownConverter();
-    }
-
-    private static native void initAppContext() /*-{
-		$wnd.pgu_geo = {};
-    }-*/;
-
-    private static native void initShowdownConverter() /*-{
-		$wnd.pgu_geo.showdown_converter = new $wnd.Showdown.converter();
-    }-*/;
-
-    public static native String markdown(String text) /*-{
-		return $wnd.pgu_geo.showdown_converter.makeHtml(text || '');
-    }-*/;
 
     public void info(final String message) {
         if (LogConfiguration.loggingIsEnabled()) {
@@ -230,36 +212,6 @@ public class ClientUtils {
         notification.setLevel(pgu.client.app.utils.Level.SUCCESS);
         notification.show();
     }
-
-    // {"education,1":["Paris","Nantes"],"experience,1":["Madrid"]}
-    public native void initCacheItems2Locations(final String items2locations) /*-{
-		$wnd.pgu_geo.cache_items2locations = JSON.parse(items2locations);
-    }-*/;
-
-    // {"Paris":{"lat":1.2323,"lng":4.5555},"Nantes":{"lat":9.99,"lng":2.22}]
-    public native void initCacheReferentialLocations(final String referentialLocations) /*-{
-		$wnd.pgu_geo.cache_referentialLocations = JSON
-				.parse(referentialLocations);
-    }-*/;
-
-    public static native JavaScriptObject getLocationNamesForItem(String type, String itemId) /*-{
-		var fullId = type + ',' + itemId;
-		return $wnd.pgu_geo.cache_items2locations[fullId] || [];
-    }-*/;
-
-    public static native boolean isLocationInReferential(String locationName) /*-{
-		return undefined != $wnd.pgu_geo.cache_referentialLocations[locationName];
-    }-*/;
-
-    public static native void updateLocationReferential(String locationName, String lat, String lng) /*-{
-
-		var location = {};
-		location.lat = lat;
-		location.lng = lng;
-
-		$wnd.pgu_geo.cache_referentialLocations[locationName] = location;
-
-    }-*/;
 
     public static void log(final String msg) {
         GWT.log(msg);
