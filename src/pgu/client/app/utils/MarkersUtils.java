@@ -41,11 +41,17 @@ public class MarkersUtils {
 
     public static native JavaScriptObject createMarker(String location_name) /*-{
 
+        var geopoint = @pgu.client.app.utils.LocationsUtils::getGeopoint(Ljava/lang/String;)(location_name);
+        @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(location_name,geopoint.lat,geopoint.lng);
+
+    }-*/;
+
+    public static native JavaScriptObject createMarkerWithGeopoint(String location_name, String lat, String lng) /*-{
+
         var google = $wnd.google;
         var map = $wnd.map;
 
-        var geopoint = @pgu.client.app.utils.LocationsUtils::getGeopoint(Ljava/lang/String;)(location_name);
-        var latLng = new google.maps.LatLng(parseFloat(geopoint.lat), parseFloat(geopoint.lng));
+        var latLng = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
 
         var marker = new google.maps.Marker({
             map : map,
@@ -57,7 +63,7 @@ public class MarkersUtils {
         $wnd.pgu_geo.markersArray.push(marker);
 
         return marker;
-
     }-*/;
+
 
 }

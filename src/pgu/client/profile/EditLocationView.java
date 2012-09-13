@@ -36,11 +36,11 @@ public interface EditLocationView extends HasNotifications {
 
     void resetCreationForm();
 
-    ArrayList<ItemLocation> getSelectedLocations();
+    ArrayList<String> getSelectedLocations();
 
-    void removeCreationFormAndShowClose(String itemId);
+    void removeCreationFormAndShowClose();
 
-    void displayNewLocationWidget(String itemId);
+    void displayNewLocationWidget(String itemConfigId);
 
     HasVisibility getCloseWidget();
 

@@ -14,7 +14,6 @@ import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.Level;
 import pgu.client.app.utils.LocationsUtils;
 import pgu.client.service.LinkedinServiceAsync;
-import pgu.shared.dto.ItemLocation;
 import pgu.shared.dto.LoginInfo;
 
 import com.google.web.bindery.event.shared.EventBus;
@@ -33,7 +32,7 @@ public class MenuActivity implements MenuPresenter //
     private final LoginInfo            loginInfo;
     private final ClientUtils          u = new ClientUtils();
     private final ClientFactory        clientFactory;
-    private String                     itemId;
+    private String                     itemConfigId;
     private final LinkedinServiceAsync linkedinService;
 
     public MenuActivity(final ClientFactory clientFactory) {
@@ -120,7 +119,7 @@ public class MenuActivity implements MenuPresenter //
 
     @Override
     public void onLocationAddNew(final LocationAddNewEvent event) {
-        itemId = event.getItemId();
+        itemConfigId = event.getItemConfigId();
 
         view.showMap();
         view.getLocationSearchWidget().setText("");
@@ -130,9 +129,9 @@ public class MenuActivity implements MenuPresenter //
     }
 
     @Override
-    public void saveLocation(final ItemLocation itemLocation) {
+    public void saveLocation(final String itemLocation) {
 
-        if (u.isVoid(itemId)) {
+        if (u.isVoid(itemConfigId)) {
             return;
         }
 
@@ -151,11 +150,11 @@ public class MenuActivity implements MenuPresenter //
                         u.fire(eventBus, new HideWaitingIndicatorEvent());
 
                         view.getSaveWidget().setVisible(false);
-                        u.fire(eventBus, new LocationsSuccessSaveEvent(itemId, itemLocation));
+                        u.fire(eventBus, new LocationsSuccessSaveEvent(itemConfigId, itemLocation));
 
                         final StringBuilder msg = new StringBuilder();
                         msg.append("The location \"");
-                        msg.append(itemLocation.getName());
+                        msg.append(itemLocation);
                         msg.append("\" has been successfully added.");
 
                         u.fire(eventBus, new NotificationEvent(Level.SUCCESS, msg.toString()));

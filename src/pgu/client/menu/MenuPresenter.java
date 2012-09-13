@@ -1,6 +1,5 @@
 package pgu.client.menu;
 
-import pgu.shared.dto.ItemLocation;
 
 public interface MenuPresenter {
 
@@ -8,7 +7,7 @@ public interface MenuPresenter {
 
     void goToContacts();
 
-    void saveLocation(ItemLocation itemLocation);
+    void saveLocation(String itemLocation);
 
     void showNotificationWarning(String msg);
 

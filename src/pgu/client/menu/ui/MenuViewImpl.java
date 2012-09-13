@@ -55,6 +55,8 @@ public class MenuViewImpl extends Composite implements MenuView {
     Nav                       profilePlayMenu;
 
     private MenuPresenter     presenter;
+    private static MenuPresenter staticPresenter;
+
     private final ClientUtils u              = new ClientUtils();
     private boolean           isMapDisplayed = true;
 
@@ -113,11 +115,12 @@ public class MenuViewImpl extends Composite implements MenuView {
     private static final String MSG_PLAY_PROFILE_LOCATIONS  = "Play profile locations";
     private static final String MSG_PAUSE                   = "Pause";
 
-    private ItemLocation        lastSearchItemLocation      = null;
+    private String        lastSearchItemLocation      = null;
 
     @Override
     public void setPresenter(final MenuPresenter presenter) {
         this.presenter = presenter;
+        staticPresenter = presenter;
     }
 
     @UiHandler("clearMarkersBtn")
@@ -128,14 +131,19 @@ public class MenuViewImpl extends Composite implements MenuView {
     @UiHandler("locationSaveBtn")
     public void clickOnLocationSave(final ClickEvent e) {
 
-        if (u.isVoid(lastSearchItemLocation.getName())) {
+        if (u.isVoid(lastSearchItemLocation)) {
 
             lastSearchItemLocation = null;
             return;
         }
 
-        presenter.saveLocation(lastSearchItemLocation);
+        MenuViewUtils.saveLastSearchLocation(lastSearchItemLocation);
     }
+
+    public static void saveLastSearchLocation(final String locationName) {
+        staticPresenter.saveLocation(locationName);
+    }
+
 
     @UiHandler("locationSearchBtn")
     public void clickOnLocationSearch(final ClickEvent e) {
@@ -265,8 +273,7 @@ public class MenuViewImpl extends Composite implements MenuView {
     }
 
     public void cacheLastSearchedLocation(final String name) {
-        lastSearchItemLocation = new ItemLocation();
-        lastSearchItemLocation.setName(name);
+        lastSearchItemLocation = name;
     }
 
     @UiHandler("mapSizeBtn")

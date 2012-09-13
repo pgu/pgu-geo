@@ -107,7 +107,7 @@ public class ProfileViewUtils {
     public static native String createTableRow(final String type, final JavaScriptObject item) /*-{
 		var item_config = {};
 		item_config.id = type + ',' + item.id;
-		item_config.locations = @pgu.client.profile.ui.ProfileViewUtils::createListLocations(Ljava/lang/String;Ljava/lang/String;)(type,item.id);
+		item_config.locations = @pgu.client.profile.ui.ProfileViewUtils::createListLocations(Ljava/lang/String;Ljava/lang/String;)(type,item_config.id);
 		item_config.dates = @pgu.client.profile.ui.ProfileDateUtils::labelDates(Lcom/google/gwt/core/client/JavaScriptObject;)(item);
 
 		if (@pgu.client.profile.ui.ProfileViewUtils::isEdu(Ljava/lang/String;)(type)) {
@@ -201,9 +201,9 @@ public class ProfileViewUtils {
 		return title.join('<br/>');
     }-*/;
 
-    public static native String createListLocations(String type, String item_id) /*-{
+    public static native String createListLocations(String type, String item_config_id) /*-{
 		var
-		  location_names = @pgu.client.app.utils.LocationsUtils::getLocationNamesForItem(Ljava/lang/String;Ljava/lang/String;)(type, item_id)
+		  location_names = @pgu.client.app.utils.LocationsUtils::getLocationNames(Ljava/lang/String;)(item_config_id)
 		, list = []
 		, cache_anchor = $wnd.pgu_geo.cache_location2anchorIds
 		;
@@ -211,7 +211,7 @@ public class ProfileViewUtils {
 		for ( var i in location_names) {
 
 			var location_name = location_names[i];
-			var anchor_id = "loc_" + item_id + "_" + i;
+			var anchor_id = "loc_" + item_config_id + "_" + i;
 
 			var anchor_ids = cache_anchor[location_name];
 			if (!anchor_ids) {
@@ -224,7 +224,7 @@ public class ProfileViewUtils {
 			'        <a id="' + anchor_id + '"                                    ' +
 			'           href="javascript:;"                                       ' +
 			'           onclick="javascript:' +
-			'pgu_geo.editLocation(\'' + item_id + '\', \'' + location_name + '\');' +
+			'pgu_geo.editLocation(\'' + item_config_id + '\', \'' + location_name + '\');' +
 			'           return false;">' + location_name +
 			'        </a>                                                         ' +
 			'      </li>                                                          ' +

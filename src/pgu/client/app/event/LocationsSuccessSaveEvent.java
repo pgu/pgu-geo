@@ -2,8 +2,6 @@ package pgu.client.app.event;
 
 import java.util.ArrayList;
 
-import pgu.shared.dto.ItemLocation;
-
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HasHandlers;
@@ -21,16 +19,16 @@ public class LocationsSuccessSaveEvent extends GwtEvent<LocationsSuccessSaveEven
 
     public static final Type<Handler>     TYPE             = new Type<Handler>();
 
-    private final String                  itemId;
-    private final ArrayList<ItemLocation> newItemLocations = new ArrayList<ItemLocation>();
+    private final String                  itemConfigId;
+    private final ArrayList<String> newItemLocations = new ArrayList<String>();
 
-    public LocationsSuccessSaveEvent(final String itemId, final ItemLocation newItemLocation) {
-        this.itemId = itemId;
+    public LocationsSuccessSaveEvent(final String itemConfigId, final String newItemLocation) {
+        this.itemConfigId = itemConfigId;
         newItemLocations.add(newItemLocation);
     }
 
-    public LocationsSuccessSaveEvent(final String itemId, final ArrayList<ItemLocation> newItemLocations) {
-        this.itemId = itemId;
+    public LocationsSuccessSaveEvent(final String itemConfigId, final ArrayList<String> newItemLocations) {
+        this.itemConfigId = itemConfigId;
         this.newItemLocations.addAll(newItemLocations);
     }
 
@@ -44,11 +42,11 @@ public class LocationsSuccessSaveEvent extends GwtEvent<LocationsSuccessSaveEven
         handler.onLocationsSuccessSave(this);
     }
 
-    public String getItemId() {
-        return itemId;
+    public String getItemConfigId() {
+        return itemConfigId;
     }
 
-    public ArrayList<ItemLocation> getNewItemLocations() {
+    public ArrayList<String> getNewItemLocations() {
         return newItemLocations;
     }
 

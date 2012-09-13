@@ -17,10 +17,10 @@ public class LocationAddNewEvent extends GwtEvent<LocationAddNewEvent.Handler> {
 
     public static final Type<Handler> TYPE = new Type<Handler>();
 
-    private final String              itemId;
+    private final String              itemConfigId;
 
-    public LocationAddNewEvent(final String itemId) {
-        this.itemId = itemId;
+    public LocationAddNewEvent(final String itemConfigId) {
+        this.itemConfigId = itemConfigId;
     }
 
     @Override
@@ -33,8 +33,8 @@ public class LocationAddNewEvent extends GwtEvent<LocationAddNewEvent.Handler> {
         handler.onLocationAddNew(this);
     }
 
-    public String getItemId() {
-        return itemId;
+    public String getItemConfigId() {
+        return itemConfigId;
     }
 
 }

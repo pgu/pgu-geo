@@ -3,7 +3,6 @@ package pgu.client.profile.ui;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedHashMap;
 
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.Notification;
@@ -38,22 +37,22 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
     }
 
     @UiField
-    Modal                                             container;
+    Modal                                 container;
     @UiField
-    Button                                            saveBtn, addBtn, displayOnMapBtn, deleteBtn, closeBtn;
+    Button                                saveBtn, addBtn, displayOnMapBtn, deleteBtn, closeBtn;
     @UiField
-    ProgressBar                                       progressBar;
+    ProgressBar                           progressBar;
     @UiField
-    HTMLPanel                                         notification, editPanel, addPanel;
+    HTMLPanel                             notification, editPanel, addPanel;
     @UiField
-    NavPills                                          otherLocationsContainer;
+    NavPills                              otherLocationsContainer;
     @UiField
-    HTML                                              locationLatUI, locationLngUI;
+    HTML                                  locationLatUI, locationLngUI;
 
-    private final ArrayList<Notification>             notifications      = new ArrayList<Notification>();
-    private final ArrayList<ItemLocation>             otherItemLocations = new ArrayList<ItemLocation>();
-    private final LinkedHashMap<String, ItemLocation> selecteds          = new LinkedHashMap<String, ItemLocation>();
-    private final ClientUtils                         u                  = new ClientUtils();
+    private final ArrayList<Notification> notifications      = new ArrayList<Notification>();
+    private final ArrayList<String>       otherItemLocations = new ArrayList<String>();
+    private final ArrayList<String>       selecteds          = new ArrayList<String>();
+    private final ClientUtils             u                  = new ClientUtils();
 
     public EditLocationViewImpl() {
         initWidget(uiBinder.createAndBindUi(this));
@@ -91,30 +90,28 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
         container.show();
     }
 
-    private static final Comparator<ItemLocation> BY_NAME = new Comparator<ItemLocation>() {
+    private static final Comparator<String> LEXICO = new Comparator<String>() {
 
-                                                              @Override
-                                                              public int compare(final ItemLocation loc1,
-                                                                      final ItemLocation loc2) {
-                                                                  return loc1.getName().toLowerCase()
-                                                                          .compareTo(loc2.getName().toLowerCase());
-                                                              }
+        @Override
+        public int compare(final String loc1, final String loc2) {
+            return loc1.toLowerCase().compareTo(loc2.toLowerCase());
+        }
 
-                                                          };
+    };
 
-    private void showOtherExistingItemLocations(final String itemId) {
+    private void showOtherExistingItemLocations(final String itemConfigId) {
 
-        retrieveOtherExistingItemLocations(itemId);
+        retrieveOtherExistingItemLocations(itemConfigId);
 
         otherLocationsContainer.clear();
         selecteds.clear();
 
-        Collections.sort(otherItemLocations, BY_NAME);
+        Collections.sort(otherItemLocations, LEXICO);
 
-        for (final ItemLocation loc : otherItemLocations) {
+        for (final String otherLocationName : otherItemLocations) {
 
             final NavLink otherLocationWidget = new NavLink();
-            otherLocationWidget.setText(loc.getName());
+            otherLocationWidget.setText(otherLocationName);
             otherLocationWidget.getElement().addClassName("locationLi");
             otherLocationsContainer.add(otherLocationWidget);
 
@@ -125,11 +122,11 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
 
                     if (!otherLocationWidget.isActive()) {
 
-                        selecteds.put(loc.getName(), loc);
+                        selecteds.add(otherLocationName);
                         otherLocationWidget.setActive(true);
 
                     } else {
-                        selecteds.remove(loc.getName());
+                        selecteds.remove(otherLocationName);
                         otherLocationWidget.setActive(false);
 
                     }
@@ -139,42 +136,24 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
         }
     }
 
-    private void retrieveOtherExistingItemLocations(final String itemId) {
+    private void retrieveOtherExistingItemLocations(final String itemConfigId) {
         otherItemLocations.clear();
-        getOtherItemLocationsFromCache(itemId, this);
+        getOtherItemLocationsFromCache(itemConfigId, this);
     }
 
-    public native void getOtherItemLocationsFromCache(String itemId, EditLocationViewImpl view) /*-{
-        
-        var locations = $wnd.cache_itemId2locations[itemId];
-        var locationNames = [];
-        
-        for (var i = 0, len = locations.length; i < len; i++) {
-            locationNames.push(locations[i].name);
-        }
-        
-		var cache_all = $wnd.cache_name2itemLocation;
+    public native void getOtherItemLocationsFromCache(String item_config_Id, EditLocationViewImpl view) /*-{
 
-		for (var key in cache_all) {
-			if (cache_all.hasOwnProperty(key)) {
-				
-				if ($wnd.$.inArray(key, locationNames) == -1) {
-				
-    				var loc = cache_all[key];
-				    view
-						.@pgu.client.profile.ui.EditLocationViewImpl::addOtherExistingItemLocation(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(
-								loc.name, '' + loc.lat, '' + loc.lng);
-				}
-			}
+		var other_location_names = @pgu.client.app.utils.LocationsUtils::getOtherLocationNames(Ljava/lang/String;)(item_config_Id);
+
+		for ( var key in other_location_names) {
+			var other_location_name = other_location_names[key];
+
+			view.@pgu.client.profile.ui.EditLocationViewImpl::addOtherExistingItemLocation(Ljava/lang/String;)(other_location_name);
 		}
     }-*/;
 
-    public void addOtherExistingItemLocation(final String name, final String lat, final String lng) {
-        final ItemLocation itemLocation = new ItemLocation();
-        itemLocation.setName(name);
-        itemLocation.setLat(lat);
-        itemLocation.setLng(lng);
-        otherItemLocations.add(itemLocation);
+    public void addOtherExistingItemLocation(final String locationName) {
+        otherItemLocations.add(locationName);
     }
 
     @Override
@@ -183,11 +162,11 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
     }
 
     @Override
-    public void displayNewLocationWidget(final String itemId) {
+    public void displayNewLocationWidget(final String itemConfigId) {
 
         container.setTitle("Add locations");
 
-        showOtherExistingItemLocations(itemId);
+        showOtherExistingItemLocations(itemConfigId);
 
         // ///////////////
         addPanel.setVisible(true);
@@ -258,12 +237,12 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
     }
 
     @Override
-    public ArrayList<ItemLocation> getSelectedLocations() {
-        return new ArrayList<ItemLocation>(selecteds.values());
+    public ArrayList<String> getSelectedLocations() {
+        return selecteds;
     }
 
     @Override
-    public void removeCreationFormAndShowClose(final String itemId) {
+    public void removeCreationFormAndShowClose() {
 
         addPanel.setVisible(false);
         saveBtn.setVisible(false);

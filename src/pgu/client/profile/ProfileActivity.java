@@ -17,8 +17,8 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 public class ProfileActivity extends AbstractActivity implements ProfilePresenter //
-        , LocationsSuccessSaveEvent.Handler //
-        , LocationSuccessDeleteEvent.Handler //
+, LocationsSuccessSaveEvent.Handler //
+, LocationSuccessDeleteEvent.Handler //
 {
 
     private final ClientFactory        clientFactory;
@@ -62,16 +62,16 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     }
 
     @Override
-    public void addNewLocation(final String itemId) {
+    public void addNewLocation(final String itemConfigId) {
         // itemId for a position or an education
 
         final EditLocationActivity editLocationActivity = new EditLocationActivity(clientFactory);
-        editLocationActivity.start(null, itemId);
+        editLocationActivity.start(null, itemConfigId);
 
     }
 
     @Override
-    public void editLocation(final String itemId, final String locName, final String locLat, final String locLng) {
+    public void editLocation(final String itemConfigId, final String locName, final String locLat, final String locLng) {
 
         final ItemLocation itemLocation = new ItemLocation();
         itemLocation.setName(locName);
@@ -79,13 +79,13 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         itemLocation.setLng(locLng);
 
         final EditLocationActivity editLocationActivity = new EditLocationActivity(clientFactory);
-        editLocationActivity.start(itemLocation, itemId);
+        editLocationActivity.start(itemLocation, itemConfigId);
     }
 
     @Override
     public void onLocationsSuccessSave(final LocationsSuccessSaveEvent event) {
         // TODO PGU Aug 29, 2012 check on the lat/lng
-        u.addNewLocationsToItem(event.getItemId(), event.getNewItemLocations());
+        u.addNewLocationsToItem(event.getItemConfigId(), event.getNewItemLocations());
     }
 
     @Override

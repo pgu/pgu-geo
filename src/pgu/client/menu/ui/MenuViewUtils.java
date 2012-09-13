@@ -140,14 +140,43 @@ public class MenuViewUtils {
                             , lng = '' + loc.lng()
                             ;
 
-                            @pgu.client.app.utils.LocationsUtils::updateLocationReferential(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(location_name,lat,lng);
-
-                            @pgu.client.app.utils.MarkersUtils::createMarker(Ljava/lang/String;)(location_name);
+                            @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(location_name,lat,lng);
 
                             menu.@pgu.client.menu.ui.MenuViewImpl::cacheLastSearchedLocation(Ljava/lang/String;)(location_name);
 
                         });
 
+    }-*/;
+
+    public static native void saveLastSearchLocation(String lastSearchItemLocation) /*-{
+        var
+        geocoder = $wnd.geocoder
+        , google = $wnd.google
+        , map = $wnd.map
+        ;
+
+        geocoder
+        .geocode(
+                {
+                    'address' : lastSearchItemLocation
+                },
+                function(results, status) {
+
+                    if (status != google.maps.GeocoderStatus.OK) {
+                        var msg = "Geocode was not successful for the following reason: " + status;
+                        menu.@pgu.client.menu.ui.MenuViewImpl::showNotificationWarning(Ljava/lang/String;)(msg);
+                        return;
+                    }
+
+                    var loc = results[0].geometry.location
+                            , lat = '' + loc.lat()
+                            , lng = '' + loc.lng()
+                            ;
+
+                    @pgu.client.app.utils.LocationsUtils::updateLocationReferential(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(lastSearchItemLocation,lat,lng);
+                    @pgu.client.menu.ui.MenuViewImpl::saveLastSearchLocation(Ljava/lang/String;)(lastSearchItemLocation);
+
+                });
     }-*/;
 
 

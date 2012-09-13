@@ -99,24 +99,24 @@ public class ProfileViewImpl extends Composite implements ProfileView {
           $wnd.pgu_geo.editLocation = $entry(@pgu.client.profile.ui.ProfileViewImpl::editLocation(Ljava/lang/String;Ljava/lang/String;));
     }-*/;
 
-    public static native void editLocation(final String item_id, final String location_name) /*-{
-        // TODO review
-		var geopoint = $wnd.pgu_geo.cache_referentialLocations[location_name];
-		if (!geopoint) {
+    public static native void editLocation(final String item_config_id, final String location_name) /*-{
+
+		if (!@pgu.client.app.utils.LocationsUtils::isLocationInReferential(Ljava/lang/String;)(location_name)) {
 			return;
 		}
 
-		@pgu.client.profile.ui.ProfileViewImpl::editItemLocation(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(item_id, location_name, geopoint.lat, geopoint.lng);
+        var geopoint = @pgu.client.app.utils.LocationsUtils::getGeopoint(Ljava/lang/String;)(location_name);
+		@pgu.client.profile.ui.ProfileViewImpl::editItemLocation(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(item_config_id, location_name, geopoint.lat, geopoint.lng);
     }-*/;
 
-    public static void editItemLocation(final String itemId, final String locName, final String locLat,
+    public static void editItemLocation(final String itemConfigId, final String locName, final String locLat,
             final String locLng) {
 
-        staticPresenter.editLocation(itemId, locName, locLat, locLng);
+        staticPresenter.editLocation(itemConfigId, locName, locLat, locLng);
     }
 
-    public static void addNewLocation(final String itemId) {
-        staticPresenter.addNewLocation(itemId);
+    public static void addNewLocation(final String itemConfigId) {
+        staticPresenter.addNewLocation(itemConfigId);
     }
 
     @UiHandler("summaryBasicBtn")
@@ -298,12 +298,20 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 		}
 		view.@pgu.client.profile.ui.ProfileViewImpl::showProfileLanguages()();
 
+		@pgu.client.profile.ui.ProfileViewUtils::initDelayForCallingGeocoder()();
+
+        if (!@pgu.client.app.utils.LocationsUtils::isLocationInReferential(Ljava/lang/String;)(location_name)) {
+
+            var delayMillis = @pgu.client.profile.ui.ProfileViewUtils::delayForCallingGeocoder;
+            @pgu.client.profile.ui.ProfileViewUtils::searchGeopointWithDelay(Ljava/lang/String;I)(location_name,delayMillis);
+            @pgu.client.profile.ui.ProfileViewUtils::incrementDelayForCallingGeocoder()();
+        }
+        // TODO wish locations
+
+
 		//
 		// tables...
 		//
-		@pgu.client.profile.ui.ProfileViewUtils::initDelayForCallingGeocoder()();
-		// TODO search geocode for profile location
-
 		var positions = j_profile.positions;
 		$doc.getElementById('pgu_geo.profile:xp_table').innerHTML = //
 		@pgu.client.profile.ui.ProfileViewUtils::createExperienceTable(Lcom/google/gwt/core/client/JavaScriptObject;)(positions);

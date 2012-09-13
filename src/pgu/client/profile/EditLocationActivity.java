@@ -41,12 +41,12 @@ public class EditLocationActivity {
         handlerRegs.add(addCloseHandler());
     }
 
-    private HandlerRegistration addAddHandler(final String itemId) {
+    private HandlerRegistration addAddHandler(final String itemConfigId) {
         return view.getAddHandler().addClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(final ClickEvent event) {
-                u.fire(eventBus, new LocationAddNewEvent(itemId));
+                u.fire(eventBus, new LocationAddNewEvent(itemConfigId));
             }
         });
     }
@@ -78,13 +78,13 @@ public class EditLocationActivity {
         });
     }
 
-    private HandlerRegistration addSaveHandler(final String itemId) {
+    private HandlerRegistration addSaveHandler(final String itemConfigId) {
         return view.getSaveWidget().addClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(final ClickEvent event) {
 
-                final ArrayList<ItemLocation> selectedLocations = view.getSelectedLocations();
+                final ArrayList<String> selectedLocations = view.getSelectedLocations();
                 if (selectedLocations.isEmpty()) {
                     return;
                 }
@@ -104,9 +104,9 @@ public class EditLocationActivity {
                             public void onSuccess(final Void result) {
 
                                 view.getWaitingIndicator().setVisible(false);
-                                view.removeCreationFormAndShowClose(itemId);
+                                view.removeCreationFormAndShowClose();
 
-                                u.fire(eventBus, new LocationsSuccessSaveEvent(itemId, selectedLocations));
+                                u.fire(eventBus, new LocationsSuccessSaveEvent(itemConfigId, selectedLocations));
 
                                 final StringBuilder msg = getSuccessMessage(selectedLocations);
                                 u.showNotificationSuccess(msg, view);
@@ -114,19 +114,19 @@ public class EditLocationActivity {
                                 hideViewWithDelay();
                             }
 
-                            private StringBuilder getSuccessMessage(final ArrayList<ItemLocation> selectedLocations) {
+                            private StringBuilder getSuccessMessage(final ArrayList<String> selectedLocations) {
                                 final StringBuilder msg = new StringBuilder();
 
                                 if (selectedLocations.size() == 1) {
                                     msg.append("The location \"");
-                                    msg.append(selectedLocations.get(0).getName());
+                                    msg.append(selectedLocations.get(0));
                                     msg.append("\" has been successfully added.");
 
                                 } else {
                                     msg.append("The locations <ul>");
-                                    for (final ItemLocation loc : selectedLocations) {
+                                    for (final String loc : selectedLocations) {
                                         msg.append("<li>\"");
-                                        msg.append(loc.getName());
+                                        msg.append(loc);
                                         msg.append("\"</li>");
                                     }
 
@@ -152,21 +152,21 @@ public class EditLocationActivity {
         });
     }
 
-    public void start(final ItemLocation itemLocation, final String itemId) {
+    public void start(final ItemLocation itemLocation, final String itemConfigId) {
 
         final boolean isNew = itemLocation == null;
 
         if (isNew) {
 
-            handlerRegs.add(addSaveHandler(itemId));
-            handlerRegs.add(addAddHandler(itemId));
-            view.displayNewLocationWidget(itemId);
+            handlerRegs.add(addSaveHandler(itemConfigId));
+            handlerRegs.add(addAddHandler(itemConfigId));
+            view.displayNewLocationWidget(itemConfigId);
 
         } else {
 
-            handlerRegs.add(addDeleteHandler(itemLocation, itemId));
+            handlerRegs.add(addDeleteHandler(itemLocation, itemConfigId));
             handlerRegs.add(addShowOnMapHandler(itemLocation));
-            view.displayEditLocationWidget(itemLocation, itemId);
+            view.displayEditLocationWidget(itemLocation, itemConfigId);
         }
         view.show();
     }

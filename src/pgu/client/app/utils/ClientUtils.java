@@ -43,23 +43,19 @@ public class ClientUtils {
         });
     }
 
-    public void addNewLocationsToItem(final String itemId, final ArrayList<ItemLocation> locations) {
-        for (final ItemLocation loc : locations) {
+    public void addNewLocationsToItem(final String itemConfigId, final ArrayList<String> locations) {
+        for (final String loc : locations) {
 
-            addNewLocationToItem(itemId, loc.getName(), loc.getLat(), loc.getLng());
+            addNewLocationToItem(itemConfigId, loc.getName(), loc.getLat(), loc.getLng());
         }
 
-        refreshHtmlLocationsForItem(itemId);
+        refreshHtmlLocationsForItem(itemConfigId);
     }
 
-    private native void addNewLocationToItem(String itemId, String name, String lat, String lng) /*-{
+    private native void addNewLocationToItem(String item_config_Id, String location_name, String lat, String lng) /*-{
 
-		var loc = {};
-		loc.name = name;
-		loc.lat = lat;
-		loc.lng = lng;
-
-		$wnd.cache_itemId2locations[itemId].push(loc);
+        @pgu.client.app.utils.LocationsUtils::updateLocationReferential(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(location_name,lat,lng);
+        @pgu.client.app.utils.LocationsUtils::addLocation2Item(Ljava/lang/String;Ljava/lang/String;)(item_config_id,location_name);
 
     }-*/;
 
