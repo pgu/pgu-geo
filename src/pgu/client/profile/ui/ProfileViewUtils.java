@@ -106,7 +106,7 @@ public class ProfileViewUtils {
 
     public static native String createTableRow(final String type, final JavaScriptObject item) /*-{
 		var item_config = {};
-		item_config.id = type + ',' + item.id;
+		item_config.id = type + '_' + item.id;
 		item_config.locations = @pgu.client.profile.ui.ProfileViewUtils::createListLocations(Ljava/lang/String;)(item_config.id);
 		item_config.dates = @pgu.client.profile.ui.ProfileDateUtils::labelDates(Lcom/google/gwt/core/client/JavaScriptObject;)(item);
 
