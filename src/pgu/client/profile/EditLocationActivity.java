@@ -229,6 +229,7 @@ public class EditLocationActivity {
 
                             @Override
                             public void onFailure(final Throwable caught) {
+                                // TODO PGU Sep 13, 2012 restore the location in the caches
                                 view.getWaitingIndicator().setVisible(false);
                                 view.enableEditionForm();
 

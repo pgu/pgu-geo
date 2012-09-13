@@ -145,7 +145,15 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     @Override
     public void setProfile(final Profile profile) {
         final UserAndLocations ual = profile.getUserAndLocations();
-        LocationsUtils.initCaches(ual.getItems2locations(), ual.getReferentialLocations());
+
+        if (ual == null) {
+            LocationsUtils.initCaches("", "");
+
+        } else {
+            LocationsUtils.initCaches(ual.getItems2locations(), ual.getReferentialLocations());
+        }
+
+
         ProfileViewUtils.initCaches();
 
         setProfile(this, profile.getJson());

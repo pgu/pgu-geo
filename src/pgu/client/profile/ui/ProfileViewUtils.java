@@ -208,10 +208,10 @@ public class ProfileViewUtils {
 		, cache_anchor = $wnd.pgu_geo.cache_location2anchorIds
 		;
 
-		for ( var i in location_names) {
+        for (var k =0, len=location_names.length; k <len; k++) {
 
-			var location_name = location_names[i];
-			var anchor_id = "loc_" + item_config_id + "_" + i;
+			var location_name = location_names[k];
+			var anchor_id = "loc_" + item_config_id + "_" + k;
 
 			var anchor_ids = cache_anchor[location_name];
 			if (!anchor_ids) {
@@ -232,8 +232,8 @@ public class ProfileViewUtils {
 
 			list.push(el);
 
-			if (!@pgu.client.app.utils.LocationsUtils::isLocationInReferential(Ljava/lang/String;)(location_name)) {
 
+			if (!@pgu.client.app.utils.LocationsUtils::isLocationInReferential(Ljava/lang/String;)(location_name)) {
 				var delayMillis = @pgu.client.profile.ui.ProfileViewUtils::delayForCallingGeocoder;
 				@pgu.client.profile.ui.ProfileViewUtils::searchGeopointWithDelay(Ljava/lang/String;I)(location_name,delayMillis);
 				@pgu.client.profile.ui.ProfileViewUtils::incrementDelayForCallingGeocoder()();
@@ -243,8 +243,6 @@ public class ProfileViewUtils {
 
 		return list.join('');
     }-*/;
-
-
 
     public static void searchGeopointWithDelay(final String locationName, final int delayMillis) {
         new Timer() {

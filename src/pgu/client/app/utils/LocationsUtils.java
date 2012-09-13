@@ -11,8 +11,18 @@ public class LocationsUtils {
             , final String referential //
             ) /*-{
 
-        $wnd.pgu_geo.cache_items2locations = JSON.parse(items2locations);
-        $wnd.pgu_geo.cache_referentialLocations = JSON.parse(referential);
+        if (!items2locations) {
+            $wnd.pgu_geo.cache_items2locations = {};
+        } else {
+            $wnd.pgu_geo.cache_items2locations = JSON.parse(items2locations);
+        }
+
+        if (!referential) {
+            $wnd.pgu_geo.cache_referentialLocations = {};
+        } else {
+            $wnd.pgu_geo.cache_referentialLocations = JSON.parse(referential);
+        }
+
 
     }-*/;
 
