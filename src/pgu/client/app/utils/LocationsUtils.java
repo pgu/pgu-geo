@@ -17,7 +17,7 @@ public class LocationsUtils {
     }-*/;
 
 
-    public static native JavaScriptObject getLocationNamesForItem(String fullId) /*-{
+    public static native JavaScriptObject getLocationNames(String fullId) /*-{
         return $wnd.pgu_geo.cache_items2locations[fullId] || [];
     }-*/;
 

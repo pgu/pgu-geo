@@ -301,6 +301,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 		// tables...
 		//
 		@pgu.client.profile.ui.ProfileViewUtils::initDelayForCallingGeocoder()();
+		// TODO search geocode for profile location
 
 		var positions = j_profile.positions;
 		$doc.getElementById('pgu_geo.profile:xp_table').innerHTML = //

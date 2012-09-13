@@ -91,7 +91,7 @@ public class MenuViewUtils {
         }
 
         var item_config = @pgu.client.profile.ui.ProfileViewUtils::getItemConfig(I)(idx);
-        var location_names = @pgu.client.app.utils.LocationsUtils::getLocationNamesForItem(Ljava/lang/String;)(itemConfig.id);
+        var location_names = @pgu.client.app.utils.LocationsUtils::getLocationNames(Ljava/lang/String;)(itemConfig.id);
 
         var google = $wnd.google;
         var map = $wnd.map;
