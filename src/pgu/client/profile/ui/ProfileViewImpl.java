@@ -145,6 +145,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         u.initCacheItems2Locations(userAndLocations.getItems2locations());
         u.initCacheReferentialLocations(userAndLocations.getReferentialLocations());
         ProfileViewUtils.initCacheLocation2AnchorIds();
+        ProfileViewUtils.initCacheItemId2Config();
 
         setProfile(this, profile.getJson());
     }

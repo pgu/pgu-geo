@@ -24,6 +24,10 @@ public class ProfileViewUtils {
 		$wnd.pgu_geo.cache_location2anchorIds = {};
     }-*/;
 
+    public static native void initCacheItemId2Config() /*-{
+		$wnd.pgu_geo.cache_itemId2config = {};
+    }-*/;
+
     public static String createExperienceTable(final JavaScriptObject jsonExperiences) {
         return createTable(ItemType.experience, jsonExperiences, "No experience has been found");
     }
@@ -80,24 +84,25 @@ public class ProfileViewUtils {
 
 		}
 
-		return '' + '<table class="table table-bordered table-striped"> '
+		return ''
+				+ '<table class="table table-bordered table-striped"> '
 				+ '   <thead>                                         '
 				+ '      <tr>                                         '
-				+ '          <th>Locations</th>                        '
+				+ '          <th>Locations</th>                       '
 				+ '          <th>Dates</th>                           '
 				+ '          <th>' + title + '</th>                   '
 				+ '          <th></th>                                '
 				+ '      </tr>                                        '
 				+ '  </thead>                                         '
-				+ '  <tbody>                                          ' //
+				+ '  <tbody>                                          '
 				+ '';
 
     }-*/;
 
     public static native String createTableFoot() /*-{
-		return '' + //
-		'  </tbody>                                        ' + //
-		'</table>                                          ' + //
+		return '' +
+		'  </tbody>                                        ' +
+		'</table>                                          ' +
 		'';
 
     }-*/;
@@ -129,8 +134,43 @@ public class ProfileViewUtils {
 			@pgu.client.app.utils.ClientUtils::log(Ljava/lang/String;)("Unknown type " + type);
 		}
 
-		// TODO 
+		if (item.startDate //
+				&& item.startDate.year) {
 
+			var startDate = item.startDate;
+			var month = startDate.month || 1;
+
+			rowConfig.startD = new Date(startDate.year, month - 1, 1);
+		}
+
+		$wnd.pgu_geo.cache_itemId2config[item.id] = rowConfig;
+
+		return ''
+				+ '<tr>                                                                              '
+				+ '  <td>                                                                            '
+				+ '    <ul id="' + rowConfig.locations_cell_id + '" class="nav nav-pills">           '
+				+ rowConfig.locations
+				+ '    </ul>                                                                         '
+				+ '    <i class="icon-plus-sign icon-large add-location"                             '
+				+ '      onclick="javascript:addNewLocation(\'' + rowConfig.item_id + '\');"         '
+				+ '      >                                                                           '
+				+ '    </i>                                                                          '
+				+ '  </td>                                                                           '
+				+ '  <td>' + rowConfig.dates + '</td>                                                '
+				+ '  <td>' + rowConfig.short_content + '</td>                                        '
+				+ '  <td style="cursor:pointer"                                                      '
+				+ '      onclick="javascript:$(\'#' + rowConfig.info_id + '\').popover(\'toggle\');" '
+				+ '      >                                                                           '
+				+ '    <i id="' + rowConfig.info_id + '" class="icon-info-sign icon-large"           '
+				+ '      data-animation="true"                                                       '
+				+ '      data-html="true"                                                            '
+				+ '      data-placement="left"                                                       '
+				+ '      data-title="' + rowConfig.content_title + '"                                '
+				+ '      data-content="' + rowConfig.long_content + '"                               '
+				+ '     ></i>                                                                        '
+				+ '   </td>                                                                          '
+				+ '</tr>                                                                             '
+				+ '';
     }-*/;
 
     public static native String labelXpTitle(JavaScriptObject position) /*-{
@@ -150,7 +190,7 @@ public class ProfileViewUtils {
     }-*/;
 
     public static native String labelEduTitle(JavaScriptObject education) /*-{
-		// Universität Rostock<br/>International Trade  
+		// Universität Rostock<br/>International Trade
 		var title = [];
 
 		if (education.schoolName) {
@@ -179,17 +219,16 @@ public class ProfileViewUtils {
 			anchor_ids.push(anchor_id);
 			$wnd.pgu_geo.cache_location2anchorIds[location_name] = anchor_ids;
 
-			var el = '' + //
-			'      <li class="locationLi">          ' + //
-			'        <a id="' + anchor_id + '"      ' + //
-			'           href="javascript:;"         ' + //
-			'           onclick="javascript:' + //
-			'pgu_geo.editLocation(\'' + item_id + '\', \'' + location_name
-					+ '\');' + //
-					'return false;"' + //
-					' >' + location_name + '</a>             ' + //
-					'      </li>                            ' + //
-					'';
+			var el = '' +
+			'      <li class="locationLi">                                        ' +
+			'        <a id="' + anchor_id + '"                                    ' +
+			'           href="javascript:;"                                       ' +
+			'           onclick="javascript:' +
+			'pgu_geo.editLocation(\'' + item_id + '\', \'' + location_name + '\');' +
+			'           return false;">' + location_name +
+			'        </a>                                                         ' +
+			'      </li>                                                          ' +
+			'';
 
 			list.push(el);
 
@@ -289,3 +328,4 @@ public class ProfileViewUtils {
         }-*/;
 
 }
+
