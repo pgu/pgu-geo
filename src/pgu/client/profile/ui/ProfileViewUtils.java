@@ -107,7 +107,7 @@ public class ProfileViewUtils {
     public static native String createTableRow(final String type, final JavaScriptObject item) /*-{
 		var item_config = {};
 		item_config.id = type + ',' + item.id;
-		item_config.locations = @pgu.client.profile.ui.ProfileViewUtils::createListLocations(Ljava/lang/String;Ljava/lang/String;)(type,item_config.id);
+		item_config.locations = @pgu.client.profile.ui.ProfileViewUtils::createListLocations(Ljava/lang/String;)(item_config.id);
 		item_config.dates = @pgu.client.profile.ui.ProfileDateUtils::labelDates(Lcom/google/gwt/core/client/JavaScriptObject;)(item);
 
 		if (@pgu.client.profile.ui.ProfileViewUtils::isEdu(Ljava/lang/String;)(type)) {
@@ -201,7 +201,7 @@ public class ProfileViewUtils {
 		return title.join('<br/>');
     }-*/;
 
-    public static native String createListLocations(String type, String item_config_id) /*-{
+    public static native String createListLocations(String item_config_id) /*-{
 		var
 		  location_names = @pgu.client.app.utils.LocationsUtils::getLocationNames(Ljava/lang/String;)(item_config_id)
 		, list = []

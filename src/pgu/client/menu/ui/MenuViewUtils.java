@@ -1,5 +1,7 @@
 package pgu.client.menu.ui;
 
+import pgu.client.menu.MenuActivity;
+
 public class MenuViewUtils {
 
     static {
@@ -148,17 +150,16 @@ public class MenuViewUtils {
 
     }-*/;
 
-    public static native void saveLastSearchLocation(String lastSearchItemLocation) /*-{
+    public static native void addNewLocation(MenuActivity activity, String item_config_id, String location_name) /*-{
         var
         geocoder = $wnd.geocoder
         , google = $wnd.google
         , map = $wnd.map
         ;
 
-        geocoder
-        .geocode(
+        geocoder.geocode(
                 {
-                    'address' : lastSearchItemLocation
+                    'address' : location_name
                 },
                 function(results, status) {
 
@@ -173,8 +174,12 @@ public class MenuViewUtils {
                             , lng = '' + loc.lng()
                             ;
 
-                    @pgu.client.app.utils.LocationsUtils::updateLocationReferential(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(lastSearchItemLocation,lat,lng);
-                    @pgu.client.menu.ui.MenuViewImpl::saveLastSearchLocation(Ljava/lang/String;)(lastSearchItemLocation);
+                    // TODO
+//                    @pgu.client.app.utils.LocationsUtils::isLocationInReferential(Ljava/lang/String;)(location_name);
+
+                    @pgu.client.app.utils.LocationsUtils::updateLocationReferential(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(location_name,lat,lng);
+                    @pgu.client.app.utils.LocationsUtils::addLocation2Item(Ljava/lang/String;Ljava/lang/String;)(item_config_id, location_name);
+                    activity.@pgu.client.menu.MenuActivity::saveLocationService(Ljava/lang/String;)(location_name);
 
                 });
     }-*/;

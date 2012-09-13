@@ -11,6 +11,7 @@ import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.LocationsUtils;
 import pgu.client.app.utils.Notification;
+import pgu.client.profile.ui.EditLocationUtils;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.shared.dto.ItemLocation;
 
@@ -92,6 +93,8 @@ public class EditLocationActivity {
                 view.getWaitingIndicator().setVisible(true);
                 view.disableCreationForm();
 
+                EditLocationUtils.addExistingLocations(itemConfigId, selectedLocations);
+
                 linkedinService.saveLocations( //
                         //
                         clientFactory.getAppState().getUserId() //
@@ -106,7 +109,7 @@ public class EditLocationActivity {
                                 view.getWaitingIndicator().setVisible(false);
                                 view.removeCreationFormAndShowClose();
 
-                                u.fire(eventBus, new LocationsSuccessSaveEvent(itemConfigId, selectedLocations));
+                                u.fire(eventBus, new LocationsSuccessSaveEvent(itemConfigId));
 
                                 final StringBuilder msg = getSuccessMessage(selectedLocations);
                                 u.showNotificationSuccess(msg, view);
@@ -191,6 +194,8 @@ public class EditLocationActivity {
 
                 view.getWaitingIndicator().setVisible(true);
                 view.disableEditionForm();
+
+                EditLocationUtils.deleteLocationFromItem(itemId, itemLocation.getName());
 
                 linkedinService.saveLocations( //
                         //

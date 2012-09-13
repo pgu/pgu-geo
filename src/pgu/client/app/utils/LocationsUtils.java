@@ -39,6 +39,47 @@ public class LocationsUtils {
         $wnd.pgu_geo.cache_items2locations[item_config_id].push(location_name);
     }-*/;
 
+    public static native void removeLocationFromItem(String item_config_id, String location_name) /*-{
+
+        var cache = $wnd.pgu_geo.cache_items2locations;
+
+        var location_names = cache[item_config_id];
+        var updated_locations = [];
+
+        for (var i in location_names) {
+            var name = location_names[i];
+
+            if (location_name !== name) {
+                updated_locations.push(name);
+            }
+        }
+
+        cache[item_config_id] = updated_locations;
+
+        var has_at_least_once = false;
+
+        mainloop: for (var key in cache) {
+            if (cache.hasOwnProperty(key)) {
+
+                var locations = cache[key];
+                for (var j in locations) {
+
+                    var location = locations[j];
+                    if (location === location_name) {
+
+                        has_at_least_once = true;
+                        break mainloop;
+                    }
+                }
+            }
+        }
+
+        if (!has_at_least_once) {
+            delete $wnd.pgu_geo.cache_referentialLocations[location_name];
+        }
+
+    }-*/;
+
     public static native JavaScriptObject getLocationNames(String item_config_id) /*-{
         return $wnd.pgu_geo.cache_items2locations[item_config_id] || [];
     }-*/;

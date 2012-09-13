@@ -55,7 +55,6 @@ public class MenuViewImpl extends Composite implements MenuView {
     Nav                       profilePlayMenu;
 
     private MenuPresenter     presenter;
-    private static MenuPresenter staticPresenter;
 
     private final ClientUtils u              = new ClientUtils();
     private boolean           isMapDisplayed = true;
@@ -120,7 +119,6 @@ public class MenuViewImpl extends Composite implements MenuView {
     @Override
     public void setPresenter(final MenuPresenter presenter) {
         this.presenter = presenter;
-        staticPresenter = presenter;
     }
 
     @UiHandler("clearMarkersBtn")
@@ -137,13 +135,8 @@ public class MenuViewImpl extends Composite implements MenuView {
             return;
         }
 
-        MenuViewUtils.saveLastSearchLocation(lastSearchItemLocation);
+        presenter.saveLocation(lastSearchItemLocation);
     }
-
-    public static void saveLastSearchLocation(final String locationName) {
-        staticPresenter.saveLocation(locationName);
-    }
-
 
     @UiHandler("locationSearchBtn")
     public void clickOnLocationSearch(final ClickEvent e) {

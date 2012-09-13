@@ -84,8 +84,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     @Override
     public void onLocationsSuccessSave(final LocationsSuccessSaveEvent event) {
-        // TODO PGU Aug 29, 2012 check on the lat/lng
-        u.addNewLocationsToItem(event.getItemConfigId(), event.getNewItemLocations());
+        u.refreshHtmlLocationsForItem(event.getItemConfigId());
     }
 
     @Override

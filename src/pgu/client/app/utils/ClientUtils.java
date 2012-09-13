@@ -1,6 +1,5 @@
 package pgu.client.app.utils;
 
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,26 +42,10 @@ public class ClientUtils {
         });
     }
 
-    public void addNewLocationsToItem(final String itemConfigId, final ArrayList<String> locations) {
-        for (final String loc : locations) {
+    public native void refreshHtmlLocationsForItem(final String item_config_id) /*-{
 
-            addNewLocationToItem(itemConfigId, loc.getName(), loc.getLat(), loc.getLng());
-        }
-
-        refreshHtmlLocationsForItem(itemConfigId);
-    }
-
-    private native void addNewLocationToItem(String item_config_Id, String location_name, String lat, String lng) /*-{
-
-        @pgu.client.app.utils.LocationsUtils::updateLocationReferential(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(location_name,lat,lng);
-        @pgu.client.app.utils.LocationsUtils::addLocation2Item(Ljava/lang/String;Ljava/lang/String;)(item_config_id,location_name);
-
-    }-*/;
-
-    private native void refreshHtmlLocationsForItem(final String itemId) /*-{
-
-		var html_locations = $wnd.createListLocations(itemId);
-		$doc.getElementById("locations_" + itemId).innerHTML = html_locations;
+		var html_locations = $wnd.createListLocations(item_config_id);
+		$doc.getElementById("locations_" + item_config_id).innerHTML = html_locations;
 
     }-*/;
 

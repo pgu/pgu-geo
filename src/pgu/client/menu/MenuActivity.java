@@ -13,6 +13,7 @@ import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.Level;
 import pgu.client.app.utils.LocationsUtils;
+import pgu.client.menu.ui.MenuViewUtils;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.shared.dto.LoginInfo;
 
@@ -137,6 +138,13 @@ public class MenuActivity implements MenuPresenter //
 
         u.fire(eventBus, new ShowWaitingIndicatorEvent());
 
+        // TODO PGU Sep 13, 2012 if same lat/lng, do something else
+
+        MenuViewUtils.addNewLocation(this, itemConfigId, itemLocation);
+    }
+
+    public void saveLocationService(final String itemLocation) {
+
         linkedinService.saveLocations( //
                 //
                 clientFactory.getAppState().getUserId() //
@@ -150,7 +158,7 @@ public class MenuActivity implements MenuPresenter //
                         u.fire(eventBus, new HideWaitingIndicatorEvent());
 
                         view.getSaveWidget().setVisible(false);
-                        u.fire(eventBus, new LocationsSuccessSaveEvent(itemConfigId, itemLocation));
+                        u.fire(eventBus, new LocationsSuccessSaveEvent(itemConfigId));
 
                         final StringBuilder msg = new StringBuilder();
                         msg.append("The location \"");
@@ -159,7 +167,7 @@ public class MenuActivity implements MenuPresenter //
 
                         u.fire(eventBus, new NotificationEvent(Level.SUCCESS, msg.toString()));
                     }
-
+                    // TODO PGU Sep 13, 2012 TODO on failure remove the location from the caches
                 });
 
     }
