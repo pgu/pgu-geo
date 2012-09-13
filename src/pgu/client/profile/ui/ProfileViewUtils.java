@@ -107,8 +107,61 @@ public class ProfileViewUtils {
 		rowConfig.id = item.id;
 		rowConfig.locations = @pgu.client.profile.ui.ProfileViewUtils::createListLocations(Ljava/lang/String;Ljava/lang/String;)(type,item.id);
 		rowConfig.dates = @pgu.client.profile.ui.ProfileDateUtils::labelDates(Lcom/google/gwt/core/client/JavaScriptObject;)(item);
-		// TODO PGU...
 
+		if (@pgu.client.profile.ui.ProfileViewUtils::isEdu(Ljava/lang/String;)(type)) {
+
+			rowConfig.short_content = @pgu.client.profile.ui.ProfileViewUtils::labelEduTitle(Lcom/google/gwt/core/client/JavaScriptObject;)(item);
+			rowConfig.content_title = "Education";
+			rowConfig.long_content = @pgu.client.app.utils.ClientUtils::markdown(Ljava/lang/String;)(item.notes);
+
+		} else if (@pgu.client.profile.ui.ProfileViewUtils::isXp(Ljava/lang/String;)(type)) {
+
+			rowConfig.short_content = @pgu.client.profile.ui.ProfileViewUtils::labelXpTitle(Lcom/google/gwt/core/client/JavaScriptObject;)(item);
+			rowConfig.content_title = "Experience";
+			rowConfig.long_content = @pgu.client.app.utils.ClientUtils::markdown(Ljava/lang/String;)(item.summary);
+
+		} else {
+
+			rowConfig.short_content = "";
+			rowConfig.content_title = "";
+			rowConfig.long_content = "";
+
+			@pgu.client.app.utils.ClientUtils::log(Ljava/lang/String;)("Unknown type " + type);
+		}
+
+		// TODO 
+
+    }-*/;
+
+    public static native String labelXpTitle(JavaScriptObject position) /*-{
+		//  SFEIR<br/>Senior Web Java J2EE Engineer Developer
+		var title = [];
+
+		if (position.company && position.company.name) {
+
+			title.push(position.company.name);
+		}
+
+		if (position.title) {
+			title.push(position.title);
+		}
+
+		return title.join('<br/>');
+    }-*/;
+
+    public static native String labelEduTitle(JavaScriptObject education) /*-{
+		// Universität Rostock<br/>International Trade  
+		var title = [];
+
+		if (education.schoolName) {
+			title.push(education.schoolName);
+		}
+
+		if (education.fieldOfStudy) {
+			title.push(education.fieldOfStudy);
+		}
+
+		return title.join('<br/>');
     }-*/;
 
     public static native String createListLocations(String type, String item_id) /*-{

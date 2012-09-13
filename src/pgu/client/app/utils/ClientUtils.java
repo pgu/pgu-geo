@@ -28,7 +28,7 @@ public class ClientUtils {
 		$wnd.pgu_geo.showdown_converter = new $wnd.Showdown.converter();
     }-*/;
 
-    public native String markdown(String text) /*-{
+    public static native String markdown(String text) /*-{
 		return $wnd.pgu_geo.showdown_converter.makeHtml(text || '');
     }-*/;
 
