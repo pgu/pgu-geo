@@ -74,7 +74,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     public void editLocation(final String itemConfigId, final String locName) {
 
         final EditLocationActivity editLocationActivity = new EditLocationActivity(clientFactory);
-        editLocationActivity.start(locName, itemConfigId);
+        editLocationActivity.start(itemConfigId, locName);
     }
 
     @Override
