@@ -174,13 +174,15 @@ public class MenuViewUtils {
                             , lng = '' + loc.lng()
                             ;
 
-                    // TODO
-//                    @pgu.client.app.utils.LocationsUtils::isLocationInReferential(Ljava/lang/String;)(location_name);
+                    var is_doublon = @pgu.client.app.utils.LocationsUtils::isDoublon(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(item_config_id,loc,lat,lng);
+                    if (is_doublon) {
+                        activity.@pgu.client.menu.MenuActivity::saveLocationService(ZLjava/lang/String;)(true,location_name);
 
-                    @pgu.client.app.utils.LocationsUtils::addGeopoint(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(location_name,lat,lng);
-                    @pgu.client.app.utils.LocationsUtils::addLocation2Item(Ljava/lang/String;Ljava/lang/String;)(item_config_id, location_name);
-                    activity.@pgu.client.menu.MenuActivity::saveLocationService(Ljava/lang/String;)(location_name);
-
+                    } else {
+                        @pgu.client.app.utils.LocationsUtils::addGeopointToCopyCache(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(location_name,lat,lng);
+                        @pgu.client.app.utils.LocationsUtils::addLocation2ItemInCopyCache(Ljava/lang/String;Ljava/lang/String;)(item_config_id, location_name);
+                        activity.@pgu.client.menu.MenuActivity::saveLocationService(ZLjava/lang/String;)(false,location_name);
+                    }
                 });
     }-*/;
 

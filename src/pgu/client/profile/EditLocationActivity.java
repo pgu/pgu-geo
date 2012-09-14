@@ -11,7 +11,6 @@ import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.LocationsUtils;
 import pgu.client.app.utils.Notification;
-import pgu.client.profile.ui.EditLocationUtils;
 import pgu.client.service.LinkedinServiceAsync;
 
 import com.github.gwtbootstrap.client.ui.event.HiddenEvent;
@@ -92,18 +91,23 @@ public class EditLocationActivity {
                 view.getWaitingIndicator().setVisible(true);
                 view.disableCreationForm();
 
-                EditLocationUtils.addExistingLocations(itemConfigId, selectedLocations);
+                LocationsUtils.copyLocationCaches();
+                for (final String locationName: selectedLocations) {
+                    LocationsUtils.addLocation2ItemInCopyCache(itemConfigId, locationName);
+                }
 
                 linkedinService.saveLocations( //
                         //
                         clientFactory.getAppState().getUserId() //
-                        , LocationsUtils.json_items2locations() //
-                        , LocationsUtils.json_referentialLocations() //
+                        , LocationsUtils.json_copyCacheItems() //
+                        , LocationsUtils.json_copyCacheReferential() //
                         //
                         , new AsyncCallbackApp<Void>(eventBus) {
 
                             @Override
                             public void onSuccess(final Void result) {
+
+                                LocationsUtils.replaceCachesByCopies();
 
                                 view.getWaitingIndicator().setVisible(false);
                                 view.removeCreationFormAndShowClose();
@@ -139,6 +143,9 @@ public class EditLocationActivity {
 
                             @Override
                             public void onFailure(final Throwable caught) {
+
+                                LocationsUtils.deleteCopies();
+
                                 view.getWaitingIndicator().setVisible(false);
                                 view.resetCreationForm();
 

@@ -102,13 +102,15 @@ public class LocationsUtils {
 
     public static native JavaScriptObject getOtherLocationNames(String item_config_id) /*-{
 
-        var referential = $wnd.pgu_geo.cache_referential;
-        var item_locations = $wnd.pgu_geo.cache_items[item_config_id];
+        var
+            cache_referential = $wnd.pgu_geo.cache_referential
+          , cache_items = $wnd.pgu_geo.cache_items
+          , item_locations = cache_items[item_config_id]
+          , other_location_names = []
+        ;
 
-        var other_location_names = [];
-
-        for (var key in referential) {
-            if (referential.hasOwnProperty(key)) {
+        for (var key in cache_referential) {
+            if (cache_referential.hasOwnProperty(key)) {
 
                 if ($wnd.$.inArray(key, item_locations) == -1) {
                     other_location_names.push(key);
@@ -119,9 +121,63 @@ public class LocationsUtils {
         return other_location_names;
     }-*/;
 
-    public static native void addLocation2Item(String item_config_id, String location_name) /*-{
-        // TODO check for doublon
-        $wnd.pgu_geo.cache_items[item_config_id].push(location_name);
+    public static native boolean isDoublon(String item_config_id, String location_name, String lat, String lng) /*-{
+        var
+            cache_referential = $wnd.pgu_geo.cache_referential
+          , cache_items = $wnd.pgu_geo.cache_items
+          , locations = cache_items[item_config_id];
+        ;
+
+        if (locations) {
+
+            var is_doublon = false;
+
+            for (var i in locations) {
+                var location = locations[i];
+
+                if (location === location_name) {
+                    return true;
+                }
+
+                var geopoint = cache_referential[location];
+
+                if (geopoint.lat === lat //
+                    && geopoint.lng === lng) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }-*/;
+
+    public static native void addLocation2ItemInCopyCache(String item_config_id, String location_name) /*-{
+        var
+            cache_items = $wnd.pgu_geo.copy_cache_items
+          , locations = cache_items[item_config_id]
+        ;
+
+        if (locations) {
+
+            var is_doublon = false;
+            for (var i in locations) {
+                var location = locations[i];
+
+                if (location === location_name) {
+                    is_doublon = true;
+                    break;
+                }
+            }
+
+            if (!is_doublon) {
+                locations.push(location_name);
+            }
+
+        } else {
+            locations = [];
+            locations.push(location_name);
+            cache_items[item_config_id] = locations;
+        }
+
     }-*/;
 
     public static native void removeLocationFromItem(String item_config_id, String location_name) /*-{
@@ -206,26 +262,28 @@ public class LocationsUtils {
         return true;
     }-*/;
 
-    public static native void addGeopoint(String locationName, String lat, String lng) /*-{
+    public static native void addGeopointToCopyCache(String locationName, String lat, String lng) /*-{
+        var cache = $wnd.pgu_geo.copy_cache_referential;
+        @pgu.client.app.utils.LocationsUtils::addGeopointInternal(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(cache,location_name,lat,lng);
+    }-*/;
+
+    public static native void addGeopoint(String location_name, String lat, String lng) /*-{
+        var cache = $wnd.pgu_geo.cache_referential;
+        @pgu.client.app.utils.LocationsUtils::addGeopointInternal(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(cache,location_name,lat,lng);
+    }-*/;
+
+    public static native void addGeopointInternal(JavaScriptObject cache, String location_name, String lat, String lng) /*-{
 
         var location = {};
         location.lat = lat;
         location.lng = lng;
 
-        $wnd.pgu_geo.cache_referential[locationName] = location;
+        cache[location_name] = location;
 
     }-*/;
 
-    public static native JavaScriptObject getGeopoint(String locationName) /*-{
-        return $wnd.pgu_geo.cache_referential[locationName];
-    }-*/;
-
-    public static native String json_items2locations() /*-{
-        return JSON.stringify($wnd.pgu_geo.cache_items);
-    }-*/;
-
-    public static native String json_referentialLocations() /*-{
-        return JSON.stringify($wnd.pgu_geo.cache_referential);
+    public static native JavaScriptObject getGeopoint(String location_name) /*-{
+        return $wnd.pgu_geo.cache_referential[location_name];
     }-*/;
 
     public static native String json_copyCacheItems() /*-{

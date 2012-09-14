@@ -130,7 +130,7 @@ public class MenuActivity implements MenuPresenter //
     }
 
     @Override
-    public void saveLocation(final String itemLocation) {
+    public void saveLocation(final String locationName) {
 
         if (u.isVoid(itemConfigId)) {
             return;
@@ -138,23 +138,34 @@ public class MenuActivity implements MenuPresenter //
 
         u.fire(eventBus, new ShowWaitingIndicatorEvent());
 
-        // TODO PGU Sep 13, 2012 if same lat/lng, do something else
-
-        MenuViewUtils.addNewLocation(this, itemConfigId, itemLocation);
+        LocationsUtils.copyLocationCaches();
+        MenuViewUtils.addNewLocation(this, itemConfigId, locationName);
     }
 
-    public void saveLocationService(final String itemLocation) {
+    public void saveLocationService(final boolean isDoublon, final String locationName) {
+
+        if (isDoublon) {
+            LocationsUtils.deleteCopies();
+            u.fire(eventBus, new HideWaitingIndicatorEvent());
+            u.fire(eventBus, new NotificationEvent(Level.WARNING, //
+                    "This location " + locationName + " is already associated to this item"));
+            return;
+        }
+
 
         linkedinService.saveLocations( //
                 //
                 clientFactory.getAppState().getUserId() //
-                , LocationsUtils.json_items2locations() //
-                , LocationsUtils.json_referentialLocations() //
+                , LocationsUtils.json_copyCacheItems() //
+                , LocationsUtils.json_copyCacheReferential() //
                 //
                 , new AsyncCallbackApp<Void>(eventBus) {
 
                     @Override
                     public void onSuccess(final Void result) {
+
+                        LocationsUtils.replaceCachesByCopies();
+
                         u.fire(eventBus, new HideWaitingIndicatorEvent());
 
                         view.getSaveWidget().setVisible(false);
@@ -162,12 +173,20 @@ public class MenuActivity implements MenuPresenter //
 
                         final StringBuilder msg = new StringBuilder();
                         msg.append("The location \"");
-                        msg.append(itemLocation);
+                        msg.append(locationName);
                         msg.append("\" has been successfully added.");
 
                         u.fire(eventBus, new NotificationEvent(Level.SUCCESS, msg.toString()));
                     }
-                    // TODO PGU Sep 13, 2012 TODO on failure remove the location from the caches
+
+                    @Override
+                    public void onFailure(final Throwable caught) {
+                        LocationsUtils.deleteCopies();
+
+                        super.onFailure(caught);
+                    }
+
+
                 });
 
     }
