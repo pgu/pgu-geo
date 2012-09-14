@@ -141,7 +141,7 @@ public class ProfileViewUtils {
 		return ''
 				+ '<tr>                                                                                '
 				+ '  <td>                                                                              '
-				+ '    <ul id=locations_"' + item_config.id + '" class="nav nav-pills">                '
+				+ '    <ul id="locations_' + item_config.id + '" class="nav nav-pills">                '
 				+ item_config.locations
 				+ '    </ul>                                                                           '
 				+ '    <i class="icon-plus-sign icon-large add-location"                               '

@@ -66,7 +66,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         // itemId for a position or an education
 
         final EditLocationActivity editLocationActivity = new EditLocationActivity(clientFactory);
-        editLocationActivity.start("", itemConfigId);
+        editLocationActivity.start(itemConfigId, "");
 
     }
 
