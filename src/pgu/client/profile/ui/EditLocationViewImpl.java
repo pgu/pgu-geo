@@ -145,8 +145,9 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
 
 		var other_location_names = @pgu.client.app.utils.LocationsUtils::getOtherLocationNames(Ljava/lang/String;)(item_config_Id);
 
-		for ( var key in other_location_names) {
-			var other_location_name = other_location_names[key];
+        for ( var i = 0, len = other_location_names.length; i < len; i++) {
+
+			var other_location_name = other_location_names[i];
 
 			view.@pgu.client.profile.ui.EditLocationViewImpl::addOtherExistingItemLocation(Ljava/lang/String;)(other_location_name);
 		}

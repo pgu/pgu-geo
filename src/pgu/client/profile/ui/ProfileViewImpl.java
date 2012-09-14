@@ -260,66 +260,28 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         lgContainer.add(row);
     }
 
-    private void setProfileId(final String id) {
+    void setProfileId(final String id) {
         presenter.setProfileId(id);
     }
 
     private native void setProfile(ProfileViewImpl view, String profile) /*-{
 
+        @pgu.client.profile.ui.ProfileViewUtils::initDelayForCallingGeocoder()();
+
 		var j_profile = JSON.parse(profile);
 
-		var //
-		profile_id = j_profile.id || '' //
-		, first_name = j_profile.firstName || '' //
-		, last_name = j_profile.lastName || '' //
-		, headline = j_profile.headline || '' //
-		, specialties = j_profile.specialties || '' //
-		, location_name = '' //
-		, summary = j_profile.summary || '' //
-		, languages = j_profile.languages || {} //
-		;
+		@pgu.client.profile.ui.ProfileSummaryUtils::setProfileId(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
+		@pgu.client.profile.ui.ProfileSummaryUtils::setProfileName(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
+		@pgu.client.profile.ui.ProfileSummaryUtils::setProfileHeadline(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
+		@pgu.client.profile.ui.ProfileSummaryUtils::setProfileSpecialties(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
+		@pgu.client.profile.ui.ProfileSummaryUtils::setProfileLocation(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
+		@pgu.client.profile.ui.ProfileSummaryUtils::setProfileSummary(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
+		@pgu.client.profile.ui.ProfileSummaryUtils::setProfileLanguages(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 
-		var profile_location = j_profile.location || {};
-		location_name = profile_location.name;
+        @pgu.client.profile.ui.ProfilePositionsUtils::updateProfilePositions(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 
-		view.@pgu.client.profile.ui.ProfileViewImpl::setProfileId(Ljava/lang/String;)(profile_id);
-		view.@pgu.client.profile.ui.ProfileViewImpl::setProfileName(Ljava/lang/String;Ljava/lang/String;)(first_name, last_name);
-		view.@pgu.client.profile.ui.ProfileViewImpl::setProfileHeadline(Ljava/lang/String;)(headline);
-		view.@pgu.client.profile.ui.ProfileViewImpl::setProfileSpecialties(Ljava/lang/String;)(specialties);
-		view.@pgu.client.profile.ui.ProfileViewImpl::setProfileLocation(Ljava/lang/String;)(location_name);
-		view.@pgu.client.profile.ui.ProfileViewImpl::setProfileSummary(Ljava/lang/String;)(summary);
+        // TODO display wish locations
 
-		view.@pgu.client.profile.ui.ProfileViewImpl::clearProfileLanguages()();
-		var language_values = languages.values || [];
-		for ( var i in language_values) {
-
-			var //
-			language_value = language_values[i] //
-			//
-			, language = language_value.language || {} //
-			, language_name = language.name || '' //
-			//
-			, language_proficiency = language_value.proficiency || {} //
-			, language_level = language_proficiency.level || '' //
-			;
-			view.@pgu.client.profile.ui.ProfileViewImpl::addProfileLanguage(Ljava/lang/String;Ljava/lang/String;)(language_name, language_level);
-		}
-		view.@pgu.client.profile.ui.ProfileViewImpl::showProfileLanguages()();
-
-		@pgu.client.profile.ui.ProfileViewUtils::initDelayForCallingGeocoder()();
-
-        if (!@pgu.client.app.utils.LocationsUtils::isLocationInReferential(Ljava/lang/String;)(location_name)) {
-
-            var delayMillis = @pgu.client.profile.ui.ProfileViewUtils::delayForCallingGeocoder;
-            @pgu.client.profile.ui.ProfileViewUtils::searchGeopointWithDelay(Ljava/lang/String;I)(location_name,delayMillis);
-            @pgu.client.profile.ui.ProfileViewUtils::incrementDelayForCallingGeocoder()();
-        }
-        // TODO wish locations
-
-
-		//
-		// tables...
-		//
 		var positions = j_profile.positions;
 		$doc.getElementById('pgu_geo.profile:xp_table').innerHTML = //
 		@pgu.client.profile.ui.ProfileViewUtils::createExperienceTable(Lcom/google/gwt/core/client/JavaScriptObject;)(positions);
@@ -327,8 +289,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 		var educations = j_profile.educations;
 		$doc.getElementById('pgu_geo.profile:edu_table').innerHTML = //
 		@pgu.client.profile.ui.ProfileViewUtils::createEducationTable(Lcom/google/gwt/core/client/JavaScriptObject;)(educations);
-
-		// TODO refresh css anchors according to locations found or not
 
     }-*/;
 

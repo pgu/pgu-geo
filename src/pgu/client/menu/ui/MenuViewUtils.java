@@ -98,7 +98,7 @@ public class MenuViewUtils {
         var google = $wnd.google;
         var map = $wnd.map;
 
-        for (var i in location_names) {
+        for ( var i = 0, len = location_names.length; i < len; i++) {
             var location_name = location_names[i];
 
             var marker = @pgu.client.app.utils.MarkersUtils::createMarker(Ljava/lang/String;)(location_name);
@@ -177,7 +177,7 @@ public class MenuViewUtils {
                     // TODO
 //                    @pgu.client.app.utils.LocationsUtils::isLocationInReferential(Ljava/lang/String;)(location_name);
 
-                    @pgu.client.app.utils.LocationsUtils::updateLocationReferential(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(location_name,lat,lng);
+                    @pgu.client.app.utils.LocationsUtils::addGeopoint(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(location_name,lat,lng);
                     @pgu.client.app.utils.LocationsUtils::addLocation2Item(Ljava/lang/String;Ljava/lang/String;)(item_config_id, location_name);
                     activity.@pgu.client.menu.MenuActivity::saveLocationService(Ljava/lang/String;)(location_name);
 

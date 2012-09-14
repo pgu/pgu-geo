@@ -26,6 +26,66 @@ public class LocationsUtils {
 
     }-*/;
 
+    public static native void addCurrentLocationToCache(String location_name) /*-{
+        if (location_name) {
+            var
+                cache = $wnd.pgu_geo.cache_items2locations
+              , key = 'current_location'
+            ;
+
+            var locations = cache[key] || [];
+            if (locations.length === 0) {
+
+                var new_location = [];
+                new_location.push(location_name);
+                cache[key] = new_location;
+
+            } else if (locations.length === 1) {
+
+                var curr_location = locations[0];
+                if (curr_location !== location_name) {
+
+                    @pgu.client.app.utils.LocationsUtils::removeLocationFromItem(Ljava/lang/String;Ljava/lang/String;)(key,location_name);
+
+                    var new_location = [];
+                    new_location.push(location_name);
+                    cache[key] = new_location;
+                }
+
+            } else {
+                throw "More than one current location: " + locations;
+            }
+
+            @pgu.client.app.utils.GeocoderUtils::searchGeopoint(Ljava/lang/String;)(location_name);
+        }
+    }-*/;
+
+    public static native void addExperienceLocationToCache(double experience_id, String location_name) /*-{
+        if (location_name) {
+            var
+                cache = $wnd.pgu_geo.cache_items2locations
+              , key = 'experience_' + experience_id
+              , locations = cache[key] || []
+              , has_location = false
+            ;
+
+            for (var i in locations) {
+                var location = locations[i];
+                if (location === location_name) {
+                    has_location = true;
+                    break;
+                }
+            }
+
+            if (!has_location) {
+                locations.push(location_name);
+                cache[key] = locations;
+            }
+
+            @pgu.client.app.utils.GeocoderUtils::searchGeopoint(Ljava/lang/String;)(location_name);
+        }
+    }-*/;
+
     public static native JavaScriptObject getOtherLocationNames(String item_config_id) /*-{
 
         var referential = $wnd.pgu_geo.cache_referentialLocations;
@@ -41,11 +101,12 @@ public class LocationsUtils {
                 }
             }
         }
-        return other_location_names;
 
+        return other_location_names;
     }-*/;
 
     public static native void addLocation2Item(String item_config_id, String location_name) /*-{
+        // TODO check for doublon
         $wnd.pgu_geo.cache_items2locations[item_config_id].push(location_name);
     }-*/;
 
@@ -94,11 +155,32 @@ public class LocationsUtils {
         return $wnd.pgu_geo.cache_items2locations[item_config_id] || [];
     }-*/;
 
-    public static native boolean isLocationInReferential(String locationName) /*-{
-        return undefined !== $wnd.pgu_geo.cache_referentialLocations[locationName];
+    public static native boolean isLocationInReferential(String location_name) /*-{
+        var cache = $wnd.pgu_geo.cache_referentialLocations;
+
+        var hasProperty = cache.hasOwnProperty(location_name);
+        if (!hasProperty) {
+            return false;
+        }
+
+        var geopoint = cache[location_name];
+        if (!geopoint) {
+            return false;
+        }
+
+        var
+            lat = geopoint.lat
+          , lng = geopoint.lng
+        ;
+
+        if (!lat || !lng) {
+            return false
+        }
+
+        return true;
     }-*/;
 
-    public static native void updateLocationReferential(String locationName, String lat, String lng) /*-{
+    public static native void addGeopoint(String locationName, String lat, String lng) /*-{
 
         var location = {};
         location.lat = lat;

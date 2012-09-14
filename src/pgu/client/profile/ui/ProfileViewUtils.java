@@ -1,12 +1,8 @@
 package pgu.client.profile.ui;
 
-import pgu.client.app.utils.LocationsUtils;
 import pgu.shared.utils.ItemType;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Timer;
 
 public class ProfileViewUtils {
 
@@ -208,10 +204,10 @@ public class ProfileViewUtils {
 		, cache_anchor = $wnd.pgu_geo.cache_location2anchorIds
 		;
 
-        for (var k =0, len=location_names.length; k <len; k++) {
+        for (var i=0, len=location_names.length; i <len; i++) {
 
-			var location_name = location_names[k];
-			var anchor_id = "loc_" + item_config_id + "_" + k;
+			var location_name = location_names[i];
+			var anchor_id = "loc_" + item_config_id + "_" + i;
 
 			var anchor_ids = cache_anchor[location_name];
 			if (!anchor_ids) {
@@ -231,107 +227,10 @@ public class ProfileViewUtils {
 			'';
 
 			list.push(el);
-
-
-			if (!@pgu.client.app.utils.LocationsUtils::isLocationInReferential(Ljava/lang/String;)(location_name)) {
-				var delayMillis = @pgu.client.profile.ui.ProfileViewUtils::delayForCallingGeocoder;
-				@pgu.client.profile.ui.ProfileViewUtils::searchGeopointWithDelay(Ljava/lang/String;I)(location_name,delayMillis);
-				@pgu.client.profile.ui.ProfileViewUtils::incrementDelayForCallingGeocoder()();
-			}
-
 		}
 
 		return list.join('');
     }-*/;
-
-    public static void searchGeopointWithDelay(final String locationName, final int delayMillis) {
-        new Timer() {
-
-            @Override
-            public void run() {
-                Scheduler.get().scheduleDeferred(new Command() {
-                    @Override
-                    public void execute() {
-                        searchGeopoint(locationName);
-                    }
-                });
-            }
-
-        }.schedule(delayMillis);
-    }
-
-    private static native boolean isGeocoderAvailable() /*-{
-		return $wnd.geocoder === undefined;
-    }-*/;
-
-    public static void searchGeopoint(final String locationName) {
-
-        if (!isGeocoderAvailable()) {
-            searchGeopointWithDelay(locationName, 1000);
-            return;
-        }
-
-        if (LocationsUtils.isLocationInReferential(locationName)) {
-            return;
-        }
-
-        geocode(locationName);
-
-    }
-
-    public static native void geocode(String location_name) /*-{
-        var
-          geocoder = $wnd.geocoder
-        , google = $wnd.google
-        , map = $wnd.map
-        ;
-
-        geocoder
-            .geocode(
-                    {
-                        'address' : location_name
-                    },
-                    function(results, status) {
-
-                        if (status == google.maps.GeocoderStatus.OK) {
-
-                            var loc = results[0].geometry.location
-                            , lat = '' + loc.lat()
-                            , lng = '' + loc.lng()
-                            ;
-
-                            @pgu.client.app.utils.LocationsUtils::updateLocationReferential(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(location_name,lat,lng);
-
-                        } else if (status == google.maps.GeocoderStatus.ZERO_RESULTS) {
-
-                            //                              var anchor = $('#' + anchor_id);
-                            //                              anchor.addClass('locationNotFound');
-                            //                              anchor.attr('title', 'Unknown location');
-
-                            @pgu.client.app.utils.ClientUtils::log(Ljava/lang/String;)("Unknown location: "
-                                    + location_name + ", " + status);
-
-                        } else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
-
-                            @pgu.client.profile.ui.ProfileViewUtils::searchGeopointWithDelay(Ljava/lang/String;I)(location_name,1000);
-
-                            @pgu.client.app.utils.ClientUtils::log(Ljava/lang/String;)("over_query_limit... " + location_name);
-
-                        } else {
-
-                            //                              var anchor = $('#' + anchor_id);
-                            //                              anchor
-                            //                                      .addClass('locationNotFound_technicalError');
-                            //                              anchor.attr('title',
-                            //                                      'Location not found because of a technical exception: '
-                            //                                              + status);
-
-                            @pgu.client.app.utils.ClientUtils::log(Ljava/lang/String;)("Oups: " + status);
-                        }
-
-                    }
-            );
-        }-*/;
 
     public static native int nbItems() /*-{
         return $wnd.pgu_geo.item_configs.length;

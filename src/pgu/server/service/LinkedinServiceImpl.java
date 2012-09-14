@@ -183,11 +183,11 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
 
     private OAuthService getOauthService(final String apiKey, final String apiSecret) {
         return new ServiceBuilder() //
-                .provider(LinkedInApi.class) //
-                .apiKey(apiKey) //
-                .apiSecret(apiSecret) //
-                // .callback(getCallbackUrl()) // // TODO PGU Aug 1, 2012 how to use callback url
-                .build();
+        .provider(LinkedInApi.class) //
+        .apiKey(apiKey) //
+        .apiSecret(apiSecret) //
+        // .callback(getCallbackUrl()) // // TODO PGU Aug 1, 2012 how to use callback url
+        .build();
     }
 
     private String getCallbackUrl() {
@@ -224,7 +224,7 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
                 accessToken.getToken() //
                 , accessToken.getSecret() //
                 , accessToken.getRawResponse() //
-        );
+                );
 
         return newRequest(url, token);
     }
@@ -332,7 +332,15 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
             //
             // profile.setItemId2locations(new Gson().toJson(itemId2locations));
 
-            final String jsonProfile = profileTest();
+            final boolean profileIsComingFromLinkedin = true;
+
+            String jsonProfile ;
+            if (profileIsComingFromLinkedin) {
+                jsonProfile = profileTest();
+            } else {
+                jsonProfile = profileTest();
+            }
+
             final LinkedinProfile javaProfile = new Gson().fromJson(jsonProfile, LinkedinProfile.class);
             final UserAndLocations userAndLocations = dao.ofy().find(UserAndLocations.class, javaProfile.getId());
 
@@ -424,7 +432,7 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
                 requestToken.getToken() //
                 , requestToken.getSecret() //
                 , requestToken.getRawResponse() //
-        );
+                );
 
         final Verifier verifier = new Verifier(oauthCode);
         final Token linkedinAccessToken = oauthService.getAccessToken(token, verifier);
@@ -508,7 +516,7 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
                             "Only one document should have been found for the user [%s] and we've found [%s]" //
                             , userId //
                             , nbResults //
-                    ));
+                            ));
             log.error(this, e);
             throw e;
 
