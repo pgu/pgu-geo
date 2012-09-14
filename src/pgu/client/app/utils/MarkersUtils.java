@@ -50,7 +50,7 @@ public class MarkersUtils {
               , lng = geopoint.lng
             ;
 
-            @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(location_name,lat,lng);
+            return @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(location_name,lat,lng);
 
         } else {
             throw "No geopoint for " + location_name;
@@ -59,8 +59,10 @@ public class MarkersUtils {
 
     public static native JavaScriptObject createMarkerWithGeopoint(String location_name, String lat, String lng) /*-{
 
-        var google = $wnd.google;
-        var map = $wnd.map;
+        var
+            google = $wnd.google
+          , map = $wnd.map
+        ;
 
         var latLng = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
 

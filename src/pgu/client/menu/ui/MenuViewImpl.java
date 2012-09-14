@@ -177,20 +177,20 @@ public class MenuViewImpl extends Composite implements MenuView {
         isPausing = false;
 
         MarkersUtils.deleteMarkers();
-        MenuViewUtils.initIndex(isPastToPresent);
+        MenuPlayUtils.initIndex(isPastToPresent);
     }
 
     @UiHandler("stepBwdBtn")
     public void clickOnStepBwdBtn(final ClickEvent e) {
         clickOnPause();
-        MenuViewUtils.decrementIndex(isPastToPresent);
+        MenuPlayUtils.decrementIndex(isPastToPresent);
         showProfileItemOnMap();
     }
 
     @UiHandler("stepFwdBtn")
     public void clickOnStepFwdBtn(final ClickEvent e) {
         clickOnPause();
-        MenuViewUtils.incrementIndex(isPastToPresent);
+        MenuPlayUtils.incrementIndex(isPastToPresent);
         showProfileItemOnMap();
     }
 
@@ -220,7 +220,7 @@ public class MenuViewImpl extends Composite implements MenuView {
 
         if (!isPausing) {
             MarkersUtils.deleteMarkers();
-            MenuViewUtils.initIndex(isPastToPresent);
+            MenuPlayUtils.initIndex(isPastToPresent);
         }
 
         isPausing = false;
@@ -241,7 +241,7 @@ public class MenuViewImpl extends Composite implements MenuView {
 
         if (isPlayingProfile) {
 
-            MenuViewUtils.incrementIndex(isPastToPresent);
+            MenuPlayUtils.incrementIndex(isPastToPresent);
             final boolean isDone = showProfileItemOnMap();
 
             return !isDone;
@@ -251,15 +251,15 @@ public class MenuViewImpl extends Composite implements MenuView {
     }
 
     private boolean showProfileItemOnMap() {
-        final boolean isDone = MenuViewUtils.showProfileItemOnMap(isPastToPresent);
+        final boolean isDone = MenuPlayUtils.showProfileItemOnMap(isPastToPresent);
 
         if (isDone) {
             clickOnPause();
             isPausing = false;
         }
 
-        stepFwdBtn.setVisible(MenuViewUtils.showFwdBtn(isPastToPresent));
-        stepBwdBtn.setVisible(MenuViewUtils.showBwdBtn(isPastToPresent));
+        stepFwdBtn.setVisible(MenuPlayUtils.showFwdBtn(isPastToPresent));
+        stepBwdBtn.setVisible(MenuPlayUtils.showBwdBtn(isPastToPresent));
 
         return isDone;
     }
