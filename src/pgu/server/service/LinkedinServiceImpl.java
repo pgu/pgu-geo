@@ -284,47 +284,39 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
     @Override
     public Profile fetchProfile(final AccessToken accessToken) {
 
+        String jsonProfile = "";
+
         if (isTest) {
+            jsonProfile = profileTest();
 
-            final boolean profileIsComingFromLinkedin = true;
+        } else {
 
-            String jsonProfile ;
-            if (profileIsComingFromLinkedin) {
-                jsonProfile = profileTest();
-            } else {
-                jsonProfile = profileTest();
-            }
-
-            final LinkedinProfile javaProfile = new Gson().fromJson(jsonProfile, LinkedinProfile.class);
-            final UserAndLocations userAndLocations = dao.ofy().find(UserAndLocations.class, javaProfile.getId());
-
-            final Profile profile = new Profile();
-            profile.setJson(jsonProfile);
-            profile.setUserAndLocations(userAndLocations);
-            return profile;
-
+            final String detailedProfiled = PROFILE_URL + //
+                    ":(" + //
+                    "id" + //
+                    ",first-name" + //
+                    ",last-name" + //
+                    ",headline" + //
+                    ",location" + //
+                    ",num-connections" + //
+                    ",num-connections-capped" + //
+                    ",summary" + //
+                    ",specialties" + //
+                    ",picture-url" + //
+                    ",public-profile-url" + //
+                    ",positions:(id,company,endDate,isCurrent,startDate,summary,title,location)" + //
+                    ",languages:(language,proficiency)" + //
+                    ",educations" + //
+                    ")";
+            jsonProfile = fetchResponseBody(accessToken, detailedProfiled);
         }
 
-        final String detailedProfiled = PROFILE_URL + //
-                ":(" + //
-                "id" + //
-                ",first-name" + //
-                ",last-name" + //
-                ",headline" + //
-                ",location" + //
-                ",num-connections" + //
-                ",num-connections-capped" + //
-                ",summary" + //
-                ",specialties" + //
-                ",picture-url" + //
-                ",public-profile-url" + //
-                ",positions:(id,company,endDate,isCurrent,startDate,summary,title,location)" + //
-                ",languages:(language,proficiency)" + //
-                ",educations" + //
-                ")";
+        final LinkedinProfile javaProfile = new Gson().fromJson(jsonProfile, LinkedinProfile.class);
+        final UserAndLocations userAndLocations = dao.ofy().find(UserAndLocations.class, javaProfile.getId());
 
         final Profile profile = new Profile();
-        profile.setJson(fetchResponseBody(accessToken, detailedProfiled));
+        profile.setJson(jsonProfile);
+        profile.setUserAndLocations(userAndLocations);
         return profile;
     }
 
