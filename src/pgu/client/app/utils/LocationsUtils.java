@@ -23,12 +23,26 @@ public class LocationsUtils {
             $wnd.pgu_geo.cache_referential = JSON.parse(referential);
         }
 
+    }-*/;
 
+    public static native String json_stringify(JavaScriptObject o) /*-{
+
+        return JSON.stringify(o, function(key, value) {
+            if (key == '__gwt_ObjectId') {
+                return;
+            }
+            return value;
+        });
     }-*/;
 
     public static native void copyLocationCaches() /*-{
-        $wnd.pgu_geo.copy_cache_items = JSON.parse(JSON.stringify($wnd.pgu_geo.cache_items));
-        $wnd.pgu_geo.copy_cache_referential = JSON.parse(JSON.stringify($wnd.pgu_geo.cache_referential));
+        $wnd.pgu_geo.copy_cache_items = JSON.parse(@pgu.client.app.utils.LocationsUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
+        $wnd.pgu_geo.cache_items));
+
+
+        $wnd.pgu_geo.copy_cache_referential = JSON.parse(@pgu.client.app.utils.LocationsUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
+        $wnd.pgu_geo.cache_referential));
+
     }-*/;
 
     public static native void removeLocationFromCopyCaches(String item_config_id, String location_name) /*-{
@@ -83,7 +97,7 @@ public class LocationsUtils {
               , has_location = false
             ;
 
-            for (var i in locations) {
+            for ( var i = 0, len = locations.length; i < len; i++) {
                 var location = locations[i];
                 if (location === location_name) {
                     has_location = true;
@@ -110,6 +124,9 @@ public class LocationsUtils {
         ;
 
         for (var key in cache_referential) {
+            if ('__gwt_ObjectId' === key) {
+                continue;
+            }
             if (cache_referential.hasOwnProperty(key)) {
 
                 if ($wnd.$.inArray(key, item_locations) == -1) {
@@ -132,7 +149,7 @@ public class LocationsUtils {
 
             var is_doublon = false;
 
-            for (var i in locations) {
+            for ( var i = 0, len = locations.length; i < len; i++) {
                 var location = locations[i];
 
                 if (location === location_name) {
@@ -159,7 +176,7 @@ public class LocationsUtils {
         if (locations) {
 
             var is_doublon = false;
-            for (var i in locations) {
+            for ( var i = 0, len = locations.length; i < len; i++) {
                 var location = locations[i];
 
                 if (location === location_name) {
@@ -199,7 +216,7 @@ public class LocationsUtils {
         var location_names = cache_items[item_config_id];
         var updated_locations = [];
 
-        for (var i in location_names) {
+        for ( var i = 0, len = location_names.length; i < len; i++) {
             var name = location_names[i];
 
             if (location_name !== name) {
@@ -212,10 +229,13 @@ public class LocationsUtils {
         var has_at_least_once = false;
 
         mainloop: for (var key in cache_items) {
+            if ('__gwt_ObjectId' === key) {
+                continue;
+            }
             if (cache_items.hasOwnProperty(key)) {
 
                 var locations = cache_items[key];
-                for (var j in locations) {
+                for ( var j = 0, len = locations.length; j < len; j++) {
 
                     var location = locations[j];
                     if (location === location_name) {
@@ -262,7 +282,7 @@ public class LocationsUtils {
         return true;
     }-*/;
 
-    public static native void addGeopointToCopyCache(String locationName, String lat, String lng) /*-{
+    public static native void addGeopointToCopyCache(String location_name, String lat, String lng) /*-{
         var cache = $wnd.pgu_geo.copy_cache_referential;
         @pgu.client.app.utils.LocationsUtils::addGeopointInternal(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(cache,location_name,lat,lng);
     }-*/;
@@ -287,11 +307,13 @@ public class LocationsUtils {
     }-*/;
 
     public static native String json_copyCacheItems() /*-{
-        return JSON.stringify($wnd.pgu_geo.copy_cache_items);
+        return @pgu.client.app.utils.LocationsUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
+          $wnd.pgu_geo.copy_cache_items);
     }-*/;
 
     public static native String json_copyCacheReferential() /*-{
-        return JSON.stringify($wnd.pgu_geo.copy_cache_referential);
+        return @pgu.client.app.utils.LocationsUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
+          $wnd.pgu_geo.copy_cache_referential);
     }-*/;
 
     public static native void replaceCachesByCopies() /*-{

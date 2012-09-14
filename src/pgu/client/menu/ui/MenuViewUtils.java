@@ -174,7 +174,7 @@ public class MenuViewUtils {
                             , lng = '' + loc.lng()
                             ;
 
-                    var is_doublon = @pgu.client.app.utils.LocationsUtils::isDoublon(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(item_config_id,loc,lat,lng);
+                    var is_doublon = @pgu.client.app.utils.LocationsUtils::isDoublon(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(item_config_id,location_name,lat,lng);
                     if (is_doublon) {
                         activity.@pgu.client.menu.MenuActivity::saveLocationService(ZLjava/lang/String;)(true,location_name);
 

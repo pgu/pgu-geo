@@ -152,7 +152,6 @@ public class MenuActivity implements MenuPresenter //
             return;
         }
 
-
         linkedinService.saveLocations( //
                 //
                 clientFactory.getAppState().getUserId() //
