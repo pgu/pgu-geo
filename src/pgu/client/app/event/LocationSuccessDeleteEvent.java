@@ -1,7 +1,5 @@
 package pgu.client.app.event;
 
-import pgu.shared.dto.ItemLocation;
-
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HasHandlers;
@@ -19,12 +17,10 @@ public class LocationSuccessDeleteEvent extends GwtEvent<LocationSuccessDeleteEv
 
     public static final Type<Handler> TYPE = new Type<Handler>();
 
-    private final String              itemId;
-    private final ItemLocation        deletedItemLocation;
+    private final String itemConfigId;
 
-    public LocationSuccessDeleteEvent(final String itemId, final ItemLocation deletedItemLocation) {
-        this.itemId = itemId;
-        this.deletedItemLocation = deletedItemLocation;
+    public LocationSuccessDeleteEvent(final String itemConfigId) {
+        this.itemConfigId = itemConfigId;
     }
 
     @Override
@@ -37,12 +33,8 @@ public class LocationSuccessDeleteEvent extends GwtEvent<LocationSuccessDeleteEv
         handler.onLocationSuccessDelete(this);
     }
 
-    public String getItemId() {
-        return itemId;
-    }
-
-    public ItemLocation getDeletedItemLocation() {
-        return deletedItemLocation;
+    public String getItemConfigId() {
+        return itemConfigId;
     }
 
 }

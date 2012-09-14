@@ -41,9 +41,20 @@ public class MarkersUtils {
 
     public static native JavaScriptObject createMarker(String location_name) /*-{
 
-        var geopoint = @pgu.client.app.utils.LocationsUtils::getGeopoint(Ljava/lang/String;)(location_name);
-        @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(location_name,geopoint.lat,geopoint.lng);
+        var geopoint_is_available = @pgu.client.app.utils.LocationsUtils::isLocationInReferential(Ljava/lang/String;)(location_name);
+        if (geopoint_is_available) {
 
+            var
+                geopoint = @pgu.client.app.utils.LocationsUtils::getGeopoint(Ljava/lang/String;)(location_name)
+              , lat = geopoint.lat
+              , lng = geopoint.lng
+            ;
+
+            @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(location_name,lat,lng);
+
+        } else {
+            throw "No geopoint for " + location_name;
+        }
     }-*/;
 
     public static native JavaScriptObject createMarkerWithGeopoint(String location_name, String lat, String lng) /*-{

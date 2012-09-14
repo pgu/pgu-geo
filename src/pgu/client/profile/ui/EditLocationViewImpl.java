@@ -8,7 +8,6 @@ import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.Notification;
 import pgu.client.app.utils.NotificationImpl;
 import pgu.client.profile.EditLocationView;
-import pgu.shared.dto.ItemLocation;
 
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.Modal;
@@ -181,11 +180,10 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
 
     // click on a location: popup with: information: name, lat, lng; actions: show on the map, delete it
     @Override
-    public void displayEditLocationWidget(final ItemLocation itemLocation, final String itemId) {
-        container.setTitle(itemLocation.getName());
+    public void displayEditLocationWidget(final String locationName) {
+        container.setTitle(locationName);
 
-        locationLatUI.setText(itemLocation.getLat());
-        locationLngUI.setText(itemLocation.getLng());
+        EditLocationUtils.showLatitudeAndLongitude(this, locationName);
 
         // ///////////////
         addPanel.setVisible(false);
@@ -195,6 +193,11 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
         saveBtn.setVisible(false);
         displayOnMapBtn.setVisible(true);
         deleteBtn.setVisible(true);
+    }
+
+    public void showLatitudeAndLongitude(final String latitude, final String longitude) {
+        locationLatUI.setText(latitude);
+        locationLngUI.setText(longitude);
     }
 
     @Override

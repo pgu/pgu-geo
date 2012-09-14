@@ -3,8 +3,6 @@ package pgu.client.app.utils;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import pgu.shared.dto.ItemLocation;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.GwtEvent;
@@ -41,36 +39,6 @@ public class ClientUtils {
             }
         });
     }
-
-    public native void refreshHtmlLocationsForItem(final String item_config_id) /*-{
-
-		var html_locations = $wnd.createListLocations(item_config_id);
-		$doc.getElementById("locations_" + item_config_id).innerHTML = html_locations;
-
-    }-*/;
-
-    public void removeLocationFromItem(final String itemId, final ItemLocation deletedItemLocation) {
-        removeLocationFromItem(itemId, deletedItemLocation.getName());
-        refreshHtmlLocationsForItem(itemId);
-    }
-
-    private native void removeLocationFromItem(String itemId, String locationName) /*-{
-
-		var locations = $wnd.cache_itemId2locations[itemId];
-		var updateds = [];
-
-		for ( var i = 0, len = locations.length; i < len; i++) {
-			var location = locations[i];
-
-			if (location.name === locationName) {
-				continue;
-			}
-
-			updateds.push(location);
-		}
-
-		$wnd.cache_itemId2locations[itemId] = updateds;
-    }-*/;
 
     public void showNotificationError(final Throwable t, final HasNotifications view) {
 

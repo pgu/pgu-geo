@@ -13,7 +13,6 @@ import pgu.client.app.utils.LocationsUtils;
 import pgu.client.app.utils.Notification;
 import pgu.client.profile.ui.EditLocationUtils;
 import pgu.client.service.LinkedinServiceAsync;
-import pgu.shared.dto.ItemLocation;
 
 import com.github.gwtbootstrap.client.ui.event.HiddenEvent;
 import com.github.gwtbootstrap.client.ui.event.HiddenHandler;
@@ -155,9 +154,12 @@ public class EditLocationActivity {
         });
     }
 
-    public void start(final ItemLocation itemLocation, final String itemConfigId) {
+    public void start(
+            final String itemConfigId
+            , final String locName
+            ) {
 
-        final boolean isNew = itemLocation == null;
+        final boolean isNew = u.isVoid(locName);
 
         if (isNew) {
 
@@ -167,26 +169,26 @@ public class EditLocationActivity {
 
         } else {
 
-            handlerRegs.add(addDeleteHandler(itemLocation, itemConfigId));
-            handlerRegs.add(addShowOnMapHandler(itemLocation));
-            view.displayEditLocationWidget(itemLocation, itemConfigId);
+            handlerRegs.add(addDeleteHandler(locName, itemConfigId));
+            handlerRegs.add(addShowOnMapHandler(locName));
+            view.displayEditLocationWidget(locName);
         }
         view.show();
     }
 
-    private HandlerRegistration addShowOnMapHandler(final ItemLocation itemLocation) {
+    private HandlerRegistration addShowOnMapHandler(final String locName) {
         return view.getShowOnMapHandler().addClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(final ClickEvent event) {
-                u.fire(eventBus, new LocationShowOnMapEvent(itemLocation));
+                u.fire(eventBus, new LocationShowOnMapEvent(locName));
                 view.hide();
             }
 
         });
     }
 
-    private HandlerRegistration addDeleteHandler(final ItemLocation itemLocation, final String itemId) {
+    private HandlerRegistration addDeleteHandler(final String locationName, final String itemConfigId) {
         return view.getDeleteHandler().addClickHandler(new ClickHandler() {
 
             @Override
@@ -195,41 +197,46 @@ public class EditLocationActivity {
                 view.getWaitingIndicator().setVisible(true);
                 view.disableEditionForm();
 
-                EditLocationUtils.deleteLocationFromItem(itemId, itemLocation.getName());
+                LocationsUtils.copyLocationCaches();
+                LocationsUtils.removeLocationFromCopyCaches(itemConfigId, locationName);
 
                 linkedinService.saveLocations( //
                         //
                         clientFactory.getAppState().getUserId() //
-                        , LocationsUtils.json_items2locations() //
-                        , LocationsUtils.json_referentialLocations() //
+                        , LocationsUtils.json_copyCacheItems() //
+                        , LocationsUtils.json_copyCacheReferential() //
                         //
                         , new AsyncCallbackApp<Void>(eventBus) {
 
                             @Override
                             public void onSuccess(final Void result) {
 
+                                LocationsUtils.replaceCachesByCopies();
+
                                 view.getWaitingIndicator().setVisible(false);
                                 view.removeEditionFormAndShowClose();
 
-                                u.fire(eventBus, new LocationSuccessDeleteEvent(itemId, itemLocation));
+                                u.fire(eventBus, new LocationSuccessDeleteEvent(itemConfigId));
 
-                                final StringBuilder msg = getSuccessMessage(itemLocation);
+                                final StringBuilder msg = getSuccessMessage(locationName);
                                 u.showNotificationSuccess(msg, view);
 
                                 hideViewWithDelay();
                             }
 
-                            private StringBuilder getSuccessMessage(final ItemLocation itemLocation) {
+                            private StringBuilder getSuccessMessage(final String locationName) {
                                 final StringBuilder msg = new StringBuilder();
                                 msg.append("The location \"");
-                                msg.append(itemLocation.getName());
+                                msg.append(locationName);
                                 msg.append("\" has been successfully removed.");
                                 return msg;
                             }
 
                             @Override
                             public void onFailure(final Throwable caught) {
-                                // TODO PGU Sep 13, 2012 restore the location in the caches
+
+                                LocationsUtils.deleteCopies();
+
                                 view.getWaitingIndicator().setVisible(false);
                                 view.enableEditionForm();
 

@@ -4,7 +4,6 @@ import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.MarkersUtils;
 import pgu.client.menu.MenuPresenter;
 import pgu.client.menu.MenuView;
-import pgu.shared.dto.ItemLocation;
 
 import com.github.gwtbootstrap.client.ui.Brand;
 import com.github.gwtbootstrap.client.ui.Button;
@@ -468,10 +467,10 @@ public class MenuViewImpl extends Composite implements MenuView {
     }
 
     @Override
-    public void showOnMap(final ItemLocation itemLocation) {
+    public void showOnMap(final String locationName) {
         showMap();
 
-        MarkersUtils.createMarker(itemLocation.getName());
+        MarkersUtils.createMarker(locationName);
     }
 
     public void showNotificationWarning(final String msg) {

@@ -11,7 +11,6 @@ import pgu.client.app.utils.LocationsUtils;
 import pgu.client.app.utils.MarkdownUtils;
 import pgu.client.profile.ProfilePresenter;
 import pgu.client.profile.ProfileView;
-import pgu.shared.dto.ItemLocation;
 import pgu.shared.dto.Profile;
 import pgu.shared.model.UserAndLocations;
 
@@ -100,19 +99,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }-*/;
 
     public static native void editLocation(final String item_config_id, final String location_name) /*-{
-
-		if (!@pgu.client.app.utils.LocationsUtils::isLocationInReferential(Ljava/lang/String;)(location_name)) {
-			return;
-		}
-
-        var geopoint = @pgu.client.app.utils.LocationsUtils::getGeopoint(Ljava/lang/String;)(location_name);
-		@pgu.client.profile.ui.ProfileViewImpl::editItemLocation(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(item_config_id, location_name, geopoint.lat, geopoint.lng);
+		@pgu.client.profile.ui.ProfileViewImpl::editItemLocation(Ljava/lang/String;Ljava/lang/String;)(item_config_id, location_name);
     }-*/;
 
-    public static void editItemLocation(final String itemConfigId, final String locName, final String locLat,
-            final String locLng) {
-
-        staticPresenter.editLocation(itemConfigId, locName, locLat, locLng);
+    public static void editItemLocation(final String itemConfigId, final String locName) {
+        staticPresenter.editLocation(itemConfigId, locName);
     }
 
     public static void addNewLocation(final String itemConfigId) {
@@ -126,12 +117,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     @UiHandler("locContainer")
     public void clickLocContainer(final ClickEvent e) {
-
-        // TODO PGU Aug 30, 2012 itemLocation
-        final ItemLocation i = new ItemLocation();
-        i.setName(locContainer.getText());
-
-        presenter.showLocationOnMap(i);
+        presenter.showLocationOnMap(locContainer.getText());
     }
 
     private ProfilePresenter presenter;

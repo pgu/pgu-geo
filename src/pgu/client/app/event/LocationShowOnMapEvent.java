@@ -1,7 +1,5 @@
 package pgu.client.app.event;
 
-import pgu.shared.dto.ItemLocation;
-
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HasHandlers;
@@ -19,10 +17,10 @@ public class LocationShowOnMapEvent extends GwtEvent<LocationShowOnMapEvent.Hand
 
     public static final Type<Handler> TYPE = new Type<Handler>();
 
-    private final ItemLocation        itemLocation;
+    private final String locName;
 
-    public LocationShowOnMapEvent(final ItemLocation itemLocation) {
-        this.itemLocation = itemLocation;
+    public LocationShowOnMapEvent(final String locName) {
+        this.locName = locName;
     }
 
     @Override
@@ -35,8 +33,8 @@ public class LocationShowOnMapEvent extends GwtEvent<LocationShowOnMapEvent.Hand
         handler.onLocationShowOnMap(this);
     }
 
-    public ItemLocation getItemLocation() {
-        return itemLocation;
+    public String getLocName() {
+        return locName;
     }
 
 }

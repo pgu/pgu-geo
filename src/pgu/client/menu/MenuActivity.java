@@ -104,7 +104,7 @@ public class MenuActivity implements MenuPresenter //
 
     @Override
     public void onLocationShowOnMap(final LocationShowOnMapEvent event) {
-        view.showOnMap(event.getItemLocation());
+        view.showOnMap(event.getLocName());
     }
 
     @Override

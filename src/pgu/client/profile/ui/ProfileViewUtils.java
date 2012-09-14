@@ -240,5 +240,13 @@ public class ProfileViewUtils {
         return $wnd.pgu_geo.item_configs[i];
     }-*/;
 
+    public static native void refreshHtmlLocationsForItem(final String item_config_id) /*-{
+
+        var html_locations = @pgu.client.profile.ui.ProfileViewUtils::createListLocations(Ljava/lang/String;)(item_config_id);
+        $doc.getElementById("locations_" + item_config_id).innerHTML = html_locations;
+
+    }-*/;
+
+
 }
 

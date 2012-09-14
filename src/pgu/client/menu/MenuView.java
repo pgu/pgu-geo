@@ -1,7 +1,5 @@
 package pgu.client.menu;
 
-import pgu.shared.dto.ItemLocation;
-
 import com.github.gwtbootstrap.client.ui.base.HasHref;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasVisibility;
@@ -45,6 +43,6 @@ public interface MenuView extends IsWidget {
 
     void showMap();
 
-    void showOnMap(ItemLocation itemLocation);
+    void showOnMap(String locationName);
 
 }

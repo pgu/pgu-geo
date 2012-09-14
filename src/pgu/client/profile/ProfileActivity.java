@@ -8,8 +8,8 @@ import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
+import pgu.client.profile.ui.ProfileViewUtils;
 import pgu.client.service.LinkedinServiceAsync;
-import pgu.shared.dto.ItemLocation;
 import pgu.shared.dto.Profile;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -66,35 +66,30 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         // itemId for a position or an education
 
         final EditLocationActivity editLocationActivity = new EditLocationActivity(clientFactory);
-        editLocationActivity.start(null, itemConfigId);
+        editLocationActivity.start("", itemConfigId);
 
     }
 
     @Override
-    public void editLocation(final String itemConfigId, final String locName, final String locLat, final String locLng) {
-
-        final ItemLocation itemLocation = new ItemLocation();
-        itemLocation.setName(locName);
-        itemLocation.setLat(locLat);
-        itemLocation.setLng(locLng);
+    public void editLocation(final String itemConfigId, final String locName) {
 
         final EditLocationActivity editLocationActivity = new EditLocationActivity(clientFactory);
-        editLocationActivity.start(itemLocation, itemConfigId);
+        editLocationActivity.start(locName, itemConfigId);
     }
 
     @Override
     public void onLocationsSuccessSave(final LocationsSuccessSaveEvent event) {
-        u.refreshHtmlLocationsForItem(event.getItemConfigId());
+        ProfileViewUtils.refreshHtmlLocationsForItem(event.getItemConfigId());
     }
 
     @Override
-    public void showLocationOnMap(final ItemLocation itemLocation) {
-        u.fire(eventBus, new LocationShowOnMapEvent(itemLocation));
+    public void showLocationOnMap(final String locationName) {
+        u.fire(eventBus, new LocationShowOnMapEvent(locationName));
     }
 
     @Override
     public void onLocationSuccessDelete(final LocationSuccessDeleteEvent event) {
-        u.removeLocationFromItem(event.getItemId(), event.getDeletedItemLocation());
+        ProfileViewUtils.refreshHtmlLocationsForItem(event.getItemConfigId());
     }
 
     @Override
