@@ -16,7 +16,6 @@ import pgu.client.service.LinkedinServiceAsync;
 
 import com.github.gwtbootstrap.client.ui.event.HiddenEvent;
 import com.github.gwtbootstrap.client.ui.event.HiddenHandler;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Timer;
@@ -179,7 +178,7 @@ public class EditLocationActivity {
         } else {
 
             final boolean isFromLinkedin = ProfileUtils.isLocationFromLinkedin(itemConfigId, locName);
-            GWT.log("isFromLinkedin " + isFromLinkedin);
+
             if (!isFromLinkedin) {
                 handlerRegs.add(addDeleteHandler(itemConfigId, locName));
             }
