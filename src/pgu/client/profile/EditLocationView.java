@@ -23,7 +23,7 @@ public interface EditLocationView extends HasNotifications {
 
     HasClickHandlers getDeleteHandler();
 
-    void displayEditLocationWidget(String locationName);
+    void displayEditLocationWidget(String locationName, boolean isFromLinkedin);
 
     void show();
 

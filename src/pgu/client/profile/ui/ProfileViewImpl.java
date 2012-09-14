@@ -251,6 +251,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         @pgu.client.profile.ui.ProfileViewUtils::initDelayForCallingGeocoder()();
 
 		var j_profile = JSON.parse(profile);
+		@pgu.client.profile.ui.ProfileUtils::cacheProfile(Lcom/google/gwt/core/client/JavaScriptObject;)(j_profile);
 
 		@pgu.client.profile.ui.ProfileSummaryUtils::setProfileId(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 		@pgu.client.profile.ui.ProfileSummaryUtils::setProfileName(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);

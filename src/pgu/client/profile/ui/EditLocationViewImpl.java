@@ -180,7 +180,7 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
 
     // click on a location: popup with: information: name, lat, lng; actions: show on the map, delete it
     @Override
-    public void displayEditLocationWidget(final String locationName) {
+    public void displayEditLocationWidget(final String locationName, final boolean isFromLinkedin) {
         container.setTitle(locationName);
 
         EditLocationUtils.showLatitudeAndLongitude(this, locationName);
@@ -192,7 +192,7 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
         addBtn.setVisible(false);
         saveBtn.setVisible(false);
         displayOnMapBtn.setVisible(true);
-        deleteBtn.setVisible(true);
+        deleteBtn.setVisible(!isFromLinkedin);
     }
 
     public void showLatitudeAndLongitude(final String latitude, final String longitude) {

@@ -11,10 +11,12 @@ import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.LocationsUtils;
 import pgu.client.app.utils.Notification;
+import pgu.client.profile.ui.ProfileUtils;
 import pgu.client.service.LinkedinServiceAsync;
 
 import com.github.gwtbootstrap.client.ui.event.HiddenEvent;
 import com.github.gwtbootstrap.client.ui.event.HiddenHandler;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Timer;
@@ -176,9 +178,14 @@ public class EditLocationActivity {
 
         } else {
 
-            handlerRegs.add(addDeleteHandler(locName, itemConfigId));
+            final boolean isFromLinkedin = ProfileUtils.isLocationFromLinkedin(itemConfigId, locName);
+            GWT.log("isFromLinkedin " + isFromLinkedin);
+            if (!isFromLinkedin) {
+                handlerRegs.add(addDeleteHandler(itemConfigId, locName));
+            }
+
             handlerRegs.add(addShowOnMapHandler(locName));
-            view.displayEditLocationWidget(locName);
+            view.displayEditLocationWidget(locName, isFromLinkedin);
         }
         view.show();
     }
@@ -195,7 +202,7 @@ public class EditLocationActivity {
         });
     }
 
-    private HandlerRegistration addDeleteHandler(final String locationName, final String itemConfigId) {
+    private HandlerRegistration addDeleteHandler(final String itemConfigId, final String locationName) {
         return view.getDeleteHandler().addClickHandler(new ClickHandler() {
 
             @Override
