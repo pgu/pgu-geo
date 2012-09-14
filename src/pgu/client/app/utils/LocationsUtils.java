@@ -211,10 +211,10 @@ public class LocationsUtils {
 
         var has_at_least_once = false;
 
-        mainloop: for (var key in cache) {
-            if (cache.hasOwnProperty(key)) {
+        mainloop: for (var key in cache_items) {
+            if (cache_items.hasOwnProperty(key)) {
 
-                var locations = cache[key];
+                var locations = cache_items[key];
                 for (var j in locations) {
 
                     var location = locations[j];
