@@ -98,11 +98,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
           $wnd.pgu_geo.editLocation = $entry(@pgu.client.profile.ui.ProfileViewImpl::editLocation(Ljava/lang/String;Ljava/lang/String;));
     }-*/;
 
-    public static native void editLocation(final String item_config_id, final String location_name) /*-{
-		@pgu.client.profile.ui.ProfileViewImpl::editItemLocation(Ljava/lang/String;Ljava/lang/String;)(item_config_id, location_name);
-    }-*/;
-
-    public static void editItemLocation(final String itemConfigId, final String locName) {
+    public static void editLocation(final String itemConfigId, final String locName) {
         staticPresenter.editLocation(itemConfigId, locName);
     }
 
