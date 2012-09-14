@@ -31,9 +31,6 @@ import pgu.server.utils.AppUtils;
 import pgu.shared.dto.AccessToken;
 import pgu.shared.dto.Connections;
 import pgu.shared.dto.Country;
-import pgu.shared.dto.ItemLocation;
-import pgu.shared.dto.ItemWithLocation;
-import pgu.shared.dto.ItemsWithLocation;
 import pgu.shared.dto.LinkedinProfile;
 import pgu.shared.dto.Location;
 import pgu.shared.dto.OauthAuthorizationStart;
@@ -279,24 +276,7 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         return new Gson().fromJson(body, Connections.class);
     }
 
-    private final boolean                        isTest               = true;
-
-    private static HashMap<String, ItemLocation> locationReferentiel  = new HashMap<String, ItemLocation>();
-    private static final HashMap<Long, String>   educationId2location = new HashMap<Long, String>();
-    static {
-
-        final ItemLocation nantesLocation = new ItemLocation();
-        nantesLocation.setName("Nantes, France");
-        nantesLocation.setLat("47.218371");
-        nantesLocation.setLng("-1.553621");
-
-        locationReferentiel.put(nantesLocation.getName(), nantesLocation);
-
-        educationId2location.put(23039762L, "Rostock, Germany");
-        educationId2location.put(23039761L, "Nantes, France");
-        educationId2location.put(3392191L, "Nantes, France");
-        educationId2location.put(23039657L, "Nantes, France; Madrid, Spain");
-    }
+    private final boolean                        isTest               = false;
 
     /**
      * https://developer.linkedin.com/documents/profile-api
@@ -304,33 +284,7 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
     @Override
     public Profile fetchProfile(final AccessToken accessToken) {
 
-        // TODO PGU Sep 5, 2012 for an education or a position, we decorate them with a list of locations names
-
         if (isTest) {
-
-            // "item" can be either an education or a position
-            // final HashMap<String, ArrayList<ItemLocation>> itemId2locations = new HashMap<String,
-            // ArrayList<ItemLocation>>();
-
-            // final Educations educations = javaProfile.getEducations();
-            // final EducationsWithLocation edsLoc = new EducationsWithLocation();
-            //
-            // for (final Education ed : educations.getValues()) {
-            //
-            // final EducationWithLocation edLoc = new EducationWithLocation(ed);
-            //
-            // final String locationName = educationId2location.get(ed.getId());
-            // if (!u.isVoid(locationName)) {
-            // edLoc.getLocation().setName(locationName);
-            // }
-            //
-            // edsLoc.getValues().add(edLoc);
-            // }
-            //
-            // fillItemId2locations(javaProfile.getPositions(), itemId2locations);
-            // fillItemId2locations(edsLoc, itemId2locations);
-            //
-            // profile.setItemId2locations(new Gson().toJson(itemId2locations));
 
             final boolean profileIsComingFromLinkedin = true;
 
@@ -372,47 +326,6 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         final Profile profile = new Profile();
         profile.setJson(fetchResponseBody(accessToken, detailedProfiled));
         return profile;
-    }
-
-    private void fillItemId2locations(final ItemsWithLocation items,
-            final HashMap<String, ArrayList<ItemLocation>> itemId2locations) {
-
-        if (items != null) {
-            for (final ItemWithLocation item : items.getValues()) {
-
-                final ArrayList<ItemLocation> itemLocations = new ArrayList<ItemLocation>();
-                itemId2locations.put(String.valueOf(item.getId()), itemLocations);
-
-                final Location location = item.getLocation();
-                if (location != null) {
-                    final String locName = location.getName();
-                    if (!u.isVoid(locName)) {
-                        final String[] locationNames = locName.split(";");
-
-                        for (final String _locationName : locationNames) {
-                            final String locationName = _locationName.trim();
-
-                            if (locationReferentiel.containsKey(locationName)) {
-                                final ItemLocation itemLoc = locationReferentiel.get(locationName);
-
-                                final ItemLocation copy = new ItemLocation();
-                                copy.setLat(itemLoc.getLat());
-                                copy.setLng(itemLoc.getLng());
-                                copy.setName(itemLoc.getName());
-
-                                itemLocations.add(copy);
-
-                            } else {
-                                final ItemLocation itLoc = new ItemLocation();
-                                itLoc.setName(locationName);
-                                itemLocations.add(itLoc);
-
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
 
     private String fetchResponseBody(final AccessToken accessToken, final String profileUrl) {
