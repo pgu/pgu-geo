@@ -3,7 +3,7 @@ package pgu.client.profile.ui;
 
 public class EditLocationUtils {
 
-    public static native void showLatitudeAndLongitude(final EditLocationViewImpl view, final String locationName) /*-{
+    public static native void showLatitudeAndLongitude(final EditLocationViewImpl view, final String location_name) /*-{
 
         var lat,lng;
 
