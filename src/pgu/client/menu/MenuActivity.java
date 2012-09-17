@@ -20,6 +20,7 @@ import pgu.shared.dto.LoginInfo;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Window.Location;
 import com.google.web.bindery.event.shared.EventBus;
 
 public class MenuActivity implements MenuPresenter //
@@ -204,8 +205,18 @@ public class MenuActivity implements MenuPresenter //
         final AppState appState = clientFactory.getAppState();
         final String publicProfileUrl = appState.getPublicProfileUrl();
 
-        final String publicProfile = publicProfileUrl.replaceFirst("http://www.linkedin.com/", GWT.getHostPageBaseURL());
-        Window.open(publicProfile, "public_profile", null);
+        final int length = "http://www.linkedin.com/".length();
+        final String linkedInSuffix = publicProfileUrl.substring(length);
+
+        String baseUrl = "";
+        if (Location.getQueryString().contains("gwt.codesvr")) {
+            baseUrl ="http://127.0.0.1:8888/Pgu_contacts.html?gwt.codesvr=127.0.0.1:9997";
+        } else {
+            baseUrl = GWT.getHostPageBaseURL();
+        }
+
+        final String publicUrl = baseUrl + "#PublicPlace:" + linkedInSuffix;
+        Window.open(publicUrl, "public_profile", null);
     }
 
 }
