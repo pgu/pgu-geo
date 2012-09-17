@@ -246,6 +246,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         presenter.setProfileId(id);
     }
 
+    void setProfilePublicUrl(final String url) {
+        presenter.setProfilePublicUrl(url);
+    }
+
     private native void setProfile(ProfileViewImpl view, String profile) /*-{
 
         @pgu.client.profile.ui.ProfileViewUtils::initDelayForCallingGeocoder()();
@@ -254,6 +258,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 		@pgu.client.profile.ui.ProfileUtils::cacheProfile(Lcom/google/gwt/core/client/JavaScriptObject;)(j_profile);
 
 		@pgu.client.profile.ui.ProfileSummaryUtils::setProfileId(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
+		@pgu.client.profile.ui.ProfileSummaryUtils::setProfilePublicUrl(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 		@pgu.client.profile.ui.ProfileSummaryUtils::setProfileName(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 		@pgu.client.profile.ui.ProfileSummaryUtils::setProfileHeadline(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 		@pgu.client.profile.ui.ProfileSummaryUtils::setProfileSpecialties(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
@@ -263,7 +268,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
         @pgu.client.profile.ui.ProfilePositionsUtils::updateProfilePositions(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 
-        // TODO display wish locations
+        // TODO display "wish" locations
 
 		var positions = j_profile.positions;
 		$doc.getElementById('pgu_geo.profile:xp_table').innerHTML = //

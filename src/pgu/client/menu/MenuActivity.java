@@ -1,5 +1,6 @@
 package pgu.client.menu;
 
+import pgu.client.app.AppState;
 import pgu.client.app.event.GoToContactsEvent;
 import pgu.client.app.event.GoToProfileEvent;
 import pgu.client.app.event.HideWaitingIndicatorEvent;
@@ -17,6 +18,8 @@ import pgu.client.menu.ui.MenuViewUtils;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.shared.dto.LoginInfo;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 import com.google.web.bindery.event.shared.EventBus;
 
 public class MenuActivity implements MenuPresenter //
@@ -193,6 +196,16 @@ public class MenuActivity implements MenuPresenter //
     @Override
     public void showNotificationWarning(final String msg) {
         u.fire(eventBus, new NotificationEvent(Level.WARNING, msg));
+    }
+
+    @Override
+    public void openPublicProfile() {
+
+        final AppState appState = clientFactory.getAppState();
+        final String publicProfileUrl = appState.getPublicProfileUrl();
+
+        final String publicProfile = publicProfileUrl.replaceFirst("http://www.linkedin.com/", GWT.getHostPageBaseURL());
+        Window.open(publicProfile, "public_profile", null);
     }
 
 }

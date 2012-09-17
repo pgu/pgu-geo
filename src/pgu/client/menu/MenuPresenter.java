@@ -11,4 +11,6 @@ public interface MenuPresenter {
 
     void showNotificationWarning(String msg);
 
+    void openPublicProfile();
+
 }

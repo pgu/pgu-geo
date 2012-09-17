@@ -3,8 +3,11 @@ gson, oauth, gwt-bootstrap, objectify
 
 TODOs
 =======
-* persistence + review js cache
-* get information from profile
+* toolbar en haut et sous-toolbar
+* public profile
+* contacts map
+* company profile
+
 
 linkedin rest:
 https://developer.linkedin.com/rest

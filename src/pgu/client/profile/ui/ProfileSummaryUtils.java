@@ -11,6 +11,13 @@ public class ProfileSummaryUtils {
         view.@pgu.client.profile.ui.ProfileViewImpl::setProfileId(Ljava/lang/String;)(profile_id);
     }-*/;
 
+    public static native void setProfilePublicUrl(ProfileViewImpl view, JavaScriptObject profile) /*-{
+
+        var public_url = profile.publicProfileUrl || '';
+
+        view.@pgu.client.profile.ui.ProfileViewImpl::setProfilePublicUrl(Ljava/lang/String;)(public_url);
+    }-*/;
+
     public static native void setProfileName(ProfileViewImpl view, JavaScriptObject profile) /*-{
         var
             first_name = profile.firstName || '' //

@@ -43,7 +43,7 @@ public class MenuViewImpl extends Composite implements MenuView {
     , past2prstBtn, prst2pastBtn //
     , stepBwdBtn, stepFwdBtn //
     , playBtn, pauseBtn, stopBtn //
-    , clearMarkersBtn //
+    , clearMarkersBtn, openPublicProfile //
     ;
     @UiField
     NavSearch                 locationSearchBox;
@@ -118,6 +118,11 @@ public class MenuViewImpl extends Composite implements MenuView {
     @Override
     public void setPresenter(final MenuPresenter presenter) {
         this.presenter = presenter;
+    }
+
+    @UiHandler("openPublicProfile")
+    public void clickOnOpenPublicProfile(final ClickEvent e) {
+        presenter.openPublicProfile();
     }
 
     @UiHandler("clearMarkersBtn")

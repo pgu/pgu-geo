@@ -11,4 +11,6 @@ public interface ProfilePresenter {
 
     void setProfileId(String id);
 
+    void setProfilePublicUrl(String url);
+
 }

@@ -445,4 +445,5 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         // TODO PGU geopoints https://developers.google.com/appengine/docs/java/search/overview
 
     }
+
 }

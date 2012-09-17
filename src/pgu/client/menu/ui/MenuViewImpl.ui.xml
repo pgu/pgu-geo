@@ -43,6 +43,7 @@
                 <b:NavLink ui:field="playBtn" icon="PLAY" iconSize="LARGE" />
                 <b:NavLink ui:field="pauseBtn" icon="PAUSE" iconSize="LARGE" />
                 <b:NavLink ui:field="stepFwdBtn" icon="STEP_FORWARD" iconSize="LARGE" />
+                <b:NavLink ui:field="openPublicProfile" icon="EXTERNAL_LINK" iconSize="LARGE" />
             </b:Nav>
         </b:Navbar>
         <g:HTMLPanel addStyleNames="{style.progressBar}">

@@ -23,4 +23,5 @@ public interface LinkedinService extends RemoteService {
     AccessToken getAccessToken(String oauthCode, RequestToken requestToken);
 
     void saveLocations(String userId, final String items2locations, final String referentialLocations);
+
 }

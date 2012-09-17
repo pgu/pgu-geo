@@ -22,4 +22,5 @@ public interface LinkedinServiceAsync {
 
     void saveLocations(String userId, final String items2locations, final String referentialLocations,
             AsyncCallback<Void> callbackApp);
+
 }

@@ -4,7 +4,8 @@ import pgu.shared.dto.AccessToken;
 
 public class AppState {
 
-    private String      userId = "Qjrp4c3fc3";
+    private String      userId;
+    private String      publicProfileUrl;
     private AccessToken accessToken;
     private boolean     hasUser;
 
@@ -31,5 +32,14 @@ public class AppState {
     public void setUserId(final String userId) {
         this.userId = userId;
     }
+
+    public String getPublicProfileUrl() {
+        return publicProfileUrl;
+    }
+
+    public void setPublicProfileUrl(final String publicProfileUrl) {
+        this.publicProfileUrl = publicProfileUrl;
+    }
+
 
 }

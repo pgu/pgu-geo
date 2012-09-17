@@ -97,4 +97,9 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         clientFactory.getAppState().setUserId(id);
     }
 
+    @Override
+    public void setProfilePublicUrl(final String url) {
+        clientFactory.getAppState().setPublicProfileUrl(url);
+    }
+
 }
