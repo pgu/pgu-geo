@@ -4,6 +4,8 @@ import pgu.client.contacts.ContactsActivity;
 import pgu.client.contacts.ContactsPlace;
 import pgu.client.profile.ProfileActivity;
 import pgu.client.profile.ProfilePlace;
+import pgu.client.pub.PublicActivity;
+import pgu.client.pub.PublicPlace;
 
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
@@ -20,6 +22,7 @@ public class AppActivityMapper implements ActivityMapper {
     @Override
     public Activity getActivity(final Place place) {
 
+        // if !PublicProfile
         //        if (!clientFactory.getAppState().hasUser()) {
         //            return new OAuthActivity(place, clientFactory);
         //
@@ -30,6 +33,9 @@ public class AppActivityMapper implements ActivityMapper {
 
         } else if (place instanceof ContactsPlace) {
             return new ContactsActivity((ContactsPlace) place, clientFactory);
+
+        } else if (place instanceof PublicPlace) {
+            return new PublicActivity((PublicPlace) place, clientFactory);
 
         }
 
