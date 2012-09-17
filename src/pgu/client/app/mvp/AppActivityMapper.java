@@ -2,7 +2,6 @@ package pgu.client.app.mvp;
 
 import pgu.client.contacts.ContactsActivity;
 import pgu.client.contacts.ContactsPlace;
-import pgu.client.oauth.OAuthActivity;
 import pgu.client.profile.ProfileActivity;
 import pgu.client.profile.ProfilePlace;
 
@@ -21,10 +20,10 @@ public class AppActivityMapper implements ActivityMapper {
     @Override
     public Activity getActivity(final Place place) {
 
-        if (!clientFactory.getAppState().hasUser()) {
-            return new OAuthActivity(place, clientFactory);
-
-        }
+        //        if (!clientFactory.getAppState().hasUser()) {
+        //            return new OAuthActivity(place, clientFactory);
+        //
+        //        }
 
         if (place instanceof ProfilePlace) {
             return new ProfileActivity((ProfilePlace) place, clientFactory);

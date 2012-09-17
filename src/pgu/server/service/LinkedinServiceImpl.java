@@ -276,7 +276,7 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         return new Gson().fromJson(body, Connections.class);
     }
 
-    private final boolean                        isTest               = false;
+    private final boolean                        isTest               = true;
 
     /**
      * https://developer.linkedin.com/documents/profile-api
