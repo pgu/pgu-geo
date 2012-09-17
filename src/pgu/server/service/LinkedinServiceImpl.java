@@ -452,6 +452,7 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         System.out.println("public " + publicUrl);
 
         final PublicProfile publicProfile = new PublicProfile();
+        // TODO PGU Sep 17, 2012 so... how is stored the public profile?...
         return publicProfile;
     }
 
