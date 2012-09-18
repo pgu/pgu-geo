@@ -4,6 +4,16 @@ public class PublicProfileUtils {
 
     public static native void showPublicPreferences(ProfileViewImpl view, final String preferences) /*-{
 
+        if ("" === preferences) {
+
+    		$wnd.pgu_geo.public_prefs = {};
+
+            view.@pgu.client.profile.ui.ProfileViewImpl::updatePublicHeader(ZLjava/lang/String;)(true,"experiences");
+            view.@pgu.client.profile.ui.ProfileViewImpl::updatePublicHeader(ZLjava/lang/String;)(true,"educations");
+
+    		return;
+        }
+
 		// {"wishes":true,"positions":true,"educations":false,"contacts":true}, see PublicProfileItem
 		$wnd.pgu_geo.public_prefs = JSON.parse(preferences);
 
@@ -16,7 +26,7 @@ public class PublicProfileUtils {
 			if (public_prefs.hasOwnProperty(key)) {
 				var is_public = public_prefs[key];
 
-                view.@pgu.client.profile.ui.ProfileViewImpl::updatePublicHeader(Ljava/lang/Boolean;Ljava/lang/String;)(is_public,key);
+                view.@pgu.client.profile.ui.ProfileViewImpl::updatePublicHeader(ZLjava/lang/String;)(is_public,key);
 			}
 		}
 
@@ -33,6 +43,7 @@ public class PublicProfileUtils {
 
 
         var copy_profile = @pgu.client.profile.ui.ProfileUtils::copyProfile()();
+        $wnd.console.log(copy_profile);
 
         // modify copy according to public preferences
         var public_prefs = $wnd.pgu_geo.public_prefs;
@@ -45,12 +56,25 @@ public class PublicProfileUtils {
                 var is_public = public_prefs[key];
 
                 if (!is_public) {
-                    delete copy_profile[key];
+
+                    if (key === 'experiences') {
+                        delete copy_profile['positions'];
+
+                    } else if (key === 'educations') {
+                        delete copy_profile['educations'];
+
+                    }
+// TODO summary...
                 }
             }
         }
 
-		return copy_profile;
+
+        $wnd.console.log("--");
+        var tmp= @pgu.client.app.utils.JsonUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
+		copy_profile);
+        $wnd.console.log(tmp);
+        return tmp;
     }-*/;
 
     public static native String json_publicPreferences() /*-{

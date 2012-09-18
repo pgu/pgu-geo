@@ -165,10 +165,17 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
         final PublicProfile updated = new PublicProfile();
         updated.setUserId(clientFactory.getAppState().getUserId());
-        updated.setUrl(clientFactory.getAppState().getPublicProfileUrl());
 
         updated.setPreferences(view.getPublicPreferences());
         updated.setProfile(view.getPublicProfile());
+
+
+        // TODO PGU Sep 18, 2012 factorize this
+        final int length = "http://www.linkedin.com/".length();
+        final String linkedInSuffix = clientFactory.getAppState().getPublicProfileUrl().substring(length);
+
+        updated.setUrl(linkedInSuffix);
+
         return updated;
     }
 

@@ -39,7 +39,7 @@ public class PublicActivity extends AbstractActivity implements PublicPresenter 
 
         panel.setWidget(view.asWidget());
 
-        publicProfileService.fetchPreferencesOnly( //
+        publicProfileService.fetchPublicProfileByUrl( //
                 place.getPublicUrl(), //
                 new AsyncCallbackApp<PublicProfile>(eventBus) {
 
@@ -47,6 +47,7 @@ public class PublicActivity extends AbstractActivity implements PublicPresenter 
                     public void onSuccess(final PublicProfile result) {
                         // TODO PGU Sep 17, 2012
                         GWT.log("retour...");
+                        GWT.log(result.getProfile());
                     }
 
                 });

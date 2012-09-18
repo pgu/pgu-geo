@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import pgu.client.app.utils.ClientUtils;
@@ -25,12 +23,14 @@ import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.Paragraph;
 import com.github.gwtbootstrap.client.ui.Popover;
 import com.github.gwtbootstrap.client.ui.Section;
+import com.github.gwtbootstrap.client.ui.Tooltip;
+import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -57,7 +57,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     @UiField
     HTMLPanel                                               lgContainer, spContainer;
     @UiField
-    HTML                                                    experienceHeader, educationHeader;
+    Button expPublicState, eduPublicState;
+    @UiField
+    Tooltip expPublicTooltip, eduPublicTooltip;
 
     @UiField
     NavLink                                                 locContainer;
@@ -94,81 +96,38 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
         initWidget(uiBinder.createAndBindUi(this));
 
-        item2header.get(PublicProfileItem.educations).header = educationHeader;
-        item2header.get(PublicProfileItem.experiences).header = experienceHeader;
-
-        initPublicProfileHeaders();
-
         exportMethod();
     }
 
-    private static final Map<String, ItemHeader> item2header = new HashMap<String, ItemHeader>();
+    private static boolean isEduPublic = false;
+    private static boolean isExpPublic = false;
 
-    static {
-        item2header.put(PublicProfileItem.educations, new ItemHeader("Education"));
-        item2header.put(PublicProfileItem.experiences, new ItemHeader("Experience"));
+    @UiHandler("expPublicState")
+    public void clickOnExpPublicState(final ClickEvent e) {
+
+        updatePublicHeader(!isExpPublic, PublicProfileItem.experiences);
+        presenter.updatePublicProfile(PublicProfileItem.experiences);
     }
 
-    private static class ItemHeader {
-        private final String title;
-        private HTML header;
-        private boolean isPublic = true;
+    @UiHandler("eduPublicState")
+    public void clickOnEduPublicState(final ClickEvent e) {
 
-        public ItemHeader(final String title) {
-            this.title = title;
-        }
+        updatePublicHeader(!isEduPublic, PublicProfileItem.educations);
+        presenter.updatePublicProfile(PublicProfileItem.educations);
     }
 
-    private void initPublicProfileHeaders() {
-        for (final Entry<String, ItemHeader> e : item2header.entrySet()) {
+    public void updatePublicHeader(final boolean isPublic, final String publicProfileItem) {
+        GWT.log("update " + isPublic + ", " + publicProfileItem);
 
-            final String publicProfileItem = e.getKey();
-            final ItemHeader itemHeader = e.getValue();
+        if (PublicProfileItem.experiences.equals(publicProfileItem)) {
+            expPublicState.setIcon(isPublic ? IconType.EYE_OPEN : IconType.EYE_CLOSE);
+            isExpPublic = isPublic;
 
-            updatePublicHeader(null, publicProfileItem);
+        } else if (PublicProfileItem.educations.equals(publicProfileItem)) {
+            eduPublicState.setIcon(isPublic ? IconType.EYE_OPEN : IconType.EYE_CLOSE);
+            isEduPublic = isPublic;
 
-            itemHeader.header.addClickHandler(new ClickHandler() {
-
-                @Override
-                public void onClick(final ClickEvent event) {
-                    updatePublicHeader(!itemHeader.isPublic, publicProfileItem);
-                    presenter.updatePublicProfile(publicProfileItem);
-                }
-            });
         }
-    }
-
-    public void updatePublicHeader(final Boolean isPublic, final String publicProfileItem) {
-
-        if (!item2header.containsKey(publicProfileItem)) {
-            return;
-        }
-
-        final ItemHeader itemHeader = item2header.get(publicProfileItem);
-        final String title = itemHeader.title;
-        final HTML header = itemHeader.header;
-
-        String icon;
-        if (isPublic == null) {
-            icon = "";
-
-        } else {
-            final String type = isPublic ? "open" : "close";
-            icon = "<i class=\"icon-eye-" + type + "\" style=\"float:right;\"></i>";
-
-            itemHeader.isPublic = isPublic;
-        }
-
-        final String tooltip = "<a " + //
-                "id=\"tooltip_" + publicProfileItem+ "\" " + //
-                "href=\"javascript:;\" " + //
-                "rel=\"tooltip\" " + //
-                "data-original-title=\"Saved.\" " + //
-                "data-placement=\"left\" " + //
-                "data-delay=\"{ show: 100, hide: 800 }\" " + //
-                ">";
-
-        header.setHTML("<h3><span>" + title + "</span>" + tooltip + icon + "</a></h3>");
     }
 
     private static ProfilePresenter staticPresenter;
@@ -362,7 +321,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     @Override
     public void showPublicPreferences(final String publicPreferences) {
 
-        final String prefs = u.isVoid(publicPreferences) ? "{}" : publicPreferences;
+        final String prefs = u.isVoid(publicPreferences) ? "" : publicPreferences;
         PublicProfileUtils.showPublicPreferences(this, prefs);
     }
 
@@ -372,18 +331,33 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     @Override
-    public native void confirmChangeOnPublicProfile(final String publicProfileItem) /*-{
+    public void confirmChangeOnPublicProfile(final String publicProfileItem) {
 
-        $wnd.$('#tooltip_' + publicProfileItem).tooltip('show');
-    }-*/;
+        Tooltip tooltip;
+        if (PublicProfileItem.experiences.equals(publicProfileItem)) {
+            tooltip = expPublicTooltip;
+
+        } else if (PublicProfileItem.educations.equals(publicProfileItem)) {
+            tooltip = eduPublicTooltip;
+        } else {
+            throw new IllegalArgumentException("item? " + publicProfileItem);
+        }
+
+        final Tooltip _tooltip = tooltip;
+        _tooltip.show();
+        new Timer(){
+
+            @Override
+            public void run() {
+                _tooltip.hide();
+            }
+
+        }.schedule(3000);
+    }
 
     public static void updateCachePublicPreferences() {
-        for (final Entry<String, ItemHeader> e : item2header.entrySet()) {
-            final String publicProfileItem = e.getKey();
-            final boolean isPublic = e.getValue().isPublic;
-
-            PublicProfileUtils.updatePublicProfileItem(publicProfileItem, isPublic);
-        }
+        PublicProfileUtils.updatePublicProfileItem(PublicProfileItem.experiences, isExpPublic);
+        PublicProfileUtils.updatePublicProfileItem(PublicProfileItem.educations, isEduPublic);
     }
 
     @Override
