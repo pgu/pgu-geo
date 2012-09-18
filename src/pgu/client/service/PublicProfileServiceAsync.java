@@ -1,13 +1,16 @@
 package pgu.client.service;
 
-import pgu.shared.dto.PublicPreferences;
+import pgu.shared.dto.PublicProfile;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface PublicProfileServiceAsync {
 
-    void fetchPublicPreferences(String userId, AsyncCallback<PublicPreferences> asyncCallbackApp);
+    void fetchPreferencesOnly(String userId, AsyncCallback<PublicProfile> asyncCallbackApp);
 
-    void saveProfile(String json, AsyncCallback<Void> callbackApp);
+    void fetchPublicProfileByUrl(String publicUrl, AsyncCallback<PublicProfile> asyncCallbackApp);
+
+    void saveProfile(PublicProfile publicProfile,  AsyncCallback<Void> callbackApp);
+
 
 }

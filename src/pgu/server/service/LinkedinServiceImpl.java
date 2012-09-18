@@ -36,7 +36,6 @@ import pgu.shared.dto.Location;
 import pgu.shared.dto.OauthAuthorizationStart;
 import pgu.shared.dto.Person;
 import pgu.shared.dto.Profile;
-import pgu.shared.dto.PublicProfile;
 import pgu.shared.dto.RequestToken;
 import pgu.shared.model.UserAndLocations;
 
@@ -377,7 +376,7 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
 
         userAndLocations.setItems2locations(items2locations);
         userAndLocations.setReferentialLocations(referentialLocations);
-        dao.ofy().put(userAndLocations);
+        dao.ofy().async().put(userAndLocations);
 
         // TODO PGU Sep 12, 2012 async: complete document profile with locations
     }
@@ -445,15 +444,6 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
 
         // TODO PGU geopoints https://developers.google.com/appengine/docs/java/search/overview
 
-    }
-
-    @Override
-    public PublicProfile fetchPublicProfile(final String publicUrl) {
-        System.out.println("public " + publicUrl);
-
-        final PublicProfile publicProfile = new PublicProfile();
-        // TODO PGU Sep 17, 2012 so... how is stored the public profile?...
-        return publicProfile;
     }
 
 }

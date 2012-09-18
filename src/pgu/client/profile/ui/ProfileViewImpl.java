@@ -14,7 +14,6 @@ import pgu.client.app.utils.MarkdownUtils;
 import pgu.client.profile.ProfilePresenter;
 import pgu.client.profile.ProfileView;
 import pgu.shared.dto.Profile;
-import pgu.shared.dto.PublicPreferences;
 import pgu.shared.model.UserAndLocations;
 import pgu.shared.utils.PublicProfileItem;
 
@@ -140,6 +139,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     public void updatePublicHeader(final Boolean isPublic, final String publicProfileItem) {
+
+        if (!item2header.containsKey(publicProfileItem)) {
+            return;
+        }
 
         final ItemHeader itemHeader = item2header.get(publicProfileItem);
         final String title = itemHeader.title;
@@ -357,10 +360,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }-*/;
 
     @Override
-    public void showPublicPreferencesAndUpdatePublicProfile(final PublicPreferences publicPreferences) {
+    public void showPublicPreferences(final String publicPreferences) {
 
-        final String prefs = publicPreferences == null ? "" : publicPreferences.getPreferences();
-        PublicProfileUtils.showPublicPreferencesAndUpdatePublicProfile(this, prefs);
+        final String prefs = u.isVoid(publicPreferences) ? "{}" : publicPreferences;
+        PublicProfileUtils.showPublicPreferences(this, prefs);
     }
 
     @Override
@@ -374,4 +377,17 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         $wnd.$('#tooltip_' + publicProfileItem).tooltip('show');
     }-*/;
 
+    public static void updateCachePublicPreferences() {
+        for (final Entry<String, ItemHeader> e : item2header.entrySet()) {
+            final String publicProfileItem = e.getKey();
+            final boolean isPublic = e.getValue().isPublic;
+
+            PublicProfileUtils.updatePublicProfileItem(publicProfileItem, isPublic);
+        }
+    }
+
+    @Override
+    public String getPublicPreferences() {
+        return PublicProfileUtils.json_publicPreferences();
+    }
 }

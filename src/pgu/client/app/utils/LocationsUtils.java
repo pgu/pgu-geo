@@ -25,22 +25,12 @@ public class LocationsUtils {
 
     }-*/;
 
-    public static native String json_stringify(JavaScriptObject o) /*-{
-
-        return JSON.stringify(o, function(key, value) {
-            if (key == '__gwt_ObjectId') {
-                return;
-            }
-            return value;
-        });
-    }-*/;
-
     public static native void copyLocationCaches() /*-{
-        $wnd.pgu_geo.copy_cache_items = JSON.parse(@pgu.client.app.utils.LocationsUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
+        $wnd.pgu_geo.copy_cache_items = JSON.parse(@pgu.client.app.utils.JsonUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
         $wnd.pgu_geo.cache_items));
 
 
-        $wnd.pgu_geo.copy_cache_referential = JSON.parse(@pgu.client.app.utils.LocationsUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
+        $wnd.pgu_geo.copy_cache_referential = JSON.parse(@pgu.client.app.utils.JsonUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
         $wnd.pgu_geo.cache_referential));
 
     }-*/;
@@ -307,12 +297,12 @@ public class LocationsUtils {
     }-*/;
 
     public static native String json_copyCacheItems() /*-{
-        return @pgu.client.app.utils.LocationsUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
+        return @pgu.client.app.utils.JsonUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
           $wnd.pgu_geo.copy_cache_items);
     }-*/;
 
     public static native String json_copyCacheReferential() /*-{
-        return @pgu.client.app.utils.LocationsUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
+        return @pgu.client.app.utils.JsonUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
           $wnd.pgu_geo.copy_cache_referential);
     }-*/;
 

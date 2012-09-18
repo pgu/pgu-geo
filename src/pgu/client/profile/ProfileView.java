@@ -1,7 +1,6 @@
 package pgu.client.profile;
 
 import pgu.shared.dto.Profile;
-import pgu.shared.dto.PublicPreferences;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -13,8 +12,10 @@ public interface ProfileView extends IsWidget {
 
     String getPublicProfile();
 
-    void showPublicPreferencesAndUpdatePublicProfile(PublicPreferences publicPreferences);
+    void showPublicPreferences(String publicPreferences);
 
     void confirmChangeOnPublicProfile(String publicProfileItem);
+
+    String getPublicPreferences();
 
 }

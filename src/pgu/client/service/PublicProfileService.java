@@ -1,6 +1,6 @@
 package pgu.client.service;
 
-import pgu.shared.dto.PublicPreferences;
+import pgu.shared.dto.PublicProfile;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -8,8 +8,11 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("pub")
 public interface PublicProfileService extends RemoteService {
 
-    PublicPreferences fetchPublicPreferences(String userId);
+    PublicProfile fetchPreferencesOnly(String userId);
 
-    void saveProfile(String json);
+    PublicProfile fetchPublicProfileByUrl(String publicUrl);
+
+    void saveProfile(PublicProfile publicProfile);
+
 
 }

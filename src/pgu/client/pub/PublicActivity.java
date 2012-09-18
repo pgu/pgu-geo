@@ -4,6 +4,7 @@ import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.service.LinkedinServiceAsync;
+import pgu.client.service.PublicProfileServiceAsync;
 import pgu.shared.dto.PublicProfile;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -13,20 +14,22 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 public class PublicActivity extends AbstractActivity implements PublicPresenter {
 
-    private final ClientFactory        clientFactory;
-    private final PublicView           view;
-    private final LinkedinServiceAsync linkedinService;
+    private final ClientFactory             clientFactory;
+    private final PublicView                view;
+    private final LinkedinServiceAsync      linkedinService;
+    private final PublicProfileServiceAsync publicProfileService;
 
-    private final ClientUtils          u = new ClientUtils();
+    private final ClientUtils               u = new ClientUtils();
 
-    private EventBus                   eventBus;
-    private final PublicPlace          place;
+    private EventBus                        eventBus;
+    private final PublicPlace               place;
 
     public PublicActivity(final PublicPlace place, final ClientFactory clientFactory) {
         this.place = place;
         this.clientFactory = clientFactory;
         view = clientFactory.getPublicView();
         linkedinService = clientFactory.getLinkedinService();
+        publicProfileService = clientFactory.getPublicProfileService();
     }
 
     @Override
@@ -36,7 +39,7 @@ public class PublicActivity extends AbstractActivity implements PublicPresenter 
 
         panel.setWidget(view.asWidget());
 
-        linkedinService.fetchPublicProfile( //
+        publicProfileService.fetchPreferencesOnly( //
                 place.getPublicUrl(), //
                 new AsyncCallbackApp<PublicProfile>(eventBus) {
 

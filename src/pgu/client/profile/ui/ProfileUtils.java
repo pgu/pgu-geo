@@ -8,6 +8,11 @@ public class ProfileUtils {
         $wnd.pgu_geo.profile = profile;
     }-*/;
 
+    public static native String copyProfile() /*-{
+        return JSON.parse(@pgu.client.app.utils.JsonUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
+        $wnd.pgu_geo.profile));
+    }-*/;
+
     public static native boolean isLocationFromLinkedin(final String item_config_id, final String location_name) /*-{
 
         if (item_config_id.indexOf('experience') === -1) {

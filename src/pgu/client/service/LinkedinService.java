@@ -4,7 +4,6 @@ import pgu.shared.dto.AccessToken;
 import pgu.shared.dto.Connections;
 import pgu.shared.dto.OauthAuthorizationStart;
 import pgu.shared.dto.Profile;
-import pgu.shared.dto.PublicProfile;
 import pgu.shared.dto.RequestToken;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -24,7 +23,5 @@ public interface LinkedinService extends RemoteService {
     AccessToken getAccessToken(String oauthCode, RequestToken requestToken);
 
     void saveLocations(String userId, final String items2locations, final String referentialLocations);
-
-    PublicProfile fetchPublicProfile(String publicUrl);
 
 }

@@ -12,7 +12,7 @@ import pgu.client.profile.ui.ProfileViewUtils;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.client.service.PublicProfileServiceAsync;
 import pgu.shared.dto.Profile;
-import pgu.shared.dto.PublicPreferences;
+import pgu.shared.dto.PublicProfile;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -65,17 +65,27 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
                         // the profile has changed in linkedin, so we need the last profile from linkedin
                         // we need the public preferences, to know what to copy and to save
 
-                        publicProfileService.fetchPublicPreferences( //
+                        publicProfileService.fetchPreferencesOnly( //
                                 clientFactory.getAppState().getUserId(), //
-                                new AsyncCallbackApp<PublicPreferences>(eventBus) {
+                                new AsyncCallbackApp<PublicProfile>(eventBus) {
 
                                     @Override
-                                    public void onSuccess(final PublicPreferences publicPreferences) {
+                                    public void onSuccess(final PublicProfile publicProfile) {
 
-                                        view.showPublicPreferencesAndUpdatePublicProfile(publicPreferences);
+                                        final boolean isCreation = publicProfile == null;
+                                        if (isCreation) {
+                                            view.showPublicPreferences(null);
+
+                                        } else {
+                                            final String publicPreferences = publicProfile.getPreferences();
+                                            view.showPublicPreferences(publicPreferences);
+
+                                        }
+
+                                        final PublicProfile updated = getUpdatedPublicProfile();
 
                                         publicProfileService.saveProfile( //
-                                                view.getPublicProfile(), //
+                                                updated, //
                                                 new AsyncCallbackApp<Void>(eventBus) {
 
                                                     @Override
@@ -136,8 +146,11 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     @Override
     public void updatePublicProfile(final String publicProfileItem) {
+
+        final PublicProfile updated = getUpdatedPublicProfile();
+
         publicProfileService.saveProfile( //
-                view.getPublicProfile(), //
+                updated, //
                 new AsyncCallbackApp<Void>(eventBus) {
 
                     @Override
@@ -146,6 +159,17 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
                     }
 
                 });
+    }
+
+    private PublicProfile getUpdatedPublicProfile() {
+
+        final PublicProfile updated = new PublicProfile();
+        updated.setUserId(clientFactory.getAppState().getUserId());
+        updated.setUrl(clientFactory.getAppState().getPublicProfileUrl());
+
+        updated.setPreferences(view.getPublicPreferences());
+        updated.setProfile(view.getPublicProfile());
+        return updated;
     }
 
 }
