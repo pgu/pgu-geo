@@ -8,7 +8,11 @@
 
   <!-- Servlets -->
   <servlet>
-    <servlet-name>linkedinServlet</servlet-name>
+    <servlet-name>pub</servlet-name>
+    <servlet-class>pgu.server.service.PublicProfileServiceImpl</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>linkedinService</servlet-name>
     <servlet-class>pgu.server.service.LinkedinServiceImpl</servlet-class>
   </servlet>
   <servlet>
@@ -17,7 +21,11 @@
   </servlet>
   
   <servlet-mapping>
-    <servlet-name>linkedinServlet</servlet-name>
+    <servlet-name>pub</servlet-name>
+    <url-pattern>/pgu_contacts/pub</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>linkedinService</servlet-name>
     <url-pattern>/pgu_contacts/linkedin</url-pattern>
   </servlet-mapping>
   <servlet-mapping>

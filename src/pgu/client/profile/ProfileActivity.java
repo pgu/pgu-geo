@@ -10,7 +10,9 @@ import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.profile.ui.ProfileViewUtils;
 import pgu.client.service.LinkedinServiceAsync;
+import pgu.client.service.PublicProfileServiceAsync;
 import pgu.shared.dto.Profile;
+import pgu.shared.dto.PublicPreferences;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -21,18 +23,20 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 , LocationSuccessDeleteEvent.Handler //
 {
 
-    private final ClientFactory        clientFactory;
-    private final ProfileView          view;
-    private final LinkedinServiceAsync linkedinService;
+    private final ClientFactory             clientFactory;
+    private final ProfileView               view;
+    private final LinkedinServiceAsync      linkedinService;
+    private final PublicProfileServiceAsync publicProfileService;
 
-    private final ClientUtils          u = new ClientUtils();
+    private final ClientUtils               u = new ClientUtils();
 
-    private EventBus                   eventBus;
+    private EventBus                        eventBus;
 
     public ProfileActivity(final ProfilePlace place, final ClientFactory clientFactory) {
         this.clientFactory = clientFactory;
         view = clientFactory.getProfileView();
         linkedinService = clientFactory.getLinkedinService();
+        publicProfileService = clientFactory.getPublicProfileService();
     }
 
     @Override
@@ -56,9 +60,37 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
                     public void onSuccess(final Profile profile) {
                         u.fire(eventBus, new HideWaitingIndicatorEvent());
                         view.setProfile(profile);
-                    }
 
+                        // TODO PGU Sep 18, 2012 create/update the public profile
+                        // the profile has changed in linkedin, so we need the last profile from linkedin
+                        // we need the public preferences, to know what to copy and to save
+
+                        publicProfileService.fetchPublicPreferences( //
+                                clientFactory.getAppState().getUserId(), //
+                                new AsyncCallbackApp<PublicPreferences>(eventBus) {
+
+                                    @Override
+                                    public void onSuccess(final PublicPreferences publicPreferences) {
+
+                                        view.showPublicPreferencesAndUpdatePublicProfile(publicPreferences);
+
+                                        publicProfileService.saveProfile( //
+                                                view.getPublicProfile(), //
+                                                new AsyncCallbackApp<Void>(eventBus) {
+
+                                                    @Override
+                                                    public void onSuccess(final Void result) {
+                                                        // no-op
+                                                    }
+
+                                                });
+                                        // TODO PGU Sep 18, 2012 save locations after geoloc the locations
+                                    }
+
+                                });
+                    }
                 });
+
     }
 
     @Override
@@ -100,6 +132,20 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     @Override
     public void setProfilePublicUrl(final String url) {
         clientFactory.getAppState().setPublicProfileUrl(url);
+    }
+
+    @Override
+    public void updatePublicProfile(final String publicProfileItem) {
+        publicProfileService.saveProfile( //
+                view.getPublicProfile(), //
+                new AsyncCallbackApp<Void>(eventBus) {
+
+                    @Override
+                    public void onSuccess(final Void result) {
+                        view.confirmChangeOnPublicProfile(publicProfileItem);
+                    }
+
+                });
     }
 
 }

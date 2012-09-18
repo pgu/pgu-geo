@@ -13,4 +13,6 @@ public interface ProfilePresenter {
 
     void setProfilePublicUrl(String url);
 
+    void updatePublicProfile(String publicProfileItem);
+
 }

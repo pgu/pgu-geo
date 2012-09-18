@@ -58,7 +58,7 @@ public class LocationsUtils {
         if (location_name) {
             var
                 cache = $wnd.pgu_geo.cache_items
-              , key = 'current_location'
+              , key = 'current' // see ItemType
             ;
 
             var locations = cache[key] || [];

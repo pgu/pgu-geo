@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import pgu.client.app.utils.ClientUtils;
@@ -12,7 +14,9 @@ import pgu.client.app.utils.MarkdownUtils;
 import pgu.client.profile.ProfilePresenter;
 import pgu.client.profile.ProfileView;
 import pgu.shared.dto.Profile;
+import pgu.shared.dto.PublicPreferences;
 import pgu.shared.model.UserAndLocations;
+import pgu.shared.utils.PublicProfileItem;
 
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.Column;
@@ -24,6 +28,7 @@ import com.github.gwtbootstrap.client.ui.Popover;
 import com.github.gwtbootstrap.client.ui.Section;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -52,6 +57,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     Section                                                 overviewSection, experienceSection, educationSection;
     @UiField
     HTMLPanel                                               lgContainer, spContainer;
+    @UiField
+    HTML                                                    experienceHeader, educationHeader;
 
     @UiField
     NavLink                                                 locContainer;
@@ -88,14 +95,84 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
         initWidget(uiBinder.createAndBindUi(this));
 
+        item2header.get(PublicProfileItem.educations).header = educationHeader;
+        item2header.get(PublicProfileItem.experiences).header = experienceHeader;
+
+        initPublicProfileHeaders();
+
         exportMethod();
+    }
+
+    private static final Map<String, ItemHeader> item2header = new HashMap<String, ItemHeader>();
+
+    static {
+        item2header.put(PublicProfileItem.educations, new ItemHeader("Education"));
+        item2header.put(PublicProfileItem.experiences, new ItemHeader("Experience"));
+    }
+
+    private static class ItemHeader {
+        private final String title;
+        private HTML header;
+        private boolean isPublic = true;
+
+        public ItemHeader(final String title) {
+            this.title = title;
+        }
+    }
+
+    private void initPublicProfileHeaders() {
+        for (final Entry<String, ItemHeader> e : item2header.entrySet()) {
+
+            final String publicProfileItem = e.getKey();
+            final ItemHeader itemHeader = e.getValue();
+
+            updatePublicHeader(null, publicProfileItem);
+
+            itemHeader.header.addClickHandler(new ClickHandler() {
+
+                @Override
+                public void onClick(final ClickEvent event) {
+                    updatePublicHeader(!itemHeader.isPublic, publicProfileItem);
+                    presenter.updatePublicProfile(publicProfileItem);
+                }
+            });
+        }
+    }
+
+    public void updatePublicHeader(final Boolean isPublic, final String publicProfileItem) {
+
+        final ItemHeader itemHeader = item2header.get(publicProfileItem);
+        final String title = itemHeader.title;
+        final HTML header = itemHeader.header;
+
+        String icon;
+        if (isPublic == null) {
+            icon = "";
+
+        } else {
+            final String type = isPublic ? "open" : "close";
+            icon = "<i class=\"icon-eye-" + type + "\" style=\"float:right;\"></i>";
+
+            itemHeader.isPublic = isPublic;
+        }
+
+        final String tooltip = "<a " + //
+                "id=\"tooltip_" + publicProfileItem+ "\" " + //
+                "href=\"javascript:;\" " + //
+                "rel=\"tooltip\" " + //
+                "data-original-title=\"Saved.\" " + //
+                "data-placement=\"left\" " + //
+                "data-delay=\"{ show: 100, hide: 800 }\" " + //
+                ">";
+
+        header.setHTML("<h3><span>" + title + "</span>" + tooltip + icon + "</a></h3>");
     }
 
     private static ProfilePresenter staticPresenter;
 
     public native void exportMethod() /*-{
-          $wnd.pgu_geo.addNewLocation = $entry(@pgu.client.profile.ui.ProfileViewImpl::addNewLocation(Ljava/lang/String;));
-          $wnd.pgu_geo.editLocation = $entry(@pgu.client.profile.ui.ProfileViewImpl::editLocation(Ljava/lang/String;Ljava/lang/String;));
+      $wnd.pgu_geo.addNewLocation = $entry(@pgu.client.profile.ui.ProfileViewImpl::addNewLocation(Ljava/lang/String;));
+      $wnd.pgu_geo.editLocation = $entry(@pgu.client.profile.ui.ProfileViewImpl::editLocation(Ljava/lang/String;Ljava/lang/String;));
     }-*/;
 
     public static void editLocation(final String itemConfigId, final String locName) {
@@ -134,7 +211,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         } else {
             LocationsUtils.initCaches(ual.getItems2locations(), ual.getReferentialLocations());
         }
-
 
         ProfileViewUtils.initCaches();
 
@@ -252,7 +328,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     private native void setProfile(ProfileViewImpl view, String profile) /*-{
 
-        @pgu.client.profile.ui.ProfileViewUtils::initDelayForCallingGeocoder()();
+		@pgu.client.profile.ui.ProfileViewUtils::initDelayForCallingGeocoder()();
 
 		var j_profile = JSON.parse(profile);
 		@pgu.client.profile.ui.ProfileUtils::cacheProfile(Lcom/google/gwt/core/client/JavaScriptObject;)(j_profile);
@@ -266,9 +342,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 		@pgu.client.profile.ui.ProfileSummaryUtils::setProfileSummary(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 		@pgu.client.profile.ui.ProfileSummaryUtils::setProfileLanguages(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 
-        @pgu.client.profile.ui.ProfilePositionsUtils::updateProfilePositions(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
+		@pgu.client.profile.ui.ProfilePositionsUtils::updateProfilePositions(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 
-        // TODO display "wish" locations
+		// TODO display "wish" locations
 
 		var positions = j_profile.positions;
 		$doc.getElementById('pgu_geo.profile:xp_table').innerHTML = //
@@ -278,6 +354,24 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 		$doc.getElementById('pgu_geo.profile:edu_table').innerHTML = //
 		@pgu.client.profile.ui.ProfileViewUtils::createEducationTable(Lcom/google/gwt/core/client/JavaScriptObject;)(educations);
 
+    }-*/;
+
+    @Override
+    public void showPublicPreferencesAndUpdatePublicProfile(final PublicPreferences publicPreferences) {
+
+        final String prefs = publicPreferences == null ? "" : publicPreferences.getPreferences();
+        PublicProfileUtils.showPublicPreferencesAndUpdatePublicProfile(this, prefs);
+    }
+
+    @Override
+    public String getPublicProfile() {
+        return PublicProfileUtils.getPublicProfile();
+    }
+
+    @Override
+    public native void confirmChangeOnPublicProfile(final String publicProfileItem) /*-{
+
+        $wnd.$('#tooltip_' + publicProfileItem).tooltip('show');
     }-*/;
 
 }

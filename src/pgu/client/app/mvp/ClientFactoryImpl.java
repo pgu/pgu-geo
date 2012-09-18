@@ -19,6 +19,8 @@ import pgu.client.service.LinkedinService;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.client.service.LoginService;
 import pgu.client.service.LoginServiceAsync;
+import pgu.client.service.PublicProfileService;
+import pgu.client.service.PublicProfileServiceAsync;
 import pgu.shared.dto.LoginInfo;
 
 import com.google.gwt.core.client.GWT;
@@ -28,21 +30,22 @@ import com.google.web.bindery.event.shared.SimpleEventBus;
 
 public class ClientFactoryImpl implements ClientFactory {
 
-    private static EventBus             eventBus         = new SimpleEventBus();
-    private static PlaceController      placeController  = new PlaceController(eventBus);
-    private static AppView              appView          = new AppViewImpl();
-    private static MenuView             menuView         = new MenuViewImpl();
-    private static ContactsView         contactsView     = new ContactsViewImpl();
-    private static ProfileView          profileView      = new ProfileViewImpl();
-    private static OAuthView            oauthView        = new OAuthViewImpl();
-    private static EditLocationView     editLocationView = new EditLocationViewImpl();
-    private static PublicView           publicView       = new PublicViewImpl();
+    private static EventBus                  eventBus             = new SimpleEventBus();
+    private static PlaceController           placeController      = new PlaceController(eventBus);
+    private static AppView                   appView              = new AppViewImpl();
+    private static MenuView                  menuView             = new MenuViewImpl();
+    private static ContactsView              contactsView         = new ContactsViewImpl();
+    private static ProfileView               profileView          = new ProfileViewImpl();
+    private static OAuthView                 oauthView            = new OAuthViewImpl();
+    private static EditLocationView          editLocationView     = new EditLocationViewImpl();
+    private static PublicView                publicView           = new PublicViewImpl();
 
-    private static LinkedinServiceAsync linkedinService  = GWT.create(LinkedinService.class);
-    private static LoginServiceAsync    loginService     = GWT.create(LoginService.class);
+    private static PublicProfileServiceAsync publicProfileService = GWT.create(PublicProfileService.class);
+    private static LinkedinServiceAsync      linkedinService      = GWT.create(LinkedinService.class);
+    private static LoginServiceAsync         loginService         = GWT.create(LoginService.class);
 
-    private static AppState             appState         = new AppState();
-    private LoginInfo                   loginInfo;
+    private static AppState                  appState             = new AppState();
+    private LoginInfo                        loginInfo;
 
     @Override
     public EventBus getEventBus() {
@@ -112,6 +115,11 @@ public class ClientFactoryImpl implements ClientFactory {
     @Override
     public PublicView getPublicView() {
         return publicView;
+    }
+
+    @Override
+    public PublicProfileServiceAsync getPublicProfileService() {
+        return publicProfileService;
     }
 
 }
