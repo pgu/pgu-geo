@@ -1,0 +1,18 @@
+summary: always public
+wish: public flag, at least one should be public.. with at least one location
+positions: public flag
+education: public flag
+
+public profile:
+<div float:left>
+- map with markers for each item with locations (wish/positions/education)
+- summary
+</div>
+<div float:left>
+- <iframe>linkedin_public profile
+</div>
+
+- by default, save the whole profile(everything is public by default)
+- disable public flag: copy public (json trick) on the copy, delete property (ex: positions), save the resulting json
+
+
