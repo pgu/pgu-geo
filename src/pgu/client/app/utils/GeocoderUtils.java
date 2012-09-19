@@ -6,6 +6,18 @@ import com.google.gwt.user.client.Timer;
 
 public class GeocoderUtils {
 
+    static {
+        exportMethod();
+    }
+
+    private static native void exportMethod() /*-{
+        $wnd.pgu_geo.init_geocoder = $entry(@pgu.client.app.utils.GeocoderUtils::initGeocoder());
+    }-*/;
+
+    public static native void initGeocoder() /*-{
+        $wnd.pgu_geo.geocoder = new $wnd.google.maps.Geocoder();
+    }-*/;
+
     public static void searchGeopoint(final String locationName) {
 
         if (LocationsUtils.isLocationInReferential(locationName)) {
@@ -21,7 +33,7 @@ public class GeocoderUtils {
     }
 
     private static native boolean isGeocoderAvailable() /*-{
-        return $wnd.geocoder !== undefined;
+        return $wnd.pgu_geo.geocoder !== undefined;
     }-*/;
 
     public static void searchGeopointWithDelay(final String locationName, final int delayMillis) {
@@ -42,7 +54,7 @@ public class GeocoderUtils {
 
     public static native void searchAndAdd(String location_name) /*-{
         var
-            geocoder = $wnd.geocoder
+            geocoder = $wnd.pgu_geo.geocoder
           , google = $wnd.google
         ;
 

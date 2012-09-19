@@ -123,7 +123,7 @@ public class ContactsViewImpl extends Composite implements ContactsView {
 
     public static native void addMarker(String countryCode, String weight) /*-{
 
-		$wnd.geocoder
+		$wnd.pgu_geo.geocoder
 				.geocode(
 						{
 							'address' : 'country: ' + countryCode
