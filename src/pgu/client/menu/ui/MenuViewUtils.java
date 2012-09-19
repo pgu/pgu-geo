@@ -8,7 +8,7 @@ public class MenuViewUtils {
         var
           geocoder = @pgu.client.app.utils.GeocoderUtils::geocoder()()
         , google = $wnd.google
-        , map = $wnd.map
+        , map = @pgu.client.profile.ui.ProfileUtils::profileMap()()
         ;
 
         geocoder
@@ -39,7 +39,7 @@ public class MenuViewUtils {
         var
           geocoder = @pgu.client.app.utils.GeocoderUtils::geocoder()()
         , google = $wnd.google
-        , map = $wnd.map
+        , map = @pgu.client.profile.ui.ProfileUtils::profileMap()()
         ;
 
         geocoder.geocode(

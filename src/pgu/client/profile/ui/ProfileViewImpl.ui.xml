@@ -46,6 +46,14 @@
                     <g:HTMLPanel ui:field="lgContainer" />
                 </div>
             </g:HTMLPanel>
+            <g:HTMLPanel addStyleNames="row-fluid">
+                <div class="span12">
+                <!-- TODO id?? map_canvas-->
+                    <div id="pgu_geo_profile_map_container" class="collapse in">
+                        <div id="pgu_geo_profile_map"></div>
+                    </div>
+                </div>
+            </g:HTMLPanel>
         </b:Section>
         
         <!-- Positions -->

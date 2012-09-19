@@ -75,7 +75,7 @@ public class MenuViewImpl extends Composite implements MenuView {
         });
 
         mapSizeBtn.getElement().setAttribute("data-toggle", "collapse");
-        mapSizeBtn.getElement().setAttribute("data-target", "#map_canvas_container");
+        mapSizeBtn.getElement().setAttribute("data-target", "#pgu_geo_profile_map_container");
 
         mapSizeBtn.setIcon(IconType.RESIZE_SMALL);
         mapSizeBtn.setText("Hide map");
@@ -309,7 +309,7 @@ public class MenuViewImpl extends Composite implements MenuView {
     }
 
     public static native void showMapProg() /*-{
-		$wnd.$('#map_canvas_container').collapse('show');
+		$wnd.$('#pgu_geo_profile_map_container').collapse('show');
     }-*/;
 
     @UiHandler("goToContactsBtn")

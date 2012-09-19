@@ -61,7 +61,7 @@ public class MarkersUtils {
 
         var
             google = $wnd.google
-          , map = $wnd.map
+          , map = @pgu.client.profile.ui.ProfileUtils::profileMap()()
         ;
 
         var latLng = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));

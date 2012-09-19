@@ -95,7 +95,7 @@ public class MenuPlayUtils {
 
         var
             google = $wnd.google
-          , map = $wnd.map
+          , map = @pgu.client.profile.ui.ProfileUtils::profileMap()()
         ;
 
         var marker;

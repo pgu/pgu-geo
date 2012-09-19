@@ -4,6 +4,28 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 public class ProfileUtils {
 
+    public static native void initProfileMap() /*-{
+
+        var
+            google = $wnd.google
+          , doc = $wnd.document
+          , mapOptions = {
+              center: new google.maps.LatLng(0, 0),
+              zoom: 2,
+              mapTypeId: google.maps.MapTypeId.ROADMAP
+            }
+        ;
+
+        $wnd.pgu_geo.profile_map = new google.maps.Map( //
+            doc.getElementById("pgu_geo_profile_map"), //
+            mapOptions);
+
+    }-*/;
+
+    public static native JavaScriptObject profileMap() /*-{
+        return $wnd.pgu_geo.profile_map;
+    }-*/;
+
     public static native void cacheProfile(JavaScriptObject profile) /*-{
         $wnd.pgu_geo.profile = profile;
     }-*/;

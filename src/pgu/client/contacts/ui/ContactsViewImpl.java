@@ -123,14 +123,19 @@ public class ContactsViewImpl extends Composite implements ContactsView {
 
     public static native void addMarker(String countryCode, String weight) /*-{
 
-        var geocoder = @pgu.client.app.utils.GeocoderUtils::geocoder()();
+        var
+            geocoder = @pgu.client.app.utils.GeocoderUtils::geocoder()()
+		  , map = @pgu.client.profile.ui.ProfileUtils::profileMap()()
+		  , google = $wnd.google
+		;
+
 		geocoder.geocode(
 						{
 							'address' : 'country: ' + countryCode
 						},
 						function(results, status) {
 
-							if (status != $wnd.google.maps.GeocoderStatus.OK) {
+							if (status != google.maps.GeocoderStatus.OK) {
 								$wnd
 										.alert("Geocode was not successful for the following reason: "
 												+ status);
@@ -142,10 +147,11 @@ public class ContactsViewImpl extends Composite implements ContactsView {
 							//                          $wnd.map.setCenter(loc);
 							$wnd.console.log(loc);
 
-							var marker = new $wnd.google.maps.Marker({
-								map : $wnd.map,
+
+							var marker = new google.maps.Marker({
+								map : map,
 								position : results[0].geometry.location,
-								animation : $wnd.google.maps.Animation.DROP,
+								animation : google.maps.Animation.DROP,
 								title : weight + " contacts"
 							});
 

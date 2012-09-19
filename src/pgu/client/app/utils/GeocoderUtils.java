@@ -7,14 +7,6 @@ import com.google.gwt.user.client.Timer;
 
 public class GeocoderUtils {
 
-    static {
-        exportMethod();
-    }
-
-    private static native void exportMethod() /*-{
-        $wnd.pgu_geo.init_geocoder = $entry(@pgu.client.app.utils.GeocoderUtils::initGeocoder());
-    }-*/;
-
     public static native void initGeocoder() /*-{
         $wnd.pgu_geo.geocoder = new $wnd.google.maps.Geocoder();
     }-*/;
