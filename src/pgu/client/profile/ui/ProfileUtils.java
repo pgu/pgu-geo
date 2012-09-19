@@ -21,8 +21,8 @@ public class ProfileUtils {
         var
             google = $wnd.google
           , mapOptions = {
-              center: new google.maps.LatLng(0, 0),
               zoom: 2,
+              center: new google.maps.LatLng(0, 0),
               mapTypeId: google.maps.MapTypeId.ROADMAP
             }
         ;

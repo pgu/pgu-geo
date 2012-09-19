@@ -19,12 +19,15 @@
     <style type="text/css">
       html { height: 100% }
       body { height: 100%; margin: 0; padding: 0 }
+      
       #pgu_geo_profile_map { 
         height: 600px; 
         position: relative; 
         background-color: #E5E3DF;
         overflow: hidden;
       }
+      #pgu_geo_profile_map img { max-width:none; }
+      
     </style>
     
     <link type="text/css" rel="stylesheet" href="Pgu_contacts.css">
@@ -34,6 +37,7 @@
     <script type="text/javascript">
       
       function pgu_geo_load_map_api_callback() {
+    	  
     	  if (pgu_geo === undefined) {
     		  setTimeout(
     		      function() {
@@ -54,12 +58,28 @@
     	  document.body.appendChild(script);
       }
       
-      window.onload = load_script;
+      function addLoadEvent(func) {
+    	  var oldonload = window.onload;
+    	  if (typeof window.onload != 'function') {
+    	    window.onload = func;
+    	  } else {
+    	    window.onload = function() {
+    	      if (oldonload) {
+    	        oldonload();
+    	      }
+    	      func();
+    	    }
+    	  }
+      }
+
+      addLoadEvent(load_script);
+//       window.onload = load_script;
+
     </script>    
     <script type="text/javascript" src="js/showdown.js"></script>
     <script type="text/javascript" src="pgu_contacts/pgu_contacts.nocache.js"></script>
   </head>
-  <body data-spy="scroll" data-offset="25">
+  <body>
     <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
     <noscript>
       <div style="width: 22em; position: absolute; left: 50%; margin-left: -11em; color: red; background-color: white; border: 1px solid red; padding: 4px; font-family: sans-serif">
@@ -67,7 +87,6 @@
         in order for this application to display correctly.
       </div>
     </noscript>
-    
-<!--     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAP-PSZ5TkuUxa7Lqe8ni0uE1fwS6lrojw&sensor=false&callback=pgu_geo.init_geo"></script> -->
+
   </body>
 </html>
