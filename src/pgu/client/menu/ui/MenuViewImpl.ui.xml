@@ -11,13 +11,13 @@
         .headerApp {
             margin-bottom: 10px;
         }
-        .firstNavbar {
-            margin-bottom: 0px;
-        }
+<!--         .firstNavbar { -->
+<!--             margin-bottom: 0px; -->
+<!--         } -->
     </ui:style>
     <g:HTMLPanel addStyleNames="{style.headerApp}">
 <!--         position="TOP"  -->
-        <b:Navbar addStyleNames="{style.firstNavbar}">
+        <b:Navbar addStyleNames="navbar-fixed-top">
             <b:Brand ui:field="appTitle">Geo CV</b:Brand>
             <b:Nav>
                 <b:NavLink icon="USER" ui:field="goToProfileBtn" iconSize="LARGE" >Profile</b:NavLink>

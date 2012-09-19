@@ -9,10 +9,8 @@
         }
     </ui:style>            
             
-                <!-- play profile -->
-                
     <g:HTMLPanel>
-        <g:HTMLPanel ui:field="submenu" styleName="subnav">
+        <g:HTMLPanel ui:field="submenu" addStyleNames="subnav subnav-fixed">
             <b:NavPills>
                 <b:NavLink href="#profile:overview">Overview</b:NavLink>
                 <b:NavLink href="#profile:experience">Experience</b:NavLink>
@@ -46,14 +44,15 @@
                     <g:HTMLPanel ui:field="lgContainer" />
                 </div>
             </g:HTMLPanel>
-            <g:HTMLPanel addStyleNames="row-fluid">
-                <div class="span12">
-                <!-- TODO id?? map_canvas-->
+            <g:HTMLPanel>
+<!--             <g:HTMLPanel addStyleNames="row-fluid"> -->
+<!--                 <div class="span12"> -->
                     <div id="pgu_geo_profile_map_container" class="collapse in">
                         <div id="pgu_geo_profile_map"></div>
                     </div>
-                </div>
             </g:HTMLPanel>
+<!--                 </div> -->
+<!--             </g:HTMLPanel> -->
         </b:Section>
         
         <!-- Positions -->
