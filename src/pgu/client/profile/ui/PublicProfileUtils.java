@@ -43,7 +43,6 @@ public class PublicProfileUtils {
 
 
         var copy_profile = @pgu.client.profile.ui.ProfileUtils::copyProfile()();
-        $wnd.console.log(copy_profile);
 
         // modify copy according to public preferences
         var public_prefs = $wnd.pgu_geo.public_prefs;
@@ -70,11 +69,8 @@ public class PublicProfileUtils {
         }
 
 
-        $wnd.console.log("--");
-        var tmp= @pgu.client.app.utils.JsonUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
-		copy_profile);
-        $wnd.console.log(tmp);
-        return tmp;
+        return @pgu.client.app.utils.JsonUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
+  		            copy_profile);
     }-*/;
 
     public static native String json_publicPreferences() /*-{

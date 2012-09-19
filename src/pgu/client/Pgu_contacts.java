@@ -6,7 +6,9 @@ import pgu.client.app.mvp.AppActivityMapper;
 import pgu.client.app.mvp.AppPlaceHistoryMapper;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
+import pgu.client.app.utils.GeoUtils;
 import pgu.client.profile.ProfilePlace;
+import pgu.client.profile.ui.ProfileViewImpl;
 import pgu.shared.dto.LoginInfo;
 
 import com.google.gwt.activity.shared.ActivityManager;
@@ -16,8 +18,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
-import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.Window.Location;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.web.bindery.event.shared.EventBus;
 
@@ -25,6 +25,8 @@ public class Pgu_contacts implements EntryPoint {
 
     static {
         initAppContext();
+        GeoUtils.exportMethod();
+        ProfileViewImpl.exportMethod();
     }
 
     private static native void initAppContext() /*-{

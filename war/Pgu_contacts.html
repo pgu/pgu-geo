@@ -19,7 +19,7 @@
     <style type="text/css">
       html { height: 100% }
       body { height: 100%; margin: 0; padding: 0 }
-      #map_canvas { 
+      #pgu_geo_profile_map { 
         height: 600px; 
         position: relative; 
         background-color: #E5E3DF;
@@ -49,11 +49,16 @@
         
 //       }
       
-      function loadScript() {
+      function loadGoogleMapAPI() {
     	  var script = document.createElement("script");
     	  script.type = "text/javascript";
     	  script.src = "http://maps.googleapis.com/maps/api/js?key=AIzaSyAP-PSZ5TkuUxa7Lqe8ni0uE1fwS6lrojw&sensor=false&callback=pgu_geo.init_geo";
     	  document.body.appendChild(script);
+      }
+      
+      function loadScript() {
+//     	  setTimeout(function(){loadGoogleMapAPI()},1000);
+        loadGoogleMapAPI();
       }
       
       window.onload = loadScript;
@@ -70,5 +75,6 @@
       </div>
     </noscript>
     
+<!--     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAP-PSZ5TkuUxa7Lqe8ni0uE1fwS6lrojw&sensor=false&callback=pgu_geo.init_geo"></script> -->
   </body>
 </html>

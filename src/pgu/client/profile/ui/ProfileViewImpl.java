@@ -95,8 +95,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         educationSection = new Section("profile:education");
 
         initWidget(uiBinder.createAndBindUi(this));
-
-        exportMethod();
     }
 
     private static boolean isEduPublic = false;
@@ -132,9 +130,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     private static ProfilePresenter staticPresenter;
 
-    public native void exportMethod() /*-{
-      $wnd.pgu_geo.addNewLocation = $entry(@pgu.client.profile.ui.ProfileViewImpl::addNewLocation(Ljava/lang/String;));
-      $wnd.pgu_geo.editLocation = $entry(@pgu.client.profile.ui.ProfileViewImpl::editLocation(Ljava/lang/String;Ljava/lang/String;));
+    public static native void exportMethod() /*-{
+      $wnd.pgu_geo.add_new_location = $entry(@pgu.client.profile.ui.ProfileViewImpl::addNewLocation(Ljava/lang/String;));
+      $wnd.pgu_geo.edit_location = $entry(@pgu.client.profile.ui.ProfileViewImpl::editLocation(Ljava/lang/String;Ljava/lang/String;));
     }-*/;
 
     public static void editLocation(final String itemConfigId, final String locName) {

@@ -6,9 +6,20 @@ public class ProfileUtils {
 
     public static native void initProfileMap() /*-{
 
+        var div = $wnd.document.getElementById("pgu_geo_profile_map");
+
+        if (div === null) {
+            $wnd.setTimeout(
+                function() {
+                    @pgu.client.profile.ui.ProfileUtils::initProfileMap()();
+                }
+                , 1000
+            );
+            return;
+        }
+
         var
             google = $wnd.google
-          , doc = $wnd.document
           , mapOptions = {
               center: new google.maps.LatLng(0, 0),
               zoom: 2,
@@ -17,8 +28,8 @@ public class ProfileUtils {
         ;
 
         $wnd.pgu_geo.profile_map = new google.maps.Map( //
-            doc.getElementById("pgu_geo_profile_map"), //
-            mapOptions);
+            div //
+            , mapOptions);
 
     }-*/;
 

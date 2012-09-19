@@ -145,7 +145,7 @@ public class ProfileViewUtils {
 				+ item_config.locations
 				+ '    </ul>                                                                           '
 				+ '    <i class="icon-plus-sign icon-large add-location"                               '
-				+ '      onclick="javascript:pgu_geo.addNewLocation(\'' + item_config.id + '\');"      '
+				+ '      onclick="javascript:pgu_geo.add_new_location(\'' + item_config.id + '\');"      '
 				+ '      >                                                                             '
 				+ '    </i>                                                                            '
 				+ '  </td>                                                                             '
@@ -220,7 +220,7 @@ public class ProfileViewUtils {
 			'        <a id="' + anchor_id + '"                                    ' +
 			'           href="javascript:;"                                       ' +
 			'           onclick="javascript:' +
-			'pgu_geo.editLocation(\'' + item_config_id + '\', \'' + location_name + '\');' +
+			'pgu_geo.edit_location(\'' + item_config_id + '\', \'' + location_name + '\');' +
 			'           return false;">' + location_name +
 			'        </a>                                                         ' +
 			'      </li>                                                          ' +

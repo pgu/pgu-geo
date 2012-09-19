@@ -4,11 +4,7 @@ import pgu.client.profile.ui.ProfileUtils;
 
 public class GeoUtils {
 
-    static {
-        exportMethod();
-    }
-
-    private static native void exportMethod() /*-{
+    public static native void exportMethod() /*-{
         $wnd.pgu_geo.init_geo = $entry(@pgu.client.app.utils.GeoUtils::initGeo());
     }-*/;
 
