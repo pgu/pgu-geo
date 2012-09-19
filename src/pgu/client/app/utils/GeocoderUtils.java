@@ -1,5 +1,6 @@
 package pgu.client.app.utils;
 
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Timer;
@@ -16,6 +17,10 @@ public class GeocoderUtils {
 
     public static native void initGeocoder() /*-{
         $wnd.pgu_geo.geocoder = new $wnd.google.maps.Geocoder();
+    }-*/;
+
+    public static native JavaScriptObject geocoder() /*-{
+        return $wnd.pgu_geo.geocoder;
     }-*/;
 
     public static void searchGeopoint(final String locationName) {
@@ -54,7 +59,7 @@ public class GeocoderUtils {
 
     public static native void searchAndAdd(String location_name) /*-{
         var
-            geocoder = $wnd.pgu_geo.geocoder
+            geocoder = @pgu.client.app.utils.GeocoderUtils::geocoder()()
           , google = $wnd.google
         ;
 

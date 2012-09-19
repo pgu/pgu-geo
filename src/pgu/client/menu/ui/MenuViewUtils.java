@@ -6,7 +6,7 @@ public class MenuViewUtils {
 
     public static native void searchLocationAndAddMarker(MenuViewImpl menu, String location_name) /*-{
         var
-          geocoder = $wnd.pgu_geo.geocoder
+          geocoder = @pgu.client.app.utils.GeocoderUtils::geocoder()()
         , google = $wnd.google
         , map = $wnd.map
         ;
@@ -37,7 +37,7 @@ public class MenuViewUtils {
 
     public static native void addNewLocation(MenuActivity activity, String item_config_id, String location_name) /*-{
         var
-        geocoder = $wnd.pgu_geo.geocoder
+          geocoder = @pgu.client.app.utils.GeocoderUtils::geocoder()()
         , google = $wnd.google
         , map = $wnd.map
         ;
