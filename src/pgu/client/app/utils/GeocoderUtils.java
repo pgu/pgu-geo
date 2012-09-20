@@ -18,6 +18,7 @@ public class GeocoderUtils {
     public static void searchGeopoint(final String locationName, final JavaScriptObject callback) {
 
         if (LocationsUtils.isLocationInReferential(locationName)) {
+            executeCallback(callback);
             return;
         }
 
@@ -28,6 +29,10 @@ public class GeocoderUtils {
 
         searchAndAddToCache(locationName, callback);
     }
+
+    private static native void executeCallback(JavaScriptObject callback) /*-{
+        callback($wnd.google.maps.GeocoderStatus.OK);
+    }-*/;
 
     private static native boolean isGeocoderAvailable() /*-{
         return $wnd.pgu_geo.geocoder !== undefined;
@@ -76,9 +81,6 @@ public class GeocoderUtils {
                         ;
                         @pgu.client.app.utils.LocationsUtils::addGeopointToCache(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(location_name,lat,lng);
 
-                        if (callback) {
-                            callback();
-                        }
 
                     } else if (status == google.maps.GeocoderStatus.ZERO_RESULTS) {
                         @pgu.client.app.utils.ClientUtils::log(Ljava/lang/String;)("Unknown location: "
@@ -90,6 +92,10 @@ public class GeocoderUtils {
 
                     } else {
                         @pgu.client.app.utils.ClientUtils::log(Ljava/lang/String;)("Oups: " + status);
+                    }
+
+                    if (callback) {
+                        callback(status);
                     }
                 }
         );
