@@ -197,7 +197,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     private void setProfileLocation(final String locationName) {
-        locContainer.setText(u.isVoid(locationName) ? "" : locationName);
+
+        final boolean hasLocation = u.isVoid(locationName);
+        locContainer.setText(hasLocation ? "" : locationName);
+
+        if (hasLocation) {
+            LocationsUtils.addCurrentLocationToCache(locationName);
+        }
     }
 
     private void setProfileSummary(final String summary) {

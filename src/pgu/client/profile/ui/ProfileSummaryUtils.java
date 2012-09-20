@@ -48,8 +48,6 @@ public class ProfileSummaryUtils {
         , location_name = profile_location.name;
 
         view.@pgu.client.profile.ui.ProfileViewImpl::setProfileLocation(Ljava/lang/String;)(location_name);
-
-        @pgu.client.app.utils.LocationsUtils::addCurrentLocationToCache(Ljava/lang/String;)(location_name);
     }-*/;
 
     public static native void setProfileSummary(ProfileViewImpl view, JavaScriptObject profile) /*-{
