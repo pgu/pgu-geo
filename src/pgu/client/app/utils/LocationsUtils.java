@@ -74,7 +74,8 @@ public class LocationsUtils {
                 throw "More than one current location: " + locations;
             }
 
-            @pgu.client.app.utils.GeocoderUtils::searchGeopoint(Ljava/lang/String;)(location_name);
+// TODO show current location
+            @pgu.client.app.utils.GeocoderUtils::searchGeopoint(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;)(location_name);
         }
     }-*/;
 
@@ -100,7 +101,8 @@ public class LocationsUtils {
                 cache[key] = locations;
             }
 
-            @pgu.client.app.utils.GeocoderUtils::searchGeopoint(Ljava/lang/String;)(location_name);
+// TODO track search to launch an event "end of search, cache is ready"
+            @pgu.client.app.utils.GeocoderUtils::searchGeopoint(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;)(location_name);
         }
     }-*/;
 
@@ -277,7 +279,7 @@ public class LocationsUtils {
         @pgu.client.app.utils.LocationsUtils::addGeopointInternal(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(cache,location_name,lat,lng);
     }-*/;
 
-    public static native void addGeopoint(String location_name, String lat, String lng) /*-{
+    public static native void addGeopointToCache(String location_name, String lat, String lng) /*-{
         var cache = $wnd.pgu_geo.cache_referential;
         @pgu.client.app.utils.LocationsUtils::addGeopointInternal(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(cache,location_name,lat,lng);
     }-*/;

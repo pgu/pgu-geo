@@ -15,25 +15,31 @@ public class GeocoderUtils {
         return $wnd.pgu_geo.geocoder;
     }-*/;
 
-    public static void searchGeopoint(final String locationName) {
+    public static void searchGeopoint(final String locationName, final JavaScriptObject callback) {
 
         if (LocationsUtils.isLocationInReferential(locationName)) {
             return;
         }
 
         if (!isGeocoderAvailable()) {
-            searchGeopointWithDelay(locationName, 1000);
+            searchGeopointWithDelay(locationName, callback, 1000);
             return;
         }
 
-        searchAndAdd(locationName);
+        searchAndAddToCache(locationName, callback);
     }
 
     private static native boolean isGeocoderAvailable() /*-{
         return $wnd.pgu_geo.geocoder !== undefined;
     }-*/;
 
-    public static void searchGeopointWithDelay(final String locationName, final int delayMillis) {
+    public static void searchGeopointWithDelay( //
+
+            final String locationName //
+            , final JavaScriptObject callback //
+            , final int delayMillis //
+            ) {
+
         new Timer() {
 
             @Override
@@ -41,7 +47,7 @@ public class GeocoderUtils {
                 Scheduler.get().scheduleDeferred(new Command() {
                     @Override
                     public void execute() {
-                        searchGeopoint(locationName);
+                        searchGeopoint(locationName, callback);
                     }
                 });
             }
@@ -49,7 +55,7 @@ public class GeocoderUtils {
         }.schedule(delayMillis);
     }
 
-    public static native void searchAndAdd(String location_name) /*-{
+    private static native void searchAndAddToCache(String location_name, JavaScriptObject callback) /*-{
         var
             geocoder = @pgu.client.app.utils.GeocoderUtils::geocoder()()
           , google = $wnd.google
@@ -68,14 +74,18 @@ public class GeocoderUtils {
                           , lat = '' + location.lat()
                           , lng = '' + location.lng()
                         ;
-                        @pgu.client.app.utils.LocationsUtils::addGeopoint(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(location_name,lat,lng);
+                        @pgu.client.app.utils.LocationsUtils::addGeopointToCache(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(location_name,lat,lng);
+
+                        if (callback) {
+                            callback();
+                        }
 
                     } else if (status == google.maps.GeocoderStatus.ZERO_RESULTS) {
                         @pgu.client.app.utils.ClientUtils::log(Ljava/lang/String;)("Unknown location: "
                                   + location_name + ", " + status);
 
                     } else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
-                        @pgu.client.app.utils.GeocoderUtils::searchGeopointWithDelay(Ljava/lang/String;I)(location_name,1000);
+                        @pgu.client.app.utils.GeocoderUtils::searchGeopointWithDelay(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;I)(location_name,callback,1000);
                         @pgu.client.app.utils.ClientUtils::log(Ljava/lang/String;)("over_query_limit... " + location_name);
 
                     } else {

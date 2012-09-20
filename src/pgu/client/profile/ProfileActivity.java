@@ -61,10 +61,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
                         u.fire(eventBus, new HideWaitingIndicatorEvent());
                         view.setProfile(profile);
 
-                        // TODO PGU Sep 18, 2012 create/update the public profile
-                        // the profile has changed in linkedin, so we need the last profile from linkedin
-                        // we need the public preferences, to know what to copy and to save
-
+                        // TODO PGU Sep 20, 2012 on last location found, we can save the public profile
                         publicProfileService.fetchPreferencesOnly( //
                                 clientFactory.getAppState().getUserId(), //
                                 new AsyncCallbackApp<PublicProfile>(eventBus) {
@@ -94,7 +91,6 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
                                                     }
 
                                                 });
-                                        // TODO PGU Sep 18, 2012 save locations after geoloc the locations
                                     }
 
                                 });
