@@ -8,6 +8,7 @@ import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
+import pgu.client.app.utils.LocationsUtils;
 import pgu.client.profile.ui.ProfileViewUtils;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.client.service.PublicProfileServiceAsync;
@@ -61,7 +62,33 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
                         u.fire(eventBus, new HideWaitingIndicatorEvent());
                         view.setProfile(profile);
 
-                        // TODO PGU Sep 20, 2012 on last location found, we can save the public profile
+                        //
+                        // TODO PGU Sep 20, 2012
+                        //
+                        // if the user has no registered locations
+                        // then save our current cache silently
+                        if (profile.getUserAndLocations() == null) {
+                            linkedinService.saveLocations( //
+                                    //
+                                    clientFactory.getAppState().getUserId() //
+                                    , LocationsUtils.json_copyCacheItems() //
+                                    , LocationsUtils.json_copyCacheReferential() //
+                                    //
+                                    , new AsyncCallbackApp<Void>(eventBus) {
+
+                                        @Override
+                                        public void onSuccess(final Void result) {
+                                            LocationsUtils.replaceCachesByCopies();
+                                        }
+
+                                        @Override
+                                        public void onFailure(final Throwable caught) {
+                                            LocationsUtils.deleteCopies();
+                                        }
+
+                                    });
+                        }
+
                         publicProfileService.fetchPreferencesOnly( //
                                 clientFactory.getAppState().getUserId(), //
                                 new AsyncCallbackApp<PublicProfile>(eventBus) {

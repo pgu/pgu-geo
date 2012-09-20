@@ -75,7 +75,11 @@ public class LocationsUtils {
             }
 
             var callback = function(status) {
-                if (status == google.maps.GeocoderStatus.OK) {
+
+                        $wnd.console.log("- status");
+                        $wnd.console.log(status);
+
+                if (status == $wnd.google.maps.GeocoderStatus.OK) {
                     @pgu.client.app.utils.MarkersUtils::createMarker(Ljava/lang/String;)(location_name);
                 }
             };
@@ -106,17 +110,7 @@ public class LocationsUtils {
                 cache[key] = locations;
             }
 
-// TODO track search to launch an event "end of search, cache is ready"
-            var callback = function(status) {
-                if (status == google.maps.GeocoderStatus.OK) {
-
-                } else if (status == google.maps.GeocoderStatus.ZERO_RESULTS) {
-                } else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
-                } else {
-                }
-            };
-
-            @pgu.client.app.utils.GeocoderUtils::searchGeopoint(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;)(location_name,callback);
+            @pgu.client.app.utils.GeocoderUtils::searchGeopoint(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;)(location_name);
         }
     }-*/;
 
