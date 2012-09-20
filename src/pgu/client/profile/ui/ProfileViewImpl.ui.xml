@@ -7,6 +7,9 @@
         .location {
             font-weight: bold;    
         }
+        .profile_map_area {
+            padding-top: 20px;
+        }
     </ui:style>            
             
     <g:HTMLPanel>
@@ -16,6 +19,14 @@
                 <b:NavLink href="#profile:experience">Experience</b:NavLink>
                 <b:NavLink href="#profile:education">Education</b:NavLink>
             </b:NavPills>
+        </g:HTMLPanel>
+
+        <g:HTMLPanel addStyleNames="row-fluid {style.profile_map_area}">
+            <div class="span12">
+                <div id="pgu_geo_profile_map_container" class="collapse in">
+                    <div id="pgu_geo_profile_map"></div>
+                </div>
+            </div>
         </g:HTMLPanel>
     
         <b:Section ui:field="overviewSection">
@@ -42,13 +53,6 @@
                 <div class="span4">
                     <h6>Languages</h6>
                     <g:HTMLPanel ui:field="lgContainer" />
-                </div>
-            </g:HTMLPanel>
-            <g:HTMLPanel addStyleNames="row-fluid">
-                <div class="span12">
-                    <div id="pgu_geo_profile_map_container" class="collapse in">
-                        <div id="pgu_geo_profile_map"></div>
-                    </div>
                 </div>
             </g:HTMLPanel>
         </b:Section>
