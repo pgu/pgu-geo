@@ -1,12 +1,14 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
-<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
-    <ui:style>
-        .important {
-            font-weight: bold;
-        }
-    </ui:style>
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" 
+            xmlns:g="urn:import:com.google.gwt.user.client.ui"
+            xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
+            
     <g:HTMLPanel>
-        Hello,
-        <g:Button styleName="{style.important}" ui:field="button" />
+        <b:Navbar addStyleNames="navbar-fixed-top">
+            <b:Brand ui:field="appTitle">Geo CV</b:Brand>
+            <b:Nav>    
+                <b:NavText ui:field="userName" />
+            </b:Nav>    
+        </b:Navbar>
     </g:HTMLPanel>
 </ui:UiBinder> 

@@ -3,6 +3,7 @@ package pgu.client.pub;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
+import pgu.client.pub.event.UserNameEvent;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.client.service.PublicProfileServiceAsync;
 import pgu.shared.dto.PublicProfile;
@@ -48,6 +49,7 @@ public class PublicActivity extends AbstractActivity implements PublicPresenter 
                         // TODO PGU Sep 17, 2012
                         GWT.log("retour...");
                         GWT.log(result.getProfile());
+                        u.fire(eventBus, new UserNameEvent("John Doe"));
                     }
 
                 });

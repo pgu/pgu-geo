@@ -11,6 +11,7 @@ import pgu.client.menu.MenuActivity;
 import pgu.client.menu.MenuView;
 import pgu.client.profile.ProfilePlace;
 import pgu.client.profile.ui.ProfileViewImpl;
+import pgu.client.pub.PublicMenuActivity;
 import pgu.client.pub.PublicMenuView;
 import pgu.shared.dto.LoginInfo;
 
@@ -58,6 +59,8 @@ public class Pgu_contacts implements EntryPoint {
 
         if (History.getToken().startsWith("PublicPlace")) {
 
+            final PublicMenuActivity menuActivity = new PublicMenuActivity(mvpContext.clientFactory);
+            menuActivity.start(mvpContext.eventBus);
             final PublicMenuView menuView = mvpContext.clientFactory.getPublicMenuView();
 
             final Place defaultPlace = mvpContext.placeController.getWhere();
