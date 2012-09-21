@@ -17,6 +17,7 @@ import pgu.shared.dto.PublicProfile;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 public class ProfileActivity extends AbstractActivity implements ProfilePresenter //
@@ -62,32 +63,16 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
                         u.fire(eventBus, new HideWaitingIndicatorEvent());
                         view.setProfile(profile);
 
-                        //
-                        // TODO PGU Sep 20, 2012
-                        //
                         // if the user has no registered locations
                         // then save our current cache silently
-                        if (profile.getUserAndLocations() == null) {
-                            linkedinService.saveLocations( //
-                                    //
-                                    clientFactory.getAppState().getUserId() //
-                                    , LocationsUtils.json_copyCacheItems() //
-                                    , LocationsUtils.json_copyCacheReferential() //
-                                    //
-                                    , new AsyncCallbackApp<Void>(eventBus) {
+                        new Timer() {
 
-                                        @Override
-                                        public void onSuccess(final Void result) {
-                                            LocationsUtils.replaceCachesByCopies();
-                                        }
+                            @Override
+                            public void run() {
+                                initUserLocations(eventBus, profile);
+                            }
 
-                                        @Override
-                                        public void onFailure(final Throwable caught) {
-                                            LocationsUtils.deleteCopies();
-                                        }
-
-                                    });
-                        }
+                        }.schedule(3000); // TODO PGU Sep 21, 2012 temporary fix: fire an event when all locations are done
 
                         publicProfileService.fetchPreferencesOnly( //
                                 clientFactory.getAppState().getUserId(), //
@@ -121,6 +106,33 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
                                     }
 
                                 });
+                    }
+
+                    private void initUserLocations(final EventBus eventBus, final Profile profile) {
+                        if (profile.getUserAndLocations() == null) {
+
+                            LocationsUtils.copyLocationCaches();
+
+                            linkedinService.saveLocations( //
+                                    //
+                                    clientFactory.getAppState().getUserId() //
+                                    , LocationsUtils.json_copyCacheItems() //
+                                    , LocationsUtils.json_copyCacheReferential() //
+                                    //
+                                    , new AsyncCallbackApp<Void>(eventBus) {
+
+                                        @Override
+                                        public void onSuccess(final Void result) {
+                                            LocationsUtils.replaceCachesByCopies();
+                                        }
+
+                                        @Override
+                                        public void onFailure(final Throwable caught) {
+                                            LocationsUtils.deleteCopies();
+                                        }
+
+                                    });
+                        }
                     }
                 });
 
