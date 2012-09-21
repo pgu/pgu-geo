@@ -6,4 +6,6 @@ public interface PublicMenuView extends IsWidget {
 
     void setUserName(String userName);
 
+    void setUserHeadline(String userHeadline);
+
 }

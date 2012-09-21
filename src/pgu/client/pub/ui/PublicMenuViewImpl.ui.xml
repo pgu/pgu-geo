@@ -3,12 +3,20 @@
             xmlns:g="urn:import:com.google.gwt.user.client.ui"
             xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
             
+    <ui:style>
+        .username {
+            color: #CCC !important; 
+        }
+        .headline {
+            font-style: italic;
+        }
+    </ui:style>            
+            
     <g:HTMLPanel>
         <b:Navbar addStyleNames="navbar-fixed-top">
             <b:Brand ui:field="appTitle">Geo CV</b:Brand>
-            <b:Nav>    
-                <b:NavText ui:field="userName" />
-            </b:Nav>    
+            <b:Brand ui:field="userName" addStyleNames="{style.username}" />
+            <b:Brand ui:field="headline" addStyleNames="{style.headline}" />
         </b:Navbar>
     </g:HTMLPanel>
 </ui:UiBinder> 

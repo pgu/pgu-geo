@@ -3,7 +3,7 @@ package pgu.client.pub.ui;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.pub.PublicMenuView;
 
-import com.github.gwtbootstrap.client.ui.NavText;
+import com.github.gwtbootstrap.client.ui.Brand;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -18,7 +18,7 @@ public class PublicMenuViewImpl extends Composite implements PublicMenuView {
     }
 
     @UiField
-    NavText userName;
+    Brand userName, headline;
 
     private final ClientUtils u = new ClientUtils();
 
@@ -29,6 +29,11 @@ public class PublicMenuViewImpl extends Composite implements PublicMenuView {
     @Override
     public void setUserName(final String userName) {
         this.userName.setText(u.isVoid(userName) ? "" : userName);
+    }
+
+    @Override
+    public void setUserHeadline(final String userHeadline) {
+        headline.setText(u.isVoid(userHeadline) ? "" : userHeadline);
     }
 
 }

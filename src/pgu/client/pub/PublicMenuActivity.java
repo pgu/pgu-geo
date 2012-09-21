@@ -1,11 +1,15 @@
 package pgu.client.pub;
 
 import pgu.client.app.mvp.ClientFactory;
+import pgu.client.pub.event.UserHeadlineEvent;
 import pgu.client.pub.event.UserNameEvent;
 
 import com.google.web.bindery.event.shared.EventBus;
 
-public class PublicMenuActivity implements UserNameEvent.Handler {
+public class PublicMenuActivity implements //
+UserNameEvent.Handler //
+, UserHeadlineEvent.Handler //
+{
 
     private final PublicMenuView view;
     private EventBus             eventBus;
@@ -25,6 +29,11 @@ public class PublicMenuActivity implements UserNameEvent.Handler {
     @Override
     public void onUserName(final UserNameEvent event) {
         view.setUserName(event.getUserName());
+    }
+
+    @Override
+    public void onUserHeadline(final UserHeadlineEvent event) {
+        view.setUserHeadline(event.getUserHeadline());
     }
 
 }

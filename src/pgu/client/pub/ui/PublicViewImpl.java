@@ -19,14 +19,13 @@ public class PublicViewImpl extends Composite implements PublicView {
     }
 
     @UiField(provided = true)
-    Section                 profileSection, contactsSection;
+    Section                 profileSection;
 
     private PublicPresenter presenter;
 
     public PublicViewImpl() {
 
         profileSection = new Section("public:profile");
-        contactsSection = new Section("public:contacts");
 
         initWidget(uiBinder.createAndBindUi(this));
     }
@@ -40,11 +39,13 @@ public class PublicViewImpl extends Composite implements PublicView {
         presenter.setProfileName(firstName + " " + lastName);
     }
 
+    public void setProfileHeadline(final String headline) {
+        presenter.setProfileHeadline(headline);
+    }
+
     @Override
     public void setProfile(final PublicProfile profile) {
         setProfile(this, profile.getProfile());
-
-        // profile.getPreferences()
     }
 
     private native void setProfile(PublicViewImpl view, String profile) /*-{
@@ -52,6 +53,7 @@ public class PublicViewImpl extends Composite implements PublicView {
 		var j_profile = JSON.parse(profile);
 
 		@pgu.client.pub.ui.PublicViewUtils::setProfileName(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
+		@pgu.client.pub.ui.PublicViewUtils::setProfileHeadline(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 
     }-*/;
 

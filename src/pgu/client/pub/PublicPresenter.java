@@ -4,4 +4,6 @@ public interface PublicPresenter {
 
     void setProfileName(String name);
 
+    void setProfileHeadline(String headline);
+
 }

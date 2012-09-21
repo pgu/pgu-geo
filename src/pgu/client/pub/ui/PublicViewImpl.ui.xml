@@ -43,21 +43,31 @@
                     </div>
                 </div>
             </g:HTMLPanel>
+            <g:HTMLPanel addStyleNames="row-fluid">
+                <div class="span3">
+                <!-- listbox -->
+                </div>
+                <div class="span3">
+                    <b:ButtonGroup toggle="radio">
+                        <b:Button icon="CIRCLE_ARROW_RIGHT" iconSize="LARGE" />
+                        <b:Button icon="CIRCLE_ARROW_LEFT" iconSize="LARGE" />
+                    </b:ButtonGroup>
+                    <g:Label>From past to present</g:Label>
+                </div>
+                <div class="span3">
+                    <b:ButtonGroup>
+                        <b:Button icon="STEP_BACKWARD" iconSize="LARGE" />
+                        <b:Button icon="STOP" iconSize="LARGE" />
+                        <b:Button icon="PLAY" iconSize="LARGE" />
+                        <b:Button icon="PAUSE" iconSize="LARGE" />
+                        <b:Button icon="STEP_FORWARD" iconSize="LARGE" />
+                    </b:ButtonGroup>
+                </div>
+                <div class="span3">
+                </div>
+            </g:HTMLPanel>
+            <!-- description item -->
         </b:Section>    
         
-        <b:Section ui:field="contactsSection">
-            <g:HTMLPanel addStyleNames="row-fluid">
-                <div class="span12">
-                    <g:HTMLPanel addStyleNames="page-header">
-                        <h3>Contacts</h3>
-                    </g:HTMLPanel>
-                </div>
-            </g:HTMLPanel>
-            <g:HTMLPanel addStyleNames="row-fluid">
-                <div class="span12">
-                </div>
-            </g:HTMLPanel>
-        </b:Section>    
-    
     </g:HTMLPanel>
 </ui:UiBinder> 

@@ -3,6 +3,7 @@ package pgu.client.pub;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
+import pgu.client.pub.event.UserHeadlineEvent;
 import pgu.client.pub.event.UserNameEvent;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.client.service.PublicProfileServiceAsync;
@@ -55,6 +56,11 @@ public class PublicActivity extends AbstractActivity implements PublicPresenter 
     @Override
     public void setProfileName(final String name) {
         u.fire(eventBus, new UserNameEvent(name));
+    }
+
+    @Override
+    public void setProfileHeadline(final String headline) {
+        u.fire(eventBus, new UserHeadlineEvent(headline));
     }
 
 }
