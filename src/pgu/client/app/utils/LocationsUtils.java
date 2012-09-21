@@ -76,9 +76,6 @@ public class LocationsUtils {
 
             var callback = function(status) {
 
-                        $wnd.console.log("- status");
-                        $wnd.console.log(status);
-
                 if (status == $wnd.google.maps.GeocoderStatus.OK) {
                     @pgu.client.app.utils.MarkersUtils::createMarker(Ljava/lang/String;)(location_name);
                 }

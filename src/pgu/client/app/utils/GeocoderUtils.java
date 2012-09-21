@@ -31,7 +31,9 @@ public class GeocoderUtils {
     }
 
     private static native void executeCallback(JavaScriptObject callback) /*-{
-        callback($wnd.google.maps.GeocoderStatus.OK);
+        if (callback) {
+            callback($wnd.google.maps.GeocoderStatus.OK);
+        }
     }-*/;
 
     private static native boolean isGeocoderAvailable() /*-{
