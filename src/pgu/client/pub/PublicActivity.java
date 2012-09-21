@@ -9,7 +9,6 @@ import pgu.client.service.PublicProfileServiceAsync;
 import pgu.shared.dto.PublicProfile;
 
 import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -45,15 +44,17 @@ public class PublicActivity extends AbstractActivity implements PublicPresenter 
                 new AsyncCallbackApp<PublicProfile>(eventBus) {
 
                     @Override
-                    public void onSuccess(final PublicProfile result) {
-                        // TODO PGU Sep 17, 2012
-                        GWT.log("retour...");
-                        GWT.log(result.getProfile());
-                        u.fire(eventBus, new UserNameEvent("John Doe"));
+                    public void onSuccess(final PublicProfile profile) {
+                        view.setProfile(profile);
                     }
 
                 });
 
+    }
+
+    @Override
+    public void setProfileName(final String name) {
+        u.fire(eventBus, new UserNameEvent(name));
     }
 
 }

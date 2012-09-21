@@ -2,4 +2,6 @@ package pgu.client.pub;
 
 public interface PublicPresenter {
 
+    void setProfileName(String name);
+
 }
