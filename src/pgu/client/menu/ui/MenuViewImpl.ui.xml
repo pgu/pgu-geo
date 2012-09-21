@@ -8,14 +8,8 @@
             margin-right: 10px;
             margin-top: 10px;
         }
-        .headerApp {
-            margin-bottom: 10px;
-        }
-<!--         .firstNavbar { -->
-<!--             margin-bottom: 0px; -->
-<!--         } -->
     </ui:style>
-    <g:HTMLPanel addStyleNames="{style.headerApp}">
+    <g:HTMLPanel>
 <!--         position="TOP"  -->
         <b:Navbar addStyleNames="navbar-fixed-top">
             <b:Brand ui:field="appTitle">Geo CV</b:Brand>
