@@ -4,8 +4,10 @@ import pgu.client.pub.PublicPresenter;
 import pgu.client.pub.PublicView;
 import pgu.shared.dto.PublicProfile;
 
+import com.github.gwtbootstrap.client.ui.Section;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -16,9 +18,16 @@ public class PublicViewImpl extends Composite implements PublicView {
     interface PublicViewImplUiBinder extends UiBinder<Widget, PublicViewImpl> {
     }
 
+    @UiField(provided = true)
+    Section                 profileSection, contactsSection;
+
     private PublicPresenter presenter;
 
     public PublicViewImpl() {
+
+        profileSection = new Section("public:profile");
+        contactsSection = new Section("public:contacts");
+
         initWidget(uiBinder.createAndBindUi(this));
     }
 
@@ -35,14 +44,14 @@ public class PublicViewImpl extends Composite implements PublicView {
     public void setProfile(final PublicProfile profile) {
         setProfile(this, profile.getProfile());
 
-        //        profile.getPreferences()
+        // profile.getPreferences()
     }
 
     private native void setProfile(PublicViewImpl view, String profile) /*-{
 
-        var j_profile = JSON.parse(profile);
+		var j_profile = JSON.parse(profile);
 
-        view.@pgu.client.pub.ui.PublicViewUtils::setProfileName(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
+		@pgu.client.pub.ui.PublicViewUtils::setProfileName(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 
     }-*/;
 

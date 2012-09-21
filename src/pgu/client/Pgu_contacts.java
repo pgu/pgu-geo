@@ -41,7 +41,6 @@ public class Pgu_contacts implements EntryPoint {
         ProfileViewImpl.exportMethod();
     }
 
-
     private void initMVPContext() {
 
         final ClientFactory clientFactory = GWT.create(ClientFactory.class);

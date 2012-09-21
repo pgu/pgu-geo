@@ -19,15 +19,6 @@
     <style type="text/css">
       html { height: 100% }
       body { height: 100%; margin: 0; padding: 0 }
-      
-      #pgu_geo_profile_map { 
-        height: 600px; 
-        position: relative; 
-        background-color: #E5E3DF;
-        overflow: hidden;
-      }
-      #pgu_geo_profile_map img { max-width:none; }
-      
     </style>
     
     <link type="text/css" rel="stylesheet" href="Pgu_contacts.css">
@@ -37,6 +28,9 @@
     <script type="text/javascript">
       
       function pgu_geo_load_map_api_callback() {
+    	  
+    	  console.log('pgu_geo_load_map_api_callback');
+    	  console.log(pgu_geo);
     	  
     	  if (pgu_geo === undefined) {
     		  setTimeout(
@@ -52,6 +46,9 @@
       }
     
       function load_script() {
+    	  
+    	  console.log('load_script');
+    	  
     	  var script = document.createElement("script");
     	  script.type = "text/javascript";
     	  script.src = "http://maps.googleapis.com/maps/api/js?key=AIzaSyAP-PSZ5TkuUxa7Lqe8ni0uE1fwS6lrojw&sensor=false&callback=pgu_geo_load_map_api_callback";
