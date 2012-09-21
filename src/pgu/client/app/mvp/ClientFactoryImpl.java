@@ -13,7 +13,9 @@ import pgu.client.profile.EditLocationView;
 import pgu.client.profile.ProfileView;
 import pgu.client.profile.ui.EditLocationViewImpl;
 import pgu.client.profile.ui.ProfileViewImpl;
+import pgu.client.pub.PublicMenuView;
 import pgu.client.pub.PublicView;
+import pgu.client.pub.ui.PublicMenuViewImpl;
 import pgu.client.pub.ui.PublicViewImpl;
 import pgu.client.service.LinkedinService;
 import pgu.client.service.LinkedinServiceAsync;
@@ -39,6 +41,7 @@ public class ClientFactoryImpl implements ClientFactory {
     private static OAuthView                 oauthView            = new OAuthViewImpl();
     private static EditLocationView          editLocationView     = new EditLocationViewImpl();
     private static PublicView                publicView           = new PublicViewImpl();
+    private static PublicMenuView            publicMenuView       = new PublicMenuViewImpl();
 
     private static PublicProfileServiceAsync publicProfileService = GWT.create(PublicProfileService.class);
     private static LinkedinServiceAsync      linkedinService      = GWT.create(LinkedinService.class);
@@ -120,6 +123,11 @@ public class ClientFactoryImpl implements ClientFactory {
     @Override
     public PublicProfileServiceAsync getPublicProfileService() {
         return publicProfileService;
+    }
+
+    @Override
+    public PublicMenuView getPublicMenuView() {
+        return publicMenuView;
     }
 
 }

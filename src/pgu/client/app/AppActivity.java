@@ -9,33 +9,36 @@ import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.Level;
 import pgu.client.app.utils.Notification;
 import pgu.client.contacts.ContactsPlace;
-import pgu.client.menu.MenuActivity;
-import pgu.client.menu.MenuView;
 import pgu.client.profile.ProfilePlace;
 
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.web.bindery.event.shared.EventBus;
 
 public class AppActivity implements //
-        NotificationEvent.Handler //
-        , TechnicalErrorEvent.Handler //
-        , GoToProfileEvent.Handler //
-        , GoToContactsEvent.Handler //
+NotificationEvent.Handler //
+, TechnicalErrorEvent.Handler //
+, GoToProfileEvent.Handler //
+, GoToContactsEvent.Handler //
 {
 
     private final ClientFactory   clientFactory;
     private final AppView         view;
-    private final MenuView        menuView;
+    private final IsWidget        menuView;
     private final PlaceController placeController;
     private EventBus              eventBus;
     private final ClientUtils     u = new ClientUtils();
 
-    public AppActivity(final PlaceController placeController, final ClientFactory clientFactory) {
+    public AppActivity( //
+            final IsWidget menuView //
+            , final PlaceController placeController //
+            , final ClientFactory clientFactory //
+            ) {
         this.clientFactory = clientFactory;
         this.placeController = placeController;
 
         view = clientFactory.getAppView();
-        menuView = clientFactory.getMenuView();
+        this.menuView = menuView;
     }
 
     public void start(final EventBus eventBus) {
@@ -45,9 +48,6 @@ public class AppActivity implements //
         eventBus.addHandler(NotificationEvent.TYPE, this);
         eventBus.addHandler(GoToProfileEvent.TYPE, this);
         eventBus.addHandler(GoToContactsEvent.TYPE, this);
-
-        final MenuActivity menuActivity = new MenuActivity(clientFactory);
-        menuActivity.start(eventBus);
 
         view.getHeader().setWidget(menuView);
     }
