@@ -29,10 +29,7 @@
       
       function pgu_geo_load_map_api_callback() {
     	  
-    	  console.log('pgu_geo_load_map_api_callback');
-    	  console.log(pgu_geo);
-    	  
-    	  if (pgu_geo === undefined) {
+    	  if (typeof pgu_geo === 'undefined') {
     		  setTimeout(
     		      function() {
     		    	  pgu_geo_load_map_api_callback();
@@ -46,8 +43,6 @@
       }
     
       function load_script() {
-    	  
-    	  console.log('load_script');
     	  
     	  var script = document.createElement("script");
     	  script.type = "text/javascript";

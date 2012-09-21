@@ -37,7 +37,7 @@ public class GeocoderUtils {
     }-*/;
 
     private static native boolean isGeocoderAvailable() /*-{
-        return $wnd.pgu_geo.geocoder !== undefined;
+        return typeof $wnd.pgu_geo.geocoder !== 'undefined';
     }-*/;
 
     public static void searchGeopointWithDelay( //

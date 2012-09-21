@@ -4,6 +4,9 @@
             xmlns:b="urn:import:com.github.gwtbootstrap.client.ui" >
 
     <ui:style>
+        .profile_section {
+            padding-top: 0px;
+        }
         .public_profile_map_area {
             padding-top: 20px;
         }
@@ -17,14 +20,14 @@
     </ui:style>            
 
     <g:HTMLPanel>
-        <g:HTMLPanel ui:field="submenu" addStyleNames="subnav subnav-fixed">
-            <b:NavPills>
-                <b:NavLink href="#public:profile">Profile</b:NavLink>
-                <b:NavLink href="#public:contacts">Contacts</b:NavLink>
-            </b:NavPills>
-        </g:HTMLPanel>
+<!--         <g:HTMLPanel ui:field="submenu" addStyleNames="subnav subnav-fixed"> -->
+<!--             <b:NavPills> -->
+<!--                 <b:NavLink href="#public:profile">Profile</b:NavLink> -->
+<!--                 <b:NavLink href="#public:contacts">Contacts</b:NavLink> -->
+<!--             </b:NavPills> -->
+<!--         </g:HTMLPanel> -->
 
-        <b:Section ui:field="profileSection">
+        <b:Section ui:field="profileSection" addStyleNames="{style.profile_section}">
             <g:HTMLPanel addStyleNames="row-fluid">
                 <div class="span12">
                     <g:HTMLPanel addStyleNames="page-header">
