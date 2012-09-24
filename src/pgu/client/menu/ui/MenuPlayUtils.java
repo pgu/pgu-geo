@@ -100,11 +100,11 @@ public class MenuPlayUtils {
 
         var marker;
         if (location_names.length === 0) {
-            marker = @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)('Unknown','0','0');
+            marker = @pgu.client.app.utils.MarkersUtils::createMarkerOnProfileMap(Ljava/lang/String;)('0, 0 (Unknown)');
 
         } else {
             var location_name = location_names[0];
-            marker = @pgu.client.app.utils.MarkersUtils::createMarker(Ljava/lang/String;)(location_name);
+            marker = @pgu.client.app.utils.MarkersUtils::createMarkerOnProfileMap(Ljava/lang/String;)(location_name);
 
         }
 
@@ -114,7 +114,7 @@ public class MenuPlayUtils {
 
         for ( var i = 1, len = location_names.length; i < len; i++) {
             var location_name = location_names[i];
-            @pgu.client.app.utils.MarkersUtils::createMarker(Ljava/lang/String;)(location_name);
+            @pgu.client.app.utils.MarkersUtils::createMarkerOnProfileMap(Ljava/lang/String;)(location_name);
         }
 
         return false; // is not done

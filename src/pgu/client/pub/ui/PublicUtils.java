@@ -1,5 +1,7 @@
 package pgu.client.pub.ui;
 
+import com.google.gwt.core.client.JavaScriptObject;
+
 public class PublicUtils {
 
     public static native void initProfileMap() /*-{
@@ -31,5 +33,7 @@ public class PublicUtils {
 
     }-*/;
 
-
+    public static native JavaScriptObject publicProfileMap() /*-{
+        return $wnd.pgu_geo.public_profile_map;
+    }-*/;
 }

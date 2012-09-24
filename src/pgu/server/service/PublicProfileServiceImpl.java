@@ -3,6 +3,7 @@ package pgu.server.service;
 import pgu.client.service.PublicProfileService;
 import pgu.server.access.DAO;
 import pgu.shared.dto.PublicProfile;
+import pgu.shared.model.UserAndLocations;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -32,7 +33,12 @@ public class PublicProfileServiceImpl extends RemoteServiceServlet implements Pu
 
     @Override
     public PublicProfile fetchPublicProfileByUrl(final String publicUrl) {
-        return dao.ofy().query(PublicProfile.class).filter("url", publicUrl).get();
+        final PublicProfile publicProfile = dao.ofy().query(PublicProfile.class).filter("url", publicUrl).get();
+
+        final UserAndLocations userAndLocations = dao.ofy().get(UserAndLocations.class, publicProfile.getUserId());
+        publicProfile.setUserAndLocations(userAndLocations);
+
+        return publicProfile;
     }
 
 

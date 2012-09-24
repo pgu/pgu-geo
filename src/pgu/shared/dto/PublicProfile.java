@@ -2,6 +2,8 @@ package pgu.shared.dto;
 
 import javax.persistence.Id;
 
+import pgu.shared.model.UserAndLocations;
+
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class PublicProfile implements IsSerializable {
@@ -12,6 +14,7 @@ public class PublicProfile implements IsSerializable {
     private String preferences;
     private String url;
     private String profile;
+    private UserAndLocations userAndLocations;
 
     @Override
     public int hashCode() {
@@ -46,7 +49,7 @@ public class PublicProfile implements IsSerializable {
     @Override
     public String toString() {
         return "PublicProfile [userId=" + userId + ", preferences=" + preferences + ", url=" + url + ", profile="
-                + profile + "]";
+                + profile + ", userAndLocations=" + userAndLocations + "]";
     }
 
     public String getUserId() {
@@ -79,6 +82,14 @@ public class PublicProfile implements IsSerializable {
 
     public void setProfile(final String profile) {
         this.profile = profile;
+    }
+
+    public UserAndLocations getUserAndLocations() {
+        return userAndLocations;
+    }
+
+    public void setUserAndLocations(final UserAndLocations userAndLocations) {
+        this.userAndLocations = userAndLocations;
     }
 
 }

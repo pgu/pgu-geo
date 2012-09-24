@@ -21,5 +21,14 @@ public class PublicViewUtils {
         view.@pgu.client.pub.ui.PublicViewImpl::setProfileHeadline(Ljava/lang/String;)(headline);
     }-*/;
 
+    public static native void setProfileLocation(PublicViewImpl view, JavaScriptObject profile) /*-{
+
+        var
+          profile_location = profile.location || {}
+        , location_name = profile_location.name;
+
+        view.@pgu.client.pub.ui.PublicViewImpl::setProfileLocation(Ljava/lang/String;)(location_name);
+    }-*/;
+
 
 }

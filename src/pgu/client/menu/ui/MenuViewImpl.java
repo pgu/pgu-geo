@@ -475,7 +475,7 @@ public class MenuViewImpl extends Composite implements MenuView {
     public void showOnMap(final String locationName) {
         showMap();
 
-        MarkersUtils.createMarker(locationName);
+        MarkersUtils.createMarkerOnProfileMap(locationName);
     }
 
     public void showNotificationWarning(final String msg) {

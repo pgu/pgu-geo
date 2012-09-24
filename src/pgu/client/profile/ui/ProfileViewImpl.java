@@ -198,8 +198,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     private void setProfileLocation(final String locationName) {
 
-        final boolean hasLocation = u.isVoid(locationName);
+        final boolean hasLocation = !u.isVoid(locationName);
         locContainer.setText(hasLocation ? "" : locationName);
+
+        // TODO PGU update user and locations
 
         if (hasLocation) {
             LocationsUtils.addCurrentLocationToCache(locationName);

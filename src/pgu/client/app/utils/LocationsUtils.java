@@ -77,7 +77,7 @@ public class LocationsUtils {
             var callback = function(status) {
 
                 if (status == $wnd.google.maps.GeocoderStatus.OK) {
-                    @pgu.client.app.utils.MarkersUtils::createMarker(Ljava/lang/String;)(location_name);
+                    @pgu.client.app.utils.MarkersUtils::createMarkerOnProfileMap(Ljava/lang/String;)(location_name);
                 }
             };
 
