@@ -24,6 +24,7 @@ UserNameEvent.Handler //
         this.eventBus = eventBus;
 
         eventBus.addHandler(UserNameEvent.TYPE, this);
+        eventBus.addHandler(UserHeadlineEvent.TYPE, this);
     }
 
     @Override
