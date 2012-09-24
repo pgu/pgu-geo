@@ -130,7 +130,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     private static ProfilePresenter staticPresenter;
 
-    public static native void exportMethod() /*-{
+    public static native void exportMethods() /*-{
       $wnd.pgu_geo.add_new_location = $entry(@pgu.client.profile.ui.ProfileViewImpl::addNewLocation(Ljava/lang/String;));
       $wnd.pgu_geo.edit_location = $entry(@pgu.client.profile.ui.ProfileViewImpl::editLocation(Ljava/lang/String;Ljava/lang/String;));
     }-*/;

@@ -29,16 +29,22 @@ import com.google.web.bindery.event.shared.EventBus;
 
 public class Pgu_contacts implements EntryPoint {
 
-    private static native void initAppJSContext() /*-{
+    private native void initAppJSContext() /*-{
         $wnd.pgu_geo = {};
     }-*/;
 
     private final MVPContext mvpContext = new MVPContext();
 
-    private void initJSContext() {
+    private void initJSContext(final boolean isPublic) {
         initAppJSContext();
-        GeoUtils.exportMethod();
-        ProfileViewImpl.exportMethod();
+
+        final GeoUtils geoUtils = new GeoUtils();
+        geoUtils.exportMethods(isPublic);
+
+        if (!isPublic) {
+            ProfileViewImpl.exportMethods();
+        }
+
     }
 
     private void initMVPContext() {
@@ -53,10 +59,12 @@ public class Pgu_contacts implements EntryPoint {
     @Override
     public void onModuleLoad() {
 
-        initJSContext();
+        final boolean isPublic = History.getToken().startsWith("PublicPlace");
+
+        initJSContext(isPublic);
         initMVPContext();
 
-        if (History.getToken().startsWith("PublicPlace")) {
+        if (isPublic) {
 
             final PublicMenuActivity menuActivity = new PublicMenuActivity(mvpContext.clientFactory);
             menuActivity.start(mvpContext.eventBus);
