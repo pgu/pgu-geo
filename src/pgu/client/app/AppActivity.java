@@ -4,7 +4,7 @@ import pgu.client.app.event.GoToContactsEvent;
 import pgu.client.app.event.GoToProfileEvent;
 import pgu.client.app.event.NotificationEvent;
 import pgu.client.app.event.TechnicalErrorEvent;
-import pgu.client.app.mvp.ClientFactory;
+import pgu.client.app.mvp.BaseClientFactory;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.Level;
 import pgu.client.app.utils.Notification;
@@ -22,7 +22,7 @@ NotificationEvent.Handler //
 , GoToContactsEvent.Handler //
 {
 
-    private final ClientFactory   clientFactory;
+    private final BaseClientFactory   clientFactory;
     private final AppView         view;
     private final IsWidget        menuView;
     private final PlaceController placeController;
@@ -32,7 +32,7 @@ NotificationEvent.Handler //
     public AppActivity( //
             final IsWidget menuView //
             , final PlaceController placeController //
-            , final ClientFactory clientFactory //
+            , final BaseClientFactory clientFactory //
             ) {
         this.clientFactory = clientFactory;
         this.placeController = placeController;

@@ -4,7 +4,12 @@ import pgu.client.app.AppActivity;
 import pgu.client.app.AppView;
 import pgu.client.app.mvp.AppActivityMapper;
 import pgu.client.app.mvp.AppPlaceHistoryMapper;
+import pgu.client.app.mvp.BaseClientFactory;
 import pgu.client.app.mvp.ClientFactory;
+import pgu.client.app.mvp.ClientFactoryImpl;
+import pgu.client.app.mvp.PublicAppActivityMapper;
+import pgu.client.app.mvp.PublicClientFactory;
+import pgu.client.app.mvp.PublicClientFactoryImpl;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.GeoUtils;
 import pgu.client.menu.MenuActivity;
@@ -19,6 +24,7 @@ import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
@@ -47,13 +53,22 @@ public class Pgu_contacts implements EntryPoint {
 
     }
 
-    private void initMVPContext() {
+    private void initMVPContext(final boolean isPublic) {
 
-        final ClientFactory clientFactory = GWT.create(ClientFactory.class);
+        if (isPublic) {
+            final PublicClientFactoryImpl publicClientFactory = new PublicClientFactoryImpl();
+            mvpContext.clientFactory = publicClientFactory;
+            mvpContext.activityMapper = new PublicAppActivityMapper(publicClientFactory);
 
-        mvpContext.clientFactory = clientFactory;
-        mvpContext.eventBus = clientFactory.getEventBus();
-        mvpContext.placeController = clientFactory.getPlaceController();
+        } else {
+            final ClientFactoryImpl clientFactory = new ClientFactoryImpl();
+            mvpContext.clientFactory = clientFactory;
+            mvpContext.activityMapper = new AppActivityMapper(clientFactory);
+
+        }
+
+        mvpContext.eventBus = mvpContext.clientFactory.getEventBus();
+        mvpContext.placeController = mvpContext.clientFactory.getPlaceController();
     }
 
     @Override
@@ -62,51 +77,80 @@ public class Pgu_contacts implements EntryPoint {
         final boolean isPublic = History.getToken().startsWith("PublicPlace");
 
         initJSContext(isPublic);
-        initMVPContext();
+        initMVPContext(isPublic);
 
         if (isPublic) {
 
-            final PublicMenuActivity menuActivity = new PublicMenuActivity(mvpContext.clientFactory);
-            menuActivity.start(mvpContext.eventBus);
-            final PublicMenuView menuView = mvpContext.clientFactory.getPublicMenuView();
-
-            final Place defaultPlace = mvpContext.placeController.getWhere();
-
-            startApplication(menuView, defaultPlace);
-
-        } else {
-            mvpContext.clientFactory.getLoginService().getLoginInfo(GWT.getHostPageBaseURL(),
-                    new AsyncCallbackApp<LoginInfo>(mvpContext.eventBus) {
+            GWT.runAsync(new RunAsyncCallback() {
 
                 @Override
-                public void onSuccess(final LoginInfo loginInfo) {
-                    mvpContext.clientFactory.setLoginInfo(loginInfo);
+                public void onSuccess() {
 
-                    final MenuActivity menuActivity = new MenuActivity(mvpContext.clientFactory);
+                    final PublicClientFactory clientFactory = (PublicClientFactory) mvpContext.clientFactory;
+
+                    final PublicMenuActivity menuActivity = new PublicMenuActivity(clientFactory);
                     menuActivity.start(mvpContext.eventBus);
-                    final MenuView menuView = mvpContext.clientFactory.getMenuView();
+                    final PublicMenuView menuView = clientFactory.getPublicMenuView();
 
-                    final Place defaultPlace = new ProfilePlace();
+                    final Place defaultPlace = mvpContext.placeController.getWhere();
 
                     startApplication(menuView, defaultPlace);
                 }
 
+                @Override
+                public void onFailure(final Throwable reason) {
+                    GWT.log("!!! problem: " + reason.getMessage());
+                }
             });
+
+        } else {
+
+            GWT.runAsync(new RunAsyncCallback() {
+
+                @Override
+                public void onSuccess() {
+                    final ClientFactory clientFactory = (ClientFactory) mvpContext.clientFactory;
+
+                    clientFactory.getLoginService().getLoginInfo(GWT.getHostPageBaseURL(),
+                            new AsyncCallbackApp<LoginInfo>(mvpContext.eventBus) {
+
+                        @Override
+                        public void onSuccess(final LoginInfo loginInfo) {
+                            clientFactory.setLoginInfo(loginInfo);
+
+                            final MenuActivity menuActivity = new MenuActivity(clientFactory);
+                            menuActivity.start(mvpContext.eventBus);
+                            final MenuView menuView = clientFactory.getMenuView();
+
+                            final Place defaultPlace = new ProfilePlace();
+
+                            startApplication(menuView, defaultPlace);
+                        }
+
+                    });
+                }
+
+                @Override
+                public void onFailure(final Throwable reason) {
+                    GWT.log("!!! problem: " + reason.getMessage());
+                }
+            });
+
         }
     }
 
     private void startApplication(final IsWidget menuView, final Place defaultPlace) {
 
-        final ClientFactory clientFactory = mvpContext.clientFactory;
+        final BaseClientFactory clientFactory = mvpContext.clientFactory;
         final EventBus eventBus = mvpContext.eventBus;
         final PlaceController placeController = mvpContext.placeController;
+        final ActivityMapper activityMapper = mvpContext.activityMapper;
 
         final AppView appView = clientFactory.getAppView();
 
         final AppActivity appActivity = new AppActivity(menuView, placeController, clientFactory);
         appActivity.start(eventBus);
 
-        final ActivityMapper activityMapper = new AppActivityMapper(clientFactory);
         final ActivityManager activityManager = new ActivityManager(activityMapper, eventBus);
         activityManager.setDisplay(appView);
 
@@ -119,7 +163,8 @@ public class Pgu_contacts implements EntryPoint {
     }
 
     private static class MVPContext {
-        private ClientFactory clientFactory;
+        private ActivityMapper activityMapper;
+        private BaseClientFactory clientFactory;
         private EventBus eventBus;
         private PlaceController placeController;
     }

@@ -1,6 +1,6 @@
 package pgu.client.pub;
 
-import pgu.client.app.mvp.ClientFactory;
+import pgu.client.app.mvp.PublicClientFactory;
 import pgu.client.pub.event.UserHeadlineEvent;
 import pgu.client.pub.event.UserNameEvent;
 
@@ -11,11 +11,11 @@ UserNameEvent.Handler //
 , UserHeadlineEvent.Handler //
 {
 
-    private final PublicMenuView view;
-    private EventBus             eventBus;
-    private final ClientFactory  clientFactory;
+    private final PublicMenuView      view;
+    private EventBus                  eventBus;
+    private final PublicClientFactory clientFactory;
 
-    public PublicMenuActivity(final ClientFactory clientFactory) {
+    public PublicMenuActivity(final PublicClientFactory clientFactory) {
         this.clientFactory = clientFactory;
         view = clientFactory.getPublicMenuView();
     }
