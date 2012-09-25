@@ -14,6 +14,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class PublicViewImpl extends Composite implements PublicView {
@@ -27,6 +29,8 @@ public class PublicViewImpl extends Composite implements PublicView {
     Section                   profileSection;
     @UiField
     NavLink                   locContainer;
+    @UiField
+    HTMLPanel                 lgContainer, spContainer;
 
     private PublicPresenter   presenter;
     private final ClientUtils u = new ClientUtils();
@@ -61,6 +65,17 @@ public class PublicViewImpl extends Composite implements PublicView {
         }
     }
 
+    public void setProfileSpecialties(final String specialtiesLabel) {
+        for (final String specialty : specialtiesLabel.split(", ")) {
+
+            if (u.isVoid(specialty)) {
+                continue;
+            }
+
+            spContainer.add(new HTML(specialty));
+        }
+    }
+
     @Override
     public void setProfile(final PublicProfile profile) {
 
@@ -83,6 +98,9 @@ public class PublicViewImpl extends Composite implements PublicView {
 		@pgu.client.pub.ui.PublicViewUtils::setProfileName(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 		@pgu.client.pub.ui.PublicViewUtils::setProfileHeadline(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 		@pgu.client.pub.ui.PublicViewUtils::setProfileLocation(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
+		@pgu.client.pub.ui.PublicViewUtils::setProfileSpecialties(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
+	    @pgu.client.pub.ui.PublicViewUtils::setProfileLanguages(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
+
 
     }-*/;
 
