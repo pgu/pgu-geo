@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 
 import com.github.gwtbootstrap.client.ui.Column;
 import com.github.gwtbootstrap.client.ui.FluidRow;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.user.client.ui.HTMLPanel;
 
 public class LanguagesUtils {
@@ -42,12 +43,38 @@ public class LanguagesUtils {
         this.lgContainer = lgContainer;
     }
 
-    public void clearProfileLanguages() {
+    public static native void setProfileLanguages(LanguagesUtils languages_utils, JavaScriptObject profile) /*-{
+
+        languages_utils.@pgu.client.app.utils.LanguagesUtils::clearProfileLanguages()();
+
+
+        var languages = profile.languages || {};
+        var language_values = languages.values || [];
+
+        for ( var i in language_values) {
+
+            var //
+            language_value = language_values[i] //
+            //
+            , language = language_value.language || {} //
+            , language_name = language.name || '' //
+            //
+            , language_proficiency = language_value.proficiency || {} //
+            , language_level = language_proficiency.level || '' //
+            ;
+
+            languages_utils.@pgu.client.app.utils.LanguagesUtils::addProfileLanguage(Ljava/lang/String;Ljava/lang/String;)(language_name, language_level);
+        }
+
+        languages_utils.@pgu.client.app.utils.LanguagesUtils::showProfileLanguages()();
+    }-*/;
+
+    private void clearProfileLanguages() {
         lgContainer.clear();
         level2languages.clear();
     }
 
-    public void addProfileLanguage(final String languageName, final String languageLevel) {
+    private void addProfileLanguage(final String languageName, final String languageLevel) {
 
         final LanguageLevel level = getLanguageLevel(languageLevel);
         addLanguageAndLevelToCache(languageName, level);
@@ -81,7 +108,7 @@ public class LanguagesUtils {
 
     };
 
-    public void showProfileLanguages() {
+    private void showProfileLanguages() {
 
         for (final Entry<LanguageLevel, ArrayList<String>> e : level2languages.entrySet()) {
             final LanguageLevel level = e.getKey();
