@@ -313,6 +313,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 		@pgu.client.profile.ui.ProfilePositionsUtils::updateProfilePositions(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 
 		// TODO display "wish" locations
+		// TODO display "holidays" locations
 
 		var positions = j_profile.positions;
 		$doc.getElementById('pgu_geo.profile:xp_table').innerHTML = //
