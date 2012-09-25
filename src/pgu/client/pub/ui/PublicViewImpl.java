@@ -1,6 +1,7 @@
 package pgu.client.pub.ui;
 
 import pgu.client.app.utils.ClientUtils;
+import pgu.client.app.utils.LanguagesUtils;
 import pgu.client.app.utils.LocationsUtils;
 import pgu.client.app.utils.MarkersUtils;
 import pgu.client.pub.PublicPresenter;
@@ -74,6 +75,10 @@ public class PublicViewImpl extends Composite implements PublicView {
 
             spContainer.add(new HTML(specialty));
         }
+    }
+
+    public LanguagesUtils getLanguagesUtils() {
+        return new LanguagesUtils(lgContainer);
     }
 
     @Override

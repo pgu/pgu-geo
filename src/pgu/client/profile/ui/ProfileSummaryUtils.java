@@ -59,7 +59,8 @@ public class ProfileSummaryUtils {
 
     public static native void setProfileLanguages(ProfileViewImpl view, JavaScriptObject profile) /*-{
 
-        view.@pgu.client.profile.ui.ProfileViewImpl::clearProfileLanguages()();
+        var languages_utils = view.@pgu.client.profile.ui.ProfileViewImpl::getLanguagesUtils()();
+        languages_utils.@pgu.client.app.utils.LanguagesUtils::clearProfileLanguages()();
 
         var languages = profile.languages || {};
         var language_values = languages.values || [];
@@ -76,10 +77,10 @@ public class ProfileSummaryUtils {
             , language_level = language_proficiency.level || '' //
             ;
 
-            view.@pgu.client.profile.ui.ProfileViewImpl::addProfileLanguage(Ljava/lang/String;Ljava/lang/String;)(language_name, language_level);
+            languages_utils.@pgu.client.app.utils.LanguagesUtils::addProfileLanguage(Ljava/lang/String;Ljava/lang/String;)(language_name, language_level);
         }
 
-        view.@pgu.client.profile.ui.ProfileViewImpl::showProfileLanguages()();
+        languages_utils.@pgu.client.app.utils.LanguagesUtils::showProfileLanguages()();
     }-*/;
 
 }

@@ -39,7 +39,9 @@ public class PublicViewUtils {
 
     public static native void setProfileLanguages(PublicViewImpl view, JavaScriptObject profile) /*-{
 
-        view.@pgu.client.pub.ui.PublicViewImpl::clearProfileLanguages()();
+        var languages_utils = view.@pgu.client.pub.ui.PublicViewImpl::getLanguagesUtils()();
+        languages_utils.@pgu.client.app.utils.LanguagesUtils::clearProfileLanguages()();
+
 
         var languages = profile.languages || {};
         var language_values = languages.values || [];
@@ -56,10 +58,10 @@ public class PublicViewUtils {
             , language_level = language_proficiency.level || '' //
             ;
 
-            view.@pgu.client.pub.ui.PublicViewImpl::addProfileLanguage(Ljava/lang/String;Ljava/lang/String;)(language_name, language_level);
+            languages_utils.@pgu.client.app.utils.LanguagesUtils::addProfileLanguage(Ljava/lang/String;Ljava/lang/String;)(language_name, language_level);
         }
 
-        view.@pgu.client.pub.ui.PublicViewImpl::showProfileLanguages()();
+        languages_utils.@pgu.client.app.utils.LanguagesUtils::showProfileLanguages()();
     }-*/;
 
 
