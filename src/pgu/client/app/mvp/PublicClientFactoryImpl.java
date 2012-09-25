@@ -18,10 +18,10 @@ public class PublicClientFactoryImpl implements PublicClientFactory {
 
     private static EventBus                  eventBus             = new SimpleEventBus();
     private static PlaceController           placeController      = new PlaceController(eventBus);
-    private static AppView                   appView              = new AppViewImpl();
+    private static AppView                   appView;
 
-    private static PublicView                publicView           = new PublicViewImpl();
-    private static PublicMenuView            publicMenuView       = new PublicMenuViewImpl();
+    private static PublicView                publicView;
+    private static PublicMenuView            publicMenuView;
 
     private static PublicProfileServiceAsync publicProfileService = GWT.create(PublicProfileService.class);
 
@@ -37,11 +37,19 @@ public class PublicClientFactoryImpl implements PublicClientFactory {
 
     @Override
     public AppView getAppView() {
+
+        if (appView == null) {
+            appView = new AppViewImpl();
+        }
+
         return appView;
     }
 
     @Override
     public PublicView getPublicView() {
+        if (publicView == null) {
+            publicView = new PublicViewImpl();
+        }
         return publicView;
     }
 
@@ -52,8 +60,10 @@ public class PublicClientFactoryImpl implements PublicClientFactory {
 
     @Override
     public PublicMenuView getPublicMenuView() {
+        if (publicMenuView == null) {
+            publicMenuView = new PublicMenuViewImpl();
+        }
         return publicMenuView;
     }
-
 
 }
