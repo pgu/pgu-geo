@@ -109,6 +109,8 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
                     }
 
                     private void initUserLocations(final EventBus eventBus, final Profile profile) {
+                        // TODO PGU Sep 25, 2012 if userAndLocations != currentUserAndLocations
+                        // TODO PGU Sep 25, 2012 clean locations when not used anymore
                         if (profile.getUserAndLocations() == null) {
 
                             LocationsUtils.copyLocationCaches();
