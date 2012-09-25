@@ -54,7 +54,7 @@ public class PublicViewImpl extends Composite implements PublicView {
     public void setProfileLocation(final String locationName) {
 
         final boolean hasLocation = !u.isVoid(locationName);
-        locContainer.setText(hasLocation ? "" : locationName);
+        locContainer.setText(hasLocation ? locationName : "");
 
         if (hasLocation) {
             MarkersUtils.createMarkerOnPublicMap(locationName);
