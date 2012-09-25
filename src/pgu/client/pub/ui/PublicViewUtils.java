@@ -37,4 +37,18 @@ public class PublicViewUtils {
         view.@pgu.client.pub.ui.PublicViewImpl::setProfileSpecialties(Ljava/lang/String;)(specialties);
     }-*/;
 
+    public static native void setProfileSummary(PublicViewImpl view, JavaScriptObject profile) /*-{
+
+        var summary = profile.summary || '';
+
+        view.@pgu.client.pub.ui.PublicViewImpl::setProfileSummary(Ljava/lang/String;)(summary);
+    }-*/;
+
+    public static native void setProfilePublicUrl(PublicViewImpl view, JavaScriptObject profile) /*-{
+
+        var public_url = profile.publicProfileUrl || '';
+
+        view.@pgu.client.pub.ui.PublicViewImpl::setProfilePublicUrl(Ljava/lang/String;)(public_url);
+    }-*/;
+
 }

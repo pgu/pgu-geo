@@ -92,6 +92,11 @@
                     <g:HTMLPanel ui:field="lgContainer" />
                 </div>
             </g:HTMLPanel>
+            <g:HTMLPanel addStyleNames="row-fluid {style.description_item}">
+                <div class="span12">
+                    <g:HTML ui:field="summaryContainer" />
+                </div>
+            </g:HTMLPanel>
         </b:Section>    
         
     </g:HTMLPanel>

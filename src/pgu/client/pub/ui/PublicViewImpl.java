@@ -3,6 +3,7 @@ package pgu.client.pub.ui;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.LanguagesUtils;
 import pgu.client.app.utils.LocationsUtils;
+import pgu.client.app.utils.MarkdownUtils;
 import pgu.client.app.utils.MarkersUtils;
 import pgu.client.pub.PublicPresenter;
 import pgu.client.pub.PublicView;
@@ -12,11 +13,15 @@ import pgu.shared.model.UserAndLocations;
 import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.Section;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
 public class PublicViewImpl extends Composite implements PublicView {
@@ -32,6 +37,8 @@ public class PublicViewImpl extends Composite implements PublicView {
     NavLink                   locContainer;
     @UiField
     HTMLPanel                 lgContainer, spContainer;
+    @UiField
+    HTML                      summaryContainer;
 
     private PublicPresenter   presenter;
     private final ClientUtils u = new ClientUtils();
@@ -81,6 +88,23 @@ public class PublicViewImpl extends Composite implements PublicView {
         return new LanguagesUtils(lgContainer);
     }
 
+    private void setProfileSummary(final String summary) {
+        summaryContainer.setHTML(MarkdownUtils.markdown(summary));
+    }
+
+    private final Image linkedinPicture = new Image();
+
+    private void setProfilePublicUrl(final String url) {
+        // TODO PGU Sep 25, 2012 linkedin picture
+        linkedinPicture.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(final ClickEvent event) {
+                Window.open(url, "linkedin_public_profile", null);
+            }
+        });
+    }
+
     @Override
     public void setProfile(final PublicProfile profile) {
 
@@ -105,8 +129,12 @@ public class PublicViewImpl extends Composite implements PublicView {
 		@pgu.client.pub.ui.PublicViewUtils::setProfileLocation(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 		@pgu.client.pub.ui.PublicViewUtils::setProfileSpecialties(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 
-        var languages_utils = view.@pgu.client.pub.ui.PublicViewImpl::getLanguagesUtils()();
-	    @pgu.client.app.utils.LanguagesUtils::setProfileLanguages(Lpgu/client/app/utils/LanguagesUtils;Lcom/google/gwt/core/client/JavaScriptObject;)(languages_utils,j_profile);
+		var languages_utils = view.@pgu.client.pub.ui.PublicViewImpl::getLanguagesUtils()();
+		@pgu.client.app.utils.LanguagesUtils::setProfileLanguages(Lpgu/client/app/utils/LanguagesUtils;Lcom/google/gwt/core/client/JavaScriptObject;)(languages_utils,j_profile);
+
+		@pgu.client.pub.ui.PublicViewUtils::setProfileSummary(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
+
+        @pgu.client.pub.ui.PublicViewUtils::setProfilePublicUrl(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 
     }-*/;
 
