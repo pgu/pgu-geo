@@ -5,9 +5,12 @@ import pgu.client.menu.MenuActivity;
 public class MenuViewUtils {
 
     public static native void searchLocationAndAddMarker(MenuViewImpl menu, String location_name) /*-{
+
+        $wnd.console.log('searchLocationAndAddMarker');
+
         var
           geocoder = @pgu.client.app.utils.GeocoderUtils::geocoder()()
-        , google = $wnd.google
+        , google = @pgu.client.app.utils.GoogleUtils::google()()
         , map = @pgu.client.profile.ui.ProfileUtils::profileMap()()
         ;
 
@@ -36,9 +39,12 @@ public class MenuViewUtils {
     }-*/;
 
     public static native void addNewLocation(MenuActivity activity, String item_config_id, String location_name) /*-{
+
+        $wnd.console.log('addNewLocation');
+
         var
           geocoder = @pgu.client.app.utils.GeocoderUtils::geocoder()()
-        , google = $wnd.google
+        , google = @pgu.client.app.utils.GoogleUtils::google()()
         , map = @pgu.client.profile.ui.ProfileUtils::profileMap()()
         ;
 

@@ -18,8 +18,10 @@ public class PublicUtils {
             return;
         }
 
+        $wnd.console.log('initProfileMap');
+
         var
-            google = $wnd.google
+            google = @pgu.client.app.utils.GoogleUtils::google()()
           , mapOptions = {
               zoom: 2,
               center: new google.maps.LatLng(0, 0),

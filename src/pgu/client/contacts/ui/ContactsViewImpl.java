@@ -126,7 +126,7 @@ public class ContactsViewImpl extends Composite implements ContactsView {
         var
             geocoder = @pgu.client.app.utils.GeocoderUtils::geocoder()()
 		  , map = @pgu.client.profile.ui.ProfileUtils::profileMap()()
-		  , google = $wnd.google
+		  , google = @pgu.client.app.utils.GoogleUtils::google()()
 		;
 
 		geocoder.geocode(

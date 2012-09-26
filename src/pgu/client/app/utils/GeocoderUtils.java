@@ -8,7 +8,11 @@ import com.google.gwt.user.client.Timer;
 public class GeocoderUtils {
 
     public static native void initGeocoder() /*-{
-        $wnd.pgu_geo.geocoder = new $wnd.google.maps.Geocoder();
+
+        $wnd.console.log('initGeocoder');
+
+        var google = @pgu.client.app.utils.GoogleUtils::google()();
+        $wnd.pgu_geo.geocoder = new google.maps.Geocoder();
     }-*/;
 
     public static native JavaScriptObject geocoder() /*-{
@@ -32,7 +36,11 @@ public class GeocoderUtils {
 
     private static native void executeCallback(JavaScriptObject callback) /*-{
         if (callback) {
-            callback($wnd.google.maps.GeocoderStatus.OK);
+
+            $wnd.console.log('executeCallback');
+
+            var google = @pgu.client.app.utils.GoogleUtils::google()();
+            callback(google.maps.GeocoderStatus.OK);
         }
     }-*/;
 
@@ -63,9 +71,12 @@ public class GeocoderUtils {
     }
 
     private static native void searchAndAddToCache(String location_name, JavaScriptObject callback) /*-{
+
+        $wnd.console.log('serachAndAddToCache');
+
         var
             geocoder = @pgu.client.app.utils.GeocoderUtils::geocoder()()
-          , google = $wnd.google
+          , google = @pgu.client.app.utils.GoogleUtils::google()()
         ;
 
         geocoder

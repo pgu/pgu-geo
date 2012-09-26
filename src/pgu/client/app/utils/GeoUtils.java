@@ -20,8 +20,13 @@ public class GeoUtils {
     }-*/;
 
     public static void initGeo() {
-        GeocoderUtils.initGeocoder();
+        initGeoInternal();
         ProfileUtils.initProfileMap();
+    }
+
+    private static void initGeoInternal() {
+        GoogleUtils.initGoogle();
+        GeocoderUtils.initGeocoder();
     }
 
     private native void exportPublicMethods() /*-{
@@ -29,7 +34,7 @@ public class GeoUtils {
     }-*/;
 
     public static void initPublicGeo() {
-        GeocoderUtils.initGeocoder();
+        initGeoInternal();
         PublicUtils.initProfileMap();
     }
 

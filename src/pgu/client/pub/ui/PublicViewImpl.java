@@ -1,6 +1,7 @@
 package pgu.client.pub.ui;
 
 import pgu.client.app.utils.ClientUtils;
+import pgu.client.app.utils.GoogleUtils;
 import pgu.client.app.utils.LanguagesUtils;
 import pgu.client.app.utils.LocationsUtils;
 import pgu.client.app.utils.MarkdownUtils;
@@ -14,11 +15,15 @@ import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.Section;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
@@ -104,8 +109,36 @@ public class PublicViewImpl extends Composite implements PublicView {
         locContainer.setText(hasLocation ? locationName : "");
 
         if (hasLocation) {
-            MarkersUtils.createMarkerOnPublicMap(locationName);
+
+            createMarkerOnPublicMap(locationName);
         }
+    }
+
+    private void createMarkerOnPublicMap(final String locationName) {
+
+        final JavaScriptObject google = GoogleUtils.google();
+        final JavaScriptObject map = PublicUtils.publicProfileMap();
+
+        if (google == null || map == null) {
+
+            new Timer() {
+
+                @Override
+                public void run() {
+                    Scheduler.get().scheduleDeferred(new Command() {
+                        @Override
+                        public void execute() {
+                            createMarkerOnPublicMap(locationName);
+                        }
+                    });
+                }
+
+            }.schedule(1000);
+            return;
+
+        }
+
+        MarkersUtils.createMarkerOnPublicMap(locationName);
     }
 
     public void setProfileSpecialties(final String specialtiesLabel) {

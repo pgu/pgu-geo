@@ -8,7 +8,11 @@ public class MenuPlayUtils {
 
     private static native void initProfileMovieIndex() /*-{
         $wnd.pgu_geo.profile_current_idx = -1
-        $wnd.pgu_geo.profile_info_window = new $wnd.google.maps.InfoWindow();
+
+        $wnd.console.log('initProfileMovieIndex');
+
+        var google = @pgu.client.app.utils.GoogleUtils::google()();
+        $wnd.pgu_geo.profile_info_window = new google.maps.InfoWindow();
     }-*/;
 
     public static native void initIndex(boolean isPastToPresent) /*-{
@@ -93,8 +97,10 @@ public class MenuPlayUtils {
         var item_config = @pgu.client.profile.ui.ProfileViewUtils::getItemConfig(I)(idx);
         var location_names = @pgu.client.app.utils.LocationsUtils::getLocationNames(Ljava/lang/String;)(item_config.id);
 
+        $wnd.console.log('showProfileItemOnMap');
+
         var
-            google = $wnd.google
+            google = @pgu.client.app.utils.GoogleUtils::google()()
           , map = @pgu.client.profile.ui.ProfileUtils::profileMap()()
         ;
 
