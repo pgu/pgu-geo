@@ -190,7 +190,7 @@ public class PublicViewImpl extends Composite implements PublicView {
 
     private native void setProfile(PublicViewImpl view, String profile) /*-{
 
-		var j_profile = JSON.parse(profile);
+	    var j_profile = JSON.parse(profile);
 
 		@pgu.client.pub.ui.PublicViewUtils::setProfileName(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 		@pgu.client.pub.ui.PublicViewUtils::setProfileHeadline(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
@@ -203,6 +203,8 @@ public class PublicViewImpl extends Composite implements PublicView {
 		@pgu.client.pub.ui.PublicViewUtils::setProfileSummary(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 
 		@pgu.client.pub.ui.PublicViewUtils::setProfilePublicUrl(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
+
+        @pgu.client.pub.ui.PublicViewUtils::setProfileItems(Lcom/google/gwt/core/client/JavaScriptObject;)(j_profile);
 
     }-*/;
 

@@ -51,4 +51,25 @@ public class PublicViewUtils {
         view.@pgu.client.pub.ui.PublicViewImpl::setProfilePublicUrl(Ljava/lang/String;)(public_url);
     }-*/;
 
+    public static native void setProfileItems(JavaScriptObject profile) /*-{
+        // education, experience
+        // profile.education?
+        // for each education in profile.education
+        // transform(education) -> item_config? profile_item?
+        // compute item_config.dates
+        // [].push(item_config)
+        //
+        // movie[educations] = []
+        // movie[all] = object.educations.concat(object.exp);
+        // sort all the arrays by dates
+
+        // at the end: movie[educations, experiences, all]
+        // default option: 'all'
+
+        //
+        // play: init what type to play: for each item of selected movie.ownProperty
+        // play them.
+
+    }-*/;
+
 }

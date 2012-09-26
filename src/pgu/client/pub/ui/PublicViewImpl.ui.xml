@@ -108,5 +108,8 @@
             </g:HTMLPanel>
         </b:Section>    
         
+        
+<!--         <b:Button ui:field="oauthLink" icon="LINKEDIN_SIGN" iconSize="LARGE" > Profile on linkedin » </b:Button> -->
+        
     </g:HTMLPanel>
 </ui:UiBinder> 

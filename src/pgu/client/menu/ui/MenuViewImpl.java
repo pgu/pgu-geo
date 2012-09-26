@@ -2,6 +2,7 @@ package pgu.client.menu.ui;
 
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.MarkersUtils;
+import pgu.client.app.utils.MovieUtils;
 import pgu.client.menu.MenuPresenter;
 import pgu.client.menu.MenuView;
 
@@ -182,20 +183,20 @@ public class MenuViewImpl extends Composite implements MenuView {
         isPausing = false;
 
         MarkersUtils.deleteMarkers();
-        MenuPlayUtils.initIndex(isPastToPresent);
+        MovieUtils.initIndex(isPastToPresent);
     }
 
     @UiHandler("stepBwdBtn")
     public void clickOnStepBwdBtn(final ClickEvent e) {
         clickOnPause();
-        MenuPlayUtils.decrementIndex(isPastToPresent);
+        MovieUtils.decrementIndex(isPastToPresent);
         showProfileItemOnMap();
     }
 
     @UiHandler("stepFwdBtn")
     public void clickOnStepFwdBtn(final ClickEvent e) {
         clickOnPause();
-        MenuPlayUtils.incrementIndex(isPastToPresent);
+        MovieUtils.incrementIndex(isPastToPresent);
         showProfileItemOnMap();
     }
 
@@ -225,7 +226,7 @@ public class MenuViewImpl extends Composite implements MenuView {
 
         if (!isPausing) {
             MarkersUtils.deleteMarkers();
-            MenuPlayUtils.initIndex(isPastToPresent);
+            MovieUtils.initIndex(isPastToPresent);
         }
 
         isPausing = false;
@@ -246,7 +247,7 @@ public class MenuViewImpl extends Composite implements MenuView {
 
         if (isPlayingProfile) {
 
-            MenuPlayUtils.incrementIndex(isPastToPresent);
+            MovieUtils.incrementIndex(isPastToPresent);
             final boolean isDone = showProfileItemOnMap();
 
             return !isDone;
@@ -256,15 +257,15 @@ public class MenuViewImpl extends Composite implements MenuView {
     }
 
     private boolean showProfileItemOnMap() {
-        final boolean isDone = MenuPlayUtils.showProfileItemOnMap(isPastToPresent);
+        final boolean isDone = MovieUtils.showProfileItemOnMap(isPastToPresent);
 
         if (isDone) {
             clickOnPause();
             isPausing = false;
         }
 
-        stepFwdBtn.setVisible(MenuPlayUtils.showFwdBtn(isPastToPresent));
-        stepBwdBtn.setVisible(MenuPlayUtils.showBwdBtn(isPastToPresent));
+        stepFwdBtn.setVisible(MovieUtils.showFwdBtn(isPastToPresent));
+        stepBwdBtn.setVisible(MovieUtils.showBwdBtn(isPastToPresent));
 
         return isDone;
     }
