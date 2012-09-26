@@ -58,21 +58,13 @@ public class ProfileViewUtils {
 
     }-*/;
 
-    public static boolean isEdu(final String itemType) {
-        return ItemType.education.equals(itemType);
-    }
-
-    public static boolean isXp(final String itemType) {
-        return ItemType.experience.equals(itemType);
-    }
-
     public static native String createTableHead(final String type) /*-{
 		var title = '';
 
-		if (@pgu.client.profile.ui.ProfileViewUtils::isEdu(Ljava/lang/String;)(type)) {
+		if (@pgu.client.app.utils.ProfileItemsUtils::isEdu(Ljava/lang/String;)(type)) {
 			title = 'Education';
 
-		} else if (@pgu.client.profile.ui.ProfileViewUtils::isXp(Ljava/lang/String;)(type)) {
+		} else if (@pgu.client.app.utils.ProfileItemsUtils::isXp(Ljava/lang/String;)(type)) {
 			title = 'Position';
 
 		}
@@ -101,40 +93,9 @@ public class ProfileViewUtils {
     }-*/;
 
     public static native String createTableRow(final String type, final JavaScriptObject item) /*-{
-		var item_config = {};
-		item_config.id = type + '_' + item.id;
-		item_config.locations = @pgu.client.profile.ui.ProfileViewUtils::createListLocations(Ljava/lang/String;)(item_config.id);
-		item_config.dates = @pgu.client.profile.ui.ProfileDateUtils::labelDates(Lcom/google/gwt/core/client/JavaScriptObject;)(item);
 
-		if (@pgu.client.profile.ui.ProfileViewUtils::isEdu(Ljava/lang/String;)(type)) {
-
-			item_config.short_content = @pgu.client.profile.ui.ProfileViewUtils::labelEduTitle(Lcom/google/gwt/core/client/JavaScriptObject;)(item);
-			item_config.content_title = "Education";
-			item_config.long_content = @pgu.client.app.utils.MarkdownUtils::markdown(Ljava/lang/String;)(item.notes);
-
-		} else if (@pgu.client.profile.ui.ProfileViewUtils::isXp(Ljava/lang/String;)(type)) {
-
-			item_config.short_content = @pgu.client.profile.ui.ProfileViewUtils::labelXpTitle(Lcom/google/gwt/core/client/JavaScriptObject;)(item);
-			item_config.content_title = "Experience";
-			item_config.long_content = @pgu.client.app.utils.MarkdownUtils::markdown(Ljava/lang/String;)(item.summary);
-
-		} else {
-
-			item_config.short_content = "";
-			item_config.content_title = "";
-			item_config.long_content = "";
-
-			@pgu.client.app.utils.ClientUtils::log(Ljava/lang/String;)("Unknown type " + type);
-		}
-
-		if (item.startDate //
-				&& item.startDate.year) {
-
-			var startDate = item.startDate;
-			var month = startDate.month || 1;
-
-			item_config.startD = new Date(startDate.year, month - 1, 1);
-		}
+		var item_config = @pgu.client.app.utils.ProfileItemsUtils::toProfileItem(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;)(type,item);
+		var item_locations = @pgu.client.profile.ui.ProfileViewUtils::createListLocations(Ljava/lang/String;)(item_config.id);
 
 		$wnd.pgu_geo.item_configs.push(item_config);
 
@@ -142,7 +103,7 @@ public class ProfileViewUtils {
 				+ '<tr>                                                                                '
 				+ '  <td>                                                                              '
 				+ '    <ul id="locations_' + item_config.id + '" class="nav nav-pills">                '
-				+ item_config.locations
+				+ item_locations
 				+ '    </ul>                                                                           '
 				+ '    <i class="icon-plus-sign icon-large add-location"                               '
 				+ '      onclick="javascript:pgu_geo.add_new_location(\'' + item_config.id + '\');"      '
@@ -164,37 +125,6 @@ public class ProfileViewUtils {
 				+ '   </td>                                                                            '
 				+ '</tr>                                                                               '
 				+ '';
-    }-*/;
-
-    public static native String labelXpTitle(JavaScriptObject position) /*-{
-		//  SFEIR<br/>Senior Web Java J2EE Engineer Developer
-		var title = [];
-
-		if (position.company && position.company.name) {
-
-			title.push(position.company.name);
-		}
-
-		if (position.title) {
-			title.push(position.title);
-		}
-
-		return title.join('<br/>');
-    }-*/;
-
-    public static native String labelEduTitle(JavaScriptObject education) /*-{
-		// Universität Rostock<br/>International Trade
-		var title = [];
-
-		if (education.schoolName) {
-			title.push(education.schoolName);
-		}
-
-		if (education.fieldOfStudy) {
-			title.push(education.fieldOfStudy);
-		}
-
-		return title.join('<br/>');
     }-*/;
 
     public static native String createListLocations(String item_config_id) /*-{

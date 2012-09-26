@@ -4,6 +4,20 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 public class ProfileDateUtils {
 
+    public static native JavaScriptObject getStartDate(JavaScriptObject item) /*-{
+
+        if (item.startDate //
+                && item.startDate.year) {
+
+            var startDate = item.startDate;
+            var month = startDate.month || 1;
+
+            return new Date(startDate.year, month - 1, 1);
+        }
+
+        return new Date();
+    }-*/;
+
     public static native String labelDates(JavaScriptObject item) /*-{
 
 		//  October 2011<br/>August 2011<br/>(3 months)
@@ -86,20 +100,20 @@ public class ProfileDateUtils {
     }-*/;
 
     public static final String[] months = { //
-                                        //
-            "January" //
-            , "February" //
-            , "March" //
-            , "April" //
-            , "May" //
-            , "June" //
-            , "July" //
-            , "August" //
-            , "September" //
-            , "October" //
-            , "November" //
-            , "December" //
-                                        };
+        //
+        "January" //
+        , "February" //
+        , "March" //
+        , "April" //
+        , "May" //
+        , "June" //
+        , "July" //
+        , "August" //
+        , "September" //
+        , "October" //
+        , "November" //
+        , "December" //
+    };
 
     public static String tslMonth(final int monthNb) {
         final Integer monthIdx = monthNb - 1;

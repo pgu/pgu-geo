@@ -9,7 +9,6 @@ import pgu.client.app.utils.MarkersUtils;
 import pgu.client.pub.PublicPresenter;
 import pgu.client.pub.PublicView;
 import pgu.shared.dto.PublicProfile;
-import pgu.shared.model.UserAndLocations;
 
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.NavLink;
@@ -176,14 +175,7 @@ public class PublicViewImpl extends Composite implements PublicView {
     @Override
     public void setProfile(final PublicProfile profile) {
 
-        final UserAndLocations ual = profile.getUserAndLocations();
-
-        if (ual == null) {
-            LocationsUtils.initCaches("", "");
-
-        } else {
-            LocationsUtils.initCaches(ual.getItems2locations(), ual.getReferentialLocations());
-        }
+        LocationsUtils.initCaches(profile.getUserAndLocations());
 
         setProfile(this, profile.getProfile());
     }

@@ -7,7 +7,6 @@ import pgu.client.app.utils.MarkdownUtils;
 import pgu.client.profile.ProfilePresenter;
 import pgu.client.profile.ProfileView;
 import pgu.shared.dto.Profile;
-import pgu.shared.model.UserAndLocations;
 import pgu.shared.utils.PublicProfileItem;
 
 import com.github.gwtbootstrap.client.ui.Button;
@@ -134,15 +133,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     @Override
     public void setProfile(final Profile profile) {
-        final UserAndLocations ual = profile.getUserAndLocations();
 
-        if (ual == null) {
-            LocationsUtils.initCaches("", "");
-
-        } else {
-            LocationsUtils.initCaches(ual.getItems2locations(), ual.getReferentialLocations());
-        }
-
+        LocationsUtils.initCaches(profile.getUserAndLocations());
         ProfileViewUtils.initCaches();
 
         setProfile(this, profile.getJson());

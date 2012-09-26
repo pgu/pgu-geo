@@ -1,8 +1,19 @@
 package pgu.client.app.utils;
 
+import pgu.shared.model.UserAndLocations;
+
 import com.google.gwt.core.client.JavaScriptObject;
 
 public class LocationsUtils {
+
+    public static void initCaches(final UserAndLocations ual) {
+        if (ual == null) {
+            LocationsUtils.initCaches("", "");
+
+        } else {
+            LocationsUtils.initCaches(ual.getItems2locations(), ual.getReferentialLocations());
+        }
+    }
 
     // item2locations: {"education,1":["Paris","Nantes"],"experience,1":["Madrid"]}
     //    referential: {"Paris":{"lat":1.2323,"lng":4.5555},"Nantes":{"lat":9.99,"lng":2.22}]
