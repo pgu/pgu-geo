@@ -1,6 +1,10 @@
 package pgu.client.pub.ui;
 
+import pgu.client.app.utils.ProfileItemsUtils;
+
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 
 public class PublicViewUtils {
 
@@ -51,25 +55,16 @@ public class PublicViewUtils {
         view.@pgu.client.pub.ui.PublicViewImpl::setProfilePublicUrl(Ljava/lang/String;)(public_url);
     }-*/;
 
-    public static native void setProfileItems(JavaScriptObject profile) /*-{
-        // education, experience
-        // profile.education?
-        // for each education in profile.education
-        // transform(education) -> item_config? profile_item?
-        // compute item_config.dates
-        // [].push(item_config)
-        //
-        // movie[educations] = []
-        // movie[all] = object.educations.concat(object.exp);
-        // sort all the arrays by dates
+    public static void setProfileItems(final JavaScriptObject profile) {
 
-        // at the end: movie[educations, experiences, all]
-        // default option: 'all'
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 
-        //
-        // play: init what type to play: for each item of selected movie.ownProperty
-        // play them.
+            @Override
+            public void execute() {
+                ProfileItemsUtils.setProfileItems(profile);
+            }
+        });
 
-    }-*/;
+    }
 
 }
