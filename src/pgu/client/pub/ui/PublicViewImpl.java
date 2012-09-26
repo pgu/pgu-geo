@@ -10,6 +10,7 @@ import pgu.client.pub.PublicView;
 import pgu.shared.dto.PublicProfile;
 import pgu.shared.model.UserAndLocations;
 
+import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.Section;
 import com.google.gwt.core.client.GWT;
@@ -17,6 +18,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
@@ -36,11 +38,20 @@ public class PublicViewImpl extends Composite implements PublicView {
     @UiField
     NavLink                   locContainer;
     @UiField
-    HTMLPanel                 lgContainer, spContainer //
+    HTML                      summaryContainer;
+
+    @UiField
+    HTMLPanel                //
+    lgContainer, spContainer //
     , pgu_geo_public_summary_container //
     ;
+
     @UiField
-    HTML                      summaryContainer;
+    Button                   //
+    past2prstBtn, prst2pastBtn //
+    , stepBwdBtn, stepFwdBtn //
+    , stopBtn, playBtn, pauseBtn //
+    ;
 
     private PublicPresenter   presenter;
     private final ClientUtils u = new ClientUtils();
@@ -59,6 +70,25 @@ public class PublicViewImpl extends Composite implements PublicView {
     public void setPresenter(final PublicPresenter presenter) {
         this.presenter = presenter;
     }
+
+    @UiHandler("playBtn")
+    public void clickOnPlay(final ClickEvent e) {
+        hideSummary();
+    }
+
+    @UiHandler("stopBtn")
+    public void clickOnStop(final ClickEvent e) {
+        showSummary();
+    }
+
+    private native void showSummary() /*-{
+        $wnd.$('#pgu_geo_public_summary_container').collapse('show');
+    }-*/;
+
+    private native void hideSummary() /*-{
+        $wnd.$('#pgu_geo_public_summary_container').collapse('hide');
+    }-*/;
+
 
     public void setProfileName(final String firstName, final String lastName) {
         presenter.setProfileName(firstName + " " + lastName);
