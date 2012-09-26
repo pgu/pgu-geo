@@ -36,7 +36,9 @@ public class PublicViewImpl extends Composite implements PublicView {
     @UiField
     NavLink                   locContainer;
     @UiField
-    HTMLPanel                 lgContainer, spContainer;
+    HTMLPanel                 lgContainer, spContainer //
+    , pgu_geo_public_summary_container //
+    ;
     @UiField
     HTML                      summaryContainer;
 
@@ -48,6 +50,9 @@ public class PublicViewImpl extends Composite implements PublicView {
         profileSection = new Section("public:profile");
 
         initWidget(uiBinder.createAndBindUi(this));
+
+        pgu_geo_public_summary_container.getElement().setId("pgu_geo_public_summary_container");
+
     }
 
     @Override
@@ -134,7 +139,7 @@ public class PublicViewImpl extends Composite implements PublicView {
 
 		@pgu.client.pub.ui.PublicViewUtils::setProfileSummary(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 
-        @pgu.client.pub.ui.PublicViewUtils::setProfilePublicUrl(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
+		@pgu.client.pub.ui.PublicViewUtils::setProfilePublicUrl(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 
     }-*/;
 

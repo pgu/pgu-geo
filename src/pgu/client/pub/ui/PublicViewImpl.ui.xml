@@ -75,26 +75,35 @@
                 <div class="span3">
                 </div>
             </g:HTMLPanel>
+            <!-- summary item -->
+            <g:HTMLPanel ui:field="pgu_geo_public_summary_container" addStyleNames="collapse in">
+                <g:HTMLPanel addStyleNames="row-fluid {style.description_item}">
+                    <div class="span4">
+                        <h6>Location</h6>
+                        <b:NavPills>
+                            <b:NavLink ui:field="locContainer" addStyleNames="{style.location}"></b:NavLink>
+                        </b:NavPills>
+                    </div>
+                    <div class="span4">
+                        <h6>Specialties</h6>
+                        <g:HTMLPanel ui:field="spContainer" />
+                    </div>
+                    <div class="span4">
+                        <h6>Languages</h6>
+                        <g:HTMLPanel ui:field="lgContainer" />
+                    </div>
+                </g:HTMLPanel>
+                <g:HTMLPanel addStyleNames="row-fluid {style.description_item}">
+                    <div class="span12">
+                        <g:HTML ui:field="summaryContainer" />
+                    </div>
+                </g:HTMLPanel>
+            </g:HTMLPanel>
+            
             <!-- description item -->
             <g:HTMLPanel addStyleNames="row-fluid {style.description_item}">
-                <div class="span4">
-                    <h6>Location</h6>
-                    <b:NavPills>
-                        <b:NavLink ui:field="locContainer" addStyleNames="{style.location}"></b:NavLink>
-                    </b:NavPills>
-                </div>
-                <div class="span4">
-                    <h6>Specialties</h6>
-                    <g:HTMLPanel ui:field="spContainer" />
-                </div>
-                <div class="span4">
-                    <h6>Languages</h6>
-                    <g:HTMLPanel ui:field="lgContainer" />
-                </div>
-            </g:HTMLPanel>
-            <g:HTMLPanel addStyleNames="row-fluid {style.description_item}">
                 <div class="span12">
-                    <g:HTML ui:field="summaryContainer" />
+                    <g:HTML ui:field="itemDescriptionContainer" />
                 </div>
             </g:HTMLPanel>
         </b:Section>    
