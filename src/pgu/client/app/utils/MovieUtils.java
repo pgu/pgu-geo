@@ -107,6 +107,7 @@ public class MovieUtils {
         var marker;
         if (location_names.length === 0) {
             marker = @pgu.client.app.utils.MarkersUtils::createMarkerOnProfileMap(Ljava/lang/String;)('0, 0 (Unknown)');
+            // TODO PGU change the strategy to 'if no locations, skip it and goes to next token'
 
         } else {
             var location_name = location_names[0];

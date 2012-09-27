@@ -184,6 +184,7 @@ public class MenuViewImpl extends Composite implements MenuView {
 
         MarkersUtils.deleteMarkers();
         MovieUtils.initIndex(isPastToPresent);
+        // TODO PGU Sep 27, 2012 show user's current location
     }
 
     @UiHandler("stepBwdBtn")
