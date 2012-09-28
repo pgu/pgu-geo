@@ -5,21 +5,21 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
-public class PlayEvent extends GwtEvent<PlayEvent.Handler> {
+public class FwdEvent extends GwtEvent<FwdEvent.Handler> {
 
-    public interface HasPlayHandlers extends HasHandlers {
-        HandlerRegistration addPlayHandler(PlayEvent.Handler handler);
+    public interface HasFwdHandlers extends HasHandlers {
+        HandlerRegistration addFwdHandler(FwdEvent.Handler handler);
     }
 
     public interface Handler extends EventHandler {
-        void onPlay(PlayEvent event);
+        void onFwd(FwdEvent event);
     }
 
     public static final Type<Handler> TYPE = new Type<Handler>();
 
     private final int token;
 
-    public PlayEvent(final int token) {
+    public FwdEvent(final int token) {
         this.token = token;
     }
 
@@ -34,7 +34,7 @@ public class PlayEvent extends GwtEvent<PlayEvent.Handler> {
 
     @Override
     protected void dispatch(final Handler handler) {
-        handler.onPlay(this);
+        handler.onFwd(this);
     }
 
 }

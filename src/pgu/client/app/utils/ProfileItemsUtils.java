@@ -26,24 +26,40 @@ public class ProfileItemsUtils {
         @pgu.client.app.utils.ProfileItemsUtils::toProfileItems(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;)( //
         education, profile.educations);
 
-        profile_items['all'] = [];
-
+        // check if profile has several sections
+        var nb_sections = 0;
         for (var key in profile_items) {
 
             if ('__gwt_ObjectId' === key) {
                 continue;
             }
-            if ('all' === key) {
-                continue;
-            }
 
             if (profile_items.hasOwnProperty(key)) {
-                profile_items['all'] = profile_items['all'].concat(profile_items[key]);
+                nb_sections++;
+            }
+
+            if (nb_sections == 2) {
+                break;
             }
         }
 
-        var all_items = profile_items['all']; // we sort 'all' items only as the others already have an order from linkedin
-        @pgu.client.app.utils.ProfileItemsUtils::sortProfileItemsByDate(Lcom/google/gwt/core/client/JavaScriptObject;)(all_items);
+        if (nb_sections == 2) {
+
+            var all_items = [];
+            for (var key in profile_items) {
+
+                if ('__gwt_ObjectId' === key) {
+                    continue;
+                }
+
+                if (profile_items.hasOwnProperty(key)) {
+                    all_items = all_items.concat(profile_items[key]);
+                }
+            }
+
+            profile_items['all'] = all_items; // we sort 'all' items only as the others already have an order from linkedin
+            @pgu.client.app.utils.ProfileItemsUtils::sortProfileItemsByDate(Lcom/google/gwt/core/client/JavaScriptObject;)(all_items);
+        }
 
     }-*/;
 
@@ -142,6 +158,31 @@ public class ProfileItemsUtils {
         }
 
         return profile_item;
+    }-*/;
+
+    public static native boolean hasAllOption() /*-{
+        return $wnd.pgu_geo.profile_items.hasOwnProperty('all');
+    }-*/;
+
+    public static native boolean hasExperienceOption() /*-{
+        return $wnd.pgu_geo.profile_items.hasOwnProperty(@pgu.shared.utils.ItemType::experience);
+    }-*/;
+
+    public static native boolean hasEducationOption() /*-{
+        return $wnd.pgu_geo.profile_items.hasOwnProperty(@pgu.shared.utils.ItemType::education);
+    }-*/;
+
+    public static native void setSelectedProfileItems(final String selectedItemType) /*-{
+        $wnd.pgu_geo.selected_profile_items = $wnd.pgu_geo.profile_items[selectedItemType];
+    }-*/;
+
+    public static native int nbSelectedItems() /*-{
+
+        if ($wnd.pgu_geo.selected_profile_items) {
+            return $wnd.pgu_geo.selected_profile_items.length;
+        }
+
+        return 0;
     }-*/;
 
 }

@@ -55,13 +55,14 @@ public class PublicViewUtils {
         view.@pgu.client.pub.ui.PublicViewImpl::setProfilePublicUrl(Ljava/lang/String;)(public_url);
     }-*/;
 
-    public static void setProfileItems(final JavaScriptObject profile) {
+    public static void setProfileItems(final PublicViewImpl view, final JavaScriptObject profile) {
 
         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 
             @Override
             public void execute() {
                 ProfileItemsUtils.setProfileItems(profile);
+                view.addProfileItemsToPlayToolbar();
             }
         });
 

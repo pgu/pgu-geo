@@ -3,13 +3,21 @@ package pgu.client.components.playtoolbar;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import pgu.client.app.utils.ProfileItemsUtils;
+import pgu.client.components.playtoolbar.event.BwdEvent;
+import pgu.client.components.playtoolbar.event.FwdEvent;
+import pgu.client.components.playtoolbar.event.PauseEvent;
 import pgu.client.components.playtoolbar.event.PlayEvent;
 import pgu.client.components.playtoolbar.event.PlayEvent.HasPlayHandlers;
 import pgu.client.components.playtoolbar.event.StopEvent;
 import pgu.client.components.playtoolbar.event.StopEvent.HasStopHandlers;
+import pgu.shared.utils.ItemType;
 
 import com.github.gwtbootstrap.client.ui.Button;
+import com.github.gwtbootstrap.client.ui.ListBox;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -26,32 +34,49 @@ public class PlayToolbar extends Composite implements HasPlayHandlers, HasStopHa
     }
 
     @UiField
-    Button               //
+    ListBox                         items;
+
+    @UiField
+    Button                         //
     past2prstBtn,
     prst2pastBtn //
     , bwdBtn, fwdBtn //
     , stopBtn, playBtn, pauseBtn //
     ;
 
-    private boolean isPast2Prst = true;
-    private int token = 0;
-    private boolean isPlaying = false;
+    private boolean                 isPast2Prst = true;
+    private int                     token       = 0;
+    private boolean                 isPlaying   = false;
 
     private final ArrayList<Widget> allControls = new ArrayList<Widget>();
 
     public PlayToolbar() {
         initWidget(uiBinder.createAndBindUi(this));
 
+        items.addChangeHandler(new ChangeHandler() {
+
+            @Override
+            public void onChange(final ChangeEvent event) {
+                final String selectedItemType = items.getValue(items.getSelectedIndex());
+                setSelectedProfileItems(selectedItemType);
+
+                stop();
+            }
+        });
+
         allControls.add(bwdBtn);
         allControls.add(stopBtn);
         allControls.add(playBtn);
         allControls.add(pauseBtn);
         allControls.add(fwdBtn);
+
+        stop();
+
+        setVisible(false);
     }
 
     private int nbItems() {
-        // TODO PGU Sep 28, 2012
-        return 5;
+        return ProfileItemsUtils.nbSelectedItems();
     }
 
     private void initToken() {
@@ -103,13 +128,13 @@ public class PlayToolbar extends Composite implements HasPlayHandlers, HasStopHa
 
         visibles(playBtn, fwdBtn);
 
-        //        currents.add(summary);
-        //        currents.add(userGeo);
+        // currents.add(summary);
+        // currents.add(userGeo);
 
         initToken();
     }
 
-    private void visibles(final Widget...widgets) {
+    private void visibles(final Widget... widgets) {
         visibles(new ArrayList<Widget>(Arrays.asList(widgets)));
     }
 
@@ -177,23 +202,61 @@ public class PlayToolbar extends Composite implements HasPlayHandlers, HasStopHa
             visibles.add(fwdBtn);
         }
 
-        //        final String location = locations[token];
-        //        currents.add(loc2desc.get(location));
-        //        currents.add(loc2geo.get(location));
+        // final String location = locations[token];
+        // currents.add(loc2desc.get(location));
+        // currents.add(loc2geo.get(location));
 
         visibles(visibles);
     }
 
+    private void pause() {
+        pauseBtn.setVisible(false);
+        playBtn.setVisible(true);
+
+        // TODO PGU Sep 28, 2012 cancel timer
+    }
+
+    private void bwd() {
+        play(false);
+    }
+
+    private void fwd() {
+        play(true);
+    }
+
     @UiHandler("playBtn")
     public void clickOnPlay(final ClickEvent e) {
-        fireEvent(new PlayEvent());
-
         play();
+
+        fireEvent(new PlayEvent(token));
     }
 
     @UiHandler("stopBtn")
     public void clickOnStop(final ClickEvent e) {
+        stop();
+
         fireEvent(new StopEvent());
+    }
+
+    @UiHandler("pauseBtn")
+    public void clickOnPause(final ClickEvent e) {
+        pause();
+
+        fireEvent(new PauseEvent());
+    }
+
+    @UiHandler("fwdBtn")
+    public void clickOnFwd(final ClickEvent e) {
+        fwd();
+
+        fireEvent(new FwdEvent(token));
+    }
+
+    @UiHandler("bwdBtn")
+    public void clickOnBwd(final ClickEvent e) {
+        bwd();
+
+        fireEvent(new BwdEvent(token));
     }
 
     @Override
@@ -204,6 +267,31 @@ public class PlayToolbar extends Composite implements HasPlayHandlers, HasStopHa
     @Override
     public HandlerRegistration addPlayHandler(final PlayEvent.Handler handler) {
         return addHandler(handler, PlayEvent.TYPE);
+    }
+
+    public void addProfileItems() {
+
+        if (ProfileItemsUtils.hasAllOption()) {
+            items.addItem("All", "all");
+        }
+        if (ProfileItemsUtils.hasExperienceOption()) {
+            items.addItem("Experience", ItemType.experience);
+        }
+        if (ProfileItemsUtils.hasEducationOption()) {
+            items.addItem("Education", ItemType.education);
+        }
+
+        if (items.getItemCount() > 0) {
+            items.setSelectedIndex(0);
+            setVisible(true);
+
+            final String selectedItemType = items.getValue(items.getSelectedIndex());
+            setSelectedProfileItems(selectedItemType);
+        }
+    }
+
+    private void setSelectedProfileItems(final String selectedItemType) {
+        ProfileItemsUtils.setSelectedProfileItems(selectedItemType);
     }
 
 }

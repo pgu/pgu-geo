@@ -11,7 +11,7 @@
 
     <g:HTMLPanel addStyleNames="row-fluid {style.play_bar}">
         <div class="span3">
-            <!-- listbox -->
+            <b:ListBox ui:field="items" />
         </div>
         <div class="span3">
             <b:ButtonGroup toggle="radio">
