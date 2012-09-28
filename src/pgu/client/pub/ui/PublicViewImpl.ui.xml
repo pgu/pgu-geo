@@ -65,11 +65,11 @@
                 </div>
                 <div class="span3">
                     <b:ButtonGroup>
-                        <b:Button ui:field="stepBwdBtn" icon="STEP_BACKWARD" iconSize="LARGE" />
+                        <b:Button ui:field="bwdBtn" icon="STEP_BACKWARD" iconSize="LARGE" />
                         <b:Button ui:field="stopBtn" icon="STOP" iconSize="LARGE" />
                         <b:Button ui:field="playBtn" icon="PLAY" iconSize="LARGE" />
                         <b:Button ui:field="pauseBtn" icon="PAUSE" iconSize="LARGE" />
-                        <b:Button ui:field="stepFwdBtn" icon="STEP_FORWARD" iconSize="LARGE" />
+                        <b:Button ui:field="fwdBtn" icon="STEP_FORWARD" iconSize="LARGE" />
                     </b:ButtonGroup>
                 </div>
                 <div class="span3">

@@ -53,7 +53,7 @@ public class PublicViewImpl extends Composite implements PublicView {
     @UiField
     Button                   //
     past2prstBtn, prst2pastBtn //
-    , stepBwdBtn, stepFwdBtn //
+    , bwdBtn, fwdBtn //
     , stopBtn, playBtn, pauseBtn //
     ;
 
