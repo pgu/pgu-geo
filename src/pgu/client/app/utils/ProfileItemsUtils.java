@@ -185,4 +185,34 @@ public class ProfileItemsUtils {
         return 0;
     }-*/;
 
+    public static native void showProfileItem(final int token, final JavaScriptObject map) /*-{
+
+        if (!$wnd.pgu_geo.selected_profile_items) {
+            return;
+        }
+
+        $wnd.console.log('showProfileItem');
+
+        var
+            selected_profile_items = $wnd.pgu_geo.selected_profile_items
+          , profile_item = selected_profile_items[token]
+          , location_names = @pgu.client.app.utils.LocationsUtils::getLocationNames(Ljava/lang/String;)(profile_item.id)
+        ;
+
+        for ( var i = 0, len = location_names.length; i < len; i++) {
+            var location_name = location_names[i];
+            @pgu.client.app.utils.MarkersUtils::createMarkerOnProfileMap(Ljava/lang/String;)(location_name);
+        }
+
+    }-*/;
+
+    public static native String getSelectedProfileItemDescription(int token) /*-{
+        var
+            selected_profile_items = $wnd.pgu_geo.selected_profile_items
+          , profile_item = selected_profile_items[token]
+        ;
+
+        return profile_item.short_content + "<br/><br/>" + profile_item.long_content;
+    }-*/;
+
 }

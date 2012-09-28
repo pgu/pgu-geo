@@ -77,9 +77,9 @@
             </g:HTMLPanel>
             
             <!-- description item -->
-            <g:HTMLPanel addStyleNames="row-fluid {style.description_item}">
+            <g:HTMLPanel ui:field="profileItemPanel" addStyleNames="row-fluid {style.description_item}">
                 <div class="span12">
-                    <g:HTML ui:field="itemDescriptionContainer" />
+                    <g:HTML ui:field="profileItemDescription" />
                 </div>
             </g:HTMLPanel>
         </b:Section>    

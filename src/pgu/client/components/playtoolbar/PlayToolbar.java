@@ -8,25 +8,32 @@ import pgu.client.components.playtoolbar.event.BwdEvent;
 import pgu.client.components.playtoolbar.event.FwdEvent;
 import pgu.client.components.playtoolbar.event.PauseEvent;
 import pgu.client.components.playtoolbar.event.PlayEvent;
-import pgu.client.components.playtoolbar.event.PlayEvent.HasPlayHandlers;
 import pgu.client.components.playtoolbar.event.StopEvent;
-import pgu.client.components.playtoolbar.event.StopEvent.HasStopHandlers;
 import pgu.shared.utils.ItemType;
 
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.ListBox;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
-public class PlayToolbar extends Composite implements HasPlayHandlers, HasStopHandlers {
+public class PlayToolbar extends Composite implements
+BwdEvent.HasBwdHandlers //
+, PauseEvent.HasPauseHandlers //
+, StopEvent.HasStopHandlers //
+, PlayEvent.HasPlayHandlers //
+, FwdEvent.HasFwdHandlers //
+{
 
     private static PlayToolbarUiBinder uiBinder = GWT.create(PlayToolbarUiBinder.class);
 
@@ -60,7 +67,7 @@ public class PlayToolbar extends Composite implements HasPlayHandlers, HasStopHa
                 final String selectedItemType = items.getValue(items.getSelectedIndex());
                 setSelectedProfileItems(selectedItemType);
 
-                stop();
+                clickOnStop(null);
             }
         });
 
@@ -212,8 +219,6 @@ public class PlayToolbar extends Composite implements HasPlayHandlers, HasStopHa
     private void pause() {
         pauseBtn.setVisible(false);
         playBtn.setVisible(true);
-
-        // TODO PGU Sep 28, 2012 cancel timer
     }
 
     private void bwd() {
@@ -224,22 +229,60 @@ public class PlayToolbar extends Composite implements HasPlayHandlers, HasStopHa
         play(true);
     }
 
+    private Timer playTimer = null;
+
     @UiHandler("playBtn")
     public void clickOnPlay(final ClickEvent e) {
         play();
 
         fireEvent(new PlayEvent(token));
+
+        ////
+        resetPlayTimer();
+
+    }
+
+    private void resetPlayTimer() {
+        stopPlayTimer();
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+
+            @Override
+            public void execute() {
+                playTimer = new Timer() {
+
+                    @Override
+                    public void run() {
+                        clickOnPlay(null);
+                    }
+                };
+                playTimer.schedule(5000);
+
+            }
+        });
     }
 
     @UiHandler("stopBtn")
     public void clickOnStop(final ClickEvent e) {
+
+        stopPlayTimer();
+
         stop();
 
         fireEvent(new StopEvent());
     }
 
+    private void stopPlayTimer() {
+        if (playTimer != null) {
+            playTimer.cancel();
+            playTimer = null;
+        }
+    }
+
     @UiHandler("pauseBtn")
     public void clickOnPause(final ClickEvent e) {
+
+        stopPlayTimer();
+
         pause();
 
         fireEvent(new PauseEvent());
@@ -250,6 +293,8 @@ public class PlayToolbar extends Composite implements HasPlayHandlers, HasStopHa
         fwd();
 
         fireEvent(new FwdEvent(token));
+
+        resetPlayTimer();
     }
 
     @UiHandler("bwdBtn")
@@ -257,6 +302,8 @@ public class PlayToolbar extends Composite implements HasPlayHandlers, HasStopHa
         bwd();
 
         fireEvent(new BwdEvent(token));
+
+        resetPlayTimer();
     }
 
     @Override
@@ -267,6 +314,21 @@ public class PlayToolbar extends Composite implements HasPlayHandlers, HasStopHa
     @Override
     public HandlerRegistration addPlayHandler(final PlayEvent.Handler handler) {
         return addHandler(handler, PlayEvent.TYPE);
+    }
+
+    @Override
+    public HandlerRegistration addFwdHandler(final FwdEvent.Handler handler) {
+        return addHandler(handler, FwdEvent.TYPE);
+    }
+
+    @Override
+    public HandlerRegistration addPauseHandler(final PauseEvent.Handler handler) {
+        return addHandler(handler, PauseEvent.TYPE);
+    }
+
+    @Override
+    public HandlerRegistration addBwdHandler(final BwdEvent.Handler handler) {
+        return addHandler(handler, BwdEvent.TYPE);
     }
 
     public void addProfileItems() {

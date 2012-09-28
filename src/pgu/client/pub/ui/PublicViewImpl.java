@@ -6,7 +6,11 @@ import pgu.client.app.utils.LanguagesUtils;
 import pgu.client.app.utils.LocationsUtils;
 import pgu.client.app.utils.MarkdownUtils;
 import pgu.client.app.utils.MarkersUtils;
+import pgu.client.app.utils.ProfileItemsUtils;
 import pgu.client.components.playtoolbar.PlayToolbar;
+import pgu.client.components.playtoolbar.event.BwdEvent;
+import pgu.client.components.playtoolbar.event.FwdEvent;
+import pgu.client.components.playtoolbar.event.PauseEvent;
 import pgu.client.components.playtoolbar.event.PlayEvent;
 import pgu.client.components.playtoolbar.event.StopEvent;
 import pgu.client.pub.PublicPresenter;
@@ -43,11 +47,11 @@ public class PublicViewImpl extends Composite implements PublicView {
     @UiField
     NavLink                   locContainer;
     @UiField
-    HTML                      summaryContainer;
+    HTML                      summaryContainer, profileItemDescription;
     @UiField
     PlayToolbar               playToolbar;
     @UiField
-    HTMLPanel                 lgContainer, spContainer, summaryPanel;
+    HTMLPanel                 lgContainer, spContainer, summaryPanel, profileItemPanel;
 
     private PublicPresenter   presenter;
     private final ClientUtils u = new ClientUtils();
@@ -64,18 +68,82 @@ public class PublicViewImpl extends Composite implements PublicView {
 
             @Override
             public void onPlay(final PlayEvent event) {
-                hideSummary();
+                showProfileItem(event.getToken());
             }
+
         });
 
         playToolbar.addStopHandler(new StopEvent.Handler() {
 
             @Override
             public void onStop(final StopEvent event) {
-                showSummary();
+                hideProfileItem();
             }
+
+        });
+        playToolbar.addPauseHandler(new PauseEvent.Handler() {
+
+            @Override
+            public void onPause(final PauseEvent event) {
+                // nothing to do
+            }
+
+        });
+        playToolbar.addBwdHandler(new BwdEvent.Handler() {
+
+            @Override
+            public void onBwd(final BwdEvent event) {
+                showProfileItem(event.getToken());
+            }
+
+        });
+        playToolbar.addFwdHandler(new FwdEvent.Handler() {
+
+            @Override
+            public void onFwd(final FwdEvent event) {
+                showProfileItem(event.getToken());
+            }
+
         });
 
+    }
+
+    private void hideProfileItem() {
+        hideProfileItemArea();
+
+        MarkersUtils.deleteMarkers();
+    }
+
+    private void showProfileItem(final int token) {
+        showProfileItemArea();
+
+        showProfileItemContent(token);
+
+        ProfileItemsUtils.showProfileItem(token, PublicUtils.publicProfileMap());
+    }
+
+    private void showProfileItemContent(final int token) {
+
+        final String description = ProfileItemsUtils.getSelectedProfileItemDescription(token);
+        profileItemDescription.setHTML(description);
+    }
+
+    private void hideProfileItemArea() {
+        if (!profileItemPanel.isVisible()) {
+            return;
+        }
+
+        profileItemPanel.setVisible(false);
+        showSummary();
+    }
+
+    private void showProfileItemArea() {
+        if (profileItemPanel.isVisible()) {
+            return;
+        }
+
+        hideSummary();
+        profileItemPanel.setVisible(true);
     }
 
     @Override
