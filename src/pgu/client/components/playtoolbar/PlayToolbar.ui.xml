@@ -1,0 +1,36 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" 
+            xmlns:g="urn:import:com.google.gwt.user.client.ui"
+            xmlns:b="urn:import:com.github.gwtbootstrap.client.ui" >
+
+    <ui:style>
+        .play_bar {
+            padding-top: 15px;
+        }
+    </ui:style>
+
+    <g:HTMLPanel addStyleNames="row-fluid {style.play_bar}">
+        <div class="span3">
+            <!-- listbox -->
+        </div>
+        <div class="span3">
+            <b:ButtonGroup toggle="radio">
+                <b:Button ui:field="past2prstBtn" icon="CIRCLE_ARROW_RIGHT" iconSize="LARGE" />
+                <b:Button ui:field="prst2pastBtn" icon="CIRCLE_ARROW_LEFT" iconSize="LARGE" />
+            </b:ButtonGroup>
+            <g:Label>From past to present</g:Label>
+        </div>
+        <div class="span3">
+            <b:ButtonGroup>
+                <b:Button ui:field="bwdBtn" icon="STEP_BACKWARD" iconSize="LARGE" />
+                <b:Button ui:field="stopBtn" icon="STOP" iconSize="LARGE" />
+                <b:Button ui:field="playBtn" icon="PLAY" iconSize="LARGE" />
+                <b:Button ui:field="pauseBtn" icon="PAUSE" iconSize="LARGE" />
+                <b:Button ui:field="fwdBtn" icon="STEP_FORWARD" iconSize="LARGE" />
+            </b:ButtonGroup>
+        </div>
+        <div class="span3">
+        </div>
+    </g:HTMLPanel>
+    
+</ui:UiBinder> 

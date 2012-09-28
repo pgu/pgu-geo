@@ -6,11 +6,13 @@ import pgu.client.app.utils.LanguagesUtils;
 import pgu.client.app.utils.LocationsUtils;
 import pgu.client.app.utils.MarkdownUtils;
 import pgu.client.app.utils.MarkersUtils;
+import pgu.client.components.playtoolbar.PlayToolbar;
+import pgu.client.components.playtoolbar.event.PlayEvent;
+import pgu.client.components.playtoolbar.event.StopEvent;
 import pgu.client.pub.PublicPresenter;
 import pgu.client.pub.PublicView;
 import pgu.shared.dto.PublicProfile;
 
-import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.Section;
 import com.google.gwt.core.client.GWT;
@@ -20,7 +22,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
@@ -43,19 +44,10 @@ public class PublicViewImpl extends Composite implements PublicView {
     NavLink                   locContainer;
     @UiField
     HTML                      summaryContainer;
-
     @UiField
-    HTMLPanel                //
-    lgContainer, spContainer //
-    , summaryPanel //
-    ;
-
+    PlayToolbar               playToolbar;
     @UiField
-    Button                   //
-    past2prstBtn, prst2pastBtn //
-    , bwdBtn, fwdBtn //
-    , stopBtn, playBtn, pauseBtn //
-    ;
+    HTMLPanel                 lgContainer, spContainer, summaryPanel;
 
     private PublicPresenter   presenter;
     private final ClientUtils u = new ClientUtils();
@@ -68,6 +60,22 @@ public class PublicViewImpl extends Composite implements PublicView {
 
         summaryPanel.getElement().setId("pgu_geo_public_summary_container");
 
+        playToolbar.addPlayHandler(new PlayEvent.Handler() {
+
+            @Override
+            public void onPlay(final PlayEvent event) {
+                hideSummary();
+            }
+        });
+
+        playToolbar.addStopHandler(new StopEvent.Handler() {
+
+            @Override
+            public void onStop(final StopEvent event) {
+                showSummary();
+            }
+        });
+
     }
 
     @Override
@@ -75,24 +83,13 @@ public class PublicViewImpl extends Composite implements PublicView {
         this.presenter = presenter;
     }
 
-    @UiHandler("playBtn")
-    public void clickOnPlay(final ClickEvent e) {
-        hideSummary();
-    }
-
-    @UiHandler("stopBtn")
-    public void clickOnStop(final ClickEvent e) {
-        showSummary();
-    }
-
     private native void showSummary() /*-{
-        $wnd.$('#pgu_geo_public_summary_container').collapse('show');
+		$wnd.$('#pgu_geo_public_summary_container').collapse('show');
     }-*/;
 
     private native void hideSummary() /*-{
-        $wnd.$('#pgu_geo_public_summary_container').collapse('hide');
+		$wnd.$('#pgu_geo_public_summary_container').collapse('hide');
     }-*/;
-
 
     public void setProfileName(final String firstName, final String lastName) {
         presenter.setProfileName(firstName + " " + lastName);
@@ -182,7 +179,7 @@ public class PublicViewImpl extends Composite implements PublicView {
 
     private native void setProfile(PublicViewImpl view, String profile) /*-{
 
-	    var j_profile = JSON.parse(profile);
+		var j_profile = JSON.parse(profile);
 
 		@pgu.client.pub.ui.PublicViewUtils::setProfileName(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 		@pgu.client.pub.ui.PublicViewUtils::setProfileHeadline(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
@@ -196,7 +193,7 @@ public class PublicViewImpl extends Composite implements PublicView {
 
 		@pgu.client.pub.ui.PublicViewUtils::setProfilePublicUrl(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 
-        @pgu.client.pub.ui.PublicViewUtils::setProfileItems(Lcom/google/gwt/core/client/JavaScriptObject;)(j_profile);
+		@pgu.client.pub.ui.PublicViewUtils::setProfileItems(Lcom/google/gwt/core/client/JavaScriptObject;)(j_profile);
 
     }-*/;
 
