@@ -76,7 +76,7 @@
                 </div>
             </g:HTMLPanel>
             <!-- summary item -->
-            <g:HTMLPanel ui:field="pgu_geo_public_summary_container" addStyleNames="collapse in">
+            <g:HTMLPanel ui:field="summaryPanel" addStyleNames="collapse in">
                 <g:HTMLPanel addStyleNames="row-fluid {style.description_item}">
                     <div class="span4">
                         <h6>Location</h6>

@@ -47,7 +47,7 @@ public class PublicViewImpl extends Composite implements PublicView {
     @UiField
     HTMLPanel                //
     lgContainer, spContainer //
-    , pgu_geo_public_summary_container //
+    , summaryPanel //
     ;
 
     @UiField
@@ -66,7 +66,7 @@ public class PublicViewImpl extends Composite implements PublicView {
 
         initWidget(uiBinder.createAndBindUi(this));
 
-        pgu_geo_public_summary_container.getElement().setId("pgu_geo_public_summary_container");
+        summaryPanel.getElement().setId("pgu_geo_public_summary_container");
 
     }
 
