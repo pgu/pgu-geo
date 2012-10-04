@@ -185,7 +185,7 @@ public class ProfileItemsUtils {
         return 0;
     }-*/;
 
-    public static native void showProfileItem(final int token, final JavaScriptObject map) /*-{
+    public static native void showProfileItemLocations(final int token, final JavaScriptObject map) /*-{
 
         if (!$wnd.pgu_geo.selected_profile_items) {
             return;

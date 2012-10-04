@@ -106,6 +106,7 @@ public class PublicViewImpl extends Composite implements PublicView {
 
         });
 
+        profileItemPanel.setVisible(false);
     }
 
     private void hideProfileItem() {
@@ -117,12 +118,12 @@ public class PublicViewImpl extends Composite implements PublicView {
     private void showProfileItem(final int token) {
         showProfileItemArea();
 
-        showProfileItemContent(token);
+        fillProfileItemContent(token);
 
-        ProfileItemsUtils.showProfileItem(token, PublicUtils.publicProfileMap());
+        ProfileItemsUtils.showProfileItemLocations(token, PublicUtils.publicProfileMap());
     }
 
-    private void showProfileItemContent(final int token) {
+    private void fillProfileItemContent(final int token) {
 
         final String description = ProfileItemsUtils.getSelectedProfileItemDescription(token);
         profileItemDescription.setHTML(description);
@@ -138,9 +139,16 @@ public class PublicViewImpl extends Composite implements PublicView {
     }
 
     private void showProfileItemArea() {
+
+        GWT.log("----------show profile item area");
+
+        GWT.log("item panel " + profileItemPanel.isVisible());
+
         if (profileItemPanel.isVisible()) {
             return;
         }
+
+        GWT.log("hide summary ");
 
         hideSummary();
         profileItemPanel.setVisible(true);
