@@ -78,6 +78,7 @@ public class PublicViewImpl extends Composite implements PublicView {
             @Override
             public void onStop(final StopEvent event) {
                 hideProfileItem();
+                displayProfileLocation();
             }
 
         });
@@ -175,15 +176,23 @@ public class PublicViewImpl extends Composite implements PublicView {
         presenter.setProfileHeadline(headline);
     }
 
-    public void setProfileLocation(final String locationName) {
+    public void displayProfileLocation() {
 
+        final String locationName = locContainer.getText();
         final boolean hasLocation = !u.isVoid(locationName);
-        locContainer.setText(hasLocation ? locationName : "");
 
         if (hasLocation) {
 
             createMarkerOnPublicMap(locationName);
         }
+    }
+
+    public void setProfileLocation(final String locationName) {
+
+        final boolean hasLocation = !u.isVoid(locationName);
+        locContainer.setText(hasLocation ? locationName : "");
+
+        displayProfileLocation();
     }
 
     private void createMarkerOnPublicMap(final String locationName) {
