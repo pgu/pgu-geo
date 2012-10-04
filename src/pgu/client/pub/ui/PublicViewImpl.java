@@ -141,15 +141,9 @@ public class PublicViewImpl extends Composite implements PublicView {
 
     private void showProfileItemArea() {
 
-        GWT.log("----------show profile item area");
-
-        GWT.log("item panel " + profileItemPanel.isVisible());
-
         if (profileItemPanel.isVisible()) {
             return;
         }
-
-        GWT.log("hide summary ");
 
         hideSummary();
         profileItemPanel.setVisible(true);

@@ -191,8 +191,6 @@ public class ProfileItemsUtils {
             return;
         }
 
-        $wnd.console.log('showProfileItem');
-
         var
             selected_profile_items = $wnd.pgu_geo.selected_profile_items
           , profile_item = selected_profile_items[token]
@@ -201,7 +199,8 @@ public class ProfileItemsUtils {
 
         for ( var i = 0, len = location_names.length; i < len; i++) {
             var location_name = location_names[i];
-            @pgu.client.app.utils.MarkersUtils::createMarkerOnProfileMap(Ljava/lang/String;)(location_name);
+
+            @pgu.client.app.utils.MarkersUtils::createMarkerOnPublicMap(Ljava/lang/String;)(location_name);
         }
 
     }-*/;

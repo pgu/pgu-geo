@@ -83,8 +83,6 @@ public class MarkersUtils {
 
     private static native JavaScriptObject createMarkerWithGeopoint(JavaScriptObject map, String location_name, String lat, String lng) /*-{
 
-        $wnd.console.log('createMarkerWithGeopoint');
-
         var
             google = @pgu.client.app.utils.GoogleUtils::google()()
         ;
