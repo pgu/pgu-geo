@@ -117,11 +117,6 @@ BwdEvent.HasBwdHandlers //
         }
     }
 
-    private void play() {
-        isPlaying = true;
-        play(true);
-    }
-
     private void incToken() {
         token += isPast2Prst ? 1 : -1;
     }
@@ -131,7 +126,10 @@ BwdEvent.HasBwdHandlers //
     }
 
     private void stop() {
+
         isPlaying = false;
+
+        stopPlayTimer();
 
         visibles(playBtn, fwdBtn);
 
@@ -139,6 +137,7 @@ BwdEvent.HasBwdHandlers //
         // currents.add(userGeo);
 
         initToken();
+        fireEvent(new StopEvent());
     }
 
     private void visibles(final Widget... widgets) {
@@ -176,7 +175,7 @@ BwdEvent.HasBwdHandlers //
         return isPast2Prst ? token < lastToken() : token > lastToken();
     }
 
-    private void play(final boolean isFwd) {
+    private void play(final boolean isFwd, final ScheduledCommand eventToFire) {
 
         if (isFwd) {
             incToken();
@@ -214,6 +213,12 @@ BwdEvent.HasBwdHandlers //
         // currents.add(loc2geo.get(location));
 
         visibles(visibles);
+
+        if (isPlaying) {
+            resetPlayTimer();
+        }
+
+        eventToFire.execute();
     }
 
     private void pause() {
@@ -221,28 +226,25 @@ BwdEvent.HasBwdHandlers //
         playBtn.setVisible(true);
     }
 
-    private void bwd() {
-        play(false);
-    }
-
-    private void fwd() {
-        play(true);
-    }
-
     private Timer playTimer = null;
 
     @UiHandler("playBtn")
     public void clickOnPlay(final ClickEvent e) {
-        play();
 
-        fireEvent(new PlayEvent(token));
+        isPlaying = true;
 
-        ////
-        resetPlayTimer();
+        play(true, new ScheduledCommand() {
 
+            @Override
+            public void execute() {
+                fireEvent(new PlayEvent(token));
+            }
+
+        });
     }
 
     private void resetPlayTimer() {
+
         stopPlayTimer();
         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 
@@ -255,7 +257,7 @@ BwdEvent.HasBwdHandlers //
                         clickOnPlay(null);
                     }
                 };
-                playTimer.schedule(5000);
+                playTimer.schedule(2000);
 
             }
         });
@@ -263,15 +265,11 @@ BwdEvent.HasBwdHandlers //
 
     @UiHandler("stopBtn")
     public void clickOnStop(final ClickEvent e) {
-
-        stopPlayTimer();
-
         stop();
-
-        fireEvent(new StopEvent());
     }
 
     private void stopPlayTimer() {
+
         if (playTimer != null) {
             playTimer.cancel();
             playTimer = null;
@@ -290,20 +288,26 @@ BwdEvent.HasBwdHandlers //
 
     @UiHandler("fwdBtn")
     public void clickOnFwd(final ClickEvent e) {
-        fwd();
 
-        fireEvent(new FwdEvent(token));
+        play(true, new ScheduledCommand() {
 
-        resetPlayTimer();
+            @Override
+            public void execute() {
+                fireEvent(new FwdEvent(token));
+            }
+        });
     }
 
     @UiHandler("bwdBtn")
     public void clickOnBwd(final ClickEvent e) {
-        bwd();
 
-        fireEvent(new BwdEvent(token));
+        play(false, new ScheduledCommand() {
 
-        resetPlayTimer();
+            @Override
+            public void execute() {
+                fireEvent(new BwdEvent(token));
+            }
+        });
     }
 
     @Override
