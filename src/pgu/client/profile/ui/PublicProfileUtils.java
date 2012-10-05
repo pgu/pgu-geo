@@ -55,8 +55,9 @@ public class PublicProfileUtils {
         // update $wnd.pgu_geo.public_prefs
         @pgu.client.profile.ui.ProfileViewImpl::updateCachePublicPreferences()();
 
-
-        var copy_profile = @pgu.client.profile.ui.ProfileUtils::copyProfile()();
+        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
+        var copy_profile = JSON.parse(@pgu.client.app.utils.JsonUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
+        base_public_profile));
 
         // modify copy according to public preferences
         var public_prefs = $wnd.pgu_geo.public_prefs;
@@ -108,6 +109,26 @@ public class PublicProfileUtils {
         var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
         base_public_profile.languages = html_languages;
 
+    }-*/;
+
+    public static native void addEducation(JavaScriptObject profile_item) /*-{
+
+        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
+        if (!base_public_profile.educations) {
+            base_public_profile.educations = [];
+        }
+
+        base_public_profile.educations.push(profile_item);
+    }-*/;
+
+    public static native void addExperience(JavaScriptObject profile_item) /*-{
+
+        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
+        if (!base_public_profile.positions) {
+            base_public_profile.positions = [];
+        }
+
+        base_public_profile.positions.push(profile_item);
     }-*/;
 
 }

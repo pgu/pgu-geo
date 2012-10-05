@@ -256,6 +256,7 @@ public class PublicViewImpl extends Composite implements PublicView {
         setProfile(this, profile.getProfile());
     }
 
+    // TODO PGU change ...
     private native void setProfile(PublicViewImpl view, String profile) /*-{
 
 		var j_profile = JSON.parse(profile);

@@ -48,6 +48,7 @@ public class ProfileViewUtils {
 			var tableFoot = @pgu.client.profile.ui.ProfileViewUtils::createTableFoot()();
 			table.push(tableFoot);
 
+            // TODO PGU clean this
             $wnd.pgu_geo.item_configs.sort(function(a,b) { return a.startD.getTime() - b.startD.getTime() } );
 
 			return table.join('');
