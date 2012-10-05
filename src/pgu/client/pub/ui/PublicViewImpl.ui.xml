@@ -42,44 +42,50 @@
                     </g:HTMLPanel>
                 </div>
             </g:HTMLPanel>
-            <g:HTMLPanel addStyleNames="row-fluid {style.public_profile_map_area}">
-                <div class="span12">
-                    <div id="pgu_geo_public_profile_map_container" class="collapse in">
-                        <div id="pgu_geo_public_profile_map">
+            <g:HTMLPanel addStyleNames="row-fluid">
+                <div class="span6">
+                    <g:HTMLPanel addStyleNames="row-fluid {style.public_profile_map_area}">
+                        <div class="span12">
+                            <div id="pgu_geo_public_profile_map_container" class="collapse in">
+                                <div id="pgu_geo_public_profile_map">
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    </g:HTMLPanel>
+                    <pgu:PlayToolbar ui:field="playToolbar"/>
                 </div>
-            </g:HTMLPanel>
-            <pgu:PlayToolbar ui:field="playToolbar"/>
-            <!-- summary item -->
-            <g:HTMLPanel ui:field="summaryPanel" addStyleNames="collapse in">
-                <g:HTMLPanel addStyleNames="row-fluid {style.description_item}">
-                    <div class="span4">
-                        <h6>Location</h6>
-                        <b:NavPills>
-                            <b:NavLink ui:field="locContainer" addStyleNames="{style.location}"></b:NavLink>
-                        </b:NavPills>
-                    </div>
-                    <div class="span4">
-                        <h6>Specialties</h6>
-                        <g:HTMLPanel ui:field="spContainer" />
-                    </div>
-                    <div class="span4">
-                        <h6>Languages</h6>
-                        <g:HTMLPanel ui:field="lgContainer" />
-                    </div>
-                </g:HTMLPanel>
-                <g:HTMLPanel addStyleNames="row-fluid {style.description_item}">
-                    <div class="span12">
-                        <g:HTML ui:field="summaryContainer" />
-                    </div>
-                </g:HTMLPanel>
-            </g:HTMLPanel>
-            
-            <!-- description item -->
-            <g:HTMLPanel ui:field="profileItemPanel" addStyleNames="row-fluid {style.description_item}">
-                <div class="span12">
-                    <g:HTML ui:field="profileItemDescription" />
+                <div class="span6">
+                    <!-- summary item -->
+                    <g:HTMLPanel ui:field="summaryPanel" addStyleNames="collapse in">
+                        <g:HTMLPanel addStyleNames="row-fluid {style.description_item}">
+                            <div class="span4">
+                                <h6>Location</h6>
+                                <b:NavPills>
+                                    <b:NavLink ui:field="locContainer" addStyleNames="{style.location}"></b:NavLink>
+                                </b:NavPills>
+                            </div>
+                            <div class="span4">
+                                <h6>Specialties</h6>
+                                <g:HTMLPanel ui:field="spContainer" />
+                            </div>
+                            <div class="span4">
+                                <h6>Languages</h6>
+                                <g:HTMLPanel ui:field="lgContainer" />
+                            </div>
+                        </g:HTMLPanel>
+                        <g:HTMLPanel addStyleNames="row-fluid {style.description_item}">
+                            <div class="span12">
+                                <g:HTML ui:field="summaryContainer" />
+                            </div>
+                        </g:HTMLPanel>
+                    </g:HTMLPanel>
+                    
+                    <!-- description item -->
+                    <g:HTMLPanel ui:field="profileItemPanel" addStyleNames="row-fluid {style.description_item}">
+                        <div class="span12">
+                            <g:HTML ui:field="profileItemDescription" />
+                        </div>
+                    </g:HTMLPanel>
                 </div>
             </g:HTMLPanel>
         </b:Section>    

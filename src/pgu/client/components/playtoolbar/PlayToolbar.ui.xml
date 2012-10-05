@@ -15,7 +15,7 @@
         </div>
         <div class="span3">
             <b:ButtonGroup toggle="radio">
-                <b:Button ui:field="past2prstBtn" icon="CIRCLE_ARROW_RIGHT" iconSize="LARGE" />
+                <b:Button ui:field="past2prstBtn" icon="CIRCLE_ARROW_RIGHT" iconSize="LARGE" addStyleNames="active" />
                 <b:Button ui:field="prst2pastBtn" icon="CIRCLE_ARROW_LEFT" iconSize="LARGE" />
             </b:ButtonGroup>
             <g:Label>From past to present</g:Label>

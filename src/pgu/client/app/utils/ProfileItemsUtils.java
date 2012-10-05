@@ -63,6 +63,8 @@ public class ProfileItemsUtils {
 
     }-*/;
 
+    // TODO PGU in the public profile, save in the reverse sort
+
     private static native void sortProfileItemsByDate(JavaScriptObject profile_items) /*-{
 
         profile_items.sort(function(a,b) { return a.startD.getTime() - b.startD.getTime() } );
