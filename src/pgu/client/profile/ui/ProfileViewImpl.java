@@ -3,7 +3,6 @@ package pgu.client.profile.ui;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.LanguagesUtils;
 import pgu.client.app.utils.LocationsUtils;
-import pgu.client.app.utils.MarkdownUtils;
 import pgu.client.profile.ProfilePresenter;
 import pgu.client.profile.ProfileView;
 import pgu.shared.dto.Profile;
@@ -149,14 +148,23 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     private void setProfileSpecialties(final String specialtiesLabel) {
+        final StringBuilder sb = new StringBuilder();
+
         for (final String specialty : specialtiesLabel.split(", ")) {
 
             if (u.isVoid(specialty)) {
                 continue;
             }
 
-            spContainer.add(new HTML(specialty));
+            sb.append("<div>");
+            sb.append(specialty);
+            sb.append("</div>");
         }
+
+        final String htmlSpecialties = sb.toString();
+
+        PublicProfileUtils.setSpecialties(htmlSpecialties);
+        spContainer.add(new HTML(htmlSpecialties));
     }
 
     private void setProfileLocation(final String locationName) {
@@ -169,8 +177,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         }
     }
 
-    private void setProfileSummary(final String summary) {
-        summaryBasic.getElement().getFirstChildElement().setAttribute("data-content", MarkdownUtils.markdown(summary));
+    private void setProfileSummary(final String htmlSummary) {
+        summaryBasic.getElement().getFirstChildElement().setAttribute("data-content", htmlSummary);
     }
 
     void setProfileId(final String id) {
@@ -191,6 +199,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
 		var j_profile = JSON.parse(profile);
 		@pgu.client.profile.ui.ProfileUtils::cacheProfile(Lcom/google/gwt/core/client/JavaScriptObject;)(j_profile);
+		@pgu.client.profile.ui.PublicProfileUtils::initBasePublicProfile()();
 
 		@pgu.client.profile.ui.ProfileSummaryUtils::setProfileId(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 		@pgu.client.profile.ui.ProfileSummaryUtils::setProfilePublicUrl(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);

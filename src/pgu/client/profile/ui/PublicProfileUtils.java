@@ -1,6 +1,20 @@
 package pgu.client.profile.ui;
 
+import com.google.gwt.core.client.JavaScriptObject;
+
 public class PublicProfileUtils {
+
+    public static native void initBasePublicProfile() /*-{
+
+        var profile = @pgu.client.profile.ui.ProfileUtils::profile()();
+
+        $wnd.pgu_geo.base_public_profile = {};
+        $wnd.pgu_geo.base_public_profile['id'] = profile.id;
+    }-*/;
+
+    public static native JavaScriptObject basePublicProfile() /*-{
+        return $wnd.pgu_geo.base_public_profile;
+    }-*/;
 
     public static native void showPublicPreferences(ProfileViewImpl view, final String preferences) /*-{
 
@@ -80,6 +94,20 @@ public class PublicProfileUtils {
 
         return @pgu.client.app.utils.JsonUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
         $wnd.pgu_geo.public_prefs);
+    }-*/;
+
+    public static native void setSpecialties(String html_specialties) /*-{
+
+        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
+        base_public_profile.specialties = html_specialties;
+
+    }-*/;
+
+    public static native void setLanguages(String html_languages) /*-{
+
+        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
+        base_public_profile.languages = html_languages;
+
     }-*/;
 
 }

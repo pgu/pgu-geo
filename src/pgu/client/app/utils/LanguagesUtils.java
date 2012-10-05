@@ -6,6 +6,8 @@ import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.Map.Entry;
 
+import pgu.client.profile.ui.PublicProfileUtils;
+
 import com.github.gwtbootstrap.client.ui.Column;
 import com.github.gwtbootstrap.client.ui.FluidRow;
 import com.google.gwt.core.client.JavaScriptObject;
@@ -121,6 +123,18 @@ public class LanguagesUtils {
                 addLanguageRow(nbTrophies, name);
             }
         }
+
+        setProfileLanguagesToPublicProfile();
+    }
+
+    private void setProfileLanguagesToPublicProfile() {
+        final StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < lgContainer.getWidgetCount(); i++) {
+            sb.append(lgContainer.getWidget(i));
+        }
+
+        PublicProfileUtils.setLanguages(sb.toString());
     }
 
     private void addLanguageRow(final int nbTrophies, final String name) {
