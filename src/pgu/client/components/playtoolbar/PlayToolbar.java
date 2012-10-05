@@ -24,6 +24,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
@@ -35,6 +36,9 @@ BwdEvent.HasBwdHandlers //
 , FwdEvent.HasFwdHandlers //
 {
 
+    private static final String FROM_PAST_TO_PRESENT = "From past to present";
+    private static final String FROM_PRESENT_TO_PAST = "From present to past";
+
     private static PlayToolbarUiBinder uiBinder = GWT.create(PlayToolbarUiBinder.class);
 
     interface PlayToolbarUiBinder extends UiBinder<Widget, PlayToolbar> {
@@ -42,6 +46,8 @@ BwdEvent.HasBwdHandlers //
 
     @UiField
     ListBox                         items;
+    @UiField
+    Label playDirection;
 
     @UiField
     Button                         //
@@ -55,10 +61,12 @@ BwdEvent.HasBwdHandlers //
     private int                     token       = 0;
     private boolean                 isPlaying   = false;
 
-    private final ArrayList<Widget> allControls = new ArrayList<Widget>();
+    private final ArrayList<Button> allControls = new ArrayList<Button>();
 
     public PlayToolbar() {
         initWidget(uiBinder.createAndBindUi(this));
+
+        playDirection.setText(FROM_PAST_TO_PRESENT);
 
         items.addChangeHandler(new ChangeHandler() {
 
@@ -106,6 +114,7 @@ BwdEvent.HasBwdHandlers //
     @UiHandler("prst2pastBtn")
     public void clickOnPrst2Past(final ClickEvent e) {
         if (isPast2Prst) {
+            playDirection.setText(FROM_PRESENT_TO_PAST);
             reverseToken();
         }
     }
@@ -113,6 +122,7 @@ BwdEvent.HasBwdHandlers //
     @UiHandler("past2prstBtn")
     public void clickOnPast2Prst(final ClickEvent e) {
         if (!isPast2Prst) {
+            playDirection.setText(FROM_PAST_TO_PRESENT);
             reverseToken();
         }
     }
@@ -140,21 +150,21 @@ BwdEvent.HasBwdHandlers //
         fireEvent(new StopEvent());
     }
 
-    private void visibles(final Widget... widgets) {
-        visibles(new ArrayList<Widget>(Arrays.asList(widgets)));
+    private void visibles(final Button... widgets) {
+        enables(new ArrayList<Button>(Arrays.asList(widgets)));
     }
 
-    private void visibles(final ArrayList<Widget> visibles) {
-        final ArrayList<Widget> copyAllControls = new ArrayList<Widget>(allControls);
+    private void enables(final ArrayList<Button> enables) {
+        final ArrayList<Button> disableds = new ArrayList<Button>(allControls);
 
-        copyAllControls.removeAll(visibles);
+        disableds.removeAll(enables);
 
-        for (final Widget widget : visibles) {
-            widget.setVisible(true);
+        for (final Button btn : enables) {
+            btn.setEnabled(true);
         }
 
-        for (final Widget widget : copyAllControls) {
-            widget.setVisible(false);
+        for (final Button btn : disableds) {
+            btn.setEnabled(false);
         }
 
     }
@@ -190,29 +200,29 @@ BwdEvent.HasBwdHandlers //
             return;
         }
 
-        final ArrayList<Widget> visibles = new ArrayList<Widget>();
+        final ArrayList<Button> enableds = new ArrayList<Button>();
 
         if (isAfterFirstToken()) {
-            visibles.add(bwdBtn);
+            enableds.add(bwdBtn);
         }
 
-        visibles.add(stopBtn);
+        enableds.add(stopBtn);
 
         if (isPlaying) {
-            visibles.add(pauseBtn);
+            enableds.add(pauseBtn);
         } else {
-            visibles.add(playBtn);
+            enableds.add(playBtn);
         }
 
         if (isBeforeLastToken()) {
-            visibles.add(fwdBtn);
+            enableds.add(fwdBtn);
         }
 
         // final String location = locations[token];
         // currents.add(loc2desc.get(location));
         // currents.add(loc2geo.get(location));
 
-        visibles(visibles);
+        enables(enableds);
 
         if (isPlaying) {
             resetPlayTimer();
