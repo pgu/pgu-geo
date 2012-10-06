@@ -131,4 +131,22 @@ public class PublicProfileUtils {
         base_public_profile.positions.push(profile_item);
     }-*/;
 
+    public static native void sortProfileItems(String type) /*-{
+
+        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
+
+        if (@pgu.client.app.utils.ProfileItemsUtils::isEdu(Ljava/lang/String;)(type)) {
+            if (base_public_profile.educations) {
+                base_public_profile.educations.sort(function(a,b) { return -(a.startD.getTime() - b.startD.getTime()) } );
+            }
+
+        } else if (@pgu.client.app.utils.ProfileItemsUtils::isXp(Ljava/lang/String;)(type)) {
+            if (base_public_profile.positions) {
+                base_public_profile.positions.sort(function(a,b) { return -(a.startD.getTime() - b.startD.getTime()) } );
+            }
+
+        }
+
+    }-*/;
+
 }

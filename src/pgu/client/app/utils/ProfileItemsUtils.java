@@ -6,7 +6,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 public class ProfileItemsUtils {
 
-    public static native JavaScriptObject getProfileItems() /*-{
+    public static native JavaScriptObject profileItems() /*-{
         return $wnd.pgu_geo.profile_items;
     }-*/;
 
@@ -20,11 +20,13 @@ public class ProfileItemsUtils {
           , education = @pgu.shared.utils.ItemType::education
         ;
 
-        @pgu.client.app.utils.ProfileItemsUtils::toProfileItems(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;)( //
-        experience, profile.positions);
+        if (profile.positions) {
+            profile_items[experience] = profile.positions;
+        }
 
-        @pgu.client.app.utils.ProfileItemsUtils::toProfileItems(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;)( //
-        education, profile.educations);
+        if (profile.educations) {
+            profile_items[education] = profile.educations;
+        }
 
         // check if profile has several sections
         var nb_sections = 0;
@@ -57,37 +59,20 @@ public class ProfileItemsUtils {
                 }
             }
 
+            for (var i = 0, len = all_items.length; i < len; i++) {
+                var item = all_items[i];
+                item.startD = new Date(item.startD);
+            }
+
             profile_items['all'] = all_items; // we sort 'all' items only as the others already have an order from linkedin
             @pgu.client.app.utils.ProfileItemsUtils::sortProfileItemsByDate(Lcom/google/gwt/core/client/JavaScriptObject;)(all_items);
         }
 
     }-*/;
 
-    // TODO PGU in the public profile, save in the reverse sort
-
     private static native void sortProfileItemsByDate(JavaScriptObject profile_items) /*-{
 
         profile_items.sort(function(a,b) { return a.startD.getTime() - b.startD.getTime() } );
-    }-*/;
-
-    private static native void toProfileItems(String type, JavaScriptObject items) /*-{
-
-        if (!items) {
-            return;
-        }
-
-        var
-            profile_items = @pgu.client.app.utils.ProfileItemsUtils::getProfileItems()()
-          , values = items.values || []
-        ;
-
-        profile_items[type] = [];
-
-        for ( var i in values) {
-            var profile_item = @pgu.client.app.utils.ProfileItemsUtils::toProfileItem(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;)(type, values[i]);
-            profile_items[type].push(profile_item);
-        }
-
     }-*/;
 
     private static boolean isEdu(final String itemType) {

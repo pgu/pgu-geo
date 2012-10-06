@@ -2,9 +2,7 @@ package pgu.client.pub.ui;
 
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.GoogleUtils;
-import pgu.client.app.utils.LanguagesUtils;
 import pgu.client.app.utils.LocationsUtils;
-import pgu.client.app.utils.MarkdownUtils;
 import pgu.client.app.utils.MarkersUtils;
 import pgu.client.app.utils.ProfileItemsUtils;
 import pgu.client.components.playtoolbar.PlayToolbar;
@@ -47,11 +45,13 @@ public class PublicViewImpl extends Composite implements PublicView {
     @UiField
     NavLink                   locContainer;
     @UiField
-    HTML                      summaryContainer, profileItemDescription;
+    HTML                      summaryContainer, profileItemDescription //
+    , lgContainer
+    ;
     @UiField
     PlayToolbar               playToolbar;
     @UiField
-    HTMLPanel                 lgContainer, spContainer, summaryPanel, profileItemPanel;
+    HTMLPanel                 spContainer, summaryPanel, profileItemPanel;
 
     private PublicPresenter   presenter;
     private final ClientUtils u = new ClientUtils();
@@ -216,23 +216,16 @@ public class PublicViewImpl extends Composite implements PublicView {
         MarkersUtils.createMarkerOnPublicMap(locationName);
     }
 
-    public void setProfileSpecialties(final String specialtiesLabel) {
-        for (final String specialty : specialtiesLabel.split(", ")) {
-
-            if (u.isVoid(specialty)) {
-                continue;
-            }
-
-            spContainer.add(new HTML(specialty));
-        }
+    public void setProfileSpecialties(final String htmlSpecialties) {
+        spContainer.add(new HTML(htmlSpecialties));
     }
 
-    public LanguagesUtils getLanguagesUtils() {
-        return new LanguagesUtils(lgContainer);
+    private void setProfileSummary(final String htmlSummary) {
+        summaryContainer.setHTML(htmlSummary);
     }
 
-    private void setProfileSummary(final String summary) {
-        summaryContainer.setHTML(MarkdownUtils.markdown(summary));
+    public void setProfileLanguages(final String htmlLanguages) {
+        lgContainer.setHTML(htmlLanguages);
     }
 
     private final Image linkedinPicture = new Image();
@@ -256,7 +249,6 @@ public class PublicViewImpl extends Composite implements PublicView {
         setProfile(this, profile.getProfile());
     }
 
-    // TODO PGU change ...
     private native void setProfile(PublicViewImpl view, String profile) /*-{
 
 		var j_profile = JSON.parse(profile);
@@ -266,8 +258,7 @@ public class PublicViewImpl extends Composite implements PublicView {
 		@pgu.client.pub.ui.PublicViewUtils::setProfileLocation(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 		@pgu.client.pub.ui.PublicViewUtils::setProfileSpecialties(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 
-		var languages_utils = view.@pgu.client.pub.ui.PublicViewImpl::getLanguagesUtils()();
-		@pgu.client.app.utils.LanguagesUtils::setProfileLanguages(Lpgu/client/app/utils/LanguagesUtils;Lcom/google/gwt/core/client/JavaScriptObject;)(languages_utils,j_profile);
+		@pgu.client.pub.ui.PublicViewUtils::setProfileLanguages(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 
 		@pgu.client.pub.ui.PublicViewUtils::setProfileSummary(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 

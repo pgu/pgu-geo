@@ -51,6 +51,8 @@ public class ProfileViewUtils {
             // TODO PGU clean this
             $wnd.pgu_geo.item_configs.sort(function(a,b) { return a.startD.getTime() - b.startD.getTime() } );
 
+            @pgu.client.profile.ui.PublicProfileUtils::sortProfileItems(Ljava/lang/String;)(type);
+
 			return table.join('');
 
 		} else {

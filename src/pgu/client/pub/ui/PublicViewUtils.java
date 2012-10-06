@@ -43,9 +43,9 @@ public class PublicViewUtils {
 
     public static native void setProfileSummary(PublicViewImpl view, JavaScriptObject profile) /*-{
 
-        var summary = profile.summary || '';
+        var html_summary = profile.summary || '';
 
-        view.@pgu.client.pub.ui.PublicViewImpl::setProfileSummary(Ljava/lang/String;)(summary);
+        view.@pgu.client.pub.ui.PublicViewImpl::setProfileSummary(Ljava/lang/String;)(html_summary);
     }-*/;
 
     public static native void setProfilePublicUrl(PublicViewImpl view, JavaScriptObject profile) /*-{
@@ -53,6 +53,13 @@ public class PublicViewUtils {
         var public_url = profile.publicProfileUrl || '';
 
         view.@pgu.client.pub.ui.PublicViewImpl::setProfilePublicUrl(Ljava/lang/String;)(public_url);
+    }-*/;
+
+    public static native void setProfileLanguages(PublicViewImpl view, JavaScriptObject profile) /*-{
+
+        var html_languages = profile.languages || '';
+
+        view.@pgu.client.pub.ui.PublicViewImpl::setProfileLanguages(Ljava/lang/String;)(html_languages);
     }-*/;
 
     public static void setProfileItems(final PublicViewImpl view, final JavaScriptObject profile) {
