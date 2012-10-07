@@ -200,13 +200,13 @@ public class ProfileItemsUtils {
 
             info_content += '<div>' + location_name + '</div>';
         }
-
+// TODO PGU now
         if ('' !== info_content) {
             info_content += '<br/>';
         }
 
         info_content += //
-            profile_item.dates + "<br/><br/>" + //
+            profile_item.dates + '<br/><br/>' + //
             profile_item.short_content
         ;
 
@@ -215,7 +215,16 @@ public class ProfileItemsUtils {
             $wnd.pgu_geo.public_profile_info_window = new google.maps.InfoWindow();
         }
 
+        if (first_marker == null) {
+            var google = @pgu.client.app.utils.GoogleUtils::google()();
+            first_marker = new google.maps.LatLng(0,0);
+        }
+
         var info = $wnd.pgu_geo.public_profile_info_window;
+        if (info_content === '<br/><br/>') {
+            info.close();
+        }
+
         info.setContent(info_content);
         info.open(map, first_marker);
 
