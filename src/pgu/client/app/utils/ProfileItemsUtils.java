@@ -186,9 +186,11 @@ public class ProfileItemsUtils {
             selected_profile_items = $wnd.pgu_geo.selected_profile_items
           , profile_item = selected_profile_items[token]
           , location_names = @pgu.client.app.utils.LocationsUtils::getLocationNames(Ljava/lang/String;)(profile_item.id)
-          , info_content = '<div>'
+          , info_content = []
           , first_marker = null
         ;
+
+        info_content.push('<div>');
 
         for ( var i = 0, len = location_names.length; i < len; i++) {
             var location_name = location_names[i];
@@ -198,23 +200,23 @@ public class ProfileItemsUtils {
                 first_marker = marker;
             }
 
-            info_content += '<div>' + location_name + '</div>';
+            info_content.push('<div>' + location_name + '</div>');
         }
 
-        if ('<div>' !== info_content) {
-            info_content += '<br/>';
+        if ('<div>' !== info_content.join('')) {
+            info_content.push('<br/>');
         }
 
         if (profile_item.dates) {
-            info_content += '<div>' + profile_item.dates + '</div>';
-            info_content += '<br/>';
+            info_content.push('<div>' + profile_item.dates + '</div>');
+            info_content.push('<br/>');
         }
 
         if (profile_item.short_content) {
-            info_content += '<div>' + profile_item.short_content + '</div>';
+            info_content.push('<div>' + profile_item.short_content + '</div>');
         }
 
-        info_content += '</div>';
+        info_content.push('</div>');
 
         if (!$wnd.pgu_geo.public_profile_info_window) {
             var google = @pgu.client.app.utils.GoogleUtils::google()();
@@ -226,10 +228,12 @@ public class ProfileItemsUtils {
             first_marker = @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(map,'Unknown','0','0');
         }
 
-        var info = $wnd.pgu_geo.public_profile_info_window;
-        info.setContent(info_content);
+        var info_content_str = info_content.join('');
 
-        if (info_content === '<div></div>') {
+        var info = $wnd.pgu_geo.public_profile_info_window;
+        info.setContent(info_content_str);
+
+        if (info_content_str === '<div></div>') {
             info.close();
 
         } else {
