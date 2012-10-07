@@ -42,13 +42,13 @@ public class MarkersUtils {
     public static native JavaScriptObject createMarkerOnProfileMap(String location_name) /*-{
         var map = @pgu.client.profile.ui.ProfileUtils::profileMap()();
 
-        @pgu.client.app.utils.MarkersUtils::createMarker(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;)(map,location_name);
+        return @pgu.client.app.utils.MarkersUtils::createMarker(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;)(map,location_name);
     }-*/;
 
     public static native JavaScriptObject createMarkerOnPublicMap(String location_name) /*-{
         var map = @pgu.client.pub.ui.PublicUtils::publicProfileMap()();
 
-        @pgu.client.app.utils.MarkersUtils::createMarker(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;)(map,location_name);
+        return @pgu.client.app.utils.MarkersUtils::createMarker(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;)(map,location_name);
     }-*/;
 
     private static native JavaScriptObject createMarker(JavaScriptObject map, String location_name) /*-{

@@ -186,13 +186,38 @@ public class ProfileItemsUtils {
             selected_profile_items = $wnd.pgu_geo.selected_profile_items
           , profile_item = selected_profile_items[token]
           , location_names = @pgu.client.app.utils.LocationsUtils::getLocationNames(Ljava/lang/String;)(profile_item.id)
+          , info_content = ''
+          , first_marker = null
         ;
 
         for ( var i = 0, len = location_names.length; i < len; i++) {
             var location_name = location_names[i];
 
-            @pgu.client.app.utils.MarkersUtils::createMarkerOnPublicMap(Ljava/lang/String;)(location_name);
+            var marker = @pgu.client.app.utils.MarkersUtils::createMarkerOnPublicMap(Ljava/lang/String;)(location_name);
+            if (i === 0) {
+                first_marker = marker;
+            }
+
+            info_content += '<div>' + location_name + '</div>';
         }
+
+        if ('' !== info_content) {
+            info_content += '<br/>';
+        }
+
+        info_content += //
+            profile_item.dates + "<br/><br/>" + //
+            profile_item.short_content
+        ;
+
+        if (!$wnd.pgu_geo.public_profile_info_window) {
+            var google = @pgu.client.app.utils.GoogleUtils::google()();
+            $wnd.pgu_geo.public_profile_info_window = new google.maps.InfoWindow();
+        }
+
+        var info = $wnd.pgu_geo.public_profile_info_window;
+        info.setContent(info_content);
+        info.open(map, first_marker);
 
     }-*/;
 
@@ -202,7 +227,7 @@ public class ProfileItemsUtils {
           , profile_item = selected_profile_items[token]
         ;
 
-        return profile_item.short_content + "<br/><br/>" + profile_item.long_content;
+        return profile_item.long_content;
     }-*/;
 
 }
