@@ -186,7 +186,7 @@ public class ProfileItemsUtils {
             selected_profile_items = $wnd.pgu_geo.selected_profile_items
           , profile_item = selected_profile_items[token]
           , location_names = @pgu.client.app.utils.LocationsUtils::getLocationNames(Ljava/lang/String;)(profile_item.id)
-          , info_content = ''
+          , info_content = '<div>'
           , first_marker = null
         ;
 
@@ -200,15 +200,21 @@ public class ProfileItemsUtils {
 
             info_content += '<div>' + location_name + '</div>';
         }
-// TODO PGU now
-        if ('' !== info_content) {
+
+        if ('<div>' !== info_content) {
             info_content += '<br/>';
         }
 
-        info_content += //
-            profile_item.dates + '<br/><br/>' + //
-            profile_item.short_content
-        ;
+        if (profile_item.dates) {
+            info_content += '<div>' + profile_item.dates + '</div>';
+            info_content += '<br/>';
+        }
+
+        if (profile_item.short_content) {
+            info_content += '<div>' + profile_item.short_content + '</div>';
+        }
+
+        info_content += '</div>';
 
         if (!$wnd.pgu_geo.public_profile_info_window) {
             var google = @pgu.client.app.utils.GoogleUtils::google()();
@@ -217,16 +223,18 @@ public class ProfileItemsUtils {
 
         if (first_marker == null) {
             var google = @pgu.client.app.utils.GoogleUtils::google()();
-            first_marker = new google.maps.LatLng(0,0);
+            first_marker = @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(map,'Unknown','0','0');
         }
 
         var info = $wnd.pgu_geo.public_profile_info_window;
-        if (info_content === '<br/><br/>') {
-            info.close();
-        }
-
         info.setContent(info_content);
-        info.open(map, first_marker);
+
+        if (info_content === '<div></div>') {
+            info.close();
+
+        } else {
+            info.open(map, first_marker);
+        }
 
     }-*/;
 
