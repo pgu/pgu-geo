@@ -137,12 +137,12 @@ public class PublicProfileUtils {
 
         if (@pgu.client.app.utils.ProfileItemsUtils::isEdu(Ljava/lang/String;)(type)) {
             if (base_public_profile.educations) {
-                base_public_profile.educations.sort(function(a,b) { return -(a.startD.getTime() - b.startD.getTime()) } );
+                @pgu.client.app.utils.ProfileItemsUtils::sortProfileItemsByDate(Lcom/google/gwt/core/client/JavaScriptObject;)(base_public_profile.educations);
             }
 
         } else if (@pgu.client.app.utils.ProfileItemsUtils::isXp(Ljava/lang/String;)(type)) {
             if (base_public_profile.positions) {
-                base_public_profile.positions.sort(function(a,b) { return -(a.startD.getTime() - b.startD.getTime()) } );
+                @pgu.client.app.utils.ProfileItemsUtils::sortProfileItemsByDate(Lcom/google/gwt/core/client/JavaScriptObject;)(base_public_profile.positions);
             }
 
         }
