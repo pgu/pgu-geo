@@ -72,7 +72,6 @@ public class PublicViewImpl extends Composite implements PublicView {
             }
 
         });
-
         playToolbar.addStopHandler(new StopEvent.Handler() {
 
             @Override
