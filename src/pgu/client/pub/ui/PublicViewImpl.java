@@ -8,8 +8,10 @@ import pgu.client.app.utils.ProfileItemsUtils;
 import pgu.client.components.playtoolbar.PlayToolbar;
 import pgu.client.components.playtoolbar.event.BwdEvent;
 import pgu.client.components.playtoolbar.event.FwdEvent;
+import pgu.client.components.playtoolbar.event.HideAllEvent;
 import pgu.client.components.playtoolbar.event.PauseEvent;
 import pgu.client.components.playtoolbar.event.PlayEvent;
+import pgu.client.components.playtoolbar.event.ShowAllEvent;
 import pgu.client.components.playtoolbar.event.StopEvent;
 import pgu.client.pub.PublicPresenter;
 import pgu.client.pub.PublicView;
@@ -102,6 +104,22 @@ public class PublicViewImpl extends Composite implements PublicView {
             @Override
             public void onFwd(final FwdEvent event) {
                 showProfileItem(event.getToken());
+            }
+
+        });
+        playToolbar.addShowAllHandler(new ShowAllEvent.Handler() {
+
+            @Override
+            public void onShowAll(final ShowAllEvent event) {
+                // TODO PGU Oct 8, 2012 show all markers for the selected item
+            }
+
+        });
+        playToolbar.addHideAllHandler(new HideAllEvent.Handler() {
+
+            @Override
+            public void onHideAll(final HideAllEvent event) {
+                // TODO PGU Oct 8, 2012 remove all markers for the selected item
             }
 
         });

@@ -10,10 +10,10 @@
     </ui:style>
 
     <g:HTMLPanel addStyleNames="row-fluid {style.play_bar}">
-        <div class="span4">
+        <div class="span3">
             <b:ListBox ui:field="items" />
         </div>
-        <div class="span4">
+        <div class="span3">
             <b:ButtonGroup toggle="radio">
                 <b:Button ui:field="past2prstBtn" icon="CIRCLE_ARROW_RIGHT" iconSize="LARGE" addStyleNames="active" />
                 <b:Button ui:field="prst2pastBtn" icon="CIRCLE_ARROW_LEFT" iconSize="LARGE" />
@@ -29,8 +29,9 @@
                 <b:Button ui:field="fwdBtn" icon="STEP_FORWARD" iconSize="LARGE" />
             </b:ButtonGroup>
         </div>
-<!--         <div class="span3"> -->
-<!--         </div> -->
+        <div class="span2">
+            <b:Button ui:field="showAllBtn" icon="MAGIC" iconSize="LARGE" toggle="true" />
+        </div>
     </g:HTMLPanel>
     
 </ui:UiBinder> 

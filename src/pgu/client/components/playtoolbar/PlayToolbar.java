@@ -6,8 +6,10 @@ import java.util.Arrays;
 import pgu.client.app.utils.ProfileItemsUtils;
 import pgu.client.components.playtoolbar.event.BwdEvent;
 import pgu.client.components.playtoolbar.event.FwdEvent;
+import pgu.client.components.playtoolbar.event.HideAllEvent;
 import pgu.client.components.playtoolbar.event.PauseEvent;
 import pgu.client.components.playtoolbar.event.PlayEvent;
+import pgu.client.components.playtoolbar.event.ShowAllEvent;
 import pgu.client.components.playtoolbar.event.StopEvent;
 import pgu.shared.utils.ItemType;
 
@@ -34,6 +36,8 @@ BwdEvent.HasBwdHandlers //
 , StopEvent.HasStopHandlers //
 , PlayEvent.HasPlayHandlers //
 , FwdEvent.HasFwdHandlers //
+, ShowAllEvent.HasShowAllHandlers //
+, HideAllEvent.HasHideAllHandlers //
 {
 
     private static final String FROM_PAST_TO_PRESENT = "From past to present";
@@ -55,6 +59,7 @@ BwdEvent.HasBwdHandlers //
     prst2pastBtn //
     , bwdBtn, fwdBtn //
     , stopBtn, playBtn, pauseBtn //
+    , showAllBtn //
     ;
 
     private boolean                 isPast2Prst = true;
@@ -88,6 +93,17 @@ BwdEvent.HasBwdHandlers //
         stop();
 
         setVisible(false);
+    }
+
+    @UiHandler("showAllBtn")
+    public void clickOnShowAll(final ClickEvent e) {
+        if (showAllBtn.isToggled()) {
+            fireEvent(new ShowAllEvent());
+
+        } else {
+            fireEvent(new HideAllEvent());
+
+        }
     }
 
     private int nbItems() {
@@ -368,6 +384,16 @@ BwdEvent.HasBwdHandlers //
 
     private void setSelectedProfileItems(final String selectedItemType) {
         ProfileItemsUtils.setSelectedProfileItems(selectedItemType);
+    }
+
+    @Override
+    public HandlerRegistration addHideAllHandler(final HideAllEvent.Handler handler) {
+        return addHandler(handler, HideAllEvent.TYPE);
+    }
+
+    @Override
+    public HandlerRegistration addShowAllHandler(final ShowAllEvent.Handler handler) {
+        return addHandler(handler, ShowAllEvent.TYPE);
     }
 
 }
