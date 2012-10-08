@@ -57,9 +57,7 @@ public class ProfileSummaryUtils {
 
         view.@pgu.client.profile.ui.ProfileViewImpl::setProfileLocation(Ljava/lang/String;)(location_name);
 
-        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
-        base_public_profile.location = location_name;
-
+        @pgu.client.profile.ui.PublicProfileUtils::setProfileLocation(Ljava/lang/String;)(location_name);
     }-*/;
 
     public static native void setProfileSummary(ProfileViewImpl view, JavaScriptObject profile) /*-{
@@ -70,9 +68,7 @@ public class ProfileSummaryUtils {
 
         view.@pgu.client.profile.ui.ProfileViewImpl::setProfileSummary(Ljava/lang/String;)(html_summary);
 
-        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
-        base_public_profile.summary = html_summary;
-
+        @pgu.client.profile.ui.PublicProfileUtils::setProfileSummary(Ljava/lang/String;)(html_summary);
     }-*/;
 
 }

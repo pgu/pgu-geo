@@ -8,7 +8,7 @@ public class PublicProfileUtils {
         $wnd.pgu_geo.base_public_profile = {};
     }-*/;
 
-    public static native JavaScriptObject basePublicProfile() /*-{
+    private static native JavaScriptObject basePublicProfile() /*-{
         return $wnd.pgu_geo.base_public_profile;
     }-*/;
 
@@ -133,6 +133,20 @@ public class PublicProfileUtils {
 
         var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
         base_public_profile.languages = html_languages;
+
+    }-*/;
+
+    public static native void setProfileLocation(String location_name) /*-{
+
+        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
+        base_public_profile.location = location_name;
+
+    }-*/;
+
+    public static native void setProfileSummary(String html_summary) /*-{
+
+        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
+        base_public_profile.summary = html_summary;
 
     }-*/;
 
