@@ -150,14 +150,15 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     private void setProfileSpecialties(final String specialtiesLabel) {
         final StringBuilder sb = new StringBuilder();
 
-        for (final String specialty : specialtiesLabel.split(", ")) {
+        final String[] rawLabels = specialtiesLabel.split(",");
+        for (final String specialty : rawLabels) {
 
             if (u.isVoid(specialty)) {
                 continue;
             }
 
             sb.append("<div>");
-            sb.append(specialty);
+            sb.append(specialty.trim());
             sb.append("</div>");
         }
 
