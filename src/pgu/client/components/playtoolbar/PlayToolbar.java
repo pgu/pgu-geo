@@ -361,6 +361,16 @@ BwdEvent.HasBwdHandlers //
         return addHandler(handler, BwdEvent.TYPE);
     }
 
+    @Override
+    public HandlerRegistration addHideAllHandler(final HideAllEvent.Handler handler) {
+        return addHandler(handler, HideAllEvent.TYPE);
+    }
+
+    @Override
+    public HandlerRegistration addShowAllHandler(final ShowAllEvent.Handler handler) {
+        return addHandler(handler, ShowAllEvent.TYPE);
+    }
+
     public void addProfileItems() {
 
         if (ProfileItemsUtils.hasAllOption()) {
@@ -384,16 +394,6 @@ BwdEvent.HasBwdHandlers //
 
     private void setSelectedProfileItems(final String selectedItemType) {
         ProfileItemsUtils.setSelectedProfileItems(selectedItemType);
-    }
-
-    @Override
-    public HandlerRegistration addHideAllHandler(final HideAllEvent.Handler handler) {
-        return addHandler(handler, HideAllEvent.TYPE);
-    }
-
-    @Override
-    public HandlerRegistration addShowAllHandler(final ShowAllEvent.Handler handler) {
-        return addHandler(handler, ShowAllEvent.TYPE);
     }
 
 }
