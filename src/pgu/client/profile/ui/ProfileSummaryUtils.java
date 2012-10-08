@@ -10,9 +10,7 @@ public class ProfileSummaryUtils {
 
         view.@pgu.client.profile.ui.ProfileViewImpl::setProfileId(Ljava/lang/String;)(profile_id);
 
-        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
-        base_public_profile.id = profile_id;
-
+        @pgu.client.profile.ui.PublicProfileUtils::setProfileId(Ljava/lang/String;)(profile_id);
     }-*/;
 
     public static native void setProfilePublicUrl(ProfileViewImpl view, JavaScriptObject profile) /*-{
@@ -21,8 +19,7 @@ public class ProfileSummaryUtils {
 
         view.@pgu.client.profile.ui.ProfileViewImpl::setProfilePublicUrl(Ljava/lang/String;)(public_url);
 
-        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
-        base_public_profile.publicProfileUrl = public_url;
+        @pgu.client.profile.ui.PublicProfileUtils::setProfilePublicUrl(Ljava/lang/String;)(public_url);
     }-*/;
 
     public static native void setProfileName(ProfileViewImpl view, JavaScriptObject profile) /*-{
@@ -33,10 +30,7 @@ public class ProfileSummaryUtils {
 
         view.@pgu.client.profile.ui.ProfileViewImpl::setProfileName(Ljava/lang/String;Ljava/lang/String;)(first_name, last_name);
 
-        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
-        base_public_profile.firstName = first_name;
-        base_public_profile.lastName = last_name;
-
+        @pgu.client.profile.ui.PublicProfileUtils::setProfileName(Ljava/lang/String;Ljava/lang/String;)(first_name, last_name);
     }-*/;
 
     public static native void setProfileHeadline(ProfileViewImpl view, JavaScriptObject profile) /*-{
@@ -45,9 +39,7 @@ public class ProfileSummaryUtils {
 
         view.@pgu.client.profile.ui.ProfileViewImpl::setProfileHeadline(Ljava/lang/String;)(headline);
 
-        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
-        base_public_profile.headline = headline;
-
+        @pgu.client.profile.ui.PublicProfileUtils::setProfileHeadline(Ljava/lang/String;)(headline);
     }-*/;
 
     public static native void setProfileSpecialties(ProfileViewImpl view, JavaScriptObject profile) /*-{

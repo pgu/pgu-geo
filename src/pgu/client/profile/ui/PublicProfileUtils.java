@@ -5,11 +5,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 public class PublicProfileUtils {
 
     public static native void initBasePublicProfile() /*-{
-
-        var profile = @pgu.client.profile.ui.ProfileUtils::profile()();
-
         $wnd.pgu_geo.base_public_profile = {};
-        $wnd.pgu_geo.base_public_profile['id'] = profile.id;
     }-*/;
 
     public static native JavaScriptObject basePublicProfile() /*-{
@@ -95,6 +91,35 @@ public class PublicProfileUtils {
 
         return @pgu.client.app.utils.JsonUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
         $wnd.pgu_geo.public_prefs);
+    }-*/;
+
+    public static native void setProfileId(String profile_id) /*-{
+
+        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
+        base_public_profile.id = profile_id;
+
+    }-*/;
+
+    public static native void setProfilePublicUrl(String public_url) /*-{
+
+        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
+        base_public_profile.publicProfileUrl = public_url;
+
+    }-*/;
+
+    public static native void setProfileName(String first_name, String last_name) /*-{
+
+        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
+        base_public_profile.firstName = first_name;
+        base_public_profile.lastName = last_name;
+
+    }-*/;
+
+    public static native void setProfileHeadline(String headline) /*-{
+
+        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
+        base_public_profile.headline = headline;
+
     }-*/;
 
     public static native void setSpecialties(String html_specialties) /*-{

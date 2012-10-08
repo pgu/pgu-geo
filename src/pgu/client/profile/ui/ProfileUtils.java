@@ -43,10 +43,6 @@ public class ProfileUtils {
         $wnd.pgu_geo.profile = profile;
     }-*/;
 
-    public static native JavaScriptObject profile() /*-{
-        return $wnd.pgu_geo.profile;
-    }-*/;
-
     public static native JavaScriptObject copyProfile() /*-{
         return JSON.parse(@pgu.client.app.utils.JsonUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
         $wnd.pgu_geo.profile));
