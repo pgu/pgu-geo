@@ -97,6 +97,8 @@ BwdEvent.HasBwdHandlers //
 
     @UiHandler("showAllBtn")
     public void clickOnShowAll(final ClickEvent e) {
+        stop();
+
         if (showAllBtn.isToggled()) {
             fireEvent(new ShowAllEvent());
 
@@ -158,6 +160,8 @@ BwdEvent.HasBwdHandlers //
         stopPlayTimer();
 
         visibles(playBtn, fwdBtn);
+        showAllBtn.setEnabled(true);
+        showAllBtn.removeStyleName("active");
 
         // currents.add(summary);
         // currents.add(userGeo);
@@ -258,6 +262,8 @@ BwdEvent.HasBwdHandlers //
     public void clickOnPlay(final ClickEvent e) {
 
         isPlaying = true;
+        showAllBtn.setEnabled(false);
+        showAllBtn.removeStyleName("active");
 
         play(true, new ScheduledCommand() {
 

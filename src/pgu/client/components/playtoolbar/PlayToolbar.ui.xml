@@ -10,7 +10,7 @@
     </ui:style>
 
     <g:HTMLPanel addStyleNames="row-fluid {style.play_bar}">
-        <div class="span3">
+        <div class="span4">
             <b:ListBox ui:field="items" />
         </div>
         <div class="span3">
@@ -29,7 +29,7 @@
                 <b:Button ui:field="fwdBtn" icon="STEP_FORWARD" iconSize="LARGE" />
             </b:ButtonGroup>
         </div>
-        <div class="span2">
+        <div class="span1">
             <b:Button ui:field="showAllBtn" icon="MAGIC" iconSize="LARGE" toggle="true" />
         </div>
     </g:HTMLPanel>
