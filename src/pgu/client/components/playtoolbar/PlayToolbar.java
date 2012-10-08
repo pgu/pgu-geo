@@ -155,13 +155,16 @@ BwdEvent.HasBwdHandlers //
 
     private void stop() {
 
+        if (isPlaying) {
+            showAllBtn.setEnabled(true);
+            showAllBtn.removeStyleName("active");
+        }
+
         isPlaying = false;
 
         stopPlayTimer();
 
         visibles(playBtn, fwdBtn);
-        showAllBtn.setEnabled(true);
-        showAllBtn.removeStyleName("active");
 
         // currents.add(summary);
         // currents.add(userGeo);
@@ -261,9 +264,12 @@ BwdEvent.HasBwdHandlers //
     @UiHandler("playBtn")
     public void clickOnPlay(final ClickEvent e) {
 
+        if (!isPlaying) {
+            showAllBtn.setEnabled(false);
+            showAllBtn.removeStyleName("active");
+        }
+
         isPlaying = true;
-        showAllBtn.setEnabled(false);
-        showAllBtn.removeStyleName("active");
 
         play(true, new ScheduledCommand() {
 
