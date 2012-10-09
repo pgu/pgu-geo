@@ -261,7 +261,26 @@ public class ProfileItemsUtils {
     }-*/;
 
     public static native void initCacheLocation2items() /*-{
-        $wnd.pgu_geo.cache_location_2_items = {};
+        $wnd.pgu_geo.cache_location_2_item_markers = {};
+
+        var profile_items = @pgu.client.app.utils.ProfileItemsUtils::profileItems()();
+        for (var key in profile_items) {
+
+            if ('__gwt_ObjectId' === key) {
+                continue;
+            }
+
+            if ('all' === key) {
+                continue;
+            }
+
+            if (profile_items.hasOwnProperty(key)) {
+                // for each profile item,
+                // take their locations
+                // fill the cache
+            }
+        }
+
 
     }-*/;
 
