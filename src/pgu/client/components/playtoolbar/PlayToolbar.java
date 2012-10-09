@@ -100,9 +100,13 @@ BwdEvent.HasBwdHandlers //
         stop();
 
         if (showAllBtn.isToggled()) {
+            // TODO PGU Oct 9, 2012 show all markers for the selected item
+
+
             fireEvent(new ShowAllEvent());
 
         } else {
+            // TODO PGU Oct 9, 2012 hide all markers for the selected item
             fireEvent(new HideAllEvent());
 
         }

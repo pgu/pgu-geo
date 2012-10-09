@@ -6,8 +6,12 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 public class ProfileItemsUtils {
 
-    public static native JavaScriptObject profileItems() /*-{
+    private static native JavaScriptObject profileItems() /*-{
         return $wnd.pgu_geo.profile_items;
+    }-*/;
+
+    private static native JavaScriptObject selectedProfileItems() /*-{
+        return $wnd.pgu_geo.selected_profile_items;
     }-*/;
 
     public static native void setProfileItems(final JavaScriptObject profile) /*-{
@@ -152,25 +156,30 @@ public class ProfileItemsUtils {
     }-*/;
 
     public static native boolean hasAllOption() /*-{
-        return $wnd.pgu_geo.profile_items.hasOwnProperty('all');
+        var profile_items = @pgu.client.app.utils.ProfileItemsUtils::profileItems()();
+        return profile_items.hasOwnProperty('all');
     }-*/;
 
     public static native boolean hasExperienceOption() /*-{
-        return $wnd.pgu_geo.profile_items.hasOwnProperty(@pgu.shared.utils.ItemType::experience);
+        var profile_items = @pgu.client.app.utils.ProfileItemsUtils::profileItems()();
+        return profile_items.hasOwnProperty(@pgu.shared.utils.ItemType::experience);
     }-*/;
 
     public static native boolean hasEducationOption() /*-{
-        return $wnd.pgu_geo.profile_items.hasOwnProperty(@pgu.shared.utils.ItemType::education);
+        var profile_items = @pgu.client.app.utils.ProfileItemsUtils::profileItems()();
+        return profile_items.hasOwnProperty(@pgu.shared.utils.ItemType::education);
     }-*/;
 
     public static native void setSelectedProfileItems(final String selectedItemType) /*-{
-        $wnd.pgu_geo.selected_profile_items = $wnd.pgu_geo.profile_items[selectedItemType];
+        var profile_items = @pgu.client.app.utils.ProfileItemsUtils::profileItems()();
+        $wnd.pgu_geo.selected_profile_items = profile_items[selectedItemType];
     }-*/;
 
     public static native int nbSelectedItems() /*-{
+        var selected_profile_items = @pgu.client.app.utils.ProfileItemsUtils::selectedProfileItems()();
 
-        if ($wnd.pgu_geo.selected_profile_items) {
-            return $wnd.pgu_geo.selected_profile_items.length;
+        if (selected_profile_items) {
+            return selected_profile_items.length;
         }
 
         return 0;
@@ -178,13 +187,13 @@ public class ProfileItemsUtils {
 
     public static native void showProfileItemLocations(final int token, final JavaScriptObject map) /*-{
 
-        if (!$wnd.pgu_geo.selected_profile_items) {
+        var selected_profile_items = @pgu.client.app.utils.ProfileItemsUtils::selectedProfileItems()();
+        if (!selected_profile_items) {
             return;
         }
 
         var
-            selected_profile_items = $wnd.pgu_geo.selected_profile_items
-          , profile_item = selected_profile_items[token]
+            profile_item = selected_profile_items[token]
           , location_names = @pgu.client.app.utils.LocationsUtils::getLocationNames(Ljava/lang/String;)(profile_item.id)
           , info_content = []
           , first_marker = null
@@ -244,11 +253,16 @@ public class ProfileItemsUtils {
 
     public static native String getSelectedProfileItemDescription(int token) /*-{
         var
-            selected_profile_items = $wnd.pgu_geo.selected_profile_items
+            selected_profile_items = @pgu.client.app.utils.ProfileItemsUtils::selectedProfileItems()()
           , profile_item = selected_profile_items[token]
         ;
 
         return profile_item.long_content;
+    }-*/;
+
+    public static native void initCacheLocation2items() /*-{
+        $wnd.pgu_geo.cache_location_2_items = {};
+
     }-*/;
 
 }
