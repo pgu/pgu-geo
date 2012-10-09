@@ -6,33 +6,37 @@ import com.google.gwt.core.client.JavaScriptObject;
 public class MarkersUtils {
 
     static {
-        initMarkersArray();
+        initMovieMarkers();
     }
 
-    private static native void initMarkersArray() /*-{
-        $wnd.pgu_geo.markersArray = [];
+    private static native void initMovieMarkers() /*-{
+        $wnd.pgu_geo.movie_markers = [];
+    }-*/;
+
+    private static native JavaScriptObject movieMarkers() /*-{
+        return $wnd.pgu_geo.movie_markers;
     }-*/;
 
     // https://developers.google.com/maps/documentation/javascript/overlays#RemovingOverlays
     //Removes the overlays from the map, but keeps them in the array
     public static native void clearMarkers() /*-{
-        var markers = $wnd.pgu_geo.markersArray;
+        var markers = @pgu.client.app.utils.MarkersUtils::movieMarkers()();
         for (i in markers) {
           markers[i].setMap(null);
         }
     }-*/;
 
     // Shows any overlays currently in the array
-    //    public static native void showMarkers() /*-{
-    //        var markers = $wnd.pgu_geo.markersArray;
-    //        for (i in markers) {
-    //            markers[i].setMap(map);
-    //        }
-    //    }-*/;
+    public static native void showMarkers() /*-{
+        var markers = @pgu.client.app.utils.MarkersUtils::movieMarkers()();
+        for (i in markers) {
+            markers[i].setMap(map);
+        }
+    }-*/;
 
     // Deletes all markers in the array by removing references to them
     public static native void deleteMarkers() /*-{
-        var markers = $wnd.pgu_geo.markersArray;
+        var markers = @pgu.client.app.utils.MarkersUtils::movieMarkers()();
         for (i in markers) {
               markers[i].setMap(null);
         }
@@ -62,7 +66,11 @@ public class MarkersUtils {
               , lng = geopoint.lng
             ;
 
-            return @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(map,location_name,lat,lng);
+            var markers = @pgu.client.app.utils.MarkersUtils::movieMarkers()();
+            var marker = @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(map,location_name,lat,lng);
+
+            markers.push(marker);
+            return marker;
 
         } else {
             throw "No geopoint for " + location_name;
@@ -72,19 +80,33 @@ public class MarkersUtils {
     public static native JavaScriptObject createMarkerOnProfileMap(String location_name, String lat, String lng) /*-{
         var map = @pgu.client.profile.ui.ProfileUtils::profileMap()();
 
-        @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(map,location_name,lat,lng);
+        var markers = @pgu.client.app.utils.MarkersUtils::movieMarkers()();
+        var marker = @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(map,location_name,lat,lng);
+
+        markers.push(marker);
+        return marker;
+
     }-*/;
 
     public static native JavaScriptObject createMarkerOnPublicMap(String location_name, String lat, String lng) /*-{
         var map = @pgu.client.pub.ui.PublicUtils::publicProfileMap()();
 
-        @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(map,location_name,lat,lng);
+        var markers = @pgu.client.app.utils.MarkersUtils::movieMarkers()();
+        var marker = @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(map,location_name,lat,lng);
+
+        markers.push(marker);
+        return marker;
+
     }-*/;
 
     public static native JavaScriptObject createUnknownMarkerOnPublicMap() /*-{
         var map = @pgu.client.pub.ui.PublicUtils::publicProfileMap()();
 
-        return @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(map,'Unknown location','0','0');
+        var markers = @pgu.client.app.utils.MarkersUtils::movieMarkers()();
+        var marker = @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(map,'Unknown location','0','0');
+
+        markers.push(marker);
+        return marker;
     }-*/;
 
     private static native JavaScriptObject createMarkerWithGeopoint(JavaScriptObject map, String location_name, String lat, String lng) /*-{
@@ -101,8 +123,6 @@ public class MarkersUtils {
             animation : google.maps.Animation.DROP,
             title : location_name
         });
-
-        $wnd.pgu_geo.markersArray.push(marker);
 
         return marker;
     }-*/;
