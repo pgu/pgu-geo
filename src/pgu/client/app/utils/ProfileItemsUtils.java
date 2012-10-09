@@ -259,11 +259,19 @@ public class ProfileItemsUtils {
         return profile_item.long_content;
     }-*/;
 
-    // TODO PGU
-    public static native void initCacheLocation2items() /*-{
-        $wnd.pgu_geo.cache_location_2_item_markers = {};
+    public static native JavaScriptObject cacheLocation2itemAndMarkers() /*-{
+        return $wnd.pgu_geo.location_2_marker_items;
+    }-*/;
+
+    public static native void initCacheLocation2itemAndMarkers() /*-{
+
+        $wnd.pgu_geo.location_2_marker_items = {};
+
+        var cache = $wnd.pgu_geo.location_2_marker_items;
+        // 'type' >> 'location' >> 'liste de profile_items+marker'
 
         var profile_items = @pgu.client.app.utils.ProfileItemsUtils::profileItems()();
+
         for (var key in profile_items) {
 
             if ('__gwt_ObjectId' === key) {
@@ -275,12 +283,88 @@ public class ProfileItemsUtils {
             }
 
             if (profile_items.hasOwnProperty(key)) {
-                // for each profile item,
-                // take their locations
-                // fill the cache
+                var
+                    profile_item = profile_items[key]
+                  , location_names = @pgu.client.app.utils.LocationsUtils::getLocationNames(Ljava/lang/String;)(profile_item.id)
+                ;
+
+                var location_2_items = {};
+
+                for (var i = 0; i < location_names.length; i++) {
+                    var location_name = location_names[i];
+
+                    if (!location_2_items.hasOwnProperty(location_name)) {
+                        location_2_items[location_name] = [];
+                    }
+
+// TODO PGU js array contains?
+
+                    var geopoint_is_available = @pgu.client.app.utils.LocationsUtils::isLocationInReferential(Ljava/lang/String;)(location_name);
+                    if (geopoint_is_available) {
+
+                        var
+                            geopoint = @pgu.client.app.utils.LocationsUtils::getGeopoint(Ljava/lang/String;)(location_name)
+                          , lat = geopoint.lat
+                          , lng = geopoint.lng
+                        ;
+
+                        var marker_and_item = {};
+                        marker_and_item['marker'] = @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(null,location_name,lat,lng);
+                        marker_and_item['item'] = profile_item;
+                        location_2_items[location_name].push(marker_and_item);
+
+                    }
+                }
+
+                cache[key] = location_2_items;
             }
         }
 
+
+    }-*/;
+
+    public static native void hideProfileMarkers(String selectedItemType) /*-{
+        var cache = @pgu.client.app.utils.ProfileItemsUtils::cacheLocation2itemAndMarkers()();
+
+        if ('all' === selectedItemType) {
+
+            for (var key in cache) {
+                if ('__gwt_ObjectId' === key) {
+                    continue;
+                }
+
+                if (cache.hasOwnProperty(key)) {
+                    var location_names = cache[key];
+                    @pgu.client.app.utils.ProfileItemsUtils::hideProfileMarkersInternal(Lcom/google/gwt/core/client/JavaScriptObject;)(location_names);
+                }
+            }
+
+        } else {
+
+            var location_names = cache[selectedItemType];
+            @pgu.client.app.utils.ProfileItemsUtils::hideProfileMarkersInternal(Lcom/google/gwt/core/client/JavaScriptObject;)(location_names);
+
+        }
+
+    }-*/;
+
+    private static native void hideProfileMarkersInternal(JavaScriptObject location_names) /*-{
+
+        for (var key in location_names) {
+            if ('__gwt_ObjectId' === key) {
+                continue;
+            }
+
+            if (location_names.hasOwnProperty(key)) {
+                var item_and_markers = location_names[key];
+
+                for (var i = 0; i < item_and_markers.length; i++) {
+                    var item_and_marker = item_and_markers[i];
+
+                    item_and_marker['marker'].setMap(null);
+                }
+            }
+        }
 
     }-*/;
 

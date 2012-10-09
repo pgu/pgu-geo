@@ -99,15 +99,17 @@ BwdEvent.HasBwdHandlers //
     public void clickOnShowAll(final ClickEvent e) {
         stop();
 
+        final String selectedItemType = items.getValue(items.getSelectedIndex());
+
         if (showAllBtn.isToggled()) {
-            // TODO PGU Oct 9, 2012 show all markers for the selected item
-
-
-            fireEvent(new ShowAllEvent());
+            // TODO PGU Oct 9, 2012
+            // show all markers
+            fireEvent(new ShowAllEvent(selectedItemType));
 
         } else {
-            // TODO PGU Oct 9, 2012 hide all markers for the selected item
-            fireEvent(new HideAllEvent());
+            // TODO PGU Oct 9, 2012
+            // show only the marker of current location
+            fireEvent(new HideAllEvent(selectedItemType));
 
         }
     }

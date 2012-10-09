@@ -17,6 +17,12 @@ public class HideAllEvent extends GwtEvent<HideAllEvent.Handler> {
 
     public static final Type<Handler> TYPE = new Type<Handler>();
 
+    private final String selectedItemType;
+
+    public HideAllEvent(final String selectedItemType) {
+        this.selectedItemType = selectedItemType;
+    }
+
     @Override
     public Type<Handler> getAssociatedType() {
         return TYPE;
@@ -25,6 +31,10 @@ public class HideAllEvent extends GwtEvent<HideAllEvent.Handler> {
     @Override
     protected void dispatch(final Handler handler) {
         handler.onHideAll(this);
+    }
+
+    public String getSelectedItemType() {
+        return selectedItemType;
     }
 
 }

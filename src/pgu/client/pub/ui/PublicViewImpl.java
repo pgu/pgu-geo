@@ -111,6 +111,8 @@ public class PublicViewImpl extends Composite implements PublicView {
 
             @Override
             public void onShowAll(final ShowAllEvent event) {
+                final String selectedItemType = event.getSelectedItemType();
+
                 // TODO PGU Oct 8, 2012 show all markers for the selected item
             }
 
@@ -119,7 +121,9 @@ public class PublicViewImpl extends Composite implements PublicView {
 
             @Override
             public void onHideAll(final HideAllEvent event) {
-                // TODO PGU Oct 8, 2012 remove all markers for the selected item
+                final String selectedItemType = event.getSelectedItemType();
+                ProfileItemsUtils.hideProfileMarkers(selectedItemType);
+                displayProfileLocation();
             }
 
         });
@@ -283,7 +287,7 @@ public class PublicViewImpl extends Composite implements PublicView {
 
 		@pgu.client.pub.ui.PublicViewUtils::setProfileItems(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 
-		@pgu.client.app.utils.ProfileItemsUtils::initCacheLocation2items()();
+		@pgu.client.app.utils.ProfileItemsUtils::initCacheLocation2itemAndMarkers()();
 
     }-*/;
 
