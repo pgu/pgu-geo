@@ -233,8 +233,7 @@ public class ProfileItemsUtils {
         }
 
         if (first_marker == null) {
-            var google = @pgu.client.app.utils.GoogleUtils::google()();
-            first_marker = @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(map,'Unknown location','0','0');
+            first_marker = @pgu.client.app.utils.MarkersUtils::createUnknownMarkerOnPublicMap()();
         }
 
         var info_content_str = info_content.join('');

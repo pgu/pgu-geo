@@ -81,6 +81,12 @@ public class MarkersUtils {
         @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(map,location_name,lat,lng);
     }-*/;
 
+    public static native JavaScriptObject createUnknownMarkerOnPublicMap() /*-{
+        var map = @pgu.client.pub.ui.PublicUtils::publicProfileMap()();
+
+        return @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(map,'Unknown location','0','0');
+    }-*/;
+
     private static native JavaScriptObject createMarkerWithGeopoint(JavaScriptObject map, String location_name, String lat, String lng) /*-{
 
         var
