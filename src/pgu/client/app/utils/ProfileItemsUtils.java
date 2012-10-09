@@ -234,7 +234,7 @@ public class ProfileItemsUtils {
 
         if (first_marker == null) {
             var google = @pgu.client.app.utils.GoogleUtils::google()();
-            first_marker = @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(map,'Unknown','0','0');
+            first_marker = @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(map,'Unknown location','0','0');
         }
 
         var info_content_str = info_content.join('');
@@ -260,6 +260,7 @@ public class ProfileItemsUtils {
         return profile_item.long_content;
     }-*/;
 
+    // TODO PGU
     public static native void initCacheLocation2items() /*-{
         $wnd.pgu_geo.cache_location_2_item_markers = {};
 
