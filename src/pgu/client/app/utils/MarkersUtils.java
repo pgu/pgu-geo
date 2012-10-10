@@ -52,10 +52,14 @@ public class MarkersUtils {
     public static native JavaScriptObject createMarkerOnPublicMap(String location_name) /*-{
         var map = @pgu.client.pub.ui.PublicUtils::publicProfileMap()();
 
-        return @pgu.client.app.utils.MarkersUtils::createMarker(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;)(map,location_name);
+        var markers = @pgu.client.app.utils.MarkersUtils::movieMarkers()();
+        var marker = @pgu.client.app.utils.MarkersUtils::createMarker(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;)(map,location_name);
+
+        markers.push(marker);
+        return marker;
     }-*/;
 
-    private static native JavaScriptObject createMarker(JavaScriptObject map, String location_name) /*-{
+    public static native JavaScriptObject createMarker(JavaScriptObject map, String location_name) /*-{
 
         var geopoint_is_available = @pgu.client.app.utils.LocationsUtils::isLocationInReferential(Ljava/lang/String;)(location_name);
         if (geopoint_is_available) {
@@ -66,11 +70,7 @@ public class MarkersUtils {
               , lng = geopoint.lng
             ;
 
-            var markers = @pgu.client.app.utils.MarkersUtils::movieMarkers()();
-            var marker = @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(map,location_name,lat,lng);
-
-            markers.push(marker);
-            return marker;
+            return @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(map,location_name,lat,lng);
 
         } else {
             throw "No geopoint for " + location_name;

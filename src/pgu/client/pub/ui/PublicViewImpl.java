@@ -79,7 +79,7 @@ public class PublicViewImpl extends Composite implements PublicView {
             @Override
             public void onStop(final StopEvent event) {
                 hideProfileItem();
-                displayProfileLocation();
+                displayProfileCurrentLocation();
             }
 
         });
@@ -112,8 +112,8 @@ public class PublicViewImpl extends Composite implements PublicView {
             @Override
             public void onShowAll(final ShowAllEvent event) {
                 final String selectedItemType = event.getSelectedItemType();
-
-                // TODO PGU Oct 8, 2012 show all markers for the selected item
+                ProfileItemsUtils.displayProfileMarkers(selectedItemType);
+                hideProfileCurrentLocation();
             }
 
         });
@@ -123,7 +123,7 @@ public class PublicViewImpl extends Composite implements PublicView {
             public void onHideAll(final HideAllEvent event) {
                 final String selectedItemType = event.getSelectedItemType();
                 ProfileItemsUtils.hideProfileMarkers(selectedItemType);
-                displayProfileLocation();
+                displayProfileCurrentLocation();
             }
 
         });
@@ -191,14 +191,21 @@ public class PublicViewImpl extends Composite implements PublicView {
         presenter.setProfileHeadline(headline);
     }
 
-    public void displayProfileLocation() {
+    private void hideProfileCurrentLocation() {
+        if (currentLocationMarker != null) {
+
+            hideCurrentLocation(currentLocationMarker);
+        }
+    }
+
+    public void displayProfileCurrentLocation() {
 
         final String locationName = locContainer.getText();
         final boolean hasLocation = !u.isVoid(locationName);
 
         if (hasLocation) {
 
-            createMarkerOnPublicMap(locationName);
+            displayCurrentLocationMarkerOnPublicMap(locationName);
         }
     }
 
@@ -207,15 +214,23 @@ public class PublicViewImpl extends Composite implements PublicView {
         final boolean hasLocation = !u.isVoid(locationName);
         locContainer.setText(hasLocation ? locationName : "");
 
-        displayProfileLocation();
+        displayProfileCurrentLocation();
     }
 
-    private void createMarkerOnPublicMap(final String locationName) {
+    private JavaScriptObject currentLocationMarker = null;
+
+    private void displayCurrentLocationMarkerOnPublicMap(final String locationName) {
+
+        if (currentLocationMarker != null) {
+
+            showCurrentLocation(currentLocationMarker);
+            return;
+        }
 
         final JavaScriptObject google = GoogleUtils.google();
-        final JavaScriptObject map = PublicUtils.publicProfileMap();
+        final JavaScriptObject publicMap = PublicUtils.publicProfileMap();
 
-        if (google == null || map == null) {
+        if (google == null || publicMap == null) {
 
             new Timer() {
 
@@ -224,18 +239,27 @@ public class PublicViewImpl extends Composite implements PublicView {
                     Scheduler.get().scheduleDeferred(new Command() {
                         @Override
                         public void execute() {
-                            createMarkerOnPublicMap(locationName);
+                            displayCurrentLocationMarkerOnPublicMap(locationName);
                         }
                     });
                 }
 
             }.schedule(1000);
-            return;
 
+            return;
         }
 
-        MarkersUtils.createMarkerOnPublicMap(locationName);
+        currentLocationMarker = MarkersUtils.createMarker(publicMap, locationName);
     }
+
+    private native void showCurrentLocation(JavaScriptObject marker) /*-{
+        var map = @pgu.client.pub.ui.PublicUtils::publicProfileMap()();
+        marker.setMap(map);
+    }-*/;
+
+    private native void hideCurrentLocation(final JavaScriptObject marker) /*-{
+        marker.setMap(null);
+    }-*/;
 
     public void setProfileSpecialties(final String htmlSpecialties) {
         spContainer.add(new HTML(htmlSpecialties));

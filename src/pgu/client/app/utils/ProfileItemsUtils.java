@@ -323,7 +323,19 @@ public class ProfileItemsUtils {
 
     }-*/;
 
+    public static native void displayProfileMarkers(final String selectedItemType) /*-{
+        var public_map = @pgu.client.pub.ui.PublicUtils::publicProfileMap()();
+
+        @pgu.client.app.utils.ProfileItemsUtils::setMapOnProfileMarkers(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;)( //
+        public_map, selectedItemType);
+    }-*/;
+
     public static native void hideProfileMarkers(String selectedItemType) /*-{
+        @pgu.client.app.utils.ProfileItemsUtils::setMapOnProfileMarkers(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;)( //
+        null, selectedItemType);
+    }-*/;
+
+    private static native void setMapOnProfileMarkers(JavaScriptObject map, String selectedItemType) /*-{
         var cache = @pgu.client.app.utils.ProfileItemsUtils::cacheLocation2itemAndMarkers()();
 
         if ('all' === selectedItemType) {
@@ -335,20 +347,22 @@ public class ProfileItemsUtils {
 
                 if (cache.hasOwnProperty(key)) {
                     var location_names = cache[key];
-                    @pgu.client.app.utils.ProfileItemsUtils::hideProfileMarkersInternal(Lcom/google/gwt/core/client/JavaScriptObject;)(location_names);
+                    @pgu.client.app.utils.ProfileItemsUtils::setMapOnProfileMarkersInternal(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)( //
+                    map, location_names);
                 }
             }
 
         } else {
 
             var location_names = cache[selectedItemType];
-            @pgu.client.app.utils.ProfileItemsUtils::hideProfileMarkersInternal(Lcom/google/gwt/core/client/JavaScriptObject;)(location_names);
+            @pgu.client.app.utils.ProfileItemsUtils::setMapOnProfileMarkersInternal(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)( //
+            map, location_names);
 
         }
 
     }-*/;
 
-    private static native void hideProfileMarkersInternal(JavaScriptObject location_names) /*-{
+    private static native void setMapOnProfileMarkersInternal(JavaScriptObject map, JavaScriptObject location_names) /*-{
 
         for (var key in location_names) {
             if ('__gwt_ObjectId' === key) {
@@ -361,7 +375,7 @@ public class ProfileItemsUtils {
                 for (var i = 0; i < item_and_markers.length; i++) {
                     var item_and_marker = item_and_markers[i];
 
-                    item_and_marker['marker'].setMap(null);
+                    item_and_marker['marker'].setMap(map);
                 }
             }
         }
