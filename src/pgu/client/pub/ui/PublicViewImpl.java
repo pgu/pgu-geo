@@ -12,6 +12,7 @@ import pgu.client.components.playtoolbar.event.HideAllEvent;
 import pgu.client.components.playtoolbar.event.PauseEvent;
 import pgu.client.components.playtoolbar.event.PlayEvent;
 import pgu.client.components.playtoolbar.event.ShowAllEvent;
+import pgu.client.components.playtoolbar.event.StartPlayingEvent;
 import pgu.client.components.playtoolbar.event.StopEvent;
 import pgu.client.pub.PublicPresenter;
 import pgu.client.pub.PublicView;
@@ -70,6 +71,7 @@ public class PublicViewImpl extends Composite implements PublicView {
 
             @Override
             public void onPlay(final PlayEvent event) {
+                // TODO PGU Oct 10, 2012 hide all markers
                 showProfileItem(event.getToken());
             }
 
@@ -127,7 +129,14 @@ public class PublicViewImpl extends Composite implements PublicView {
             }
 
         });
+        playToolbar.addStartPlayingHandler(new StartPlayingEvent.Handler() {
 
+            @Override
+            public void onStartPlaying(final StartPlayingEvent event) {
+                final String selectedItemType = event.getSelectedItemType();
+                ProfileItemsUtils.hideProfileMarkers(selectedItemType);
+            }
+        });
         profileItemPanel.setVisible(false);
     }
 

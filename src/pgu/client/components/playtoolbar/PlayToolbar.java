@@ -10,6 +10,7 @@ import pgu.client.components.playtoolbar.event.HideAllEvent;
 import pgu.client.components.playtoolbar.event.PauseEvent;
 import pgu.client.components.playtoolbar.event.PlayEvent;
 import pgu.client.components.playtoolbar.event.ShowAllEvent;
+import pgu.client.components.playtoolbar.event.StartPlayingEvent;
 import pgu.client.components.playtoolbar.event.StopEvent;
 import pgu.shared.utils.ItemType;
 
@@ -38,6 +39,7 @@ BwdEvent.HasBwdHandlers //
 , FwdEvent.HasFwdHandlers //
 , ShowAllEvent.HasShowAllHandlers //
 , HideAllEvent.HasHideAllHandlers //
+, StartPlayingEvent.HasStartPlayingHandlers //
 {
 
     private static final String FROM_PAST_TO_PRESENT = "From past to present";
@@ -271,8 +273,15 @@ BwdEvent.HasBwdHandlers //
     public void clickOnPlay(final ClickEvent e) {
 
         if (!isPlaying) {
+
             showAllBtn.setEnabled(false);
-            showAllBtn.removeStyleName("active");
+
+            if (showAllBtn.isToggled()) {
+                showAllBtn.removeStyleName("active");
+            }
+
+            final String selectedItemType = items.getValue(items.getSelectedIndex());
+            fireEvent(new StartPlayingEvent(selectedItemType));
         }
 
         isPlaying = true;
@@ -387,6 +396,11 @@ BwdEvent.HasBwdHandlers //
     @Override
     public HandlerRegistration addShowAllHandler(final ShowAllEvent.Handler handler) {
         return addHandler(handler, ShowAllEvent.TYPE);
+    }
+
+    @Override
+    public HandlerRegistration addStartPlayingHandler(final StartPlayingEvent.Handler handler) {
+        return addHandler(handler, StartPlayingEvent.TYPE);
     }
 
     public void addProfileItems() {
