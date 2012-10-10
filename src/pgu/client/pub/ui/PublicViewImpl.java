@@ -72,7 +72,6 @@ public class PublicViewImpl extends Composite implements PublicView {
 
             @Override
             public void onPlay(final PlayEvent event) {
-                // TODO PGU Oct 10, 2012 hide all markers
                 showProfileItem(event.getToken());
             }
 
@@ -82,7 +81,6 @@ public class PublicViewImpl extends Composite implements PublicView {
             @Override
             public void onStop(final StopEvent event) {
                 hideProfileItem();
-                displayProfileCurrentLocation();
             }
 
         });
