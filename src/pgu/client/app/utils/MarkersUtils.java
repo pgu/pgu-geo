@@ -19,7 +19,7 @@ public class MarkersUtils {
 
     // https://developers.google.com/maps/documentation/javascript/overlays#RemovingOverlays
     //Removes the overlays from the map, but keeps them in the array
-    public static native void clearMarkers() /*-{
+    public static native void clearMovieMarkers() /*-{
         var markers = @pgu.client.app.utils.MarkersUtils::movieMarkers()();
         for (i in markers) {
           markers[i].setMap(null);
@@ -27,7 +27,7 @@ public class MarkersUtils {
     }-*/;
 
     // Shows any overlays currently in the array
-    public static native void showMarkers() /*-{
+    public static native void showMovieMarkers() /*-{
         var markers = @pgu.client.app.utils.MarkersUtils::movieMarkers()();
         for (i in markers) {
             markers[i].setMap(map);
@@ -35,7 +35,7 @@ public class MarkersUtils {
     }-*/;
 
     // Deletes all markers in the array by removing references to them
-    public static native void deleteMarkers() /*-{
+    public static native void deleteMovieMarkers() /*-{
         var markers = @pgu.client.app.utils.MarkersUtils::movieMarkers()();
         for (i in markers) {
               markers[i].setMap(null);

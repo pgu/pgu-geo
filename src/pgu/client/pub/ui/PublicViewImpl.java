@@ -168,7 +168,7 @@ public class PublicViewImpl extends Composite implements PublicView {
     private void hideProfileItem() {
         hideProfileItemArea();
 
-        MarkersUtils.deleteMarkers();
+        MarkersUtils.deleteMovieMarkers();
     }
 
     private void showProfileItem(final int token) {

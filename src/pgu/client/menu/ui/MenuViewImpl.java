@@ -128,7 +128,7 @@ public class MenuViewImpl extends Composite implements MenuView {
 
     @UiHandler("clearMarkersBtn")
     public void clickOnClearMarkersBtn(final ClickEvent e) {
-        MarkersUtils.deleteMarkers();
+        MarkersUtils.deleteMovieMarkers();
     }
 
     @UiHandler("locationSaveBtn")
@@ -182,7 +182,7 @@ public class MenuViewImpl extends Composite implements MenuView {
         clickOnPause();
         isPausing = false;
 
-        MarkersUtils.deleteMarkers();
+        MarkersUtils.deleteMovieMarkers();
         MovieUtils.initIndex(isPastToPresent);
         // TODO PGU Sep 27, 2012 show user's current location
     }
@@ -226,7 +226,7 @@ public class MenuViewImpl extends Composite implements MenuView {
         isPlayingProfile = true;
 
         if (!isPausing) {
-            MarkersUtils.deleteMarkers();
+            MarkersUtils.deleteMovieMarkers();
             MovieUtils.initIndex(isPastToPresent);
         }
 
