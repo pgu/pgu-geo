@@ -265,24 +265,30 @@ public class ProfileItemsUtils {
 
     public static native void initCacheLocation2itemAndMarkers() /*-{
 
-        $wnd.pgu_geo.location_2_marker_items = {};
+        $wnd.pgu_geo.type_2_locations = {};
+        $wnd.pgu_geo.location_2_marker = {};
+        $wnd.pgu_geo.marker_2_items = {};
 
-        var cache = $wnd.pgu_geo.location_2_marker_items;
+        var
+            cache_type = $wnd.pgu_geo.type_2_locations
+          , cache_location = $wnd.pgu_geo.location_2_marker
+          , cache_marker = $wnd.pgu_geo.marker_2_items
+        ;
         // 'type' >> 'location' >> 'marker' >> 'liste de profile_items'
 
         var profile_items = @pgu.client.app.utils.ProfileItemsUtils::profileItems()();
 
-        for (var key in profile_items) {
+        for (var type in profile_items) {
 
-            if ('__gwt_ObjectId' === key) {
+            if ('__gwt_ObjectId' === type) {
                 continue;
             }
 
-            if ('all' === key) {
+            if ('all' === type) {
                 continue;
             }
 
-            if (profile_items.hasOwnProperty(key)) {
+            if (profile_items.hasOwnProperty(type)) {
                 var
                     profile_item = profile_items[key]
                   , location_names = @pgu.client.app.utils.LocationsUtils::getLocationNames(Ljava/lang/String;)(profile_item.id)
