@@ -268,7 +268,7 @@ public class ProfileItemsUtils {
         $wnd.pgu_geo.location_2_marker_items = {};
 
         var cache = $wnd.pgu_geo.location_2_marker_items;
-        // 'type' >> 'location' >> 'liste de profile_items+marker'
+        // 'type' >> 'location' >> 'marker' >> 'liste de profile_items'
 
         var profile_items = @pgu.client.app.utils.ProfileItemsUtils::profileItems()();
 
@@ -297,8 +297,6 @@ public class ProfileItemsUtils {
                         location_2_items[location_name] = [];
                     }
 
-// TODO PGU js array contains?
-
                     var geopoint_is_available = @pgu.client.app.utils.LocationsUtils::isLocationInReferential(Ljava/lang/String;)(location_name);
                     if (geopoint_is_available) {
 
@@ -308,6 +306,8 @@ public class ProfileItemsUtils {
                           , lng = geopoint.lng
                         ;
 
+// TODO PGU marker.setClick(display profile_items)
+// TODO PGU review data structures: 1location, 1marker, X profile_items
                         var marker_and_item = {};
                         marker_and_item['marker'] = @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(null,location_name,lat,lng);
                         marker_and_item['item'] = profile_item;

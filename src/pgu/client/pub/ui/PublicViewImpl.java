@@ -112,9 +112,10 @@ public class PublicViewImpl extends Composite implements PublicView {
 
             @Override
             public void onShowAll(final ShowAllEvent event) {
+                hideProfileCurrentLocation();
+
                 final String selectedItemType = event.getSelectedItemType();
                 ProfileItemsUtils.displayProfileMarkers(selectedItemType);
-                hideProfileCurrentLocation();
             }
 
         });
@@ -124,6 +125,7 @@ public class PublicViewImpl extends Composite implements PublicView {
             public void onHideAll(final HideAllEvent event) {
                 final String selectedItemType = event.getSelectedItemType();
                 ProfileItemsUtils.hideProfileMarkers(selectedItemType);
+
                 displayProfileCurrentLocation();
             }
 
