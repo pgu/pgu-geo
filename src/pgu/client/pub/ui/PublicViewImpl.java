@@ -367,7 +367,7 @@ public class PublicViewImpl extends Composite implements PublicView {
 
 		@pgu.client.pub.ui.PublicViewUtils::setProfileItems(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 
-		@pgu.client.app.utils.ProfileItemsUtils::initCacheLocation2itemAndMarkers(Lpgu/client/pub/ui/PublicViewImpl;)(view);
+		@pgu.client.app.utils.ProfileItemsUtils::initCachesLocation2MarkerAndItems(Lpgu/client/pub/ui/PublicViewImpl;)(view);
 
     }-*/;
 
@@ -383,10 +383,8 @@ public class PublicViewImpl extends Composite implements PublicView {
         id2itemTitle.clear();
         id2itemContent.clear();
 
-        // get the profile items for this location name
         ProfileItemsUtils.fillViewWithProfileItems(this, locationName);
 
-        // fill up the stack panel for each of the profile item
         final StringBuilder sb = new StringBuilder();
 
         for (final Entry<String, String> e : id2itemTitle.entrySet()) {
@@ -399,6 +397,30 @@ public class PublicViewImpl extends Composite implements PublicView {
 
         itemsAccordion.setHTML(sb.toString());
 
+        // TODO PGU Oct 11, 2012 open the accordion if there is only one item
+    }
+
+    private String newAccordionGroup(final String id, final String title, final String content) {
+        return
+                "<div class=\"accordion-group\">                " + //
+                "  <div class=\"accordion-heading\">            " + //
+                "    <a class=\"accordion-toggle\"              " + //
+                "       data-toggle=\"collapse\"                " + //
+                "       data-parent=\"#" + ACCORDION_ID + "\"   " + //
+                "       href=\"#accordion_" + id + "\">         " + //
+                title + //
+                "    </a>                                       " + //
+                "  </div>                                       " + //
+                "  <div id=\"accordion_" + id + "\"             " + //
+                "       class=\"accordion-body collapse in\">   " + //
+                "    <div class=\"accordion-inner\">            " + //
+                content + //
+                "    </div>                                     " + //
+                "  </div>                                       " + //
+                "</div>                                         " //
+
+
+        ;
     }
 
     public void fillWithProfileItem(final String id, final String title, final String content) {

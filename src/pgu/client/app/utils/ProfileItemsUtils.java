@@ -260,7 +260,7 @@ public class ProfileItemsUtils {
         return profile_item.long_content;
     }-*/;
 
-    public static native void initCacheLocation2itemAndMarkers(PublicViewImpl view) /*-{
+    public static native void initCachesLocation2MarkerAndItems(PublicViewImpl view) /*-{
 
         $wnd.pgu_geo.type_2_locations = {};
         $wnd.pgu_geo.location_2_marker = {};
