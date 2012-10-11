@@ -1,5 +1,8 @@
 package pgu.client.pub.ui;
 
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.GoogleUtils;
 import pgu.client.app.utils.LocationsUtils;
@@ -39,6 +42,11 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class PublicViewImpl extends Composite implements PublicView {
 
+    private static final String MULTI_PANEL_ID = "pgu_geo_profile_item_multi_panel";
+    private static final String SINGLE_PANEL_ID = "pgu_geo_profile_item_single_panel";
+    private static final String SUMMARY_ID = "pgu_geo_public_summary_container";
+    private static final String ACCORDION_ID = "pgu_geo_profile_items_accordion";
+
     private static PublicViewImplUiBinder uiBinder = GWT.create(PublicViewImplUiBinder.class);
 
     interface PublicViewImplUiBinder extends UiBinder<Widget, PublicViewImpl> {
@@ -50,7 +58,8 @@ public class PublicViewImpl extends Composite implements PublicView {
     NavLink                   locContainer;
     @UiField
     HTML                      summaryContainer, profileItemDescription //
-    , lgContainer
+    , lgContainer //
+    , itemsAccordion //
     ;
     @UiField
     PlayToolbar               playToolbar;
@@ -67,7 +76,10 @@ public class PublicViewImpl extends Composite implements PublicView {
 
         initWidget(uiBinder.createAndBindUi(this));
 
-        summaryPanel.getElement().setId("pgu_geo_public_summary_container");
+        summaryPanel.getElement().setId(SUMMARY_ID);
+        singlePanel.getElement().setId(SINGLE_PANEL_ID);
+        multiPanel.getElement().setId(MULTI_PANEL_ID);
+        itemsAccordion.getElement().setId(ACCORDION_ID);
 
         playToolbar.addPlayHandler(new PlayEvent.Handler() {
 
@@ -114,8 +126,8 @@ public class PublicViewImpl extends Composite implements PublicView {
             @Override
             public void onShowAll(final ShowAllEvent event) {
 
-                singlePanel.setVisible(false);
-                multiPanel.setVisible(true);
+                collapseHide(SINGLE_PANEL_ID);
+                collapseShow(MULTI_PANEL_ID);
 
                 hideProfileCurrentLocation();
 
@@ -129,14 +141,15 @@ public class PublicViewImpl extends Composite implements PublicView {
             @Override
             public void onHideAll(final HideAllEvent event) {
 
-                singlePanel.setVisible(true);
-                multiPanel.setVisible(false);
+                collapseHide(MULTI_PANEL_ID);
+                collapseShow(SINGLE_PANEL_ID);
 
                 final String selectedItemType = event.getSelectedItemType();
                 ProfileItemsUtils.hideProfileMarkers(selectedItemType);
 
                 displayProfileCurrentLocation();
             }
+
 
         });
         playToolbar.addStartPlayingHandler(new StartPlayingEvent.Handler() {
@@ -174,6 +187,14 @@ public class PublicViewImpl extends Composite implements PublicView {
         profileItemPanel.setVisible(false);
     }
 
+    private native void collapseShow(String id) /*-{
+        $wnd.$('#' + id).collapse('show');
+    }-*/;
+
+    private native void collapseHide(String id) /*-{
+        $wnd.$('#' + id).collapse('hide');
+    }-*/;
+
     private void hideProfileItem() {
         hideProfileItemArea();
 
@@ -200,7 +221,7 @@ public class PublicViewImpl extends Composite implements PublicView {
         }
 
         profileItemPanel.setVisible(false);
-        showSummary();
+        collapseShow(SUMMARY_ID);
     }
 
     private void showProfileItemArea() {
@@ -209,7 +230,7 @@ public class PublicViewImpl extends Composite implements PublicView {
             return;
         }
 
-        hideSummary();
+        collapseHide(SUMMARY_ID);
         profileItemPanel.setVisible(true);
     }
 
@@ -217,14 +238,6 @@ public class PublicViewImpl extends Composite implements PublicView {
     public void setPresenter(final PublicPresenter presenter) {
         this.presenter = presenter;
     }
-
-    private native void showSummary() /*-{
-		$wnd.$('#pgu_geo_public_summary_container').collapse('show');
-    }-*/;
-
-    private native void hideSummary() /*-{
-		$wnd.$('#pgu_geo_public_summary_container').collapse('hide');
-    }-*/;
 
     public void setProfileName(final String firstName, final String lastName) {
         presenter.setProfileName(firstName + " " + lastName);
@@ -362,9 +375,35 @@ public class PublicViewImpl extends Composite implements PublicView {
         playToolbar.addProfileItems();
     }
 
+    private final HashMap<String, String> id2itemTitle = new HashMap<String, String>();
+    private final HashMap<String, String> id2itemContent = new HashMap<String, String>();
+
     public void showItemsForLocation(final String locationName) {
+
+        id2itemTitle.clear();
+        id2itemContent.clear();
+
         // get the profile items for this location name
+        ProfileItemsUtils.fillViewWithProfileItems(this, locationName);
+
         // fill up the stack panel for each of the profile item
+        final StringBuilder sb = new StringBuilder();
+
+        for (final Entry<String, String> e : id2itemTitle.entrySet()) {
+            final String id = e.getKey();
+            final String title = e.getValue();
+            final String content = id2itemContent.get(id);
+
+            sb.append(newAccordionGroup(id, title, content));
+        }
+
+        itemsAccordion.setHTML(sb.toString());
+
+    }
+
+    public void fillWithProfileItem(final String id, final String title, final String content) {
+        id2itemTitle.put(id, title);
+        id2itemContent.put(id, content);
     }
 
 }

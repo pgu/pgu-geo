@@ -400,4 +400,36 @@ public class ProfileItemsUtils {
 
     }-*/;
 
+    public static native void fillViewWithProfileItems(final PublicViewImpl view, final String location_name) /*-{
+
+        var
+            cache_items = $wnd.pgu_geo.location_2_items
+          , items = cache_items[location_name]
+        ;
+
+        for ( var i = 0; i < items.length; i++) {
+            var item = items[i];
+
+            var
+                id = item.id
+              , title = []
+              , content = item.long_content
+            ;
+
+            if (item.dates) {
+                title.push(item.dates);
+                title.push(' - ');
+            }
+
+            if (item.short_content) {
+                title.push(item.short_content);
+            }
+
+            view.@pgu.client.pub.ui.PublicViewImpl::fillWithProfileItem(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)( //
+            id, title.join(''), content);
+        }
+
+    }-*/;
+
+
 }

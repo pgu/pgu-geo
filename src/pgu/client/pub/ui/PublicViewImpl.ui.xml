@@ -56,11 +56,41 @@
                 </div>
                 <div class="span6">
                 
-                    <g:HTMLPanel ui:field="multiPanel">
-                        <!-- + stack panel -->
+                    <g:HTMLPanel ui:field="multiPanel" addStyleNames="collapse">
+                        <!-- TODO + collapse panel -->
+<g:HTML ui:field="itemsAccordion" addStyleNames="accordion" id="profile_items_container">
+
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#profile_items_container" href="#profile_item_1">
+        Profile item 1 title
+      </a>
+    </div>
+    <div id="profile_item_1" class="accordion-body collapse in">
+      <div class="accordion-inner">
+        Profile item 1 content
+      </div>
+    </div>
+  </div>
+  
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#profile_items_container" href="#profile_item_2">
+        Profile item 2 title
+      </a>
+    </div>
+    <div id="profile_item_2" class="accordion-body collapse">
+      <div class="accordion-inner">
+        Profile item 2 content
+      </div>
+    </div>
+  </div>
+  
+</g:HTML>                        
+                        
                     </g:HTMLPanel>
                     
-                    <g:HTMLPanel ui:field="singlePanel" addStyleNames="well">
+                    <g:HTMLPanel ui:field="singlePanel" addStyleNames="well collapse in">
                         <!-- summary item -->
                         <g:HTMLPanel ui:field="summaryPanel" addStyleNames="collapse in">
                             <g:HTMLPanel addStyleNames="row-fluid {style.description_item}">
