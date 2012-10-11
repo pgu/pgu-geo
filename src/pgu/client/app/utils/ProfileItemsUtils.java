@@ -273,8 +273,11 @@ public class ProfileItemsUtils {
         ;
 
         var profile_items = @pgu.client.app.utils.ProfileItemsUtils::profileItems()();
+        $wnd.console.log('init caches');
+        $wnd.console.log(profile_items);
 
         for (var type in profile_items) {
+            $wnd.console.log(type);
 
             if ('__gwt_ObjectId' === type) {
                 continue;
@@ -296,10 +299,17 @@ public class ProfileItemsUtils {
                   , google = @pgu.client.app.utils.GoogleUtils::google()()
                 ;
 
+                $wnd.console.log(profile_item);
+
                 for (var i = 0; i < location_names.length; i++) {
                     var location_name = location_names[i];
 
+                    $wnd.console.log(location_name);
+
                     var geopoint_is_available = @pgu.client.app.utils.LocationsUtils::isLocationInReferential(Ljava/lang/String;)(location_name);
+
+                    $wnd.console.log(geopoint_is_available);
+
                     if (geopoint_is_available) {
 
                         if (!cache_marker.hasOwnProperty(location_name)) {

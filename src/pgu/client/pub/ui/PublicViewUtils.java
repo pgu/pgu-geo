@@ -70,6 +70,8 @@ public class PublicViewUtils {
             public void execute() {
                 ProfileItemsUtils.setProfileItems(profile);
                 view.addProfileItemsToPlayToolbar();
+                ProfileItemsUtils.initCachesLocation2MarkerAndItems(view);
+
             }
         });
 

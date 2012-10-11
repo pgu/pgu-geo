@@ -367,8 +367,6 @@ public class PublicViewImpl extends Composite implements PublicView {
 
 		@pgu.client.pub.ui.PublicViewUtils::setProfileItems(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 
-		@pgu.client.app.utils.ProfileItemsUtils::initCachesLocation2MarkerAndItems(Lpgu/client/pub/ui/PublicViewImpl;)(view);
-
     }-*/;
 
     public void addProfileItemsToPlayToolbar() {
