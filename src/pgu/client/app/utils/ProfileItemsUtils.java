@@ -1,5 +1,6 @@
 package pgu.client.app.utils;
 
+import pgu.client.pub.ui.PublicViewImpl;
 import pgu.shared.utils.ItemType;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -259,7 +260,7 @@ public class ProfileItemsUtils {
         return profile_item.long_content;
     }-*/;
 
-    public static native void initCacheLocation2itemAndMarkers() /*-{
+    public static native void initCacheLocation2itemAndMarkers(PublicViewImpl view) /*-{
 
         $wnd.pgu_geo.type_2_locations = {};
         $wnd.pgu_geo.location_2_marker = {};
@@ -307,7 +308,9 @@ public class ProfileItemsUtils {
                         ;
 
                         var marker = @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(null,location_name,lat,lng);
-// TODO PGU marker.setClick(display profile_items)
+                        google.maps.event.addListener(marker, 'click', function() {
+                            view.@pgu.client.pub.ui.PublicViewImpl::showItemsForLocation(Ljava/lang/String;)(location_name);
+                        });
 
                         if (cache_type[type].indexOf(location_name) == -1) {
                             cache_type[type].push(location_name);

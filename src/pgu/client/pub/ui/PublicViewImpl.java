@@ -55,7 +55,8 @@ public class PublicViewImpl extends Composite implements PublicView {
     @UiField
     PlayToolbar               playToolbar;
     @UiField
-    HTMLPanel                 spContainer, summaryPanel, profileItemPanel;
+    HTMLPanel                 spContainer, summaryPanel, profileItemPanel //
+    , multiPanel, singlePanel;
 
     private PublicPresenter   presenter;
     private final ClientUtils u = new ClientUtils();
@@ -112,6 +113,10 @@ public class PublicViewImpl extends Composite implements PublicView {
 
             @Override
             public void onShowAll(final ShowAllEvent event) {
+
+                singlePanel.setVisible(false);
+                multiPanel.setVisible(true);
+
                 hideProfileCurrentLocation();
 
                 final String selectedItemType = event.getSelectedItemType();
@@ -123,6 +128,10 @@ public class PublicViewImpl extends Composite implements PublicView {
 
             @Override
             public void onHideAll(final HideAllEvent event) {
+
+                singlePanel.setVisible(true);
+                multiPanel.setVisible(false);
+
                 final String selectedItemType = event.getSelectedItemType();
                 ProfileItemsUtils.hideProfileMarkers(selectedItemType);
 
@@ -345,12 +354,17 @@ public class PublicViewImpl extends Composite implements PublicView {
 
 		@pgu.client.pub.ui.PublicViewUtils::setProfileItems(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
 
-		@pgu.client.app.utils.ProfileItemsUtils::initCacheLocation2itemAndMarkers()();
+		@pgu.client.app.utils.ProfileItemsUtils::initCacheLocation2itemAndMarkers(Lpgu/client/pub/ui/PublicViewImpl;)(view);
 
     }-*/;
 
     public void addProfileItemsToPlayToolbar() {
         playToolbar.addProfileItems();
+    }
+
+    public void showItemsForLocation(final String locationName) {
+        // get the profile items for this location name
+        // fill up the stack panel for each of the profile item
     }
 
 }

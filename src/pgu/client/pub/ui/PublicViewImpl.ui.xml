@@ -55,7 +55,12 @@
                     <pgu:PlayToolbar ui:field="playToolbar"/>
                 </div>
                 <div class="span6">
-                    <div class="well">
+                
+                    <g:HTMLPanel ui:field="multiPanel">
+                        <!-- + stack panel -->
+                    </g:HTMLPanel>
+                    
+                    <g:HTMLPanel ui:field="singlePanel" addStyleNames="well">
                         <!-- summary item -->
                         <g:HTMLPanel ui:field="summaryPanel" addStyleNames="collapse in">
                             <g:HTMLPanel addStyleNames="row-fluid {style.description_item}">
@@ -87,7 +92,7 @@
                                 <g:HTML ui:field="profileItemDescription" />
                             </div>
                         </g:HTMLPanel>
-                    </div>
+                    </g:HTMLPanel>
                 </div>
             </g:HTMLPanel>
         </b:Section>    
