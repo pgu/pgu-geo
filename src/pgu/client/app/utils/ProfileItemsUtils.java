@@ -293,6 +293,7 @@ public class ProfileItemsUtils {
                 var
                     profile_item = profile_items[type]
                   , location_names = @pgu.client.app.utils.LocationsUtils::getLocationNames(Ljava/lang/String;)(profile_item.id)
+                  , google = @pgu.client.app.utils.GoogleUtils::google()()
                 ;
 
                 for (var i = 0; i < location_names.length; i++) {
