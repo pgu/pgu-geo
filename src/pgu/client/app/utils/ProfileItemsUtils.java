@@ -302,23 +302,27 @@ public class ProfileItemsUtils {
                     var geopoint_is_available = @pgu.client.app.utils.LocationsUtils::isLocationInReferential(Ljava/lang/String;)(location_name);
                     if (geopoint_is_available) {
 
-                        var
-                            geopoint = @pgu.client.app.utils.LocationsUtils::getGeopoint(Ljava/lang/String;)(location_name)
-                          , lat = geopoint.lat
-                          , lng = geopoint.lng
-                        ;
+                        if (!cache_marker.hasOwnProperty(location_name)) {
 
-                        var marker = @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(null,location_name,lat,lng);
-                        google.maps.event.addListener(marker, 'click', function() {
-                            view.@pgu.client.pub.ui.PublicViewImpl::showItemsForLocation(Ljava/lang/String;)(location_name);
-                        });
+                            var
+                                geopoint = @pgu.client.app.utils.LocationsUtils::getGeopoint(Ljava/lang/String;)(location_name)
+                              , lat = geopoint.lat
+                              , lng = geopoint.lng
+                            ;
+
+                            var marker = @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(null,location_name,lat,lng);
+                            google.maps.event.addListener(marker, 'click', function() {
+                                view.@pgu.client.pub.ui.PublicViewImpl::showItemsForLocation(Ljava/lang/String;)(location_name);
+                            });
+
+                            // TODO PGU counter on how many items are associated to this marker and
+                            // then overrides the marker's title? marker.setTitle(location_name + ': <b>3</b>');
+
+                            cache_marker[location_name] = marker;
+                        }
 
                         if (cache_type[type].indexOf(location_name) == -1) {
                             cache_type[type].push(location_name);
-                        }
-
-                        if (!cache_marker.hasOwnProperty(location_name)) {
-                            cache_marker[location_name] = marker;
                         }
 
                         if (!cache_items.hasOwnProperty(location_name)) {
