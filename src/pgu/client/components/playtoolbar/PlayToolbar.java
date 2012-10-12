@@ -69,6 +69,7 @@ BwdEvent.HasBwdHandlers //
     private boolean                 isPast2Prst = true;
     private int                     token       = 0;
     private boolean                 isPlaying   = false;
+    private boolean isToggled = false;
 
     private final ArrayList<Button> allControls = new ArrayList<Button>();
 
@@ -94,25 +95,30 @@ BwdEvent.HasBwdHandlers //
         allControls.add(pauseBtn);
         allControls.add(fwdBtn);
 
-        stop();
+        visibles(playBtn, fwdBtn);
+        initToken();
+        isPlaying = false;
+
+        showAllBtn.setEnabled(true);
+        isToggled = false;
 
         setVisible(false);
     }
 
     @UiHandler("showAllBtn")
     public void clickOnShowAll(final ClickEvent e) {
-        stop();
+        isToggled = !isToggled;
+        fireShowAllAction();
+    }
 
+    private void fireShowAllAction() {
         final String selectedItemType = items.getValue(items.getSelectedIndex());
 
-        if (showAllBtn.isToggled()) {
-            // TODO PGU Oct 9, 2012
-            // show all markers
+        // we can not rely on showAllBtn.isToggled() as we get here before it sets the css 'active'
+        if (isToggled) {
             fireEvent(new ShowAllEvent(selectedItemType));
 
         } else {
-            // TODO PGU Oct 9, 2012
-            // show only the marker of current location
             fireEvent(new HideAllEvent(selectedItemType));
 
         }
@@ -165,18 +171,6 @@ BwdEvent.HasBwdHandlers //
 
     private void stop() {
 
-        if (isPlaying) {
-            showAllBtn.setEnabled(true);
-
-            final boolean isShowAllOn =showAllBtn.isToggled();
-            final String selectedItemType = items.getValue(items.getSelectedIndex());
-
-            fireEvent(new StopPlayingEvent(selectedItemType, isShowAllOn));
-
-            isPlaying = false;
-        }
-
-
         stopPlayTimer();
 
         visibles(playBtn, fwdBtn);
@@ -186,6 +180,12 @@ BwdEvent.HasBwdHandlers //
 
         initToken();
         fireEvent(new StopEvent());
+
+        isPlaying = false;
+
+        showAllBtn.setEnabled(true);
+
+        fireShowAllAction(); // restore the state of the show all
     }
 
     private void visibles(final Button... widgets) {
@@ -283,10 +283,9 @@ BwdEvent.HasBwdHandlers //
 
             showAllBtn.setEnabled(false);
 
-            final boolean isShowAllOn =showAllBtn.isToggled();
             final String selectedItemType = items.getValue(items.getSelectedIndex());
 
-            fireEvent(new StartPlayingEvent(selectedItemType, isShowAllOn));
+            fireEvent(new StartPlayingEvent(selectedItemType));
 
             isPlaying = true;
         }
@@ -347,6 +346,13 @@ BwdEvent.HasBwdHandlers //
     @UiHandler("fwdBtn")
     public void clickOnFwd(final ClickEvent e) {
 
+        if (!isPlaying) {
+            showAllBtn.setEnabled(false);
+
+            final String selectedItemType = items.getValue(items.getSelectedIndex());
+            fireEvent(new HideAllEvent(selectedItemType));
+        }
+
         play(true, new ScheduledCommand() {
 
             @Override
@@ -358,6 +364,13 @@ BwdEvent.HasBwdHandlers //
 
     @UiHandler("bwdBtn")
     public void clickOnBwd(final ClickEvent e) {
+
+        if (!isPlaying) {
+            showAllBtn.setEnabled(false);
+
+            final String selectedItemType = items.getValue(items.getSelectedIndex());
+            fireEvent(new HideAllEvent(selectedItemType));
+        }
 
         play(false, new ScheduledCommand() {
 

@@ -5,7 +5,7 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
-public class HideAllEvent extends GwtEvent<HideAllEvent.Handler> {
+public class HideAllEvent extends GwtEvent<HideAllEvent.Handler> implements HasSelectedItemType {
 
     public interface HasHideAllHandlers extends HasHandlers {
         HandlerRegistration addHideAllHandler(HideAllEvent.Handler handler);
@@ -33,6 +33,7 @@ public class HideAllEvent extends GwtEvent<HideAllEvent.Handler> {
         handler.onHideAll(this);
     }
 
+    @Override
     public String getSelectedItemType() {
         return selectedItemType;
     }

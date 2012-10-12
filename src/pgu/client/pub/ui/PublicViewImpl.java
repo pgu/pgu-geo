@@ -11,6 +11,7 @@ import pgu.client.app.utils.ProfileItemsUtils;
 import pgu.client.components.playtoolbar.PlayToolbar;
 import pgu.client.components.playtoolbar.event.BwdEvent;
 import pgu.client.components.playtoolbar.event.FwdEvent;
+import pgu.client.components.playtoolbar.event.HasSelectedItemType;
 import pgu.client.components.playtoolbar.event.HideAllEvent;
 import pgu.client.components.playtoolbar.event.PauseEvent;
 import pgu.client.components.playtoolbar.event.PlayEvent;
@@ -142,40 +143,6 @@ public class PublicViewImpl extends Composite implements PublicView {
             }
 
         });
-        playToolbar.addHideAllHandler(new HideAllEvent.Handler() {
-
-            @Override
-            public void onHideAll(final HideAllEvent event) {
-                GWT.log("[on hide all]");
-
-                collapseHide(MULTI_PANEL_ID);
-                collapseShow(SINGLE_PANEL_ID);
-
-                final String selectedItemType = event.getSelectedItemType();
-                ProfileItemsUtils.hideProfileMarkers(selectedItemType);
-
-                displayProfileCurrentLocation();
-            }
-
-
-        });
-        playToolbar.addStartPlayingHandler(new StartPlayingEvent.Handler() {
-
-            @Override
-            public void onStartPlaying(final StartPlayingEvent event) {
-                GWT.log("[on start playing]");
-
-                if (event.isShowAllOn()) {
-
-                    final String selectedItemType = event.getSelectedItemType();
-                    ProfileItemsUtils.hideProfileMarkers(selectedItemType);
-
-                } else {
-                    hideProfileCurrentLocation();
-
-                }
-            }
-        });
         playToolbar.addStopPlayingHandler(new StopPlayingEvent.Handler() {
 
             @Override
@@ -193,7 +160,38 @@ public class PublicViewImpl extends Composite implements PublicView {
                 }
             }
         });
+        playToolbar.addHideAllHandler(new HideAllEvent.Handler() {
+
+            @Override
+            public void onHideAll(final HideAllEvent event) {
+                GWT.log("[on hide all]");
+
+                hideProfileMarkers(event);
+
+                displayProfileCurrentLocation();
+            }
+
+        });
+        playToolbar.addStartPlayingHandler(new StartPlayingEvent.Handler() {
+
+            @Override
+            public void onStartPlaying(final StartPlayingEvent event) {
+                GWT.log("[on start playing]");
+
+                hideProfileMarkers(event);
+
+                hideProfileCurrentLocation();
+            }
+        });
         profileItemPanel.setVisible(false);
+    }
+
+    private void hideProfileMarkers(final HasSelectedItemType event) {
+        collapseHide(MULTI_PANEL_ID);
+        collapseShow(SINGLE_PANEL_ID);
+
+        final String selectedItemType = event.getSelectedItemType();
+        ProfileItemsUtils.hideProfileMarkers(selectedItemType);
     }
 
     private native void collapseShow(String id) /*-{

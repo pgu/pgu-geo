@@ -5,7 +5,7 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
-public class StartPlayingEvent extends GwtEvent<StartPlayingEvent.Handler> {
+public class StartPlayingEvent extends GwtEvent<StartPlayingEvent.Handler> implements HasSelectedItemType {
 
     public interface HasStartPlayingHandlers extends HasHandlers {
         HandlerRegistration addStartPlayingHandler(StartPlayingEvent.Handler handler);
@@ -18,11 +18,9 @@ public class StartPlayingEvent extends GwtEvent<StartPlayingEvent.Handler> {
     public static final Type<Handler> TYPE = new Type<Handler>();
 
     private final String selectedItemType;
-    private final boolean isShowAllOn;
 
-    public StartPlayingEvent(final String selectedItemType, final boolean isShowAllOn) {
+    public StartPlayingEvent(final String selectedItemType) {
         this.selectedItemType = selectedItemType;
-        this.isShowAllOn = isShowAllOn;
     }
 
     @Override
@@ -35,12 +33,9 @@ public class StartPlayingEvent extends GwtEvent<StartPlayingEvent.Handler> {
         handler.onStartPlaying(this);
     }
 
+    @Override
     public String getSelectedItemType() {
         return selectedItemType;
-    }
-
-    public boolean isShowAllOn() {
-        return isShowAllOn;
     }
 
 }
