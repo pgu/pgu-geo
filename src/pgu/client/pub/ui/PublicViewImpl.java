@@ -18,7 +18,6 @@ import pgu.client.components.playtoolbar.event.PlayEvent;
 import pgu.client.components.playtoolbar.event.ShowAllEvent;
 import pgu.client.components.playtoolbar.event.StartPlayingEvent;
 import pgu.client.components.playtoolbar.event.StopEvent;
-import pgu.client.components.playtoolbar.event.StopPlayingEvent;
 import pgu.client.pub.PublicPresenter;
 import pgu.client.pub.PublicView;
 import pgu.shared.dto.PublicProfile;
@@ -134,7 +133,14 @@ public class PublicViewImpl extends Composite implements PublicView {
                 GWT.log("[on show all]");
 
                 collapseHide(SINGLE_PANEL_ID);
-                collapseShow(MULTI_PANEL_ID);
+                new Timer() {
+
+                    @Override
+                    public void run() {
+                        collapseShow(MULTI_PANEL_ID);
+                    }
+
+                }.schedule(300);
 
                 hideProfileCurrentLocation();
 
@@ -143,23 +149,23 @@ public class PublicViewImpl extends Composite implements PublicView {
             }
 
         });
-        playToolbar.addStopPlayingHandler(new StopPlayingEvent.Handler() {
-
-            @Override
-            public void onStopPlaying(final StopPlayingEvent event) {
-                GWT.log("[on stop playing]");
-
-                if (event.isShowAllOn()) {
-
-                    final String selectedItemType = event.getSelectedItemType();
-                    ProfileItemsUtils.displayProfileMarkers(selectedItemType);
-
-                } else {
-
-                    displayProfileCurrentLocation();
-                }
-            }
-        });
+        //        playToolbar.addStopPlayingHandler(new StopPlayingEvent.Handler() {
+        //
+        //            @Override
+        //            public void onStopPlaying(final StopPlayingEvent event) {
+        //                GWT.log("[on stop playing]");
+        //
+        //                if (event.isShowAllOn()) {
+        //
+        //                    final String selectedItemType = event.getSelectedItemType();
+        //                    ProfileItemsUtils.displayProfileMarkers(selectedItemType);
+        //
+        //                } else {
+        //
+        //                    displayProfileCurrentLocation();
+        //                }
+        //            }
+        //        });
         playToolbar.addHideAllHandler(new HideAllEvent.Handler() {
 
             @Override
@@ -188,7 +194,14 @@ public class PublicViewImpl extends Composite implements PublicView {
 
     private void hideProfileMarkers(final HasSelectedItemType event) {
         collapseHide(MULTI_PANEL_ID);
-        collapseShow(SINGLE_PANEL_ID);
+        new Timer() {
+
+            @Override
+            public void run() {
+                collapseShow(SINGLE_PANEL_ID);
+            }
+
+        }.schedule(300);
 
         final String selectedItemType = event.getSelectedItemType();
         ProfileItemsUtils.hideProfileMarkers(selectedItemType);
