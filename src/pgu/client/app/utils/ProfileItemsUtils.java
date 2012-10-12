@@ -302,7 +302,6 @@ public class ProfileItemsUtils {
         var type_2_profile_items = @pgu.client.app.utils.ProfileItemsUtils::type2profileItems()();
 
         for (var type in type_2_profile_items) {
-            $wnd.console.log(type);
 
             if ('__gwt_ObjectId' === type) {
                 continue;
@@ -312,13 +311,7 @@ public class ProfileItemsUtils {
                 continue;
             }
 
-            $wnd.console.log('1');
-            $wnd.console.log(type_2_profile_items.hasOwnProperty(type));
-
             if (type_2_profile_items.hasOwnProperty(type)) {
-
-                $wnd.console.log('2');
-                $wnd.console.log(cache_type.hasOwnProperty(type));
 
                 if (!cache_type.hasOwnProperty(type)) {
                     cache_type[type] = [];
@@ -328,9 +321,6 @@ public class ProfileItemsUtils {
                     profile_items = type_2_profile_items[type]
                 ;
 
-                $wnd.console.log('3');
-                $wnd.console.log(profile_items);
-
                 for (var k = 0; k < profile_items.length; k++) {
 
                     var
@@ -338,19 +328,12 @@ public class ProfileItemsUtils {
                       , location_names = @pgu.client.app.utils.LocationsUtils::getLocationNames(Ljava/lang/String;)(profile_item.id)
                     ;
 
-                    $wnd.console.log('3bis');
-                    $wnd.console.log(profile_item);
-
                     for (var i = 0; i < location_names.length; i++) {
 
                         var
                             location_name = location_names[i]
                           , geopoint_is_available = @pgu.client.app.utils.LocationsUtils::isLocationInReferential(Ljava/lang/String;)(location_name);
                         ;
-
-                        $wnd.console.log('4');
-                        $wnd.console.log(location_name);
-                        $wnd.console.log(geopoint_is_available);
 
                         if (geopoint_is_available) {
 
