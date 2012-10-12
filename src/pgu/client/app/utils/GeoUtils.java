@@ -35,7 +35,7 @@ public class GeoUtils {
 
     public static void initPublicGeo() {
         initGeoInternal();
-        PublicUtils.initProfileMap();
+        PublicUtils.initPublicProfileMap();
     }
 
 

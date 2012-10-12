@@ -4,11 +4,14 @@ import pgu.client.pub.ui.PublicViewImpl;
 import pgu.shared.utils.ItemType;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Timer;
 
 public class ProfileItemsUtils {
 
-    private static native JavaScriptObject profileItems() /*-{
-        return $wnd.pgu_geo.profile_items;
+    private static native JavaScriptObject type2profileItems() /*-{
+        return $wnd.pgu_geo.type_2_profile_items;
     }-*/;
 
     private static native JavaScriptObject selectedProfileItems() /*-{
@@ -17,31 +20,31 @@ public class ProfileItemsUtils {
 
     public static native void setProfileItems(final JavaScriptObject profile) /*-{
 
-        $wnd.pgu_geo.profile_items = {};
+        $wnd.pgu_geo.type_2_profile_items = {};
 
         var
-            profile_items = $wnd.pgu_geo.profile_items
+            type_2_profile_items = $wnd.pgu_geo.type_2_profile_items
           , experience = @pgu.shared.utils.ItemType::experience
           , education = @pgu.shared.utils.ItemType::education
         ;
 
         if (profile.positions) {
-            profile_items[experience] = profile.positions;
+            type_2_profile_items[experience] = profile.positions;
         }
 
         if (profile.educations) {
-            profile_items[education] = profile.educations;
+            type_2_profile_items[education] = profile.educations;
         }
 
         // check if profile has several sections
         var nb_sections = 0;
-        for (var key in profile_items) {
+        for (var type in type_2_profile_items) {
 
-            if ('__gwt_ObjectId' === key) {
+            if ('__gwt_ObjectId' === type) {
                 continue;
             }
 
-            if (profile_items.hasOwnProperty(key)) {
+            if (type_2_profile_items.hasOwnProperty(type)) {
                 nb_sections++;
             }
 
@@ -53,14 +56,14 @@ public class ProfileItemsUtils {
         if (nb_sections == 2) {
 
             var all_items = [];
-            for (var key in profile_items) {
+            for (var type in type_2_profile_items) {
 
-                if ('__gwt_ObjectId' === key) {
+                if ('__gwt_ObjectId' === type) {
                     continue;
                 }
 
-                if (profile_items.hasOwnProperty(key)) {
-                    all_items = all_items.concat(profile_items[key]);
+                if (type_2_profile_items.hasOwnProperty(type)) {
+                    all_items = all_items.concat(type_2_profile_items[type]);
                 }
             }
 
@@ -69,7 +72,7 @@ public class ProfileItemsUtils {
                 item.startD = new Date(item.startD);
             }
 
-            profile_items['all'] = all_items; // we sort 'all' items only as the others already have an order from linkedin
+            type_2_profile_items['all'] = all_items; // we sort 'all' items only as the others already have an order from linkedin
             @pgu.client.app.utils.ProfileItemsUtils::sortProfileItemsByDate(Lcom/google/gwt/core/client/JavaScriptObject;)(all_items);
         }
 
@@ -157,23 +160,23 @@ public class ProfileItemsUtils {
     }-*/;
 
     public static native boolean hasAllOption() /*-{
-        var profile_items = @pgu.client.app.utils.ProfileItemsUtils::profileItems()();
-        return profile_items.hasOwnProperty('all');
+        var type_2_profile_items = @pgu.client.app.utils.ProfileItemsUtils::type2profileItems()();
+        return type_2_profile_items.hasOwnProperty('all');
     }-*/;
 
     public static native boolean hasExperienceOption() /*-{
-        var profile_items = @pgu.client.app.utils.ProfileItemsUtils::profileItems()();
-        return profile_items.hasOwnProperty(@pgu.shared.utils.ItemType::experience);
+        var type_2_profile_items = @pgu.client.app.utils.ProfileItemsUtils::type2profileItems()();
+        return type_2_profile_items.hasOwnProperty(@pgu.shared.utils.ItemType::experience);
     }-*/;
 
     public static native boolean hasEducationOption() /*-{
-        var profile_items = @pgu.client.app.utils.ProfileItemsUtils::profileItems()();
-        return profile_items.hasOwnProperty(@pgu.shared.utils.ItemType::education);
+        var type_2_profile_items = @pgu.client.app.utils.ProfileItemsUtils::type2profileItems()();
+        return type_2_profile_items.hasOwnProperty(@pgu.shared.utils.ItemType::education);
     }-*/;
 
     public static native void setSelectedProfileItems(final String selectedItemType) /*-{
-        var profile_items = @pgu.client.app.utils.ProfileItemsUtils::profileItems()();
-        $wnd.pgu_geo.selected_profile_items = profile_items[selectedItemType];
+        var type_2_profile_items = @pgu.client.app.utils.ProfileItemsUtils::type2profileItems()();
+        $wnd.pgu_geo.selected_profile_items = type_2_profile_items[selectedItemType];
     }-*/;
 
     public static native int nbSelectedItems() /*-{
@@ -260,7 +263,31 @@ public class ProfileItemsUtils {
         return profile_item.long_content;
     }-*/;
 
-    public static native void initCachesLocation2MarkerAndItems(PublicViewImpl view) /*-{
+    public static void initCachesLocation2MarkerAndItems(final PublicViewImpl view) {
+
+        new Timer() {
+
+            @Override
+            public void run() {
+                Scheduler.get().scheduleDeferred(new Command() {
+                    @Override
+                    public void execute() {
+                        initCachesLocation2MarkerAndItemsInternal(view);
+                    }
+                });
+            }
+
+        }.schedule(1000);
+
+    }
+
+    private static native void initCachesLocation2MarkerAndItemsInternal(PublicViewImpl view) /*-{
+
+        var google = @pgu.client.app.utils.GoogleUtils::google()();
+        if (!google) {
+            @pgu.client.app.utils.ProfileItemsUtils::initCachesLocation2MarkerAndItems(Lpgu/client/pub/ui/PublicViewImpl;)(view);
+            return;
+        }
 
         $wnd.pgu_geo.type_2_locations = {};
         $wnd.pgu_geo.location_2_marker = {};
@@ -272,9 +299,9 @@ public class ProfileItemsUtils {
           , cache_items = $wnd.pgu_geo.location_2_items
         ;
 
-        var profile_items = @pgu.client.app.utils.ProfileItemsUtils::profileItems()();
+        var type_2_profile_items = @pgu.client.app.utils.ProfileItemsUtils::type2profileItems()();
 
-        for (var type in profile_items) {
+        for (var type in type_2_profile_items) {
             $wnd.console.log(type);
 
             if ('__gwt_ObjectId' === type) {
@@ -285,62 +312,79 @@ public class ProfileItemsUtils {
                 continue;
             }
 
-// TODO PGU
-            if (profile_items.hasOwnProperty(type)) {
+            $wnd.console.log('1');
+            $wnd.console.log(type_2_profile_items.hasOwnProperty(type));
+
+            if (type_2_profile_items.hasOwnProperty(type)) {
+
+                $wnd.console.log('2');
+                $wnd.console.log(cache_type.hasOwnProperty(type));
 
                 if (!cache_type.hasOwnProperty(type)) {
                     cache_type[type] = [];
                 }
 
                 var
-                    profile_item = profile_items[type]
-                  , location_names = @pgu.client.app.utils.LocationsUtils::getLocationNames(Ljava/lang/String;)(profile_item.id)
-                  , google = @pgu.client.app.utils.GoogleUtils::google()()
+                    profile_items = type_2_profile_items[type]
                 ;
 
-                $wnd.console.log(profile_item);
+                $wnd.console.log('3');
+                $wnd.console.log(profile_items);
 
-                for (var i = 0; i < location_names.length; i++) {
-                    var location_name = location_names[i];
+                for (var k = 0; k < profile_items.length; k++) {
 
-                    $wnd.console.log(location_name);
+                    var
+                        profile_item = profile_items[k]
+                      , location_names = @pgu.client.app.utils.LocationsUtils::getLocationNames(Ljava/lang/String;)(profile_item.id)
+                    ;
 
-                    var geopoint_is_available = @pgu.client.app.utils.LocationsUtils::isLocationInReferential(Ljava/lang/String;)(location_name);
+                    $wnd.console.log('3bis');
+                    $wnd.console.log(profile_item);
 
-                    $wnd.console.log(geopoint_is_available);
+                    for (var i = 0; i < location_names.length; i++) {
 
-                    if (geopoint_is_available) {
+                        var
+                            location_name = location_names[i]
+                          , geopoint_is_available = @pgu.client.app.utils.LocationsUtils::isLocationInReferential(Ljava/lang/String;)(location_name);
+                        ;
 
-                        if (!cache_marker.hasOwnProperty(location_name)) {
+                        $wnd.console.log('4');
+                        $wnd.console.log(location_name);
+                        $wnd.console.log(geopoint_is_available);
 
-                            var
-                                geopoint = @pgu.client.app.utils.LocationsUtils::getGeopoint(Ljava/lang/String;)(location_name)
-                              , lat = geopoint.lat
-                              , lng = geopoint.lng
-                            ;
+                        if (geopoint_is_available) {
 
-                            var marker = @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(null,location_name,lat,lng);
-                            google.maps.event.addListener(marker, 'click', function() {
-                                view.@pgu.client.pub.ui.PublicViewImpl::showItemsForLocation(Ljava/lang/String;)(location_name);
-                            });
+                            if (!cache_marker.hasOwnProperty(location_name)) {
 
-                            // TODO PGU counter on how many items are associated to this marker and
-                            // then overrides the marker's title? marker.setTitle(location_name + ': <b>3</b>');
+                                var
+                                    geopoint = @pgu.client.app.utils.LocationsUtils::getGeopoint(Ljava/lang/String;)(location_name)
+                                  , lat = geopoint.lat
+                                  , lng = geopoint.lng
+                                ;
 
-                            cache_marker[location_name] = marker;
+                                var marker = @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(null,location_name,lat,lng);
+                                google.maps.event.addListener(marker, 'click', function() {
+                                    view.@pgu.client.pub.ui.PublicViewImpl::showItemsForLocation(Ljava/lang/String;)(location_name);
+                                });
+
+                                // TODO PGU counter on how many items are associated to this marker and
+                                // then overrides the marker's title? marker.setTitle(location_name + ': <b>3</b>');
+
+                                cache_marker[location_name] = marker;
+                            }
+
+                            if (cache_type[type].indexOf(location_name) == -1) {
+                                cache_type[type].push(location_name);
+                            }
+
+                            if (!cache_items.hasOwnProperty(location_name)) {
+                                cache_items[location_name] = [].concat(profile_item);
+
+                            } else {
+                                cache_items[location_name].push(profile_item);
+                            }
+
                         }
-
-                        if (cache_type[type].indexOf(location_name) == -1) {
-                            cache_type[type].push(location_name);
-                        }
-
-                        if (!cache_items.hasOwnProperty(location_name)) {
-                            cache_items[location_name] = [].concat(profile_item);
-
-                        } else {
-                            cache_items[location_name].push(profile_item);
-                        }
-
                     }
                 }
 

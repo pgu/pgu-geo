@@ -4,21 +4,21 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 public class PublicUtils {
 
-    public static native void initProfileMap() /*-{
+    public static native void initPublicProfileMap() /*-{
 
         var div = $wnd.document.getElementById("pgu_geo_public_profile_map");
 
         if (div === null) {
             $wnd.setTimeout(
                 function() {
-                    @pgu.client.pub.ui.PublicUtils::initProfileMap()();
+                    @pgu.client.pub.ui.PublicUtils::initPublicProfileMap()();
                 }
                 , 1000
             );
             return;
         }
 
-        $wnd.console.log('initProfileMap');
+        $wnd.console.log('initPublicMap');
 
         var
             google = @pgu.client.app.utils.GoogleUtils::google()()

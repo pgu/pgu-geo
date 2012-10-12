@@ -85,6 +85,7 @@ public class PublicViewImpl extends Composite implements PublicView {
 
             @Override
             public void onPlay(final PlayEvent event) {
+                GWT.log("[on play]");
                 showProfileItem(event.getToken());
             }
 
@@ -93,6 +94,7 @@ public class PublicViewImpl extends Composite implements PublicView {
 
             @Override
             public void onStop(final StopEvent event) {
+                GWT.log("[on stop]");
                 hideProfileItem();
             }
 
@@ -102,6 +104,7 @@ public class PublicViewImpl extends Composite implements PublicView {
             @Override
             public void onPause(final PauseEvent event) {
                 // nothing to do
+                GWT.log("[on pause]");
             }
 
         });
@@ -109,6 +112,7 @@ public class PublicViewImpl extends Composite implements PublicView {
 
             @Override
             public void onBwd(final BwdEvent event) {
+                GWT.log("[on bwd]");
                 showProfileItem(event.getToken());
             }
 
@@ -117,6 +121,7 @@ public class PublicViewImpl extends Composite implements PublicView {
 
             @Override
             public void onFwd(final FwdEvent event) {
+                GWT.log("[on fwd]");
                 showProfileItem(event.getToken());
             }
 
@@ -125,6 +130,7 @@ public class PublicViewImpl extends Composite implements PublicView {
 
             @Override
             public void onShowAll(final ShowAllEvent event) {
+                GWT.log("[on show all]");
 
                 collapseHide(SINGLE_PANEL_ID);
                 collapseShow(MULTI_PANEL_ID);
@@ -140,6 +146,7 @@ public class PublicViewImpl extends Composite implements PublicView {
 
             @Override
             public void onHideAll(final HideAllEvent event) {
+                GWT.log("[on hide all]");
 
                 collapseHide(MULTI_PANEL_ID);
                 collapseShow(SINGLE_PANEL_ID);
@@ -156,6 +163,7 @@ public class PublicViewImpl extends Composite implements PublicView {
 
             @Override
             public void onStartPlaying(final StartPlayingEvent event) {
+                GWT.log("[on start playing]");
 
                 if (event.isShowAllOn()) {
 
@@ -172,6 +180,7 @@ public class PublicViewImpl extends Composite implements PublicView {
 
             @Override
             public void onStopPlaying(final StopPlayingEvent event) {
+                GWT.log("[on stop playing]");
 
                 if (event.isShowAllOn()) {
 
