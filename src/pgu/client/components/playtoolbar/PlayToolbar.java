@@ -99,6 +99,7 @@ BwdEvent.HasBwdHandlers //
         initToken();
         isPlaying = false;
 
+        items.setEnabled(true);
         showAllBtn.setEnabled(true);
         isToggled = false;
 
@@ -183,6 +184,7 @@ BwdEvent.HasBwdHandlers //
 
         isPlaying = false;
 
+        items.setEnabled(true);
         showAllBtn.setEnabled(true);
 
         fireShowAllAction(); // restore the state of the show all
@@ -281,6 +283,7 @@ BwdEvent.HasBwdHandlers //
 
         if (!isPlaying) {
 
+            items.setEnabled(false);
             showAllBtn.setEnabled(false);
 
             final String selectedItemType = items.getValue(items.getSelectedIndex());
@@ -347,6 +350,7 @@ BwdEvent.HasBwdHandlers //
     public void clickOnFwd(final ClickEvent e) {
 
         if (!isPlaying) {
+            items.setEnabled(false);
             showAllBtn.setEnabled(false);
 
             final String selectedItemType = items.getValue(items.getSelectedIndex());
@@ -366,6 +370,7 @@ BwdEvent.HasBwdHandlers //
     public void clickOnBwd(final ClickEvent e) {
 
         if (!isPlaying) {
+            items.setEnabled(false);
             showAllBtn.setEnabled(false);
 
             final String selectedItemType = items.getValue(items.getSelectedIndex());
