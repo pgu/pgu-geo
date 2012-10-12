@@ -350,11 +350,14 @@ BwdEvent.HasBwdHandlers //
     public void clickOnFwd(final ClickEvent e) {
 
         if (!isPlaying) {
-            items.setEnabled(false);
-            showAllBtn.setEnabled(false);
+            if (showAllBtn.isEnabled()) {
 
-            final String selectedItemType = items.getValue(items.getSelectedIndex());
-            fireEvent(new HideAllEvent(selectedItemType));
+                items.setEnabled(false);
+                showAllBtn.setEnabled(false);
+
+                final String selectedItemType = items.getValue(items.getSelectedIndex());
+                fireEvent(new HideAllEvent(selectedItemType));
+            }
         }
 
         play(true, new ScheduledCommand() {
@@ -370,11 +373,14 @@ BwdEvent.HasBwdHandlers //
     public void clickOnBwd(final ClickEvent e) {
 
         if (!isPlaying) {
-            items.setEnabled(false);
-            showAllBtn.setEnabled(false);
+            if (showAllBtn.isEnabled()) {
 
-            final String selectedItemType = items.getValue(items.getSelectedIndex());
-            fireEvent(new HideAllEvent(selectedItemType));
+                items.setEnabled(false);
+                showAllBtn.setEnabled(false);
+
+                final String selectedItemType = items.getValue(items.getSelectedIndex());
+                fireEvent(new HideAllEvent(selectedItemType));
+            }
         }
 
         play(false, new ScheduledCommand() {
