@@ -418,13 +418,14 @@ public class PublicViewImpl extends Composite implements PublicView {
         ProfileItemsUtils.fillViewWithProfileItems(this, locationName);
 
         final StringBuilder sb = new StringBuilder();
+        final boolean isOpen = id2itemTitle.size() == 1;
 
         for (final Entry<String, String> e : id2itemTitle.entrySet()) {
             final String id = e.getKey();
             final String title = e.getValue();
             final String content = id2itemContent.get(id);
 
-            sb.append(newAccordionGroup(id, title, content));
+            sb.append(newAccordionGroup(isOpen, id, title, content));
         }
 
         itemsAccordion.setHTML(sb.toString());
@@ -432,24 +433,25 @@ public class PublicViewImpl extends Composite implements PublicView {
         // TODO PGU Oct 11, 2012 open the accordion if there is only one item
     }
 
-    private String newAccordionGroup(final String id, final String title, final String content) {
+    private String newAccordionGroup(final boolean isOpen, final String id, final String title, final String content) {
+        final String cssIn = isOpen? " in " : "";
         return
-                "<div class=\"accordion-group\">                " + //
-                "  <div class=\"accordion-heading\">            " + //
-                "    <a class=\"accordion-toggle\"              " + //
-                "       data-toggle=\"collapse\"                " + //
-                "       data-parent=\"#" + ACCORDION_ID + "\"   " + //
-                "       href=\"#accordion_" + id + "\">         " + //
+                "<div class=\"accordion-group\">                          " + //
+                "  <div class=\"accordion-heading\">                      " + //
+                "    <a class=\"accordion-toggle\"                        " + //
+                "       data-toggle=\"collapse\"                          " + //
+                "       data-parent=\"#" + ACCORDION_ID + "\"             " + //
+                "       href=\"#accordion_" + id + "\">                   " + //
                 title + //
-                "    </a>                                       " + //
-                "  </div>                                       " + //
-                "  <div id=\"accordion_" + id + "\"             " + //
-                "       class=\"accordion-body collapse\">   " + //
-                "    <div class=\"accordion-inner\">            " + //
+                "    </a>                                                 " + //
+                "  </div>                                                 " + //
+                "  <div id=\"accordion_" + id + "\"                       " + //
+                "       class=\"accordion-body collapse" + cssIn + "\">   " + //
+                "    <div class=\"accordion-inner\">                      " + //
                 content + //
-                "    </div>                                     " + //
-                "  </div>                                       " + //
-                "</div>                                         " //
+                "    </div>                                               " + //
+                "  </div>                                                 " + //
+                "</div>                                                   " //
 
 
         ;
