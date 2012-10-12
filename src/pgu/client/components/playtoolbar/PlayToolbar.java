@@ -83,7 +83,7 @@ BwdEvent.HasBwdHandlers //
                 final String selectedItemType = items.getValue(items.getSelectedIndex());
                 setSelectedProfileItems(selectedItemType);
 
-                clickOnStop(null);
+                stop();
             }
         });
 
@@ -107,6 +107,9 @@ BwdEvent.HasBwdHandlers //
     @UiHandler("showAllBtn")
     public void clickOnShowAll(final ClickEvent e) {
         isToggled = !isToggled;
+
+        items.setEnabled(!isToggled);
+
         fireShowAllAction();
     }
 
@@ -182,8 +185,8 @@ BwdEvent.HasBwdHandlers //
 
         isPlaying = false;
 
-        items.setEnabled(true);
         showAllBtn.setEnabled(true);
+        items.setEnabled(!isToggled);
 
         fireShowAllAction(); // restore the state of the show all
     }
@@ -281,8 +284,8 @@ BwdEvent.HasBwdHandlers //
 
         if (!isPlaying) {
 
-            items.setEnabled(false);
             showAllBtn.setEnabled(false);
+            items.setEnabled(false);
 
             final String selectedItemType = items.getValue(items.getSelectedIndex());
 
@@ -350,8 +353,8 @@ BwdEvent.HasBwdHandlers //
         if (!isPlaying) {
             if (showAllBtn.isEnabled()) {
 
-                items.setEnabled(false);
                 showAllBtn.setEnabled(false);
+                items.setEnabled(false);
 
                 final String selectedItemType = items.getValue(items.getSelectedIndex());
                 fireEvent(new HideAllEvent(selectedItemType));
@@ -373,8 +376,8 @@ BwdEvent.HasBwdHandlers //
         if (!isPlaying) {
             if (showAllBtn.isEnabled()) {
 
-                items.setEnabled(false);
                 showAllBtn.setEnabled(false);
+                items.setEnabled(false);
 
                 final String selectedItemType = items.getValue(items.getSelectedIndex());
                 fireEvent(new HideAllEvent(selectedItemType));
