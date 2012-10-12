@@ -113,13 +113,13 @@ public class MenuActivity implements MenuPresenter //
 
     @Override
     public void onGoToContacts(final GoToContactsEvent event) {
-        view.getProfilePlayMenuWidget().setVisible(false);
+        //        view.getProfilePlayMenuWidget().setVisible(false);
     }
 
     @Override
     public void onGoToProfile(final GoToProfileEvent event) {
-        view.getProfilePlayMenuWidget().init();
-        view.getProfilePlayMenuWidget().setVisible(true);
+        //        view.getProfilePlayMenuWidget().init();
+        //        view.getProfilePlayMenuWidget().setVisible(true);
     }
 
     @Override
