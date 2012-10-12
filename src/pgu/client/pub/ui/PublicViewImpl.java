@@ -88,7 +88,7 @@ public class PublicViewImpl extends Composite implements PublicView {
             @Override
             public void onStop(final StopEvent event) {
                 GWT.log("[on stop]");
-                hideProfileItemArea();
+                hideProfileItem();
             }
 
         });
@@ -166,6 +166,12 @@ public class PublicViewImpl extends Composite implements PublicView {
         summaryPanel.setVisible(true);
         profileItemPanel.setVisible(false);
 
+    }
+
+    private void hideProfileItem() {
+        hideProfileItemArea();
+
+        MarkersUtils.deleteMovieMarkers();
     }
 
     private void hideProfileMarkers(final HasSelectedItemType event) {
