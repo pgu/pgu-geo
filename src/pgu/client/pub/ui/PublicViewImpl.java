@@ -73,6 +73,7 @@ public class PublicViewImpl extends Composite implements PublicView {
 
         initWidget(uiBinder.createAndBindUi(this));
 
+        playToolbar.setVisible(false);
         playToolbar.addPlayHandler(new PlayEvent.Handler() {
 
             @Override
@@ -87,7 +88,7 @@ public class PublicViewImpl extends Composite implements PublicView {
             @Override
             public void onStop(final StopEvent event) {
                 GWT.log("[on stop]");
-                hideProfileItem();
+                hideProfileItemArea();
             }
 
         });
@@ -184,12 +185,6 @@ public class PublicViewImpl extends Composite implements PublicView {
     private native void collapseHide(String id) /*-{
         $wnd.$('#' + id).collapse('hide');
     }-*/;
-
-    private void hideProfileItem() {
-        hideProfileItemArea();
-
-        MarkersUtils.deleteMovieMarkers();
-    }
 
     private void showProfileItem(final int token) {
         showProfileItemArea();
@@ -361,6 +356,7 @@ public class PublicViewImpl extends Composite implements PublicView {
 
     public void addProfileItemsToPlayToolbar() {
         playToolbar.addProfileItems();
+        playToolbar.setVisible(playToolbar.hasItemsToDisplay());
     }
 
     private final LinkedHashMap<String, String> id2itemTitle = new LinkedHashMap<String, String>();

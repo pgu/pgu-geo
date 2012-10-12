@@ -101,8 +101,6 @@ BwdEvent.HasBwdHandlers //
         showAllBtn.setEnabled(true);
         isToggled = false;
 
-        setVisible(false);
-
         nbSecondsBox.addItem("2");
         nbSecondsBox.addItem("5");
         nbSecondsBox.addItem("10");
@@ -455,7 +453,6 @@ BwdEvent.HasBwdHandlers //
 
         if (itemsBox.getItemCount() > 0) {
             itemsBox.setSelectedIndex(0);
-            setVisible(true);
 
             final String selectedItemType = itemsBox.getValue(itemsBox.getSelectedIndex());
             setSelectedProfileItems(selectedItemType);
@@ -464,6 +461,10 @@ BwdEvent.HasBwdHandlers //
 
     private void setSelectedProfileItems(final String selectedItemType) {
         ProfileItemsUtils.setSelectedProfileItems(selectedItemType);
+    }
+
+    public boolean hasItemsToDisplay() {
+        return itemsBox.getItemCount() > 0;
     }
 
 }
