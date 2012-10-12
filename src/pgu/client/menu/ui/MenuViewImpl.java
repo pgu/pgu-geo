@@ -124,6 +124,7 @@ public class MenuViewImpl extends Composite implements MenuView {
 
     @UiHandler("clearMarkersBtn")
     public void clickOnClearMarkersBtn(final ClickEvent e) {
+        // TODO PGU Oct 12, 2012 clear markers of the map and show the marker of the current location
         MarkersUtils.deleteMovieMarkers();
     }
 
