@@ -46,7 +46,11 @@ public class MarkersUtils {
     public static native JavaScriptObject createMarkerOnProfileMap(String location_name) /*-{
         var map = @pgu.client.profile.ui.ProfileUtils::profileMap()();
 
-        return @pgu.client.app.utils.MarkersUtils::createMarker(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;)(map,location_name);
+        var markers = @pgu.client.app.utils.MarkersUtils::movieMarkers()();
+        var marker = @pgu.client.app.utils.MarkersUtils::createMarker(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;)(map,location_name);
+
+        markers.push(marker);
+        return marker;
     }-*/;
 
     public static native JavaScriptObject createMarkerOnPublicMap(String location_name) /*-{
