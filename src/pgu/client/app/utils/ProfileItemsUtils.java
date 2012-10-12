@@ -273,8 +273,6 @@ public class ProfileItemsUtils {
         ;
 
         var profile_items = @pgu.client.app.utils.ProfileItemsUtils::profileItems()();
-        $wnd.console.log('init caches');
-        $wnd.console.log(profile_items);
 
         for (var type in profile_items) {
             $wnd.console.log(type);
@@ -287,6 +285,7 @@ public class ProfileItemsUtils {
                 continue;
             }
 
+// TODO PGU
             if (profile_items.hasOwnProperty(type)) {
 
                 if (!cache_type.hasOwnProperty(type)) {
