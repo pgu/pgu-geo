@@ -160,6 +160,7 @@ public class PublicViewImpl extends Composite implements PublicView {
 
         singlePanel.setVisible(true);
         multiPanel.setVisible(false);
+        itemsAccordion.setHTML("");
 
         summaryPanel.setVisible(true);
         profileItemPanel.setVisible(false);
@@ -169,6 +170,7 @@ public class PublicViewImpl extends Composite implements PublicView {
     private void hideProfileMarkers(final HasSelectedItemType event) {
 
         multiPanel.setVisible(false);
+        itemsAccordion.setHTML("");
         singlePanel.setVisible(true);
 
         final String selectedItemType = event.getSelectedItemType();
