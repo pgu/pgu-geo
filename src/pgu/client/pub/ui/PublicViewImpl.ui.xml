@@ -14,9 +14,6 @@
         .profile_section {
             padding-top: 0px;
         }
-        .public_profile_map_area {
-             /* padding-top: 20px; */
-        }
         #pgu_geo_public_profile_map { 
             height: 570px; 
             position: relative; 
@@ -44,7 +41,7 @@
             </g:HTMLPanel>
             <g:HTMLPanel addStyleNames="row-fluid">
                 <div class="span6">
-                    <g:HTMLPanel addStyleNames="row-fluid {style.public_profile_map_area}">
+                    <g:HTMLPanel addStyleNames="row-fluid">
                         <div class="span12">
                             <div id="pgu_geo_public_profile_map_container" class="collapse in">
                                 <div id="pgu_geo_public_profile_map">

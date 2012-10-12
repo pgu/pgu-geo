@@ -1,6 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" 
             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+            xmlns:pgu="urn:import:pgu.client.components.playtoolbar"
             xmlns:b="urn:import:com.github.gwtbootstrap.client.ui" >
 
     <ui:style>
@@ -22,44 +23,54 @@
     <g:HTMLPanel>
         <g:HTMLPanel ui:field="submenu" addStyleNames="subnav subnav-fixed">
             <b:NavPills>
-                <b:NavLink href="#profile:overview">Overview</b:NavLink>
+            <!-- TODO PGU clean this -->
+<!--                 <b:NavLink href="#profile:overview">Overview</b:NavLink> -->
                 <b:NavLink href="#profile:experience">Experience</b:NavLink>
                 <b:NavLink href="#profile:education">Education</b:NavLink>
             </b:NavPills>
         </g:HTMLPanel>
 
-        <g:HTMLPanel addStyleNames="row-fluid {style.profile_map_area}">
-            <div class="span12">
-                <div id="pgu_geo_profile_map_container" class="collapse in">
-                    <div id="pgu_geo_profile_map"></div>
-                </div>
-            </div>
-        </g:HTMLPanel>
-    
         <b:Section ui:field="overviewSection">
-            <b:Hero>
-                <b:Popover ui:field="summaryBasic" trigger="MANUAL" animation="true" placement="LEFT" heading="Summary">
-                    <b:Button ui:field="summaryBasicBtn" icon="INFO_SIGN" type="INFO" iconSize="LARGE" addStyleNames="pull-right" />
-                </b:Popover>
-                <b:Heading size="2" ui:field="nameBasic" />
-                <!-- picture -->
-                <b:Paragraph ui:field="headlineBasic" />
-            </b:Hero>  
-            
+        
+<!--             <g:HTMLPanel addStyleNames="row-fluid {style.profile_map_area}"> -->
             <g:HTMLPanel addStyleNames="row-fluid">
-                <div class="span4">
-                    <h6>Location</h6>
-                    <b:NavPills>
-                        <b:NavLink ui:field="locContainer" addStyleNames="{style.location}"></b:NavLink>
-                    </b:NavPills>
+                <div class="span6">
+                    <g:HTMLPanel addStyleNames="row-fluid">
+                        <div class="span12">
+                            <div id="pgu_geo_profile_map_container" class="collapse in">
+                                <div id="pgu_geo_profile_map">
+                                </div>
+                            </div>
+                        </div>
+                    </g:HTMLPanel>
+                    <pgu:PlayToolbar ui:field="playToolbar"/>
                 </div>
-                <div class="span4">
-                    <h6>Specialties</h6>
-                    <g:HTMLPanel ui:field="spContainer" />
-                </div>
-                <div class="span4">
-                    <h6>Languages</h6>
-                    <g:HTMLPanel ui:field="lgContainer" />
+                <div class="span6">
+                    <b:Hero>
+                        <b:Popover ui:field="summaryBasic" trigger="MANUAL" animation="true" placement="LEFT" heading="Summary">
+                            <b:Button ui:field="summaryBasicBtn" icon="INFO_SIGN" type="INFO" iconSize="LARGE" addStyleNames="pull-right" />
+                        </b:Popover>
+                        <b:Heading size="2" ui:field="nameBasic" />
+                        <!-- picture -->
+                        <b:Paragraph ui:field="headlineBasic" />
+                    </b:Hero>  
+                    
+                    <g:HTMLPanel addStyleNames="row-fluid">
+                        <div class="span4">
+                            <h6>Location</h6>
+                            <b:NavPills>
+                                <b:NavLink ui:field="locContainer" addStyleNames="{style.location}"></b:NavLink>
+                            </b:NavPills>
+                        </div>
+                        <div class="span4">
+                            <h6>Specialties</h6>
+                            <g:HTMLPanel ui:field="spContainer" />
+                        </div>
+                        <div class="span4">
+                            <h6>Languages</h6>
+                            <g:HTMLPanel ui:field="lgContainer" />
+                        </div>
+                    </g:HTMLPanel>
                 </div>
             </g:HTMLPanel>
         </b:Section>
