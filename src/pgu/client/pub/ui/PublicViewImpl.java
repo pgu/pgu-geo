@@ -429,8 +429,6 @@ public class PublicViewImpl extends Composite implements PublicView {
         }
 
         itemsAccordion.setHTML(sb.toString());
-
-        // TODO PGU Oct 11, 2012 open the accordion if there is only one item
     }
 
     private String newAccordionGroup(final boolean isOpen, final String id, final String title, final String content) {
@@ -452,9 +450,7 @@ public class PublicViewImpl extends Composite implements PublicView {
                 "    </div>                                               " + //
                 "  </div>                                                 " + //
                 "</div>                                                   " //
-
-
-        ;
+                ;
     }
 
     public void fillWithProfileItem(final String id, final String title, final String content) {
