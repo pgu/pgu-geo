@@ -1,6 +1,6 @@
 package pgu.client.pub.ui;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 import pgu.client.app.utils.ClientUtils;
@@ -363,8 +363,8 @@ public class PublicViewImpl extends Composite implements PublicView {
         playToolbar.addProfileItems();
     }
 
-    private final HashMap<String, String> id2itemTitle = new HashMap<String, String>();
-    private final HashMap<String, String> id2itemContent = new HashMap<String, String>();
+    private final LinkedHashMap<String, String> id2itemTitle = new LinkedHashMap<String, String>();
+    private final LinkedHashMap<String, String> id2itemContent = new LinkedHashMap<String, String>();
 
     public void showItemsForLocation(final String locationName) {
 

@@ -73,14 +73,19 @@ public class ProfileItemsUtils {
             }
 
             type_2_profile_items['all'] = all_items; // we sort 'all' items only as the others already have an order from linkedin
-            @pgu.client.app.utils.ProfileItemsUtils::sortProfileItemsByDate(Lcom/google/gwt/core/client/JavaScriptObject;)(all_items);
+            @pgu.client.app.utils.ProfileItemsUtils::sortProfileItemsByDateFromOldToNew(Lcom/google/gwt/core/client/JavaScriptObject;)(all_items);
         }
 
     }-*/;
 
-    private static native void sortProfileItemsByDate(JavaScriptObject profile_items) /*-{
+    private static native void sortProfileItemsByDateFromOldToNew(JavaScriptObject profile_items) /*-{
 
         profile_items.sort(function(a,b) { return a.startD.getTime() - b.startD.getTime() } );
+    }-*/;
+
+    private static native void sortProfileItemsByDateFromNewToOld(JavaScriptObject profile_items) /*-{
+
+        profile_items.sort(function(a,b) { return b.startD.getTime() - a.startD.getTime() } );
     }-*/;
 
     private static boolean isEdu(final String itemType) {
@@ -373,6 +378,17 @@ public class ProfileItemsUtils {
 
             }
         }
+
+        for (var location_name in cache_items) {
+
+            if ('__gwt_ObjectId' === location_name) {
+                continue;
+            }
+
+            var items = cache_items[location_name];
+            @pgu.client.app.utils.ProfileItemsUtils::sortProfileItemsByDateFromNewToOld(Lcom/google/gwt/core/client/JavaScriptObject;)(items);
+        }
+
     }-*/;
 
     private static native JavaScriptObject clickOnMarker(JavaScriptObject marker, String location_name, PublicViewImpl view) /*-{
