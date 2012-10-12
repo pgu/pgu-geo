@@ -346,9 +346,9 @@ public class ProfileItemsUtils {
                                 ;
 
                                 var marker = @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(null,location_name,lat,lng);
-                                google.maps.event.addListener(marker, 'click', function() {
-                                    view.@pgu.client.pub.ui.PublicViewImpl::showItemsForLocation(Ljava/lang/String;)(location_name);
-                                });
+                                google.maps.event.addListener(marker, 'click', //
+                                    @pgu.client.app.utils.ProfileItemsUtils::clickOnMarker(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Lpgu/client/pub/ui/PublicViewImpl;)(marker, location_name, view)
+                                );
 
                                 // TODO PGU counter on how many items are associated to this marker and
                                 // then overrides the marker's title? marker.setTitle(location_name + ': <b>3</b>');
@@ -373,8 +373,12 @@ public class ProfileItemsUtils {
 
             }
         }
+    }-*/;
 
-
+    private static native JavaScriptObject clickOnMarker(JavaScriptObject marker, String location_name, PublicViewImpl view) /*-{
+        return function() {
+                    view.@pgu.client.pub.ui.PublicViewImpl::showItemsForLocation(Ljava/lang/String;)(location_name);
+                }
     }-*/;
 
     public static native void displayProfileMarkers(final String selectedItemType) /*-{
