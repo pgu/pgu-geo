@@ -279,8 +279,8 @@ BwdEvent.HasBwdHandlers //
     }
 
     private void pause() {
-        pauseBtn.setVisible(false);
-        playBtn.setVisible(true);
+        pauseBtn.setEnabled(false);
+        playBtn.setEnabled(true);
     }
 
     private Timer playTimer = null;
