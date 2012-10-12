@@ -132,15 +132,17 @@ public class PublicViewImpl extends Composite implements PublicView {
             public void onShowAll(final ShowAllEvent event) {
                 GWT.log("[on show all]");
 
-                collapseHide(SINGLE_PANEL_ID);
-                new Timer() {
-
-                    @Override
-                    public void run() {
-                        collapseShow(MULTI_PANEL_ID);
-                    }
-
-                }.schedule(300);
+                singlePanel.setVisible(false);
+                multiPanel.setVisible(true);
+                //                collapseHide(SINGLE_PANEL_ID);
+                //                new Timer() {
+                //
+                //                    @Override
+                //                    public void run() {
+                //                        collapseShow(MULTI_PANEL_ID);
+                //                    }
+                //
+                //                }.schedule(350);
 
                 hideProfileCurrentLocation();
 
@@ -189,19 +191,29 @@ public class PublicViewImpl extends Composite implements PublicView {
                 hideProfileCurrentLocation();
             }
         });
+
+        singlePanel.setVisible(true);
+        multiPanel.setVisible(false);
+
+        summaryPanel.setVisible(true);
         profileItemPanel.setVisible(false);
+
     }
 
     private void hideProfileMarkers(final HasSelectedItemType event) {
-        collapseHide(MULTI_PANEL_ID);
-        new Timer() {
 
-            @Override
-            public void run() {
-                collapseShow(SINGLE_PANEL_ID);
-            }
+        multiPanel.setVisible(false);
+        singlePanel.setVisible(true);
 
-        }.schedule(300);
+        //        collapseHide(MULTI_PANEL_ID);
+        //        new Timer() {
+        //
+        //            @Override
+        //            public void run() {
+        //                collapseShow(SINGLE_PANEL_ID);
+        //            }
+        //
+        //        }.schedule(350);
 
         final String selectedItemType = event.getSelectedItemType();
         ProfileItemsUtils.hideProfileMarkers(selectedItemType);
@@ -241,7 +253,8 @@ public class PublicViewImpl extends Composite implements PublicView {
         }
 
         profileItemPanel.setVisible(false);
-        collapseShow(SUMMARY_ID);
+        //        collapseShow(SUMMARY_ID);
+        summaryPanel.setVisible(true);
     }
 
     private void showProfileItemArea() {
@@ -250,7 +263,8 @@ public class PublicViewImpl extends Composite implements PublicView {
             return;
         }
 
-        collapseHide(SUMMARY_ID);
+        //        collapseHide(SUMMARY_ID);
+        summaryPanel.setVisible(false);
         profileItemPanel.setVisible(true);
     }
 
