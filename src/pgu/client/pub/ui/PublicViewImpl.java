@@ -444,7 +444,7 @@ public class PublicViewImpl extends Composite implements PublicView {
                 "    </a>                                       " + //
                 "  </div>                                       " + //
                 "  <div id=\"accordion_" + id + "\"             " + //
-                "       class=\"accordion-body collapse in\">   " + //
+                "       class=\"accordion-body collapse\">   " + //
                 "    <div class=\"accordion-inner\">            " + //
                 content + //
                 "    </div>                                     " + //
