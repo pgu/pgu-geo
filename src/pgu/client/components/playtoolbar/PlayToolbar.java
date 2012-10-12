@@ -51,7 +51,7 @@ BwdEvent.HasBwdHandlers //
     }
 
     @UiField
-    ListBox                         items;
+    ListBox                         itemsBox, nbSecondsBox;
     @UiField
     Label playDirection;
 
@@ -76,11 +76,11 @@ BwdEvent.HasBwdHandlers //
 
         playDirection.setText(FROM_PAST_TO_PRESENT);
 
-        items.addChangeHandler(new ChangeHandler() {
+        itemsBox.addChangeHandler(new ChangeHandler() {
 
             @Override
             public void onChange(final ChangeEvent event) {
-                final String selectedItemType = items.getValue(items.getSelectedIndex());
+                final String selectedItemType = itemsBox.getValue(itemsBox.getSelectedIndex());
                 setSelectedProfileItems(selectedItemType);
 
                 stop();
@@ -97,24 +97,30 @@ BwdEvent.HasBwdHandlers //
         initToken();
         isPlaying = false;
 
-        items.setEnabled(true);
+        itemsBox.setEnabled(true);
         showAllBtn.setEnabled(true);
         isToggled = false;
 
         setVisible(false);
+
+        nbSecondsBox.addItem("2");
+        nbSecondsBox.addItem("5");
+        nbSecondsBox.addItem("10");
+        nbSecondsBox.addItem("30");
+        nbSecondsBox.setSelectedIndex(0);
     }
 
     @UiHandler("showAllBtn")
     public void clickOnShowAll(final ClickEvent e) {
         isToggled = !isToggled;
 
-        items.setEnabled(!isToggled);
+        itemsBox.setEnabled(!isToggled);
 
         fireShowAllAction();
     }
 
     private void fireShowAllAction() {
-        final String selectedItemType = items.getValue(items.getSelectedIndex());
+        final String selectedItemType = itemsBox.getValue(itemsBox.getSelectedIndex());
 
         // we can not rely on showAllBtn.isToggled() as we get here before it sets the css 'active'
         if (isToggled) {
@@ -186,7 +192,7 @@ BwdEvent.HasBwdHandlers //
         isPlaying = false;
 
         showAllBtn.setEnabled(true);
-        items.setEnabled(!isToggled);
+        itemsBox.setEnabled(!isToggled);
 
         fireShowAllAction(); // restore the state of the show all
     }
@@ -285,9 +291,9 @@ BwdEvent.HasBwdHandlers //
         if (!isPlaying) {
 
             showAllBtn.setEnabled(false);
-            items.setEnabled(false);
+            itemsBox.setEnabled(false);
 
-            final String selectedItemType = items.getValue(items.getSelectedIndex());
+            final String selectedItemType = itemsBox.getValue(itemsBox.getSelectedIndex());
 
             fireEvent(new StartPlayingEvent(selectedItemType));
 
@@ -318,7 +324,9 @@ BwdEvent.HasBwdHandlers //
                         clickOnPlay(null);
                     }
                 };
-                playTimer.schedule(2000);
+
+                final Integer nbSeconds = Integer.valueOf(nbSecondsBox.getValue(nbSecondsBox.getSelectedIndex()));
+                playTimer.schedule(nbSeconds * 1000);
 
             }
         });
@@ -354,9 +362,9 @@ BwdEvent.HasBwdHandlers //
             if (showAllBtn.isEnabled()) {
 
                 showAllBtn.setEnabled(false);
-                items.setEnabled(false);
+                itemsBox.setEnabled(false);
 
-                final String selectedItemType = items.getValue(items.getSelectedIndex());
+                final String selectedItemType = itemsBox.getValue(itemsBox.getSelectedIndex());
                 fireEvent(new HideAllEvent(selectedItemType));
             }
         }
@@ -377,9 +385,9 @@ BwdEvent.HasBwdHandlers //
             if (showAllBtn.isEnabled()) {
 
                 showAllBtn.setEnabled(false);
-                items.setEnabled(false);
+                itemsBox.setEnabled(false);
 
-                final String selectedItemType = items.getValue(items.getSelectedIndex());
+                final String selectedItemType = itemsBox.getValue(itemsBox.getSelectedIndex());
                 fireEvent(new HideAllEvent(selectedItemType));
             }
         }
@@ -436,20 +444,20 @@ BwdEvent.HasBwdHandlers //
     public void addProfileItems() {
 
         if (ProfileItemsUtils.hasAllOption()) {
-            items.addItem("All", "all");
+            itemsBox.addItem("All", "all");
         }
         if (ProfileItemsUtils.hasExperienceOption()) {
-            items.addItem("Experience", ItemType.experience);
+            itemsBox.addItem("Experience", ItemType.experience);
         }
         if (ProfileItemsUtils.hasEducationOption()) {
-            items.addItem("Education", ItemType.education);
+            itemsBox.addItem("Education", ItemType.education);
         }
 
-        if (items.getItemCount() > 0) {
-            items.setSelectedIndex(0);
+        if (itemsBox.getItemCount() > 0) {
+            itemsBox.setSelectedIndex(0);
             setVisible(true);
 
-            final String selectedItemType = items.getValue(items.getSelectedIndex());
+            final String selectedItemType = itemsBox.getValue(itemsBox.getSelectedIndex());
             setSelectedProfileItems(selectedItemType);
         }
     }
