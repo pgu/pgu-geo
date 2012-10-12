@@ -8,9 +8,8 @@ import java.util.Map.Entry;
 
 import pgu.client.profile.ui.PublicProfileUtils;
 
-import com.github.gwtbootstrap.client.ui.Column;
-import com.github.gwtbootstrap.client.ui.FluidRow;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 
 public class LanguagesUtils {
@@ -112,6 +111,8 @@ public class LanguagesUtils {
 
     private void showProfileLanguages() {
 
+        final StringBuilder rows = new StringBuilder();
+
         for (final Entry<LanguageLevel, ArrayList<String>> e : level2languages.entrySet()) {
             final LanguageLevel level = e.getKey();
             final ArrayList<String> names = e.getValue();
@@ -120,41 +121,25 @@ public class LanguagesUtils {
             Collections.sort(names, LEXICO);
 
             for (final String name : names) {
-                addLanguageRow(nbTrophies, name);
+                rows.append(newLanguageRow(nbTrophies, name));
             }
         }
 
-        setProfileLanguagesToPublicProfile();
+        final String htmlLanguages = rows.toString();
+
+        lgContainer.add(new HTML(htmlLanguages));
+
+        PublicProfileUtils.setLanguages(htmlLanguages);
     }
 
-    private void setProfileLanguagesToPublicProfile() {
-        final StringBuilder sb = new StringBuilder();
-
-        for (int i = 0; i < lgContainer.getWidgetCount(); i++) {
-            sb.append(lgContainer.getWidget(i));
-        }
-
-        PublicProfileUtils.setLanguages(sb.toString());
-    }
-
-    private void addLanguageRow(final int nbTrophies, final String name) {
+    private String newLanguageRow(final int nbTrophies, final String name) {
 
         final StringBuilder trophies = new StringBuilder();
         for (int i = 0; i < nbTrophies; i++) {
             trophies.append(trophy);
         }
 
-        final Column labelCol = new Column(3);
-        final Column levelCol = new Column(3);
-
-        labelCol.getElement().setInnerHTML(name);
-        levelCol.getElement().setInnerHTML(trophies.toString());
-
-        final FluidRow row = new FluidRow();
-        row.add(labelCol);
-        row.add(levelCol);
-
-        lgContainer.add(row);
+        return "<div>" + name + "</div><div>" + trophies.toString() + "</div>";
     }
 
 }
