@@ -56,14 +56,14 @@
                 </div>
                 <div class="span6">
                 
-                    <g:HTMLPanel ui:field="multiPanel" addStyleNames="collapse">
+                    <g:HTMLPanel ui:field="multiPanel">
                         <g:HTML ui:field="itemsAccordion" addStyleNames="accordion" />
                     </g:HTMLPanel>
                     
-                    <g:HTMLPanel ui:field="singlePanel" addStyleNames="collapse in">
+                    <g:HTMLPanel ui:field="singlePanel">
                         <div class="well">
                             <!-- summary item -->
-                            <g:HTMLPanel ui:field="summaryPanel" addStyleNames="collapse in">
+                            <g:HTMLPanel ui:field="summaryPanel">
                                 <g:HTMLPanel addStyleNames="row-fluid {style.description_item}">
                                     <div class="span4">
                                         <h6>Location</h6>
