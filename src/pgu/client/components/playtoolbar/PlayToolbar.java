@@ -12,7 +12,6 @@ import pgu.client.components.playtoolbar.event.PlayEvent;
 import pgu.client.components.playtoolbar.event.ShowAllEvent;
 import pgu.client.components.playtoolbar.event.StartPlayingEvent;
 import pgu.client.components.playtoolbar.event.StopEvent;
-import pgu.client.components.playtoolbar.event.StopPlayingEvent;
 import pgu.shared.utils.ItemType;
 
 import com.github.gwtbootstrap.client.ui.Button;
@@ -41,7 +40,6 @@ BwdEvent.HasBwdHandlers //
 , ShowAllEvent.HasShowAllHandlers //
 , HideAllEvent.HasHideAllHandlers //
 , StartPlayingEvent.HasStartPlayingHandlers //
-, StopPlayingEvent.HasStopPlayingHandlers //
 {
 
     private static final String FROM_PAST_TO_PRESENT = "From past to present";
@@ -430,11 +428,6 @@ BwdEvent.HasBwdHandlers //
     @Override
     public HandlerRegistration addStartPlayingHandler(final StartPlayingEvent.Handler handler) {
         return addHandler(handler, StartPlayingEvent.TYPE);
-    }
-
-    @Override
-    public HandlerRegistration addStopPlayingHandler(final StopPlayingEvent.Handler handler) {
-        return addHandler(handler, StopPlayingEvent.TYPE);
     }
 
     public void addProfileItems() {

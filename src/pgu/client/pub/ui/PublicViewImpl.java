@@ -42,9 +42,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class PublicViewImpl extends Composite implements PublicView {
 
-    private static final String MULTI_PANEL_ID = "pgu_geo_profile_item_multi_panel";
-    private static final String SINGLE_PANEL_ID = "pgu_geo_profile_item_single_panel";
-    private static final String SUMMARY_ID = "pgu_geo_public_summary_container";
     private static final String ACCORDION_ID = "pgu_geo_profile_items_accordion";
 
     private static PublicViewImplUiBinder uiBinder = GWT.create(PublicViewImplUiBinder.class);
@@ -75,11 +72,6 @@ public class PublicViewImpl extends Composite implements PublicView {
         profileSection = new Section("public:profile");
 
         initWidget(uiBinder.createAndBindUi(this));
-
-        summaryPanel.getElement().setId(SUMMARY_ID);
-        singlePanel.getElement().setId(SINGLE_PANEL_ID);
-        multiPanel.getElement().setId(MULTI_PANEL_ID);
-        itemsAccordion.getElement().setId(ACCORDION_ID);
 
         playToolbar.addPlayHandler(new PlayEvent.Handler() {
 
@@ -134,15 +126,6 @@ public class PublicViewImpl extends Composite implements PublicView {
 
                 singlePanel.setVisible(false);
                 multiPanel.setVisible(true);
-                //                collapseHide(SINGLE_PANEL_ID);
-                //                new Timer() {
-                //
-                //                    @Override
-                //                    public void run() {
-                //                        collapseShow(MULTI_PANEL_ID);
-                //                    }
-                //
-                //                }.schedule(350);
 
                 hideProfileCurrentLocation();
 
@@ -151,23 +134,6 @@ public class PublicViewImpl extends Composite implements PublicView {
             }
 
         });
-        //        playToolbar.addStopPlayingHandler(new StopPlayingEvent.Handler() {
-        //
-        //            @Override
-        //            public void onStopPlaying(final StopPlayingEvent event) {
-        //                GWT.log("[on stop playing]");
-        //
-        //                if (event.isShowAllOn()) {
-        //
-        //                    final String selectedItemType = event.getSelectedItemType();
-        //                    ProfileItemsUtils.displayProfileMarkers(selectedItemType);
-        //
-        //                } else {
-        //
-        //                    displayProfileCurrentLocation();
-        //                }
-        //            }
-        //        });
         playToolbar.addHideAllHandler(new HideAllEvent.Handler() {
 
             @Override
@@ -204,16 +170,6 @@ public class PublicViewImpl extends Composite implements PublicView {
 
         multiPanel.setVisible(false);
         singlePanel.setVisible(true);
-
-        //        collapseHide(MULTI_PANEL_ID);
-        //        new Timer() {
-        //
-        //            @Override
-        //            public void run() {
-        //                collapseShow(SINGLE_PANEL_ID);
-        //            }
-        //
-        //        }.schedule(350);
 
         final String selectedItemType = event.getSelectedItemType();
         ProfileItemsUtils.hideProfileMarkers(selectedItemType);
@@ -253,7 +209,6 @@ public class PublicViewImpl extends Composite implements PublicView {
         }
 
         profileItemPanel.setVisible(false);
-        //        collapseShow(SUMMARY_ID);
         summaryPanel.setVisible(true);
     }
 
@@ -263,7 +218,6 @@ public class PublicViewImpl extends Composite implements PublicView {
             return;
         }
 
-        //        collapseHide(SUMMARY_ID);
         summaryPanel.setVisible(false);
         profileItemPanel.setVisible(true);
     }
