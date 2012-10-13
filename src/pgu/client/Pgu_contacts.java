@@ -79,6 +79,9 @@ public class Pgu_contacts implements EntryPoint {
         initJSContext(isPublic);
         initMVPContext(isPublic);
 
+        final EventBus eventBus = mvpContext.eventBus;
+        final PlaceController placeController = mvpContext.placeController;
+
         if (isPublic) {
 
             GWT.runAsync(new RunAsyncCallback() {
@@ -89,10 +92,10 @@ public class Pgu_contacts implements EntryPoint {
                     final PublicClientFactory clientFactory = (PublicClientFactory) mvpContext.clientFactory;
 
                     final PublicMenuActivity menuActivity = new PublicMenuActivity(clientFactory);
-                    menuActivity.start(mvpContext.eventBus);
+                    menuActivity.start(eventBus);
                     final PublicMenuView menuView = clientFactory.getPublicMenuView();
 
-                    final Place defaultPlace = mvpContext.placeController.getWhere();
+                    final Place defaultPlace = placeController.getWhere();
 
                     startApplication(menuView, defaultPlace);
                 }
@@ -109,17 +112,18 @@ public class Pgu_contacts implements EntryPoint {
 
                 @Override
                 public void onSuccess() {
+
                     final ClientFactory clientFactory = (ClientFactory) mvpContext.clientFactory;
 
                     clientFactory.getLoginService().getLoginInfo(GWT.getHostPageBaseURL(),
-                            new AsyncCallbackApp<LoginInfo>(mvpContext.eventBus) {
+                            new AsyncCallbackApp<LoginInfo>(eventBus) {
 
                         @Override
                         public void onSuccess(final LoginInfo loginInfo) {
                             clientFactory.setLoginInfo(loginInfo);
 
-                            final MenuActivity menuActivity = new MenuActivity(clientFactory);
-                            menuActivity.start(mvpContext.eventBus);
+                            final MenuActivity menuActivity = new MenuActivity(clientFactory, placeController);
+                            menuActivity.start(eventBus);
                             final MenuView menuView = clientFactory.getMenuView();
 
                             final Place defaultPlace = new ProfilePlace();
@@ -148,7 +152,7 @@ public class Pgu_contacts implements EntryPoint {
 
         final AppView appView = clientFactory.getAppView();
 
-        final AppActivity appActivity = new AppActivity(menuView, placeController, clientFactory);
+        final AppActivity appActivity = new AppActivity(menuView, clientFactory);
         appActivity.start(eventBus);
 
         final ActivityManager activityManager = new ActivityManager(activityMapper, eventBus);

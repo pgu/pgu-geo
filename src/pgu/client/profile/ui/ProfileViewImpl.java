@@ -3,6 +3,9 @@ package pgu.client.profile.ui;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.LanguagesUtils;
 import pgu.client.app.utils.LocationsUtils;
+import pgu.client.app.utils.MarkersUtils;
+import pgu.client.menu.MenuView.LocationSearchWidget;
+import pgu.client.menu.ui.MenuViewUtils;
 import pgu.client.profile.ProfilePresenter;
 import pgu.client.profile.ProfileView;
 import pgu.shared.dto.Profile;
@@ -14,17 +17,23 @@ import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.Paragraph;
 import com.github.gwtbootstrap.client.ui.Popover;
 import com.github.gwtbootstrap.client.ui.Section;
+import com.github.gwtbootstrap.client.ui.TextBox;
 import com.github.gwtbootstrap.client.ui.Tooltip;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HasVisibility;
 import com.google.gwt.user.client.ui.Widget;
 
 public class ProfileViewImpl extends Composite implements ProfileView {
@@ -48,7 +57,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     @UiField
     HTMLPanel                                               lgContainer, spContainer;
     @UiField
-    Button expPublicState, eduPublicState;
+    Button expPublicState, eduPublicState //
+    , clearSearchMarkersBtn //
+    , locationSearchBtn //
+    , locationSaveBtn //
+    ;
+    @UiField
+    TextBox locationSearchBox;
     @UiField
     Tooltip expPublicTooltip, eduPublicTooltip;
 
@@ -64,7 +79,116 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         educationSection = new Section("profile:education");
 
         initWidget(uiBinder.createAndBindUi(this));
+
+        isMapDisplayed = true;
+        locationSaveBtn.setVisible(false);
+
+        locationSearchBox.addKeyPressHandler(new KeyPressHandler() {
+
+            @Override
+            public void onKeyPress(final KeyPressEvent event) {
+                if (event.getCharCode() == KeyCodes.KEY_ENTER) {
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    searchLocation();
+                }
+            }
+        });
+
     }
+
+    private String        lastSearchItemLocation      = null;
+    private final ClientUtils u              = new ClientUtils();
+    private final boolean           isMapDisplayed = true;
+
+    @UiHandler("locationSearchBtn")
+    public void clickOnLocationSearch(final ClickEvent e) {
+        searchLocation();
+    }
+
+    @UiHandler("locationSaveBtn")
+    public void clickOnLocationSave(final ClickEvent e) {
+
+        if (u.isVoid(lastSearchItemLocation)) {
+
+            lastSearchItemLocation = null;
+            return;
+        }
+
+        presenter.saveLocation(lastSearchItemLocation);
+    }
+
+    @Override
+    public HasVisibility getSaveWidget() {
+        return locationSaveBtn;
+    }
+
+    @Override
+    public void showOnMap(final String locationName) {
+        showMap();
+
+        MarkersUtils.createMarkerOnProfileMap(locationName);
+    }
+
+    @Override
+    public void showMap() {
+        Window.scrollTo(0, 0);
+
+        if (isMapDisplayed) {
+            return;
+        }
+
+        showMapProg();
+    }
+
+    public void cacheLastSearchedLocation(final String name) {
+        lastSearchItemLocation = name;
+    }
+
+    public static native void showMapProg() /*-{
+        $wnd.$('#pgu_geo_profile_map_container').collapse('show');
+    }-*/;
+
+    @Override
+    public LocationSearchWidget getLocationSearchWidget() {
+        return new LocationSearchWidget() {
+
+            @Override
+            public String getText() {
+                return locationSearchBox.getText();
+            }
+
+            @Override
+            public void setText(final String text) {
+                locationSearchBox.setText(text);
+            }
+
+            @Override
+            public void setFocus(final boolean isFocused) {
+                locationSearchBox.setFocus(isFocused);
+            }
+
+        };
+    }
+
+    private void searchLocation() {
+        final String locationText = locationSearchBox.getText();
+
+        if (u.isVoid(locationText)) {
+            lastSearchItemLocation = null;
+            return;
+        }
+
+        MenuViewUtils.searchLocationAndAddMarker(this, locationText);
+    }
+
+
+    @UiHandler("clearSearchMarkersBtn")
+    public void clickOnClearMarkersBtn(final ClickEvent e) {
+        MarkersUtils.deleteSearchMarkers();
+    }
+
 
     private static boolean isEduPublic = false;
     private static boolean isExpPublic = false;

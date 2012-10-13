@@ -1,14 +1,18 @@
 package pgu.client.profile;
 
 import pgu.client.app.event.HideWaitingIndicatorEvent;
+import pgu.client.app.event.LocationAddNewEvent;
 import pgu.client.app.event.LocationShowOnMapEvent;
 import pgu.client.app.event.LocationSuccessDeleteEvent;
 import pgu.client.app.event.LocationsSuccessSaveEvent;
+import pgu.client.app.event.NotificationEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
+import pgu.client.app.utils.Level;
 import pgu.client.app.utils.LocationsUtils;
+import pgu.client.menu.ui.MenuViewUtils;
 import pgu.client.profile.ui.ProfileViewUtils;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.client.service.PublicProfileServiceAsync;
@@ -39,6 +43,85 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         view = clientFactory.getProfileView();
         linkedinService = clientFactory.getLinkedinService();
         publicProfileService = clientFactory.getPublicProfileService();
+    }
+
+    private String                     itemConfigId;
+
+    @Override
+    public void onLocationShowOnMap(final LocationShowOnMapEvent event) {
+        view.showOnMap(event.getLocName());
+    }
+
+    @Override
+    public void onLocationAddNew(final LocationAddNewEvent event) {
+        itemConfigId = event.getItemConfigId();
+
+        view.showMap();
+        view.getLocationSearchWidget().setText("");
+        view.getLocationSearchWidget().setFocus(true);
+        view.getSaveWidget().setVisible(true);
+
+    }
+
+    @Override
+    public void saveLocation(final String locationName) {
+
+        if (u.isVoid(itemConfigId)) {
+            return;
+        }
+
+        u.fire(eventBus, new ShowWaitingIndicatorEvent());
+
+        LocationsUtils.copyLocationCaches();
+        MenuViewUtils.addNewLocation(this, itemConfigId, locationName);
+    }
+
+    public void saveLocationService(final boolean isDoublon, final String locationName) {
+
+        if (isDoublon) {
+            LocationsUtils.deleteCopies();
+            u.fire(eventBus, new HideWaitingIndicatorEvent());
+            u.fire(eventBus, new NotificationEvent(Level.WARNING, //
+                    "This location " + locationName + " is already associated to this item"));
+            return;
+        }
+
+        linkedinService.saveLocations( //
+                //
+                clientFactory.getAppState().getUserId() //
+                , LocationsUtils.json_copyCacheItems() //
+                , LocationsUtils.json_copyCacheReferential() //
+                //
+                , new AsyncCallbackApp<Void>(eventBus) {
+
+                    @Override
+                    public void onSuccess(final Void result) {
+
+                        LocationsUtils.replaceCachesByCopies();
+
+                        u.fire(eventBus, new HideWaitingIndicatorEvent());
+
+                        view.getSaveWidget().setVisible(false);
+                        u.fire(eventBus, new LocationsSuccessSaveEvent(itemConfigId));
+
+                        final StringBuilder msg = new StringBuilder();
+                        msg.append("The location \"");
+                        msg.append(locationName);
+                        msg.append("\" has been successfully added.");
+
+                        u.fire(eventBus, new NotificationEvent(Level.SUCCESS, msg.toString()));
+                    }
+
+                    @Override
+                    public void onFailure(final Throwable caught) {
+                        LocationsUtils.deleteCopies();
+
+                        super.onFailure(caught);
+                    }
+
+
+                });
+
     }
 
     @Override

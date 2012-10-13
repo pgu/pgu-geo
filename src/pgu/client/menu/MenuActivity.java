@@ -1,35 +1,33 @@
 package pgu.client.menu;
 
 import pgu.client.app.AppState;
-import pgu.client.app.event.GoToContactsEvent;
-import pgu.client.app.event.GoToProfileEvent;
 import pgu.client.app.event.HideWaitingIndicatorEvent;
 import pgu.client.app.event.LocationAddNewEvent;
 import pgu.client.app.event.LocationShowOnMapEvent;
-import pgu.client.app.event.LocationsSuccessSaveEvent;
-import pgu.client.app.event.NotificationEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
-import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
-import pgu.client.app.utils.Level;
-import pgu.client.app.utils.LocationsUtils;
-import pgu.client.menu.ui.MenuViewUtils;
-import pgu.client.service.LinkedinServiceAsync;
+import pgu.client.contacts.ContactsPlace;
+import pgu.client.menu.event.GoToContactsEvent;
+import pgu.client.menu.event.GoToProfileEvent;
+import pgu.client.menu.event.GoToPublicProfileEvent;
+import pgu.client.profile.ProfilePlace;
 import pgu.shared.dto.LoginInfo;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.Location;
 import com.google.web.bindery.event.shared.EventBus;
 
-public class MenuActivity implements MenuPresenter //
-, ShowWaitingIndicatorEvent.Handler //
+public class MenuActivity implements //
+ShowWaitingIndicatorEvent.Handler //
 , HideWaitingIndicatorEvent.Handler //
 , LocationAddNewEvent.Handler //
 , LocationShowOnMapEvent.Handler //
 , GoToProfileEvent.Handler //
 , GoToContactsEvent.Handler //
+, GoToPublicProfileEvent.Handler //
 {
 
     private final MenuView             view;
@@ -37,63 +35,42 @@ public class MenuActivity implements MenuPresenter //
     private final LoginInfo            loginInfo;
     private final ClientUtils          u = new ClientUtils();
     private final ClientFactory        clientFactory;
-    private String                     itemConfigId;
-    private final LinkedinServiceAsync linkedinService;
+    private final PlaceController placeController;
 
-    public MenuActivity(final ClientFactory clientFactory) {
+    public MenuActivity(final ClientFactory clientFactory, final PlaceController placeController) {
         this.clientFactory = clientFactory;
         view = clientFactory.getMenuView();
         loginInfo = clientFactory.getLoginInfo();
-        linkedinService = clientFactory.getLinkedinService();
+        this.placeController = placeController;
     }
 
     public void start(final EventBus eventBus) {
         this.eventBus = eventBus;
-        view.setPresenter(this);
-        setAppTitle();
 
         eventBus.addHandler(ShowWaitingIndicatorEvent.TYPE, this);
         eventBus.addHandler(HideWaitingIndicatorEvent.TYPE, this);
         eventBus.addHandler(LocationAddNewEvent.TYPE, this);
         eventBus.addHandler(LocationShowOnMapEvent.TYPE, this);
-        eventBus.addHandler(GoToProfileEvent.TYPE, this);
-        eventBus.addHandler(GoToContactsEvent.TYPE, this);
 
-        view.getProfileWidget().setVisible(true);
-        view.getContactsWidget().setVisible(true);
+        view.addGoToProfileHandler(this);
+        view.addGoToContactsHandler(this);
+        view.addGoToPublicProfileHandler(this);
 
         final boolean isAdmin = loginInfo.isLoggedIn();
-
-        view.getLoginWidget().setVisible(!isAdmin);
-        view.getLogoutWidget().setVisible(isAdmin);
+        view.setIsAdmin(isAdmin);
 
         if (isAdmin) {
-            view.getLogoutWidget().setHref(loginInfo.getLogoutUrl());
+            view.setLogoutUrl(loginInfo.getLogoutUrl());
 
         } else {
-            view.getLoginWidget().setHref(loginInfo.getLoginUrl());
+            view.setLoginUrl(loginInfo.getLoginUrl());
         }
+
 
         final boolean isSuperAdmin = isAdmin //
                 && "guilcher.pascal.dev@gmail.com".equals(loginInfo.getEmailAddress());
 
-        view.getAppstatsWidget().setVisible(isSuperAdmin);
-
-    }
-
-    public void setAppTitle() {
-        // TODO PGU Aug 13, 2012 add feature of open id with linkedin
-        // TODO PGU Aug 13, 2012 set name of the linked logged user
-    }
-
-    @Override
-    public void goToProfile() {
-        u.fire(eventBus, new GoToProfileEvent());
-    }
-
-    @Override
-    public void goToContacts() {
-        u.fire(eventBus, new GoToContactsEvent());
+        view.setIsSuperAdmin(isSuperAdmin);
     }
 
     @Override
@@ -107,100 +84,17 @@ public class MenuActivity implements MenuPresenter //
     }
 
     @Override
-    public void onLocationShowOnMap(final LocationShowOnMapEvent event) {
-        view.showOnMap(event.getLocName());
-    }
-
-    @Override
     public void onGoToContacts(final GoToContactsEvent event) {
-        //        view.getProfilePlayMenuWidget().setVisible(false);
+        placeController.goTo(new ContactsPlace());
     }
 
     @Override
     public void onGoToProfile(final GoToProfileEvent event) {
-        //        view.getProfilePlayMenuWidget().init();
-        //        view.getProfilePlayMenuWidget().setVisible(true);
+        placeController.goTo(new ProfilePlace());
     }
 
     @Override
-    public void onLocationAddNew(final LocationAddNewEvent event) {
-        itemConfigId = event.getItemConfigId();
-
-        view.showMap();
-        view.getLocationSearchWidget().setText("");
-        view.getLocationSearchWidget().setFocus(true);
-        view.getSaveWidget().setVisible(true);
-
-    }
-
-    @Override
-    public void saveLocation(final String locationName) {
-
-        if (u.isVoid(itemConfigId)) {
-            return;
-        }
-
-        u.fire(eventBus, new ShowWaitingIndicatorEvent());
-
-        LocationsUtils.copyLocationCaches();
-        MenuViewUtils.addNewLocation(this, itemConfigId, locationName);
-    }
-
-    public void saveLocationService(final boolean isDoublon, final String locationName) {
-
-        if (isDoublon) {
-            LocationsUtils.deleteCopies();
-            u.fire(eventBus, new HideWaitingIndicatorEvent());
-            u.fire(eventBus, new NotificationEvent(Level.WARNING, //
-                    "This location " + locationName + " is already associated to this item"));
-            return;
-        }
-
-        linkedinService.saveLocations( //
-                //
-                clientFactory.getAppState().getUserId() //
-                , LocationsUtils.json_copyCacheItems() //
-                , LocationsUtils.json_copyCacheReferential() //
-                //
-                , new AsyncCallbackApp<Void>(eventBus) {
-
-                    @Override
-                    public void onSuccess(final Void result) {
-
-                        LocationsUtils.replaceCachesByCopies();
-
-                        u.fire(eventBus, new HideWaitingIndicatorEvent());
-
-                        view.getSaveWidget().setVisible(false);
-                        u.fire(eventBus, new LocationsSuccessSaveEvent(itemConfigId));
-
-                        final StringBuilder msg = new StringBuilder();
-                        msg.append("The location \"");
-                        msg.append(locationName);
-                        msg.append("\" has been successfully added.");
-
-                        u.fire(eventBus, new NotificationEvent(Level.SUCCESS, msg.toString()));
-                    }
-
-                    @Override
-                    public void onFailure(final Throwable caught) {
-                        LocationsUtils.deleteCopies();
-
-                        super.onFailure(caught);
-                    }
-
-
-                });
-
-    }
-
-    @Override
-    public void showNotificationWarning(final String msg) {
-        u.fire(eventBus, new NotificationEvent(Level.WARNING, msg));
-    }
-
-    @Override
-    public void openPublicProfile() {
+    public void onGoToPublicProfile(final GoToPublicProfileEvent event) {
 
         final AppState appState = clientFactory.getAppState();
         final String publicProfileUrl = appState.getPublicProfileUrl();

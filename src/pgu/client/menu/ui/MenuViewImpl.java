@@ -1,20 +1,15 @@
 package pgu.client.menu.ui;
 
-import pgu.client.app.utils.ClientUtils;
-import pgu.client.app.utils.MarkersUtils;
-import pgu.client.menu.MenuPresenter;
 import pgu.client.menu.MenuView;
+import pgu.client.menu.event.GoToContactsEvent;
+import pgu.client.menu.event.GoToProfileEvent;
+import pgu.client.menu.event.GoToPublicProfileEvent;
 
 import com.github.gwtbootstrap.client.ui.Brand;
-import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.NavLink;
-import com.github.gwtbootstrap.client.ui.NavSearch;
 import com.github.gwtbootstrap.client.ui.ProgressBar;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -22,6 +17,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasVisibility;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 
 public class MenuViewImpl extends Composite implements MenuView {
 
@@ -35,235 +31,38 @@ public class MenuViewImpl extends Composite implements MenuView {
     @UiField
     ProgressBar               progressBar;
     @UiField
-    NavLink                   adminBtn, logoutBtn, goToProfileBtn, goToContactsBtn, goToAppstatsBtn //
-    //    , stepBwdBtn, stepFwdBtn //
-    //    , playBtn, pauseBtn, stopBtn //
-    , clearMarkersBtn, openPublicProfile //
+    NavLink
+    adminBtn //
+    , logoutBtn //
+    , goToProfileBtn //
+    , goToContactsBtn //
+    , goToAppstatsBtn //
+    , openPublicProfile //
     ;
-    @UiField
-    NavSearch                 locationSearchBox;
-    @UiField
-    Button                    locationSearchBtn, locationSaveBtn //
-    ;
-    //    @UiField
-    //    Nav                       profilePlayMenu;
-
-    private MenuPresenter     presenter;
-
-    private final ClientUtils u              = new ClientUtils();
-    private boolean           isMapDisplayed = true;
 
     public MenuViewImpl() {
         initWidget(uiBinder.createAndBindUi(this));
 
-        locationSearchBox.getTextBox().addKeyPressHandler(new KeyPressHandler() {
-
-            @Override
-            public void onKeyPress(final KeyPressEvent event) {
-                if (event.getCharCode() == KeyCodes.KEY_ENTER) {
-                    event.preventDefault();
-                    event.stopPropagation();
-
-                    searchLocation();
-                }
-            }
-        });
-
-        isMapDisplayed = true;
-
         logoutBtn.setVisible(false);
 
-        goToProfileBtn.setVisible(false);
-        goToContactsBtn.setVisible(false);
         goToAppstatsBtn.setVisible(false);
 
         progressBar.setVisible(false);
-        locationSaveBtn.setVisible(false);
-
-        //        stepBwdBtn.setTitle(MSG_GO_TO_PREVIOUS_LOCATION);
-        //        stepFwdBtn.setTitle(MSG_GO_TO_NEXT_LOCATION);
-        //        stepBwdBtn.setVisible(false);
-        //
-        //        playBtn.setTitle(MSG_PLAY_PROFILE_LOCATIONS);
-        //        pauseBtn.setTitle(MSG_PAUSE);
-
-        //        getProfilePlayMenuWidget().init();
-    }
-
-    private static final String MSG_FROM_PAST_TO_PRESENT    = "From past to present";
-    private static final String MSG_FROM_PRESENT_TO_PAST    = "From present to past";
-    private static final String MSG_GO_TO_PREVIOUS_LOCATION = "Go to previous location";
-    private static final String MSG_GO_TO_NEXT_LOCATION     = "Go to next location";
-    private static final String MSG_PLAY_PROFILE_LOCATIONS  = "Play profile locations";
-    private static final String MSG_PAUSE                   = "Pause";
-
-    private String        lastSearchItemLocation      = null;
-
-    @Override
-    public void setPresenter(final MenuPresenter presenter) {
-        this.presenter = presenter;
     }
 
     @UiHandler("openPublicProfile")
     public void clickOnOpenPublicProfile(final ClickEvent e) {
-        presenter.openPublicProfile();
+        fireEvent(new GoToPublicProfileEvent());
     }
-
-    @UiHandler("clearMarkersBtn")
-    public void clickOnClearMarkersBtn(final ClickEvent e) {
-        MarkersUtils.deleteSearchMarkers();
-    }
-
-    @UiHandler("locationSaveBtn")
-    public void clickOnLocationSave(final ClickEvent e) {
-
-        if (u.isVoid(lastSearchItemLocation)) {
-
-            lastSearchItemLocation = null;
-            return;
-        }
-
-        presenter.saveLocation(lastSearchItemLocation);
-    }
-
-    @UiHandler("locationSearchBtn")
-    public void clickOnLocationSearch(final ClickEvent e) {
-        searchLocation();
-    }
-
-    private void searchLocation() {
-        final String locationText = locationSearchBox.getTextBox().getText();
-
-        if (u.isVoid(locationText)) {
-            lastSearchItemLocation = null;
-            return;
-        }
-
-        MenuViewUtils.searchLocationAndAddMarker(this, locationText);
-    }
-
-    //    @UiHandler("stopBtn")
-    //    public void clickOnStopProfile(final ClickEvent e) {
-    //        clickOnPause();
-    //        isPausing = false;
-    //
-    //        MarkersUtils.deleteMovieMarkers();
-    //        MovieUtils.initIndex(isPastToPresent);
-    //        // TODO PGU Sep 27, 2012 show user's current location
-    //    }
-    //
-    //    @UiHandler("stepBwdBtn")
-    //    public void clickOnStepBwdBtn(final ClickEvent e) {
-    //        clickOnPause();
-    //        MovieUtils.decrementIndex(isPastToPresent);
-    //        showProfileItemOnMap();
-    //    }
-    //
-    //    @UiHandler("stepFwdBtn")
-    //    public void clickOnStepFwdBtn(final ClickEvent e) {
-    //        clickOnPause();
-    //        MovieUtils.incrementIndex(isPastToPresent);
-    //        showProfileItemOnMap();
-    //    }
-    //
-    //    @UiHandler("pauseBtn")
-    //    public void clickOnPauseProfile(final ClickEvent e) {
-    //        clickOnPause();
-    //    }
-    //
-    //    private void clickOnPause() {
-    //        pauseBtn.setVisible(false);
-    //        isPlayingProfile = false;
-    //        isPausing = true;
-    //
-    //        playBtn.setVisible(true);
-    //    }
-    //
-    //    private boolean isPastToPresent  = true;
-    //    private boolean isPlayingProfile = false;
-    //    private boolean isPausing        = false;
-    //
-    //    @UiHandler("playBtn")
-    //    public void clickOnPlayProfile(final ClickEvent e) {
-    //        playBtn.setVisible(false);
-    //        pauseBtn.setVisible(true);
-    //
-    //        isPlayingProfile = true;
-    //
-    //        if (!isPausing) {
-    //            MarkersUtils.deleteMovieMarkers();
-    //            MovieUtils.initIndex(isPastToPresent);
-    //        }
-    //
-    //        isPausing = false;
-    //
-    //        Scheduler.get().scheduleFixedPeriod(new RepeatingCommand() {
-    //
-    //            @Override
-    //            public boolean execute() {
-    //                return goToNextProfileItemOnMap();
-    //            }
-    //
-    //        }, 3000);
-    //
-    //        goToNextProfileItemOnMap();
-    //    }
-    //
-    //    private boolean goToNextProfileItemOnMap() {
-    //
-    //        if (isPlayingProfile) {
-    //
-    //            MovieUtils.incrementIndex(isPastToPresent);
-    //            final boolean isDone = showProfileItemOnMap();
-    //
-    //            return !isDone;
-    //        }
-    //
-    //        return false;
-    //    }
-
-    //    private boolean showProfileItemOnMap() {
-    //        final boolean isDone = MovieUtils.showProfileItemOnMap(isPastToPresent);
-    //
-    //        if (isDone) {
-    //            clickOnPause();
-    //            isPausing = false;
-    //        }
-    //
-    //        stepFwdBtn.setVisible(MovieUtils.showFwdBtn(isPastToPresent));
-    //        stepBwdBtn.setVisible(MovieUtils.showBwdBtn(isPastToPresent));
-    //
-    //        return isDone;
-    //    }
-
-    public void cacheLastSearchedLocation(final String name) {
-        lastSearchItemLocation = name;
-    }
-
-    @Override
-    public void showMap() {
-        Window.scrollTo(0, 0);
-
-        if (isMapDisplayed) {
-            return;
-        }
-
-        showMapProg();
-        //        updateMenuOnDisplayingMap();
-    }
-
-    public static native void showMapProg() /*-{
-		$wnd.$('#pgu_geo_profile_map_container').collapse('show');
-    }-*/;
 
     @UiHandler("goToContactsBtn")
     public void clickGoToContacts(final ClickEvent e) {
-        presenter.goToContacts();
+        fireEvent(new GoToContactsEvent());
     }
 
     @UiHandler("goToProfileBtn")
     public void clickGoToProfile(final ClickEvent e) {
-        presenter.goToProfile();
+        fireEvent(new GoToProfileEvent());
     }
 
     @UiHandler("goToAppstatsBtn")
@@ -277,87 +76,8 @@ public class MenuViewImpl extends Composite implements MenuView {
     }
 
     @Override
-    public LogWidget getLoginWidget() {
-        return new LogWidget() {
-
-            @Override
-            public void setTargetHistoryToken(final String targetHistoryToken) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void setHref(final String href) {
-                adminBtn.setHref(href);
-            }
-
-            @Override
-            public String getTargetHistoryToken() {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public String getHref() {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public boolean isVisible() {
-                return adminBtn.isVisible();
-            }
-
-            @Override
-            public void setVisible(final boolean visible) {
-                adminBtn.setVisible(visible);
-            }
-
-        };
-    }
-
-    @Override
-    public LogWidget getLogoutWidget() {
-        return new LogWidget() {
-
-            @Override
-            public void setTargetHistoryToken(final String targetHistoryToken) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void setHref(final String href) {
-                logoutBtn.setHref(href);
-            }
-
-            @Override
-            public String getTargetHistoryToken() {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public String getHref() {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public boolean isVisible() {
-                return logoutBtn.isVisible();
-            }
-
-            @Override
-            public void setVisible(final boolean visible) {
-                logoutBtn.setVisible(visible);
-            }
-
-        };
-    }
-
-    @Override
     public HasVisibility getProfileWidget() {
         return goToProfileBtn;
-    }
-
-    @Override
-    public HasVisibility getAppstatsWidget() {
-        return goToAppstatsBtn;
     }
 
     @Override
@@ -366,64 +86,39 @@ public class MenuViewImpl extends Composite implements MenuView {
     }
 
     @Override
-    public LocationSearchWidget getLocationSearchWidget() {
-        return new LocationSearchWidget() {
-
-            @Override
-            public String getText() {
-                return locationSearchBox.getTextBox().getText();
-            }
-
-            @Override
-            public void setText(final String text) {
-                locationSearchBox.getTextBox().setText(text);
-            }
-
-            @Override
-            public void setFocus(final boolean isFocused) {
-                locationSearchBox.getTextBox().setFocus(isFocused);
-            }
-
-        };
-    }
-
-    //    @Override
-    //    public ProfilePlayMenuWidget getProfilePlayMenuWidget() {
-    //        return new ProfilePlayMenuWidget() {
-    //
-    //            @Override
-    //            public boolean isVisible() {
-    //                return profilePlayMenu.isVisible();
-    //            }
-    //
-    //            @Override
-    //            public void setVisible(final boolean visible) {
-    //                profilePlayMenu.setVisible(visible);
-    //            }
-    //
-    //            @Override
-    //            public void init() {
-    //                playBtn.setVisible(true);
-    //                pauseBtn.setVisible(false);
-    //            }
-    //
-    //        };
-    //    }
-
-    @Override
-    public HasVisibility getSaveWidget() {
-        return locationSaveBtn;
+    public void setIsAdmin(final boolean isAdmin) {
+        adminBtn.setVisible(!isAdmin);
+        logoutBtn.setVisible(isAdmin);
     }
 
     @Override
-    public void showOnMap(final String locationName) {
-        showMap();
-
-        MarkersUtils.createMarkerOnProfileMap(locationName);
+    public void setLogoutUrl(final String logoutUrl) {
+        logoutBtn.setHref(logoutUrl);
     }
 
-    public void showNotificationWarning(final String msg) {
-        presenter.showNotificationWarning(msg);
+    @Override
+    public void setLoginUrl(final String loginUrl) {
+        adminBtn.setHref(loginUrl);
+    }
+
+    @Override
+    public void setIsSuperAdmin(final boolean isSuperAdmin) {
+        goToAppstatsBtn.setVisible(isSuperAdmin);
+    }
+
+    @Override
+    public HandlerRegistration addGoToProfileHandler(final GoToProfileEvent.Handler handler) {
+        return addHandler(handler, GoToProfileEvent.TYPE);
+    }
+
+    @Override
+    public HandlerRegistration addGoToContactsHandler(final GoToContactsEvent.Handler handler) {
+        return addHandler(handler, GoToContactsEvent.TYPE);
+    }
+
+    @Override
+    public HandlerRegistration addGoToPublicProfileHandler(final GoToPublicProfileEvent.Handler handler) {
+        return addHandler(handler, GoToPublicProfileEvent.TYPE);
     }
 
 }

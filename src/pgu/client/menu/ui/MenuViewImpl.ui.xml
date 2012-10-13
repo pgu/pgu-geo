@@ -10,15 +10,11 @@
         }
     </ui:style>
     <g:HTMLPanel>
-<!--         position="TOP"  -->
         <b:Navbar addStyleNames="navbar-fixed-top">
             <b:Brand ui:field="appTitle">Geo CV</b:Brand>
             <b:Nav>
                 <b:NavLink icon="USER" ui:field="goToProfileBtn" iconSize="LARGE" >Profile</b:NavLink>
                 <b:NavLink icon="GLOBE" ui:field="goToContactsBtn" iconSize="LARGE" >Contacts</b:NavLink>
-                <b:NavSearch ui:field="locationSearchBox" size="3" placeholder="Location..." />
-                <b:Button ui:field="locationSearchBtn" icon="SEARCH" iconSize="LARGE">Search</b:Button>
-                <b:Button ui:field="locationSaveBtn" icon="SAVE" iconSize="LARGE">Save</b:Button>
             </b:Nav>
             <b:Nav alignment="RIGHT">
                 <b:NavLink icon="DASHBOARD" ui:field="goToAppstatsBtn" iconSize="LARGE" >Appstats</b:NavLink>
@@ -26,18 +22,8 @@
                 <b:NavLink icon="LOCK" ui:field="adminBtn" iconSize="LARGE" ></b:NavLink>
             </b:Nav>
             <b:Nav alignment="RIGHT">
-                <b:NavLink ui:field="clearMarkersBtn" icon="REMOVE" iconSize="LARGE" >Clear map</b:NavLink>
                 <b:NavLink ui:field="openPublicProfile" icon="EXTERNAL_LINK" iconSize="LARGE" />
             </b:Nav>
-<!--             <b:Nav ui:field="profilePlayMenu" alignment="RIGHT">only for profile -->
-<!--                 <b:NavLink ui:field="past2prstBtn" icon="CIRCLE_ARROW_RIGHT" iconSize="LARGE" /> -->
-<!--                 <b:NavLink ui:field="prst2pastBtn" icon="CIRCLE_ARROW_LEFT" iconSize="LARGE" /> -->
-<!--                 <b:NavLink ui:field="stepBwdBtn" icon="STEP_BACKWARD" iconSize="LARGE" /> -->
-<!--                 <b:NavLink ui:field="stopBtn" icon="STOP" iconSize="LARGE" /> -->
-<!--                 <b:NavLink ui:field="playBtn" icon="PLAY" iconSize="LARGE" /> -->
-<!--                 <b:NavLink ui:field="pauseBtn" icon="PAUSE" iconSize="LARGE" /> -->
-<!--                 <b:NavLink ui:field="stepFwdBtn" icon="STEP_FORWARD" iconSize="LARGE" /> -->
-<!--             </b:Nav> -->
         </b:Navbar>
         <g:HTMLPanel addStyleNames="{style.progressBar}">
             <b:ProgressBar ui:field="progressBar" type="ANIMATED" percent="100" />
