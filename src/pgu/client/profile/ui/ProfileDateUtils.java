@@ -81,7 +81,7 @@ public class ProfileDateUtils {
 					diffD += '<br/>(';
 					diffD += years > 0 ? (years + ' year') : '';
 					if (years > 0) {
-						diffD += years > 1 ? 's ' : '';
+						diffD += years > 1 ? 's ' : ' ';
 					}
 
 					diffD += months > 0 ? (months + ' month') : '';
