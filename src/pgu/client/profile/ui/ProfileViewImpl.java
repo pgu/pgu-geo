@@ -4,10 +4,9 @@ import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.LanguagesUtils;
 import pgu.client.app.utils.LocationsUtils;
 import pgu.client.app.utils.MarkersUtils;
-import pgu.client.menu.MenuView.LocationSearchWidget;
-import pgu.client.menu.ui.MenuViewUtils;
 import pgu.client.profile.ProfilePresenter;
 import pgu.client.profile.ProfileView;
+import pgu.client.profile.event.SaveLocationEvent;
 import pgu.shared.dto.Profile;
 import pgu.shared.utils.PublicProfileItem;
 
@@ -33,8 +32,8 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.HasVisibility;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 
 public class ProfileViewImpl extends Composite implements ProfileView {
 
@@ -72,6 +71,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     private final ClientUtils                               u               = new ClientUtils();
 
+    private String              lastSearchItemLocation      = null;
+    private boolean             isMapDisplayed = true;
+
     public ProfileViewImpl() {
 
         overviewSection = new Section("profile:overview");
@@ -98,9 +100,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     }
 
-    private String        lastSearchItemLocation      = null;
-    private final ClientUtils u              = new ClientUtils();
-    private final boolean           isMapDisplayed = true;
 
     @UiHandler("locationSearchBtn")
     public void clickOnLocationSearch(final ClickEvent e) {
@@ -116,39 +115,18 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             return;
         }
 
-        presenter.saveLocation(lastSearchItemLocation);
-    }
-
-    @Override
-    public HasVisibility getSaveWidget() {
-        return locationSaveBtn;
+        fireEvent(new SaveLocationEvent(lastSearchItemLocation));
     }
 
     @Override
     public void showOnMap(final String locationName) {
-        showMap();
-
-        MarkersUtils.createMarkerOnProfileMap(locationName);
-    }
-
-    @Override
-    public void showMap() {
         Window.scrollTo(0, 0);
-
-        if (isMapDisplayed) {
-            return;
-        }
-
-        showMapProg();
+        MarkersUtils.createMarkerOnProfileMap(locationName);
     }
 
     public void cacheLastSearchedLocation(final String name) {
         lastSearchItemLocation = name;
     }
-
-    public static native void showMapProg() /*-{
-        $wnd.$('#pgu_geo_profile_map_container').collapse('show');
-    }-*/;
 
     @Override
     public LocationSearchWidget getLocationSearchWidget() {
@@ -180,7 +158,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             return;
         }
 
-        MenuViewUtils.searchLocationAndAddMarker(this, locationText);
+        ProfileViewUtils.searchLocationAndAddMarker(this, locationText);
     }
 
 
@@ -398,5 +376,23 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     @Override
     public String getPublicPreferences() {
         return PublicProfileUtils.json_publicPreferences();
+    }
+
+
+    @Override
+    public HandlerRegistration addSaveLocationHandler(final SaveLocationEvent.Handler handler) {
+        return addHandler(handler, SaveLocationEvent.TYPE);
+    }
+
+
+    @Override
+    public void hideSaveWidget() {
+        locationSaveBtn.setVisible(false);
+    }
+
+
+    @Override
+    public void showSaveWidget() {
+        locationSaveBtn.setVisible(true);
     }
 }

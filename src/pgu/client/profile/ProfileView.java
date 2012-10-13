@@ -1,10 +1,13 @@
 package pgu.client.profile;
 
+import pgu.client.profile.event.SaveLocationEvent;
 import pgu.shared.dto.Profile;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface ProfileView extends IsWidget {
+public interface ProfileView extends IsWidget //
+, SaveLocationEvent.HasSaveLocationHandlers //
+{
 
     void setPresenter(ProfilePresenter presenter);
 
@@ -17,5 +20,9 @@ public interface ProfileView extends IsWidget {
     void confirmChangeOnPublicProfile(String publicProfileItem);
 
     String getPublicPreferences();
+
+    void hideSaveWidget();
+
+    void showSaveWidget();
 
 }
