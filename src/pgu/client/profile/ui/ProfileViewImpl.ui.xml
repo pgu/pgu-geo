@@ -41,6 +41,17 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- search text, search btn, save search btn, clear search map btn,  
+                        [search locations || current location]
+                        [show/hide all locations || current location]
+                        clear search map => show current location
+                        hide all locations => show current location
+                        search location => hide current location
+                        show all locations => hide current location
+                         -->
+                        <!-- alert if location not found -->
+                        <!-- movie parameters: list of center map to which location for which item -->
+                        <!-- movie parameters: list of zoom to which location -->
                     </g:HTMLPanel>
                 </div>
                 <div class="span6">
@@ -49,8 +60,9 @@
                             <b:Button ui:field="summaryBasicBtn" icon="INFO_SIGN" type="INFO" iconSize="LARGE" addStyleNames="pull-right" />
                         </b:Popover>
                         <b:Heading size="2" ui:field="nameBasic" />
-                        <!-- picture -->
+                        <!-- TODO picture -->
                         <b:Paragraph ui:field="headlineBasic" />
+                        <!-- TODO link to public profile -->
                     </b:Hero>  
                     
                     <g:HTMLPanel addStyleNames="row-fluid">

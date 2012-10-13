@@ -36,8 +36,6 @@ public class MenuViewImpl extends Composite implements MenuView {
     ProgressBar               progressBar;
     @UiField
     NavLink                   adminBtn, logoutBtn, goToProfileBtn, goToContactsBtn, goToAppstatsBtn //
-    //    , mapSizeBtn //
-    //    , past2prstBtn, prst2pastBtn //
     //    , stepBwdBtn, stepFwdBtn //
     //    , playBtn, pauseBtn, stopBtn //
     , clearMarkersBtn, openPublicProfile //
@@ -71,11 +69,6 @@ public class MenuViewImpl extends Composite implements MenuView {
             }
         });
 
-        //        mapSizeBtn.getElement().setAttribute("data-toggle", "collapse");
-        //        mapSizeBtn.getElement().setAttribute("data-target", "#pgu_geo_profile_map_container");
-        //
-        //        mapSizeBtn.setIcon(IconType.RESIZE_SMALL);
-        //        mapSizeBtn.setText("Hide map");
         isMapDisplayed = true;
 
         logoutBtn.setVisible(false);
@@ -86,12 +79,6 @@ public class MenuViewImpl extends Composite implements MenuView {
 
         progressBar.setVisible(false);
         locationSaveBtn.setVisible(false);
-
-        //        past2prstBtn.setTitle(MSG_FROM_PAST_TO_PRESENT);
-        //        prst2pastBtn.setTitle(MSG_FROM_PRESENT_TO_PAST);
-
-        //        isPastToPresent = true;
-        //        past2prstBtn.setActive(true);
 
         //        stepBwdBtn.setTitle(MSG_GO_TO_PREVIOUS_LOCATION);
         //        stepFwdBtn.setTitle(MSG_GO_TO_NEXT_LOCATION);
@@ -155,24 +142,6 @@ public class MenuViewImpl extends Composite implements MenuView {
         MenuViewUtils.searchLocationAndAddMarker(this, locationText);
     }
 
-    //    @UiHandler("prst2pastBtn")
-    //    public void clickOnPrst2Past(final ClickEvent e) {
-    //
-    //        prst2pastBtn.setActive(true);
-    //
-    //        past2prstBtn.setActive(false);
-    //        isPastToPresent = false;
-    //    }
-    //
-    //    @UiHandler("past2prstBtn")
-    //    public void clickOnPast2Prst(final ClickEvent e) {
-    //
-    //        past2prstBtn.setActive(true);
-    //        isPastToPresent = true;
-    //
-    //        prst2pastBtn.setActive(false);
-    //    }
-    //
     //    @UiHandler("stopBtn")
     //    public void clickOnStopProfile(final ClickEvent e) {
     //        clickOnPause();
@@ -271,21 +240,6 @@ public class MenuViewImpl extends Composite implements MenuView {
         lastSearchItemLocation = name;
     }
 
-    //    @UiHandler("mapSizeBtn")
-    //    public void clickMapSize(final ClickEvent e) {
-    //
-    //        if (isMapDisplayed) {
-    //            mapSizeBtn.setIcon(IconType.RESIZE_FULL);
-    //            mapSizeBtn.setText("Show map");
-    //            isMapDisplayed = false;
-    //            //            profilePlayMenu.setVisible(false);
-    //
-    //        } else {
-    //            updateMenuOnDisplayingMap();
-    //
-    //        }
-    //    }
-
     @Override
     public void showMap() {
         Window.scrollTo(0, 0);
@@ -297,14 +251,6 @@ public class MenuViewImpl extends Composite implements MenuView {
         showMapProg();
         //        updateMenuOnDisplayingMap();
     }
-
-    //    private void updateMenuOnDisplayingMap() {
-    //
-    //        mapSizeBtn.setIcon(IconType.RESIZE_SMALL);
-    //        mapSizeBtn.setText("Hide map");
-    //        isMapDisplayed = true;
-    //        //        profilePlayMenu.setVisible(true);
-    //    }
 
     public static native void showMapProg() /*-{
 		$wnd.$('#pgu_geo_profile_map_container').collapse('show');

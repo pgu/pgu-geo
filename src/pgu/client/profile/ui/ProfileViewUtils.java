@@ -165,10 +165,12 @@ public class ProfileViewUtils {
 		return list.join('');
     }-*/;
 
+    // TODO to delete
     public static native int nbItems() /*-{
         return $wnd.pgu_geo.item_configs.length;
     }-*/;
 
+    // TODO to delete
     public static native JavaScriptObject getItemConfig(int i) /*-{
         return $wnd.pgu_geo.item_configs[i];
     }-*/;
