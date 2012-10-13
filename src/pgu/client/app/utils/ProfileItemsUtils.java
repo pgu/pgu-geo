@@ -194,7 +194,7 @@ public class ProfileItemsUtils {
         return 0;
     }-*/;
 
-    public static native void showProfileItemLocations(final int token, final JavaScriptObject map) /*-{
+    public static native void showMovieProfileItemLocations(final int token, final JavaScriptObject map) /*-{
 
         var selected_profile_items = @pgu.client.app.utils.ProfileItemsUtils::selectedProfileItems()();
         if (!selected_profile_items) {
@@ -213,7 +213,7 @@ public class ProfileItemsUtils {
         for ( var i = 0, len = location_names.length; i < len; i++) {
             var location_name = location_names[i];
 
-            var marker = @pgu.client.app.utils.MarkersUtils::createMarkerOnPublicMap(Ljava/lang/String;)(location_name);
+            var marker = @pgu.client.app.utils.MarkersUtils::createMovieMarkerOnPublicMap(Ljava/lang/String;)(location_name);
             if (i === 0) {
                 first_marker = marker;
             }
@@ -242,7 +242,7 @@ public class ProfileItemsUtils {
         }
 
         if (first_marker == null) {
-            first_marker = @pgu.client.app.utils.MarkersUtils::createUnknownMarkerOnPublicMap()();
+            first_marker = @pgu.client.app.utils.MarkersUtils::createMovieUnknownMarkerOnPublicMap()();
         }
 
         var info_content_str = info_content.join('');

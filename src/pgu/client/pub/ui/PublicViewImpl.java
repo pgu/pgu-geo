@@ -79,7 +79,7 @@ public class PublicViewImpl extends Composite implements PublicView {
             @Override
             public void onPlay(final PlayEvent event) {
                 GWT.log("[on play]");
-                showProfileItem(event.getToken());
+                showMovieProfileItem(event.getToken());
             }
 
         });
@@ -106,7 +106,7 @@ public class PublicViewImpl extends Composite implements PublicView {
             @Override
             public void onBwd(final BwdEvent event) {
                 GWT.log("[on bwd]");
-                showProfileItem(event.getToken());
+                showMovieProfileItem(event.getToken());
             }
 
         });
@@ -115,7 +115,7 @@ public class PublicViewImpl extends Composite implements PublicView {
             @Override
             public void onFwd(final FwdEvent event) {
                 GWT.log("[on fwd]");
-                showProfileItem(event.getToken());
+                showMovieProfileItem(event.getToken());
             }
 
         });
@@ -192,12 +192,12 @@ public class PublicViewImpl extends Composite implements PublicView {
         $wnd.$('#' + id).collapse('hide');
     }-*/;
 
-    private void showProfileItem(final int token) {
+    private void showMovieProfileItem(final int token) {
         showProfileItemArea();
 
         fillProfileItemContent(token);
 
-        ProfileItemsUtils.showProfileItemLocations(token, PublicUtils.publicProfileMap());
+        ProfileItemsUtils.showMovieProfileItemLocations(token, PublicUtils.publicProfileMap());
     }
 
     private void fillProfileItemContent(final int token) {

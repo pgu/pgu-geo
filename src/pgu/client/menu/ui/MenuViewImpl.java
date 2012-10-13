@@ -124,7 +124,7 @@ public class MenuViewImpl extends Composite implements MenuView {
 
     @UiHandler("clearMarkersBtn")
     public void clickOnClearMarkersBtn(final ClickEvent e) {
-        MarkersUtils.deleteMovieMarkers();
+        MarkersUtils.deleteSearchMarkers();
     }
 
     @UiHandler("locationSaveBtn")
