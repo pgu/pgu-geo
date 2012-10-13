@@ -1,6 +1,8 @@
 package pgu.client.app;
 
+import pgu.client.app.event.HideWaitingIndicatorEvent;
 import pgu.client.app.event.NotificationEvent;
+import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.event.TechnicalErrorEvent;
 import pgu.client.app.mvp.BaseClientFactory;
 import pgu.client.app.utils.ClientUtils;
@@ -13,6 +15,8 @@ import com.google.web.bindery.event.shared.EventBus;
 public class AppActivity implements //
 NotificationEvent.Handler //
 , TechnicalErrorEvent.Handler //
+, ShowWaitingIndicatorEvent.Handler //
+, HideWaitingIndicatorEvent.Handler //
 {
 
     private final AppView         view;
@@ -32,6 +36,9 @@ NotificationEvent.Handler //
 
         eventBus.addHandler(TechnicalErrorEvent.TYPE, this);
         eventBus.addHandler(NotificationEvent.TYPE, this);
+
+        eventBus.addHandler(ShowWaitingIndicatorEvent.TYPE, this);
+        eventBus.addHandler(HideWaitingIndicatorEvent.TYPE, this);
 
         view.getHeader().setWidget(menuView);
     }
@@ -68,6 +75,16 @@ NotificationEvent.Handler //
         }
 
         notification.show();
+    }
+
+    @Override
+    public void onHideWaitingIndicator(final HideWaitingIndicatorEvent event) {
+        view.hideWaitingIndicator();
+    }
+
+    @Override
+    public void onShowWaitingIndicator(final ShowWaitingIndicatorEvent event) {
+        view.showWaitingIndicator();
     }
 
 }

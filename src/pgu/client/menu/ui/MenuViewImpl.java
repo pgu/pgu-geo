@@ -1,21 +1,19 @@
 package pgu.client.menu.ui;
 
 import pgu.client.menu.MenuView;
+import pgu.client.menu.event.GoToAppStatsEvent;
 import pgu.client.menu.event.GoToContactsEvent;
 import pgu.client.menu.event.GoToProfileEvent;
 import pgu.client.menu.event.GoToPublicProfileEvent;
 
 import com.github.gwtbootstrap.client.ui.Brand;
 import com.github.gwtbootstrap.client.ui.NavLink;
-import com.github.gwtbootstrap.client.ui.ProgressBar;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HasVisibility;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
@@ -28,8 +26,6 @@ public class MenuViewImpl extends Composite implements MenuView {
 
     @UiField
     Brand                     appTitle;
-    @UiField
-    ProgressBar               progressBar;
     @UiField
     NavLink
     adminBtn //
@@ -44,10 +40,7 @@ public class MenuViewImpl extends Composite implements MenuView {
         initWidget(uiBinder.createAndBindUi(this));
 
         logoutBtn.setVisible(false);
-
         goToAppstatsBtn.setVisible(false);
-
-        progressBar.setVisible(false);
     }
 
     @UiHandler("openPublicProfile")
@@ -67,22 +60,7 @@ public class MenuViewImpl extends Composite implements MenuView {
 
     @UiHandler("goToAppstatsBtn")
     public void clickGoToAppstats(final ClickEvent e) {
-        Window.open("appstats/", "appstats", null);
-    }
-
-    @Override
-    public HasVisibility getWaitingIndicator() {
-        return progressBar;
-    }
-
-    @Override
-    public HasVisibility getProfileWidget() {
-        return goToProfileBtn;
-    }
-
-    @Override
-    public HasVisibility getContactsWidget() {
-        return goToContactsBtn;
+        fireEvent(new GoToAppStatsEvent());
     }
 
     @Override
@@ -119,6 +97,11 @@ public class MenuViewImpl extends Composite implements MenuView {
     @Override
     public HandlerRegistration addGoToPublicProfileHandler(final GoToPublicProfileEvent.Handler handler) {
         return addHandler(handler, GoToPublicProfileEvent.TYPE);
+    }
+
+    @Override
+    public HandlerRegistration addGoToAppStatsHandler(final GoToAppStatsEvent.Handler handler) {
+        return addHandler(handler, GoToAppStatsEvent.TYPE);
     }
 
 }

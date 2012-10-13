@@ -27,6 +27,8 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 public class ProfileActivity extends AbstractActivity implements ProfilePresenter //
 , LocationsSuccessSaveEvent.Handler //
 , LocationSuccessDeleteEvent.Handler //
+, LocationAddNewEvent.Handler //
+, LocationShowOnMapEvent.Handler //
 {
 
     private final ClientFactory             clientFactory;
@@ -132,6 +134,8 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
         eventBus.addHandler(LocationsSuccessSaveEvent.TYPE, this);
         eventBus.addHandler(LocationSuccessDeleteEvent.TYPE, this);
+        eventBus.addHandler(LocationAddNewEvent.TYPE, this);
+        eventBus.addHandler(LocationShowOnMapEvent.TYPE, this);
 
         panel.setWidget(view.asWidget());
 

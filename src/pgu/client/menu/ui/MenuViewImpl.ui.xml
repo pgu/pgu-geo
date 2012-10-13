@@ -2,13 +2,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" 
             xmlns:g="urn:import:com.google.gwt.user.client.ui"
             xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
-    <ui:style>
-        .progressBar {
-            margin-left: 10px;
-            margin-right: 10px;
-            margin-top: 10px;
-        }
-    </ui:style>
+            
     <g:HTMLPanel>
         <b:Navbar addStyleNames="navbar-fixed-top">
             <b:Brand ui:field="appTitle">Geo CV</b:Brand>
@@ -17,16 +11,11 @@
                 <b:NavLink icon="GLOBE" ui:field="goToContactsBtn" iconSize="LARGE" >Contacts</b:NavLink>
             </b:Nav>
             <b:Nav alignment="RIGHT">
+                <b:NavLink icon="EXTERNAL_LINK" ui:field="openPublicProfile" iconSize="LARGE" />
                 <b:NavLink icon="DASHBOARD" ui:field="goToAppstatsBtn" iconSize="LARGE" >Appstats</b:NavLink>
                 <b:NavLink icon="UNLOCK" ui:field="logoutBtn" iconSize="LARGE" >Log out</b:NavLink>
                 <b:NavLink icon="LOCK" ui:field="adminBtn" iconSize="LARGE" ></b:NavLink>
             </b:Nav>
-            <b:Nav alignment="RIGHT">
-                <b:NavLink ui:field="openPublicProfile" icon="EXTERNAL_LINK" iconSize="LARGE" />
-            </b:Nav>
         </b:Navbar>
-        <g:HTMLPanel addStyleNames="{style.progressBar}">
-            <b:ProgressBar ui:field="progressBar" type="ANIMATED" percent="100" />
-        </g:HTMLPanel>
     </g:HTMLPanel>
 </ui:UiBinder> 

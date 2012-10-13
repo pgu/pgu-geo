@@ -1,13 +1,9 @@
 package pgu.client.menu;
 
 import pgu.client.app.AppState;
-import pgu.client.app.event.HideWaitingIndicatorEvent;
-import pgu.client.app.event.LocationAddNewEvent;
-import pgu.client.app.event.LocationShowOnMapEvent;
-import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
-import pgu.client.app.utils.ClientUtils;
 import pgu.client.contacts.ContactsPlace;
+import pgu.client.menu.event.GoToAppStatsEvent;
 import pgu.client.menu.event.GoToContactsEvent;
 import pgu.client.menu.event.GoToProfileEvent;
 import pgu.client.menu.event.GoToPublicProfileEvent;
@@ -21,19 +17,14 @@ import com.google.gwt.user.client.Window.Location;
 import com.google.web.bindery.event.shared.EventBus;
 
 public class MenuActivity implements //
-ShowWaitingIndicatorEvent.Handler //
-, HideWaitingIndicatorEvent.Handler //
-, LocationAddNewEvent.Handler //
-, LocationShowOnMapEvent.Handler //
-, GoToProfileEvent.Handler //
+GoToProfileEvent.Handler //
 , GoToContactsEvent.Handler //
 , GoToPublicProfileEvent.Handler //
+, GoToAppStatsEvent.Handler //
 {
 
     private final MenuView             view;
-    private EventBus                   eventBus;
     private final LoginInfo            loginInfo;
-    private final ClientUtils          u = new ClientUtils();
     private final ClientFactory        clientFactory;
     private final PlaceController placeController;
 
@@ -45,16 +36,11 @@ ShowWaitingIndicatorEvent.Handler //
     }
 
     public void start(final EventBus eventBus) {
-        this.eventBus = eventBus;
-
-        eventBus.addHandler(ShowWaitingIndicatorEvent.TYPE, this);
-        eventBus.addHandler(HideWaitingIndicatorEvent.TYPE, this);
-        eventBus.addHandler(LocationAddNewEvent.TYPE, this);
-        eventBus.addHandler(LocationShowOnMapEvent.TYPE, this);
 
         view.addGoToProfileHandler(this);
         view.addGoToContactsHandler(this);
         view.addGoToPublicProfileHandler(this);
+        view.addGoToAppStatsHandler(this);
 
         final boolean isAdmin = loginInfo.isLoggedIn();
         view.setIsAdmin(isAdmin);
@@ -71,16 +57,6 @@ ShowWaitingIndicatorEvent.Handler //
                 && "guilcher.pascal.dev@gmail.com".equals(loginInfo.getEmailAddress());
 
         view.setIsSuperAdmin(isSuperAdmin);
-    }
-
-    @Override
-    public void onHideWaitingIndicator(final HideWaitingIndicatorEvent event) {
-        view.getWaitingIndicator().setVisible(false);
-    }
-
-    @Override
-    public void onShowWaitingIndicator(final ShowWaitingIndicatorEvent event) {
-        view.getWaitingIndicator().setVisible(true);
     }
 
     @Override
@@ -111,6 +87,11 @@ ShowWaitingIndicatorEvent.Handler //
 
         final String publicUrl = baseUrl + "#PublicPlace:" + linkedInSuffix;
         Window.open(publicUrl, "public_profile", null);
+    }
+
+    @Override
+    public void onGoToAppStats(final GoToAppStatsEvent event) {
+        Window.open("appstats/", "appstats", null);
     }
 
 }

@@ -3,9 +3,23 @@
     xmlns:g="urn:import:com.google.gwt.user.client.ui"
     xmlns:b="urn:import:com.github.gwtbootstrap.client.ui">
     
+    <ui:style>
+        .progressBar {
+            margin-left: 10px;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+    </ui:style>
+    
     <g:HTMLPanel>
         <g:SimplePanel ui:field="header" />
+        
+        <g:HTMLPanel addStyleNames="{style.progressBar}">
+            <b:ProgressBar ui:field="progressBar" type="ANIMATED" percent="100" />
+        </g:HTMLPanel>
+        
         <g:HTMLPanel ui:field="notification" addStyleNames="container-fluid" />
+        
         <g:HTMLPanel addStyleNames="container-fluid">
             <g:SimplePanel ui:field="body" />
         </g:HTMLPanel>
