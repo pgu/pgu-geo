@@ -25,16 +25,12 @@
     <g:HTMLPanel>
         <g:HTMLPanel ui:field="submenu" addStyleNames="subnav subnav-fixed">
             <b:NavPills>
-            <!-- TODO PGU clean this -->
-<!--                 <b:NavLink href="#profile:overview">Overview</b:NavLink> -->
                 <b:NavLink href="#profile:experience">Experience</b:NavLink>
                 <b:NavLink href="#profile:education">Education</b:NavLink>
             </b:NavPills>
         </g:HTMLPanel>
 
         <b:Section ui:field="overviewSection">
-        
-<!--             <g:HTMLPanel addStyleNames="row-fluid {style.profile_map_area}"> -->
             <g:HTMLPanel addStyleNames="row-fluid">
                 <div class="span6">
                     <g:HTMLPanel addStyleNames="row-fluid">
@@ -45,38 +41,36 @@
                             </div>
                         </div>
                     </g:HTMLPanel>
-                        <!-- search text, search btn, save search btn, clear search map btn,  
-                        [search locations || current location]
-                        [show/hide all locations || current location]
-                        clear search map => show current location
-                        hide all locations => show current location
-                        search location => hide current location
-                        show all locations => hide current location
-                         -->
-                        <!-- alert if location not found -->
-                        <!-- movie parameters: list of center map to which location for which item -->
-                        <!-- movie parameters: list of zoom to which location -->
-                        <g:HTMLPanel addStyleNames="row-fluid {style.map_toolbar}">
-                            <div class="span11">
-                                <form class="form-search span8"> 
-                                  <div class="input-append">
-<!--                                     <input type="text" class="span2 search-query" /> -->
-<!--                                     <button type="submit" class="btn">Search</button> -->
-                                    <b:TextBox ui:field="locationSearchBox" 
-                                               placeholder="Location..."  
-                                               addStyleNames="search-query"/>
-                                    <button ui:field="locationSearchBtn" type="submit" class="btn">Search</button>
+                    <!-- search text, search btn, save search btn, clear search map btn,  
+                    [search locations || current location]
+                    [show/hide all locations || current location]
+                    clear search map => show current location
+                    hide all locations => show current location
+                    search location => hide current location
+                    show all locations => hide current location
+                     -->
+                    <!-- alert if location not found -->
+                    <!-- movie parameters: list of center map to which location for which item -->
+                    <!-- movie parameters: list of zoom to which location -->
+                    <g:HTMLPanel addStyleNames="row-fluid {style.map_toolbar}">
+                        <div class="span11">
+                            <form class="form-search span8"> 
+                              <div class="input-append">
+                                <b:TextBox ui:field="locationSearchBox" 
+                                           placeholder="Location..."  
+                                           addStyleNames="search-query"/>
+                                <button ui:field="locationSearchBtn" type="submit" class="btn">Search</button>
 <!--                                     <b:SubmitButton ui:field="locationSearchBtn" >Search</b:SubmitButton> -->
 <!--                                     <b:SubmitButton ui:field="locationSearchBtn" icon="SEARCH" iconSize="LARGE" /> -->
-                                  </div>
-                                </form>
-                                <b:Button ui:field="locationSaveBtn" icon="SAVE" iconSize="LARGE" />
-                                <b:Button ui:field="clearSearchMarkersBtn" icon="REMOVE" iconSize="LARGE" />
-                            </div>
-                            <div class="span1">
-                                <b:Button ui:field="showAllBtn" icon="MAGIC" iconSize="LARGE" toggle="true" />
-                            </div>
-                        </g:HTMLPanel>
+                              </div>
+                            </form>
+                            <b:Button ui:field="locationSaveBtn" icon="SAVE" iconSize="LARGE" />
+                            <b:Button ui:field="clearSearchMarkersBtn" icon="REMOVE" iconSize="LARGE" />
+                        </div>
+                        <div class="span1">
+                            <b:Button ui:field="showAllBtn" icon="MAGIC" iconSize="LARGE" toggle="true" />
+                        </div>
+                    </g:HTMLPanel>
                 </div>
                 <div class="span6">
                     <b:Hero>
