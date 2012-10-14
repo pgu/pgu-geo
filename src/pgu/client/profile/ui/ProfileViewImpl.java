@@ -21,6 +21,7 @@ import com.github.gwtbootstrap.client.ui.TextBox;
 import com.github.gwtbootstrap.client.ui.Tooltip;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.ButtonElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
@@ -59,8 +60,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     @UiField
     Button expPublicState, eduPublicState //
     , clearSearchMarkersBtn //
-    , locationSearchBtn //
     , locationSaveBtn //
+    ;
+    @UiField
+    ButtonElement locationSearchBtn //
     ;
     @UiField
     TextBox locationSearchBox;
@@ -102,10 +105,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
 
-    @UiHandler("locationSearchBtn")
-    public void clickOnLocationSearch(final ClickEvent e) {
-        searchLocation();
-    }
+    //    @UiHandler("locationSearchBtn")
+    //    public void clickOnLocationSearch(final ClickEvent e) {
+    //        searchLocation();
+    //    }
 
     @UiHandler("locationSaveBtn")
     public void clickOnLocationSave(final ClickEvent e) {
