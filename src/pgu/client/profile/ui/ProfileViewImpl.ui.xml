@@ -54,8 +54,8 @@
                         <!-- movie parameters: list of zoom to which location -->
                         <g:HTMLPanel addStyleNames="row-fluid">
                             <div class="span11">
-                                <b:Form addStyleNames="form-search"> 
-                                  <g:HTMLPanel addStyleNames="input-append">
+                                <form class="form-search span8"> 
+                                  <div class="input-append">
 <!--                                     <input type="text" class="span2 search-query" /> -->
 <!--                                     <button type="submit" class="btn">Search</button> -->
                                     <b:TextBox ui:field="locationSearchBox" 
@@ -64,8 +64,8 @@
                                     <button ui:field="locationSearchBtn" type="submit" class="btn">Search</button>
 <!--                                     <b:SubmitButton ui:field="locationSearchBtn" >Search</b:SubmitButton> -->
 <!--                                     <b:SubmitButton ui:field="locationSearchBtn" icon="SEARCH" iconSize="LARGE" /> -->
-                                  </g:HTMLPanel>
-                                </b:Form>
+                                  </div>
+                                </form>
                                 <b:Button ui:field="locationSaveBtn" icon="SAVE" iconSize="LARGE" />
                                 <b:Button ui:field="clearSearchMarkersBtn" icon="REMOVE" iconSize="LARGE" />
                             </div>
