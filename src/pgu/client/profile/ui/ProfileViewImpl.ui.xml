@@ -4,6 +4,9 @@
             xmlns:b="urn:import:com.github.gwtbootstrap.client.ui" >
 
     <ui:style>
+        .map_toolbar {
+            margin-top: 10px;
+        }
         .location {
             font-weight: bold;    
         }
@@ -41,6 +44,7 @@
                                 </div>
                             </div>
                         </div>
+                    </g:HTMLPanel>
                         <!-- search text, search btn, save search btn, clear search map btn,  
                         [search locations || current location]
                         [show/hide all locations || current location]
@@ -52,7 +56,7 @@
                         <!-- alert if location not found -->
                         <!-- movie parameters: list of center map to which location for which item -->
                         <!-- movie parameters: list of zoom to which location -->
-                        <g:HTMLPanel addStyleNames="row-fluid">
+                        <g:HTMLPanel addStyleNames="row-fluid {style.map_toolbar}">
                             <div class="span11">
                                 <form class="form-search span8"> 
                                   <div class="input-append">
@@ -60,7 +64,7 @@
 <!--                                     <button type="submit" class="btn">Search</button> -->
                                     <b:TextBox ui:field="locationSearchBox" 
                                                placeholder="Location..."  
-                                               addStyleNames="span8 search-query"/>
+                                               addStyleNames="search-query"/>
                                     <button ui:field="locationSearchBtn" type="submit" class="btn">Search</button>
 <!--                                     <b:SubmitButton ui:field="locationSearchBtn" >Search</b:SubmitButton> -->
 <!--                                     <b:SubmitButton ui:field="locationSearchBtn" icon="SEARCH" iconSize="LARGE" /> -->
@@ -73,7 +77,6 @@
                                 <b:Button ui:field="showAllBtn" icon="MAGIC" iconSize="LARGE" toggle="true" />
                             </div>
                         </g:HTMLPanel>
-                    </g:HTMLPanel>
                 </div>
                 <div class="span6">
                     <b:Hero>
