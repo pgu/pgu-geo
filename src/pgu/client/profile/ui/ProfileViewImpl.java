@@ -1,5 +1,6 @@
 package pgu.client.profile.ui;
 
+import pgu.client.app.event.LocationShowOnMapEvent;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.LanguagesUtils;
 import pgu.client.app.utils.LocationsUtils;
@@ -128,28 +129,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         lastSearchItemLocation = name;
     }
 
-    @Override
-    public LocationSearchWidget getLocationSearchWidget() {
-        return new LocationSearchWidget() {
-
-            @Override
-            public String getText() {
-                return locationSearchBox.getText();
-            }
-
-            @Override
-            public void setText(final String text) {
-                locationSearchBox.setText(text);
-            }
-
-            @Override
-            public void setFocus(final boolean isFocused) {
-                locationSearchBox.setFocus(isFocused);
-            }
-
-        };
-    }
-
     private void searchLocation() {
         final String locationText = locationSearchBox.getText();
 
@@ -221,7 +200,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     @UiHandler("locContainer")
     public void clickLocContainer(final ClickEvent e) {
-        presenter.showLocationOnMap(locContainer.getText());
+        fireEvent(new LocationShowOnMapEvent(locContainer.getText()));
     }
 
     private ProfilePresenter presenter;
@@ -384,6 +363,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         return addHandler(handler, SaveLocationEvent.TYPE);
     }
 
+    @Override
+    public HandlerRegistration addLocationShowOnMapHandler(final LocationShowOnMapEvent.Handler handler) {
+        return addHandler(handler, LocationShowOnMapEvent.TYPE);
+    }
 
     @Override
     public void hideSaveWidget() {
@@ -395,4 +378,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     public void showSaveWidget() {
         locationSaveBtn.setVisible(true);
     }
+
+    @Override
+    public void showNotificationWarning(final String msg) {
+        GWT.log(msg);
+        // TODO PGU textbox with the warning msg
+    }
+
+
 }

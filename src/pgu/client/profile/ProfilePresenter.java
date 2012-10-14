@@ -7,8 +7,6 @@ public interface ProfilePresenter {
 
     void editLocation(String itemConfigId, String locName);
 
-    void showLocationOnMap(String locationName);
-
     void setProfileId(String id);
 
     void setProfilePublicUrl(String url);

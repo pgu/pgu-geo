@@ -58,10 +58,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     public void onLocationAddNew(final LocationAddNewEvent event) {
         itemConfigId = event.getItemConfigId();
 
-        view.getLocationSearchWidget().setText("");
-        view.getLocationSearchWidget().setFocus(true);
         view.showSaveWidget();
-
     }
 
     @Override
@@ -71,6 +68,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         view.setPresenter(this);
 
         view.addSaveLocationHandler(this);
+        view.addLocationShowOnMapHandler(this);
 
         eventBus.addHandler(LocationsSuccessSaveEvent.TYPE, this);
         eventBus.addHandler(LocationSuccessDeleteEvent.TYPE, this);
@@ -189,11 +187,6 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     }
 
     @Override
-    public void showLocationOnMap(final String locationName) {
-        u.fire(eventBus, new LocationShowOnMapEvent(locationName));
-    }
-
-    @Override
     public void onLocationSuccessDelete(final LocationSuccessDeleteEvent event) {
         ProfileViewUtils.refreshHtmlLocationsForItem(event.getItemConfigId());
     }
@@ -308,6 +301,10 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
                 });
 
+    }
+
+    public void showNotificationWarning(final String msg) {
+        view.showNotificationWarning(msg);
     }
 
 }

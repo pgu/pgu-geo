@@ -1,5 +1,6 @@
 package pgu.client.profile.ui;
 
+import pgu.client.profile.ProfileActivity;
 import pgu.shared.utils.ItemType;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -219,7 +220,7 @@ public class ProfileViewUtils {
                         });
     }-*/;
 
-    public static native void addNewLocation(ProfileViewImpl view, String item_config_id, String location_name) /*-{
+    public static native void addNewLocation(ProfileActivity activity, String item_config_id, String location_name) /*-{
 
         $wnd.console.log('addNewLocation');
 
@@ -237,7 +238,7 @@ public class ProfileViewUtils {
 
                     if (status != google.maps.GeocoderStatus.OK) {
                         var msg = "Geocode was not successful for the following reason: " + status;
-                        view.@pgu.client.profile.ui.ProfileViewImpl::showNotificationWarning(Ljava/lang/String;)( //
+                        activity.@pgu.client.profile.ProfileActivity::showNotificationWarning(Ljava/lang/String;)( //
                         msg);
                         return;
                     }
@@ -251,7 +252,7 @@ public class ProfileViewUtils {
                                      item_config_id,location_name,lat,lng);
 
                     if (is_doublon) {
-                        view.@pgu.client.profile.ui.ProfileViewImpl::saveLocationService(ZLjava/lang/String;)( //
+                        activity.@pgu.client.profile.ProfileActivity::saveLocationService(ZLjava/lang/String;)( //
                         true,location_name);
 
                     } else {
@@ -261,12 +262,11 @@ public class ProfileViewUtils {
                         @pgu.client.app.utils.LocationsUtils::addLocation2ItemInCopyCache(Ljava/lang/String;Ljava/lang/String;)( //
                         item_config_id, location_name);
 
-                        view.@pgu.client.profile.ui.ProfileViewImpl::saveLocationService(ZLjava/lang/String;)( //
+                        activity.@pgu.client.profile.ProfileActivity::saveLocationService(ZLjava/lang/String;)( //
                         false,location_name);
                     }
                 });
     }-*/;
-
 
 }
 
