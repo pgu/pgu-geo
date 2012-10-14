@@ -5,7 +5,7 @@
 
     <ui:style>
         .map_toolbar {
-            margin-top: 10px;
+            margin-top: 15px;
         }
         .location {
             font-weight: bold;    
