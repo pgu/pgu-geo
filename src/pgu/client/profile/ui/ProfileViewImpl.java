@@ -1,5 +1,7 @@
 package pgu.client.profile.ui;
 
+import java.util.HashMap;
+
 import pgu.client.app.event.LocationShowOnMapEvent;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.LanguagesUtils;
@@ -119,7 +121,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             return;
         }
 
-        fireEvent(new SaveLocationEvent(lastSearchItemLocation));
+        final String lat = loc2lat.get(lastSearchItemLocation);
+        final String lng = loc2lng.get(lastSearchItemLocation);
+
+        fireEvent(new SaveLocationEvent(lastSearchItemLocation, lat, lng));
     }
 
     @Override
@@ -128,8 +133,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         MarkersUtils.createMarkerOnProfileMap(locationName);
     }
 
-    public void cacheLastSearchedLocation(final String name) {
+    private final HashMap<String, String> loc2lat = new HashMap<String, String>();
+    private final HashMap<String, String> loc2lng = new HashMap<String, String>();
+
+    public void cacheLastSearchedLocation(final String name, final String lat, final String lng) {
         lastSearchItemLocation = name;
+        loc2lat.put(name, lat);
+        loc2lng.put(name, lng);
     }
 
     private void searchLocation() {

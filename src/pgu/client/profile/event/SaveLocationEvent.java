@@ -18,9 +18,13 @@ public class SaveLocationEvent extends GwtEvent<SaveLocationEvent.Handler> {
     public static final Type<Handler> TYPE = new Type<Handler>();
 
     private final String locationName;
+    private final String lat;
+    private final String lng;
 
-    public SaveLocationEvent(final String locationName) {
+    public SaveLocationEvent(final String locationName, final String lat, final String lng) {
         this.locationName = locationName;
+        this.lat = lat;
+        this.lng = lng;
     }
 
     @Override
@@ -35,6 +39,14 @@ public class SaveLocationEvent extends GwtEvent<SaveLocationEvent.Handler> {
 
     public String getLocationName() {
         return locationName;
+    }
+
+    public String getLat() {
+        return lat;
+    }
+
+    public String getLng() {
+        return lng;
     }
 
 }

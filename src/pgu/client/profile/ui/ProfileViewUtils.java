@@ -215,8 +215,8 @@ public class ProfileViewUtils {
                             @pgu.client.app.utils.MarkersUtils::createMarkerOnProfileMap(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)( //
                             location_name,lat,lng);
 
-                            view.@pgu.client.profile.ui.ProfileViewImpl::cacheLastSearchedLocation(Ljava/lang/String;)( //
-                            location_name);
+                            view.@pgu.client.profile.ui.ProfileViewImpl::cacheLastSearchedLocation(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)( //
+                            location_name,lat,lng);
                         });
     }-*/;
 

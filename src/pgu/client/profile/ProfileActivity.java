@@ -247,59 +247,67 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         LocationsUtils.copyLocationCaches();
 
         final String locationName = event.getLocationName();
+        final String lat = event.getLat();
+        final String lng = event.getLng();
 
-        // TODO PGU we should have [name, item_id, lat and lng]
-        // and call directly the service
-
-        ProfileViewUtils.addNewLocation(this, itemConfigId, locationName);
-    }
-
-    public void saveLocationService(final boolean isDoublon, final String locationName) {
-
+        final boolean isDoublon = LocationsUtils.isDoublon(itemConfigId, locationName, lat, lng);
         if (isDoublon) {
+
             LocationsUtils.deleteCopies();
             u.fire(eventBus, new HideWaitingIndicatorEvent());
             u.fire(eventBus, new NotificationEvent(Level.WARNING, //
                     "This location " + locationName + " is already associated to this item"));
-            return;
+
+        } else {
+            LocationsUtils.addGeopointToCopyCache(locationName, lat, lng);
+            LocationsUtils.addLocation2ItemInCopyCache(itemConfigId, locationName);
+
+            linkedinService.saveLocations( //
+                    //
+                    clientFactory.getAppState().getUserId() //
+                    , LocationsUtils.json_copyCacheItems() //
+                    , LocationsUtils.json_copyCacheReferential() //
+                    //
+                    , new AsyncCallbackApp<Void>(eventBus) {
+
+                        @Override
+                        public void onSuccess(final Void result) {
+
+                            LocationsUtils.replaceCachesByCopies();
+
+                            u.fire(eventBus, new HideWaitingIndicatorEvent());
+
+                            view.hideSaveWidget();
+
+                            u.fire(eventBus, new LocationsSuccessSaveEvent(itemConfigId));
+
+                            final StringBuilder msg = new StringBuilder();
+                            msg.append("The location \"");
+                            msg.append(locationName);
+                            msg.append("\" has been successfully added.");
+
+                            u.fire(eventBus, new NotificationEvent(Level.SUCCESS, msg.toString()));
+                        }
+
+                        @Override
+                        public void onFailure(final Throwable caught) {
+                            LocationsUtils.deleteCopies();
+
+                            super.onFailure(caught);
+                        }
+
+
+                    });
+
         }
 
-        linkedinService.saveLocations( //
-                //
-                clientFactory.getAppState().getUserId() //
-                , LocationsUtils.json_copyCacheItems() //
-                , LocationsUtils.json_copyCacheReferential() //
-                //
-                , new AsyncCallbackApp<Void>(eventBus) {
+        // TODO PGU we should have [name, item_id, lat and lng]
+        // and call directly the service
+        //        ProfileViewUtils.addNewLocation(this, itemConfigId, locationName);
+    }
 
-                    @Override
-                    public void onSuccess(final Void result) {
-
-                        LocationsUtils.replaceCachesByCopies();
-
-                        u.fire(eventBus, new HideWaitingIndicatorEvent());
-
-                        view.hideSaveWidget();
-
-                        u.fire(eventBus, new LocationsSuccessSaveEvent(itemConfigId));
-
-                        final StringBuilder msg = new StringBuilder();
-                        msg.append("The location \"");
-                        msg.append(locationName);
-                        msg.append("\" has been successfully added.");
-
-                        u.fire(eventBus, new NotificationEvent(Level.SUCCESS, msg.toString()));
-                    }
-
-                    @Override
-                    public void onFailure(final Throwable caught) {
-                        LocationsUtils.deleteCopies();
-
-                        super.onFailure(caught);
-                    }
-
-
-                });
+    @Deprecated
+    public void saveLocationService(final boolean isDoublon, final String locationName) {
 
     }
 
