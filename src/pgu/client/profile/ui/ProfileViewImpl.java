@@ -23,11 +23,10 @@ import com.github.gwtbootstrap.client.ui.TextBox;
 import com.github.gwtbootstrap.client.ui.Tooltip;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.ButtonElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -63,9 +62,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     Button expPublicState, eduPublicState //
     , clearSearchMarkersBtn //
     , locationSaveBtn //
+    , showAllBtn // TODO
     ;
     @UiField
-    ButtonElement locationSearchBtn //
+    Button locationSearchBtn //
     ;
     @UiField
     TextBox locationSearchBox;
@@ -91,26 +91,28 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         isMapDisplayed = true;
         locationSaveBtn.setVisible(false);
 
-        locationSearchBox.addKeyPressHandler(new KeyPressHandler() {
+        locationSearchBox.addKeyDownHandler(new KeyDownHandler() {
 
             @Override
-            public void onKeyPress(final KeyPressEvent event) {
-                if (event.getCharCode() == KeyCodes.KEY_ENTER) {
+            public void onKeyDown(final KeyDownEvent event) {
+
+                if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+
                     event.preventDefault();
                     event.stopPropagation();
 
                     searchLocation();
                 }
+
             }
         });
 
     }
 
-
-    //    @UiHandler("locationSearchBtn")
-    //    public void clickOnLocationSearch(final ClickEvent e) {
-    //        searchLocation();
-    //    }
+    @UiHandler("locationSearchBtn")
+    public void clickOnLocationSearch(final ClickEvent e) {
+        searchLocation();
+    }
 
     @UiHandler("locationSaveBtn")
     public void clickOnLocationSave(final ClickEvent e) {
