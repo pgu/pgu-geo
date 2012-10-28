@@ -92,6 +92,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     }
 
+    @UiHandler("showAllBtn")
+    public void clickOnShowAllBtn(final ClickEvent e) {
+
+    }
+
     @UiHandler("locationSearchBox")
     public void keydownOnSearch(final KeyDownEvent event) {
 
