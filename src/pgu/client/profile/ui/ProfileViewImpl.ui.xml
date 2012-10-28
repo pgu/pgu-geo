@@ -53,21 +53,21 @@
                     <!-- movie parameters: list of center map to which location for which item -->
                     <!-- movie parameters: list of zoom to which location -->
                     <g:HTMLPanel addStyleNames="row-fluid {style.map_toolbar}">
-                        <div class="span11">
+                        <div class="span10">
                             <form class="form-search span8"> 
                               <div class="input-append">
                                 <b:TextBox ui:field="locationSearchBox" 
                                            placeholder="Location..."  
                                            addStyleNames="search-query"/>
-<!--                                     <b:SubmitButton ui:field="locationSearchBtn" >Search</b:SubmitButton> -->
                                     <b:Button ui:field="locationSearchBtn" icon="SEARCH" iconSize="LARGE" />
                               </div>
                             </form>
                             <b:Button ui:field="locationSaveBtn" icon="SAVE" iconSize="LARGE" />
                             <b:Button ui:field="clearSearchMarkersBtn" icon="REMOVE" iconSize="LARGE" />
                         </div>
-                        <div class="span1">
+                        <div class="span2">
                             <b:Button ui:field="showAllBtn" icon="MAP_MARKER" iconSize="LARGE" />
+                            <b:Button ui:field="mapPreferencesBtn" icon="SCREENSHOT" iconSize="LARGE" />
                         </div>
                     </g:HTMLPanel>
                 </div>

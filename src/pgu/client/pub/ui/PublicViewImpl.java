@@ -277,6 +277,9 @@ public class PublicViewImpl extends Composite implements PublicView {
         final JavaScriptObject google = GoogleUtils.google();
         final JavaScriptObject publicMap = PublicUtils.publicProfileMap();
 
+        GWT.log("display current location");
+        GWT.log("google: " + google);
+
         if (google == null || publicMap == null) {
 
             new Timer() {
@@ -293,10 +296,10 @@ public class PublicViewImpl extends Composite implements PublicView {
 
             }.schedule(1000);
 
-            return;
-        }
+        } else {
 
-        currentLocationMarker = MarkersUtils.createMarker(publicMap, locationName);
+            currentLocationMarker = MarkersUtils.createMarker(publicMap, locationName);
+        }
     }
 
     private native void showCurrentLocation(JavaScriptObject marker) /*-{
@@ -339,6 +342,42 @@ public class PublicViewImpl extends Composite implements PublicView {
         LocationsUtils.initCaches(profile.getUserAndLocations());
 
         setProfile(this, profile.getProfile());
+
+        ensureGoogleIsLoaded(profile);
+    }
+
+    private void ensureGoogleIsLoaded(final PublicProfile profile) {
+
+        Scheduler.get().scheduleDeferred(new Command() {
+            @Override
+            public void execute() {
+
+                final JavaScriptObject google = GoogleUtils.google();
+
+                GWT.log("ensure");
+                GWT.log("" + google);
+
+                if (google == null) {
+                    new Timer() {
+
+                        @Override
+                        public void run() {
+                            ensureGoogleIsLoaded(profile);
+                        }
+
+                    }.schedule(500);
+
+                } else {
+
+                    final String mapPreferences = profile.getMapPreferences();
+                    if (!u.isVoid(mapPreferences)) {
+                        PublicUtils.updateMapVisu(mapPreferences);
+                    }
+                }
+
+            }
+        });
+
     }
 
     private native void setProfile(PublicViewImpl view, String profile) /*-{

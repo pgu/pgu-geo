@@ -12,6 +12,7 @@ public class PublicProfile implements IsSerializable {
     private String userId;
 
     private String preferences;
+    private String mapPreferences;
     private String url;
     private String profile;
     private UserAndLocations userAndLocations;
@@ -48,8 +49,9 @@ public class PublicProfile implements IsSerializable {
 
     @Override
     public String toString() {
-        return "PublicProfile [userId=" + userId + ", preferences=" + preferences + ", url=" + url + ", profile="
-                + profile + ", userAndLocations=" + userAndLocations + "]";
+        return "PublicProfile [userId=" + userId + ", preferences=" + preferences + ", mapPreferences="
+                + mapPreferences + ", url=" + url + ", profile=" + profile + ", userAndLocations=" + userAndLocations
+                + "]";
     }
 
     public String getUserId() {
@@ -90,6 +92,14 @@ public class PublicProfile implements IsSerializable {
 
     public void setUserAndLocations(final UserAndLocations userAndLocations) {
         this.userAndLocations = userAndLocations;
+    }
+
+    public String getMapPreferences() {
+        return mapPreferences;
+    }
+
+    public void setMapPreferences(final String mapPreferences) {
+        this.mapPreferences = mapPreferences;
     }
 
 }

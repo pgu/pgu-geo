@@ -10,6 +10,8 @@ import pgu.client.app.utils.MarkersUtils;
 import pgu.client.profile.ProfilePresenter;
 import pgu.client.profile.ProfileView;
 import pgu.client.profile.event.SaveLocationEvent;
+import pgu.client.profile.event.SaveMapPreferencesEvent;
+import pgu.client.profile.event.SaveMapPreferencesEvent.Handler;
 import pgu.shared.dto.Profile;
 import pgu.shared.utils.PublicProfileItem;
 
@@ -61,7 +63,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     Button expPublicState, eduPublicState //
     , clearSearchMarkersBtn //
     , locationSaveBtn //
-    , showAllBtn // TODO
+    , showAllBtn //
+    , mapPreferencesBtn //
     ;
     @UiField
     Button locationSearchBtn //
@@ -90,6 +93,14 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         isMapDisplayed = true;
         locationSaveBtn.setVisible(false);
 
+    }
+
+    @UiHandler("mapPreferencesBtn")
+    public void clickOnMapPreferences(final ClickEvent e) {
+
+        final String mapPreferences = ProfileUtils.getCurrentMapPreferences();
+
+        fireEvent(new SaveMapPreferencesEvent(mapPreferences));
     }
 
     @UiHandler("showAllBtn")
@@ -387,10 +398,14 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     @Override
+    public HandlerRegistration addSaveMapPreferencesHandler(final Handler handler) {
+        return addHandler(handler, SaveMapPreferencesEvent.TYPE);
+    }
+
+    @Override
     public void hideSaveWidget() {
         locationSaveBtn.setVisible(false);
     }
-
 
     @Override
     public void showSaveWidget() {
@@ -405,6 +420,5 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         GWT.log(msg);
         // TODO PGU textbox with the warning msg
     }
-
 
 }

@@ -1,5 +1,7 @@
 package pgu.client.profile;
 
+import java.util.ArrayList;
+
 import pgu.client.app.event.HideWaitingIndicatorEvent;
 import pgu.client.app.event.LocationAddNewEvent;
 import pgu.client.app.event.LocationShowOnMapEvent;
@@ -13,6 +15,7 @@ import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.Level;
 import pgu.client.app.utils.LocationsUtils;
 import pgu.client.profile.event.SaveLocationEvent;
+import pgu.client.profile.event.SaveMapPreferencesEvent;
 import pgu.client.profile.ui.ProfileViewUtils;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.client.service.PublicProfileServiceAsync;
@@ -23,6 +26,7 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 
 public class ProfileActivity extends AbstractActivity implements ProfilePresenter //
 , LocationsSuccessSaveEvent.Handler //
@@ -30,6 +34,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 , LocationAddNewEvent.Handler //
 , LocationShowOnMapEvent.Handler //
 , SaveLocationEvent.Handler //
+, SaveMapPreferencesEvent.Handler //
 {
 
     private final ClientFactory             clientFactory;
@@ -41,6 +46,8 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     private EventBus                        eventBus;
     private String                     itemConfigId;
+
+    private final ArrayList<HandlerRegistration> hRegs = new ArrayList<HandlerRegistration>();
 
     public ProfileActivity(final ProfilePlace place, final ClientFactory clientFactory) {
         this.clientFactory = clientFactory;
@@ -67,8 +74,10 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         this.eventBus = eventBus;
         view.setPresenter(this);
 
-        view.addSaveLocationHandler(this);
-        view.addLocationShowOnMapHandler(this);
+        hRegs.clear();
+        hRegs.add(view.addSaveLocationHandler(this));
+        hRegs.add(view.addLocationShowOnMapHandler(this));
+        hRegs.add(view.addSaveMapPreferencesHandler(this));
 
         eventBus.addHandler(LocationsSuccessSaveEvent.TYPE, this);
         eventBus.addHandler(LocationSuccessDeleteEvent.TYPE, this);
@@ -313,6 +322,34 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     public void showNotificationWarning(final String msg) {
         view.showNotificationWarning(msg);
+    }
+
+    @Override
+    public void onSaveMapPreferences(final SaveMapPreferencesEvent event) {
+        publicProfileService.saveMapPreferences( //
+                clientFactory.getAppState().getUserId() //
+                , event.getMapPreferences() //
+                , new AsyncCallbackApp<Void>(eventBus) {
+
+                    @Override
+                    public void onSuccess(final Void result) {
+                        // no-op
+                    }
+
+                });
+    }
+
+    @Override
+    public void onStop() {
+
+        for (HandlerRegistration hReg : hRegs) {
+            hReg.removeHandler();
+            hReg = null;
+        }
+
+        hRegs.clear();
+
+        super.onStop();
     }
 
 }

@@ -38,4 +38,18 @@ public class PublicUtils {
     public static native JavaScriptObject publicProfileMap() /*-{
         return $wnd.pgu_geo.public_profile_map;
     }-*/;
+
+    public static native void updateMapVisu(String mapPreferences) /*-{
+
+        var
+            public_map = @pgu.client.pub.ui.PublicUtils::publicProfileMap()()
+          , google = @pgu.client.app.utils.GoogleUtils::google()()
+          , prefs = JSON.parse(mapPreferences)
+          , center = new google.maps.LatLng(parseFloat(prefs.center_lat), parseFloat(prefs.center_lng))
+        ;
+
+        public_map.setZoom(prefs.zoom);
+        public_map.setCenter(center);
+
+    }-*/;
 }

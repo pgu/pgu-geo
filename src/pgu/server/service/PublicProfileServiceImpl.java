@@ -41,5 +41,16 @@ public class PublicProfileServiceImpl extends RemoteServiceServlet implements Pu
         return publicProfile;
     }
 
+    @Override
+    public void saveMapPreferences(final String userId, final String mapPreferences) {
+
+        final PublicProfile publicProfile = dao.ofy().find(PublicProfile.class, userId);
+        if(publicProfile == null) {
+            return ;
+        }
+
+        publicProfile.setMapPreferences(mapPreferences);
+        dao.ofy().async().put(publicProfile);
+    }
 
 }

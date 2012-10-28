@@ -39,6 +39,18 @@ public class ProfileUtils {
         return $wnd.pgu_geo.profile_map;
     }-*/;
 
+    public static native String getCurrentMapPreferences() /*-{
+        var profile_map = @pgu.client.profile.ui.ProfileUtils::profileMap()();
+
+        var map_preferences = {};
+        map_preferences.zoom = profile_map.zoom;
+        map_preferences.center_lat = '' + profile_map.center.lat();
+        map_preferences.center_lng = '' + profile_map.center.lng();
+
+        return @pgu.client.app.utils.JsonUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
+        map_preferences);
+    }-*/;
+
     public static native void cacheProfile(JavaScriptObject profile) /*-{
         $wnd.pgu_geo.profile = profile;
     }-*/;

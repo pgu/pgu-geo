@@ -2,6 +2,7 @@ package pgu.client.profile;
 
 import pgu.client.app.event.LocationShowOnMapEvent;
 import pgu.client.profile.event.SaveLocationEvent;
+import pgu.client.profile.event.SaveMapPreferencesEvent;
 import pgu.shared.dto.Profile;
 
 import com.google.gwt.user.client.ui.IsWidget;
@@ -9,6 +10,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 public interface ProfileView extends IsWidget //
 , SaveLocationEvent.HasSaveLocationHandlers //
 , LocationShowOnMapEvent.HasLocationShowOnMapHandlers //
+, SaveMapPreferencesEvent.HasSaveMapPreferencesHandlers //
 {
 
     void setPresenter(ProfilePresenter presenter);
