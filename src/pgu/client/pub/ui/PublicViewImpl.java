@@ -3,6 +3,7 @@ package pgu.client.pub.ui;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
+import pgu.client.app.event.GoogleIsAvailableEvent;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.GoogleUtils;
 import pgu.client.app.utils.LocationsUtils;
@@ -40,7 +41,7 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
-public class PublicViewImpl extends Composite implements PublicView {
+public class PublicViewImpl extends Composite implements PublicView, GoogleIsAvailableEvent.Handler {
 
     private static final String ACCORDION_ID = "pgu_geo_profile_items_accordion";
 
@@ -66,12 +67,15 @@ public class PublicViewImpl extends Composite implements PublicView {
 
     private PublicPresenter   presenter;
     private final ClientUtils u = new ClientUtils();
+    private PublicProfile profile;
 
     public PublicViewImpl() {
 
         profileSection = new Section("public:profile");
 
         initWidget(uiBinder.createAndBindUi(this));
+
+        addHandler(this, GoogleIsAvailableEvent.TYPE);
 
         playToolbar.setVisible(false);
         playToolbar.addPlayHandler(new PlayEvent.Handler() {
@@ -277,9 +281,6 @@ public class PublicViewImpl extends Composite implements PublicView {
         final JavaScriptObject google = GoogleUtils.google();
         final JavaScriptObject publicMap = PublicUtils.publicProfileMap();
 
-        GWT.log("display current location");
-        GWT.log("google: " + google);
-
         if (google == null || publicMap == null) {
 
             new Timer() {
@@ -339,14 +340,16 @@ public class PublicViewImpl extends Composite implements PublicView {
     @Override
     public void setProfile(final PublicProfile profile) {
 
+        this.profile = profile;
+
+        ensureGoogleIsLoaded();
+
         LocationsUtils.initCaches(profile.getUserAndLocations());
 
         setProfile(this, profile.getProfile());
-
-        ensureGoogleIsLoaded(profile);
     }
 
-    private void ensureGoogleIsLoaded(final PublicProfile profile) {
+    private void ensureGoogleIsLoaded() {
 
         Scheduler.get().scheduleDeferred(new Command() {
             @Override
@@ -354,25 +357,19 @@ public class PublicViewImpl extends Composite implements PublicView {
 
                 final JavaScriptObject google = GoogleUtils.google();
 
-                GWT.log("ensure");
-                GWT.log("" + google);
-
                 if (google == null) {
                     new Timer() {
 
                         @Override
                         public void run() {
-                            ensureGoogleIsLoaded(profile);
+                            ensureGoogleIsLoaded();
                         }
 
-                    }.schedule(500);
+                    }.schedule(300);
 
                 } else {
 
-                    final String mapPreferences = profile.getMapPreferences();
-                    if (!u.isVoid(mapPreferences)) {
-                        PublicUtils.updateMapVisu(mapPreferences);
-                    }
+                    fireEvent(new GoogleIsAvailableEvent());
                 }
 
             }
@@ -453,6 +450,16 @@ public class PublicViewImpl extends Composite implements PublicView {
     public void fillWithProfileItem(final String id, final String title, final String content) {
         id2itemTitle.put(id, title);
         id2itemContent.put(id, content);
+    }
+
+    @Override
+    public void onGoogleIsAvailable(final GoogleIsAvailableEvent event) {
+
+        final String mapPreferences = profile.getMapPreferences();
+        if (!u.isVoid(mapPreferences)) {
+            PublicUtils.updateMapVisu(mapPreferences);
+        }
+
     }
 
 }
