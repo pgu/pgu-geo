@@ -220,6 +220,10 @@ public class ProfileViewUtils {
                         });
     }-*/;
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public static native void addNewLocation(ProfileActivity activity, String item_config_id, String location_name) /*-{
 
         $wnd.console.log('addNewLocation');

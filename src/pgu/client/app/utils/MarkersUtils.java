@@ -46,7 +46,6 @@ public class MarkersUtils {
         markers.length = 0;
     }-*/;
 
-    // TODO revoir ça...
     public static native JavaScriptObject createMarkerOnProfileMap(String location_name) /*-{
         var profile_map = @pgu.client.profile.ui.ProfileUtils::profileMap()();
 

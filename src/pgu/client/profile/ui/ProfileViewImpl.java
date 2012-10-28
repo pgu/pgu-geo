@@ -94,7 +94,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     @UiHandler("showAllBtn")
     public void clickOnShowAllBtn(final ClickEvent e) {
+        // clear current markers
+        MarkersUtils.deleteSearchMarkers();
 
+        // show profile_item markers
+        LocationsUtils.showProfileItemsOnProfileMap();
     }
 
     @UiHandler("locationSearchBox")
@@ -391,6 +395,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     @Override
     public void showSaveWidget() {
         locationSaveBtn.setVisible(true);
+
+        Window.scrollTo(0, 0);
+        locationSearchBox.setFocus(true);
     }
 
     @Override

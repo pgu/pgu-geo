@@ -208,6 +208,29 @@ public class LocationsUtils {
 
     }-*/;
 
+    public static native void showProfileItemsOnProfileMap() /*-{
+        var
+            cache_referential = $wnd.pgu_geo.cache_referential
+          , cache_items = $wnd.pgu_geo.cache_items
+        ;
+
+        for (var key in cache_items) {
+            if ('__gwt_ObjectId' === key) {
+                continue;
+            }
+            if (cache_items.hasOwnProperty(key)) {
+
+                var locations = cache_items[key];
+                for ( var j = 0, len = locations.length; j < len; j++) {
+
+                    var location = locations[j];
+                    @pgu.client.app.utils.MarkersUtils::createMarkerOnProfileMap(Ljava/lang/String;)(location);
+                }
+            }
+        }
+
+    }-*/;
+
     public static native void removeLocationFromItem(String item_config_id, String location_name) /*-{
         var
             cache_items = $wnd.pgu_geo.cache_items

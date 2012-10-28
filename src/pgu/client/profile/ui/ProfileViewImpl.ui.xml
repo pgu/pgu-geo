@@ -67,7 +67,7 @@
                             <b:Button ui:field="clearSearchMarkersBtn" icon="REMOVE" iconSize="LARGE" />
                         </div>
                         <div class="span1">
-                            <b:Button ui:field="showAllBtn" icon="MAP_MARKER" iconSize="LARGE" toggle="true" />
+                            <b:Button ui:field="showAllBtn" icon="MAP_MARKER" iconSize="LARGE" />
                         </div>
                     </g:HTMLPanel>
                 </div>
