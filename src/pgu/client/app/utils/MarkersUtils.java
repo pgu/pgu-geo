@@ -24,7 +24,7 @@ public class MarkersUtils {
     }-*/;
 
     public static native void deleteSearchMarkers() /*-{
-        var search_markers = @pgu.client.app.utils.MarkersUtils::searchMarkers();
+        var search_markers = @pgu.client.app.utils.MarkersUtils::searchMarkers()();
 
         @pgu.client.app.utils.MarkersUtils::deleteMarkers(Lcom/google/gwt/core/client/JavaScriptObject;)( //
         search_markers);
