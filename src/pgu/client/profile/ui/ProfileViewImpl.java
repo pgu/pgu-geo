@@ -26,7 +26,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -91,22 +90,18 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         isMapDisplayed = true;
         locationSaveBtn.setVisible(false);
 
-        locationSearchBox.addKeyDownHandler(new KeyDownHandler() {
+    }
 
-            @Override
-            public void onKeyDown(final KeyDownEvent event) {
+    @UiHandler("locationSearchBox")
+    public void keydownOnSearch(final KeyDownEvent event) {
 
-                if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+        if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 
-                    event.preventDefault();
-                    event.stopPropagation();
+            event.preventDefault();
+            event.stopPropagation();
 
-                    searchLocation();
-                }
-
-            }
-        });
-
+            searchLocation();
+        }
     }
 
     @UiHandler("locationSearchBtn")
@@ -160,7 +155,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     public void clickOnClearMarkersBtn(final ClickEvent e) {
         MarkersUtils.deleteSearchMarkers();
     }
-
 
     private static boolean isEduPublic = false;
     private static boolean isExpPublic = false;
