@@ -218,7 +218,7 @@ public class ProfileItemsUtils {
                 first_marker = marker;
             }
 
-            info_content.push('<div>' + location_name + '</div>');
+            info_content.push('<div><b>' + location_name + '</b></div>');
         }
 
         if ('<div>' !== info_content.join('')) {
