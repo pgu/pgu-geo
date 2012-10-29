@@ -3,5 +3,6 @@
     <ui:style>
     </ui:style>
     <g:HTMLPanel>
+        <div id="pgu_geo_contacts_map" style="width: 900px; height: 500px;"></div>
     </g:HTMLPanel>
 </ui:UiBinder> 

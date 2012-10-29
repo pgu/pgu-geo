@@ -15,7 +15,6 @@ import pgu.shared.dto.Person;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.event.shared.EventBus;
@@ -92,27 +91,50 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
             }
         }
 
-        int count = 1;
+        //        int count = 1;
+        initDataTable();
         for (final Entry<Integer, ArrayList<String>> e : weight2codes.entrySet()) {
             final Integer weight = e.getKey();
             final ArrayList<String> countryCodes = e.getValue();
 
             for (final String countryCode : countryCodes) {
-                new Timer() {
-
-                    @Override
-                    public void run() {
-                        // TODO PGU Aug 14, 2012 add a marker without geocoder for already existing connections
-                        addMarker(countryCode, Integer.toString(weight));
-                        GWT.log(countryCode + " is done");
-                    }
-
-                }.schedule(count * 1000);
-
-                count += 2;
+                addDataRow(countryCode, weight);
+                //                new Timer() {
+                //
+                //                    @Override
+                //                    public void run() {
+                //                        // TODO PGU Aug 14, 2012 add a marker without geocoder for already existing connections
+                //                        addMarker(countryCode, Integer.toString(weight));
+                //                        GWT.log(countryCode + " is done");
+                //                    }
+                //
+                //                }.schedule(count * 1000);
+                //
+                //                count += 2;
             }
         }
+        buildGeochart();
     }
+
+    private native void buildGeochart() /*-{
+
+        var data = $wnd.google.visualization.arrayToDataTable($wnd.pgu_geo.contacts_table);
+
+        var options = {};
+
+        var chart = new $wnd.google.visualization.GeoChart($doc.getElementById('pgu_geo_contacts_map'));
+        chart.draw(data, options);
+    }-*/;
+
+    private native void addDataRow(final String countryCode, final Integer weight) /*-{
+        $wnd.pgu_geo.contacts_table.push([countryCode, weight]);
+    }-*/;
+
+    private native void initDataTable() /*-{
+        $wnd.pgu_geo.contacts_table = [];
+        $wnd.pgu_geo.contacts_table.push(['Country', 'Connections']);
+
+    }-*/;
 
     private void logResult(final HashMap<String, Integer> code2weight) {
         final StringBuilder sb = new StringBuilder();

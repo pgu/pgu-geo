@@ -273,6 +273,8 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
     public Connections fetchConnections(final AccessToken accessToken) {
 
         final String body = fetchResponseBody(accessToken, CONNECTIONS_URL);
+        System.out.println("connections");
+        System.out.println(body);
         return new Gson().fromJson(body, Connections.class);
     }
 
