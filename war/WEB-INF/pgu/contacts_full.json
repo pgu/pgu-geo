@@ -1,0 +1,371 @@
+connections
+{
+  "_total": 84,
+  "values": [
+    {
+      "apiStandardProfileRequest": {
+        "headers": {
+          "_total": 1,
+          "values": [{
+            "name": "x-li-auth-token",
+            "value": "name:AtQo"
+          }]
+        },
+        "url": "http://api.linkedin.com/v1/people/tU7PW4TMdZ"
+      },
+      "firstName": "David",
+      "headline": "Développeur Architecte Artisan J2EE, Agiliste, Manager",
+      "id": "tU7PW4TMdZ",
+      "industry": "Information Technology and Services",
+      "lastName": "Aboulkheir",
+      "location": {
+        "country": {"code": "fr"},
+        "name": "Paris Area, France"
+      },
+      "pictureUrl": "http://m3.licdn.com/mpr/mprx/0_N-oHBbXGL8Z-1Iyp99sBBXA2FCf00eyp91OBBXGO4bRfh2wy4qVXJknrd27hy7grvAH9Z_rV9lGy",
+      "siteStandardProfileRequest": {"url": "http://www.linkedin.com/profile?viewProfile=&key=104566555&authToken=AtQo&authType=name&trk=api*a196273*s204372*"}
+    },
+    {
+      "apiStandardProfileRequest": {
+        "headers": {
+          "_total": 1,
+          "values": [{
+            "name": "x-li-auth-token",
+            "value": "name:EJEI"
+          }]
+        },
+        "url": "http://api.linkedin.com/v1/people/oQG_A737Nv"
+      },
+      "firstName": "Daniel",
+      "headline": "Software Engineer en ELCA infomatique SA",
+      "id": "oQG_A737Nv",
+      "industry": "Information Technology and Services",
+      "lastName": "Rodríguez Postigo",
+      "location": {
+        "country": {"code": "ch"},
+        "name": "Zürich Area, Switzerland"
+      },
+      "pictureUrl": "http://m3.licdn.com/mpr/mprx/0_m8msvselI8kHBoHxu32Lv4J2W_iWBo4x2bsLv4dunLcMemf0GQYnRZgCbm_nqDJP7_uksxB87Lri",
+      "siteStandardProfileRequest": {"url": "http://www.linkedin.com/profile?viewProfile=&key=51940077&authToken=EJEI&authType=name&trk=api*a196273*s204372*"}
+    },
+    {
+      "apiStandardProfileRequest": {
+        "headers": {
+          "_total": 1,
+          "values": [{
+            "name": "x-li-auth-token",
+            "value": "name:qUI0"
+          }]
+        },
+        "url": "http://api.linkedin.com/v1/people/T8atcZS3mf"
+      },
+      "firstName": "Nadia",
+      "headline": "Project manager, Product owner",
+      "id": "T8atcZS3mf",
+      "industry": "Internet",
+      "lastName": "Sol",
+      "location": {
+        "country": {"code": "fr"},
+        "name": "Lille Area, France"
+      },
+      "pictureUrl": "http://m3.licdn.com/mpr/mprx/0_R7Vm6_eNzeJDECuzvwZA6howcSOfECjzMmaA6heqHeo0v6ovBWoCe8pVJiYrd5pJVu4KdbnOV61j",
+      "siteStandardProfileRequest": {"url": "http://www.linkedin.com/profile?viewProfile=&key=24161235&authToken=qUI0&authType=name&trk=api*a196273*s204372*"}
+    },
+    {
+      "apiStandardProfileRequest": {
+        "headers": {
+          "_total": 1,
+          "values": [{
+            "name": "x-li-auth-token",
+            "value": "name:F1fU"
+          }]
+        },
+        "url": "http://api.linkedin.com/v1/people/hrbDP99t9L"
+      },
+      "firstName": "Fabrice",
+      "headline": "Architect / Senior Java - Java EE Developer",
+      "id": "hrbDP99t9L",
+      "industry": "Computer Software",
+      "lastName": "Sznajderman",
+      "location": {
+        "country": {"code": "fr"},
+        "name": "Paris Area, France"
+      },
+      "pictureUrl": "http://m3.licdn.com/mpr/mprx/0_mB1VmUzp_pqFPpvw2vr5mJq070Q5Pxvw2KF5m4v_KVtvuRCIGli9hZ3STl6srZNb7NAXTxF7je5O",
+      "siteStandardProfileRequest": {"url": "http://www.linkedin.com/profile?viewProfile=&key=6019663&authToken=F1fU&authType=name&trk=api*a196273*s204372*"}
+    },
+    {
+      "apiStandardProfileRequest": {
+        "headers": {
+          "_total": 1,
+          "values": [{
+            "name": "x-li-auth-token",
+            "value": "name:q9FK"
+          }]
+        },
+        "url": "http://api.linkedin.com/v1/people/3t67NpnrqQ"
+      },
+      "firstName": "Slim",
+      "headline": "Freelance Senior Java / Hadoop Developer",
+      "id": "3t67NpnrqQ",
+      "industry": "Computer Software",
+      "lastName": "Tebourbi",
+      "location": {
+        "country": {"code": "fr"},
+        "name": "Paris Area, France"
+      },
+      "pictureUrl": "http://m3.licdn.com/mpr/mprx/0_uBxCSyNlBg1X1kA6GAyAS05xcRv6PC36aKwjS0v_HOT9u69Qhl7mix3SJvzJr5hoSNgyCZwF5Y8g",
+      "siteStandardProfileRequest": {"url": "http://www.linkedin.com/profile?viewProfile=&key=26224191&authToken=q9FK&authType=name&trk=api*a196273*s204372*"}
+    },
+    {
+      "apiStandardProfileRequest": {
+        "headers": {
+          "_total": 1,
+          "values": [{
+            "name": "x-li-auth-token",
+            "value": "name:_pwe"
+          }]
+        },
+        "url": "http://api.linkedin.com/v1/people/wCHc5UAmWV"
+      },
+      "firstName": "Maxime",
+      "headline": "Senior Java Developper & Interoperability Specialist",
+      "id": "wCHc5UAmWV",
+      "industry": "Information Technology and Services",
+      "lastName": "Terrettaz",
+      "location": {
+        "country": {"code": "ca"},
+        "name": "Montreal, Canada Area"
+      },
+      "pictureUrl": "http://m3.licdn.com/mpr/mprx/0_Lw2NlIpzIlIs5eQpbmfFlegvIcf9LeFpbu4IlexHq-R6V2ryWSpZ0HI6LM7dQ76rXeaEYfDxAdvH",
+      "siteStandardProfileRequest": {"url": "http://www.linkedin.com/profile?viewProfile=&key=15039336&authToken=_pwe&authType=name&trk=api*a196273*s204372*"}
+    },
+    {
+      "apiStandardProfileRequest": {
+        "headers": {
+          "_total": 1,
+          "values": [{
+            "name": "x-li-auth-token",
+            "value": "name:Vobq"
+          }]
+        },
+        "url": "http://api.linkedin.com/v1/people/jEWQGS1Oig"
+      },
+      "firstName": "Axel",
+      "headline": "Engineering Manager at Qualys",
+      "id": "jEWQGS1Oig",
+      "industry": "Computer & Network Security",
+      "lastName": "Tessier",
+      "location": {
+        "country": {"code": "fr"},
+        "name": "Paris Area, France"
+      },
+      "pictureUrl": "http://m3.licdn.com/mpr/mprx/0_Oz05kBl0QWc-PuxUOA7VkqAlXE8Clf7UplIVkqchR2NtmwZRt1fWoN_aobhg-HmB09jUwPWydj-U",
+      "siteStandardProfileRequest": {"url": "http://www.linkedin.com/profile?viewProfile=&key=1082534&authToken=Vobq&authType=name&trk=api*a196273*s204372*"}
+    },
+    {
+      "apiStandardProfileRequest": {
+        "headers": {
+          "_total": 1,
+          "values": [{
+            "name": "x-li-auth-token",
+            "value": "name:VGMF"
+          }]
+        },
+        "url": "http://api.linkedin.com/v1/people/CH_lS-l_z_"
+      },
+      "firstName": "Sovanneary",
+      "headline": "Chef de Projet Stockage chez SFR",
+      "id": "CH_lS-l_z_",
+      "industry": "Information Services",
+      "lastName": "Than",
+      "location": {
+        "country": {"code": "fr"},
+        "name": "Paris Area, France"
+      },
+      "siteStandardProfileRequest": {"url": "http://www.linkedin.com/profile?viewProfile=&key=37381294&authToken=VGMF&authType=name&trk=api*a196273*s204372*"}
+    },
+    {
+      "apiStandardProfileRequest": {
+        "headers": {
+          "_total": 1,
+          "values": [{
+            "name": "x-li-auth-token",
+            "value": "name:Lt5i"
+          }]
+        },
+        "url": "http://api.linkedin.com/v1/people/gipSG31Nie"
+      },
+      "firstName": "Thierry",
+      "headline": "Project Director - SFEIR Groupe",
+      "id": "gipSG31Nie",
+      "industry": "Information Technology and Services",
+      "lastName": "TREPIED",
+      "location": {
+        "country": {"code": "fr"},
+        "name": "France"
+      },
+      "pictureUrl": "http://m3.licdn.com/mpr/mprx/0_WTL7mWwitVp5J1-II5qpmISm-0IwMzPIIQArmIoxDV0UQlkwLbz_hwYlplwNV-tFeCFlTuqrQmYi",
+      "siteStandardProfileRequest": {"url": "http://www.linkedin.com/profile?viewProfile=&key=43418674&authToken=Lt5i&authType=name&trk=api*a196273*s204372*"}
+    },
+    {
+      "apiStandardProfileRequest": {
+        "headers": {
+          "_total": 1,
+          "values": [{
+            "name": "x-li-auth-token",
+            "value": "name:6ZJl"
+          }]
+        },
+        "url": "http://api.linkedin.com/v1/people/gD1LJIn2mT"
+      },
+      "firstName": "Sébastien",
+      "headline": "Senior Software Engineer chez SecuTix SA",
+      "id": "gD1LJIn2mT",
+      "industry": "Information Technology and Services",
+      "lastName": "Treyvaud",
+      "location": {
+        "country": {"code": "ch"},
+        "name": "Geneva Area, Switzerland"
+      },
+      "pictureUrl": "http://m3.licdn.com/mpr/mprx/0_uQ-Va4V-mpBwBOqEu_i5asRp20X6BgvEaX65asJ81Vr9eJCoh8G98VSmGlkJqsNQS5rX3jbajgCI",
+      "siteStandardProfileRequest": {"url": "http://www.linkedin.com/profile?viewProfile=&key=31724189&authToken=6ZJl&authType=name&trk=api*a196273*s204372*"}
+    },
+    {
+      "apiStandardProfileRequest": {
+        "headers": {
+          "_total": 1,
+          "values": [{
+            "name": "x-li-auth-token",
+            "value": "name:t0y5"
+          }]
+        },
+        "url": "http://api.linkedin.com/v1/people/th-0sJ0b3-"
+      },
+      "firstName": "Francky",
+      "headline": "Head at IREALITE",
+      "id": "th-0sJ0b3-",
+      "industry": "Computer Software",
+      "lastName": "Trichet",
+      "location": {
+        "country": {"code": "fr"},
+        "name": "Nantes Area, France"
+      },
+      "pictureUrl": "http://m3.licdn.com/mpr/mprx/0_Pk_hAc0Ot1ky9-1gAXCPANUArN8AqqigA_BxANg2flN3IKqj0CP2xqdGOVhaB1GltbTOO1ivcnaB",
+      "siteStandardProfileRequest": {"url": "http://www.linkedin.com/profile?viewProfile=&key=24022256&authToken=t0y5&authType=name&trk=api*a196273*s204372*"}
+    },
+    {
+      "apiStandardProfileRequest": {
+        "headers": {
+          "_total": 1,
+          "values": [{
+            "name": "x-li-auth-token",
+            "value": "name:X0lm"
+          }]
+        },
+        "url": "http://api.linkedin.com/v1/people/N5F2CefPCg"
+      },
+      "firstName": "Rea",
+      "headline": "Freelancer presso AARCH-MI",
+      "id": "N5F2CefPCg",
+      "industry": "Architecture & Planning",
+      "lastName": "Turohan",
+      "location": {
+        "country": {"code": "it"},
+        "name": "Brescia Area, Italy"
+      },
+      "pictureUrl": "http://m3.licdn.com/mpr/mprx/0_io443YZHFyQcEmcc3fdw3judIjA9oDncTI2b3j0zqUL6zWTB72Hq7gwRLrldWoBRGdV6asDxqrc1",
+      "siteStandardProfileRequest": {"url": "http://www.linkedin.com/profile?viewProfile=&key=161200606&authToken=X0lm&authType=name&trk=api*a196273*s204372*"}
+    },
+    {
+      "apiStandardProfileRequest": {
+        "headers": {
+          "_total": 1,
+          "values": [{
+            "name": "x-li-auth-token",
+            "value": "name:veT0"
+          }]
+        },
+        "url": "http://api.linkedin.com/v1/people/-VEyNXIAJf"
+      },
+      "firstName": "Joseba",
+      "headline": "Head of Division ECM at ELCA infomatique SA",
+      "id": "-VEyNXIAJf",
+      "industry": "Information Technology and Services",
+      "lastName": "Urzelai",
+      "location": {
+        "country": {"code": "ch"},
+        "name": "Zürich Area, Switzerland"
+      },
+      "pictureUrl": "http://m3.licdn.com/mpr/mprx/0_RNyrIkFxMdOCtheIMBx7I66KMIwit_dIJre7I6qTQSx1SFOwBtup5Q87B6IpAkHFVBYaXTQ-oP7-",
+      "siteStandardProfileRequest": {"url": "http://www.linkedin.com/profile?viewProfile=&key=1714194&authToken=veT0&authType=name&trk=api*a196273*s204372*"}
+    },
+    {
+      "apiStandardProfileRequest": {
+        "headers": {
+          "_total": 1,
+          "values": [{
+            "name": "x-li-auth-token",
+            "value": "name:M-Tp"
+          }]
+        },
+        "url": "http://api.linkedin.com/v1/people/UChc6Pp2IN"
+      },
+      "firstName": "Orchidée",
+      "headline": "Gestionnaire Marketing Internet chez Videotron",
+      "id": "UChc6Pp2IN",
+      "industry": "Information Technology and Services",
+      "lastName": "Vaussard",
+      "location": {
+        "country": {"code": "ca"},
+        "name": "Montreal, Canada Area"
+      },
+      "pictureUrl": "http://m3.licdn.com/mpr/mprx/0_sMe3tGkWBrR_ahlAqOoYt8LLzzg826TA4RyYt8NJoPWK1Cnl9xZDphhcR4jx738jUsE0gFQuNken",
+      "siteStandardProfileRequest": {"url": "http://www.linkedin.com/profile?viewProfile=&key=5843867&authToken=M-Tp&authType=name&trk=api*a196273*s204372*"}
+    },
+    {
+      "apiStandardProfileRequest": {
+        "headers": {
+          "_total": 1,
+          "values": [{
+            "name": "x-li-auth-token",
+            "value": "name:wo2_"
+          }]
+        },
+        "url": "http://api.linkedin.com/v1/people/V4jfuAGXDh"
+      },
+      "firstName": "Francois",
+      "headline": "Scrum Master & Senior Java/GWT Developer at Sfeir",
+      "id": "V4jfuAGXDh",
+      "industry": "Computer Software",
+      "lastName": "Wauquier",
+      "location": {
+        "country": {"code": "fr"},
+        "name": "Paris Area, France"
+      },
+      "pictureUrl": "http://m3.licdn.com/mpr/mprx/0_gyqUotveuIKTTgsLgYQHoAnouaqaSgsL0ghXorQnPIhOtJS5AsXBkK-ZC8NAasUdyx95LBNXCap7",
+      "siteStandardProfileRequest": {"url": "http://www.linkedin.com/profile?viewProfile=&key=34465418&authToken=wo2_&authType=name&trk=api*a196273*s204372*"}
+    },
+    {
+      "apiStandardProfileRequest": {
+        "headers": {
+          "_total": 1,
+          "values": [{
+            "name": "x-li-auth-token",
+            "value": "name:haZR"
+          }]
+        },
+        "url": "http://api.linkedin.com/v1/people/3PD7tIJqws"
+      },
+      "firstName": "Sayaka",
+      "headline": "Wimbledon 学生",
+      "id": "3PD7tIJqws",
+      "lastName": "Yamaichi",
+      "location": {
+        "country": {"code": "gb"},
+        "name": "London, United Kingdom"
+      },
+      "siteStandardProfileRequest": {"url": "http://www.linkedin.com/profile?viewProfile=&key=184910677&authToken=haZR&authType=name&trk=api*a196273*s204372*"}
+    }
+  ]
+}

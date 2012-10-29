@@ -271,14 +271,12 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
 
     @Override
     public Connections fetchConnections(final AccessToken accessToken) {
-
-        final String body = fetchResponseBody(accessToken, CONNECTIONS_URL);
-        System.out.println("connections");
-        System.out.println(body);
+        // TODO PGU Oct 29, 2012 is test
+        final String body = fetchResponseBody(accessToken, CONNECTIONS_URL + ":(first-name,last-name,location)");
         return new Gson().fromJson(body, Connections.class);
     }
 
-    private final boolean                        isTest               = true;
+    private final boolean                        isTest               = false;
 
     /**
      * https://developer.linkedin.com/documents/profile-api
