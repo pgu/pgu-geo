@@ -48,4 +48,5 @@ public class ContactsActivity extends AbstractActivity implements ContactsPresen
 
                 });
     }
+
 }

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import pgu.client.app.event.ChartsApiIsAvailableEvent;
 import pgu.client.contacts.ContactsPresenter;
 import pgu.client.contacts.ContactsView;
 import pgu.shared.dto.Connections;
@@ -17,16 +18,19 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.web.bindery.event.shared.EventBus;
 
-public class ContactsViewImpl extends Composite implements ContactsView {
+public class ContactsViewImpl extends Composite implements ContactsView, ChartsApiIsAvailableEvent.Handler {
 
     private static ContactsViewImplUiBinder uiBinder = GWT.create(ContactsViewImplUiBinder.class);
 
     interface ContactsViewImplUiBinder extends UiBinder<Widget, ContactsViewImpl> {
     }
 
-    public ContactsViewImpl() {
+    public ContactsViewImpl(final EventBus eventBus) {
         initWidget(uiBinder.createAndBindUi(this));
+
+        eventBus.addHandler(ChartsApiIsAvailableEvent.TYPE, this);
     }
 
     private ContactsPresenter presenter;
@@ -158,6 +162,16 @@ public class ContactsViewImpl extends Composite implements ContactsView {
 						});
 
     }-*/;
+
+    private boolean isChartsApiAvailable = false;
+
+    @Override
+    public void onChartsApiIsAvailable(final ChartsApiIsAvailableEvent event) {
+        GWT.log("!!! ok, charts is ON, let's do some geocharts !!!");
+        isChartsApiAvailable = true;
+
+        // TODO PGU Oct 29, 2012 if isChartsApiAvailable is false, let's check that $wnd.google.visualization.GeoChart existe and update isChartsApiAvailable.
+    }
 
     // is user logged in linkedin?
     // if no, then offer him to authorize the app

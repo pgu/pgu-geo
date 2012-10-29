@@ -41,13 +41,43 @@
     	  
     	  pgu_geo.init_geo();    	  
       }
-    
-      function load_script() {
+      
+      function charts_callback() {
     	  
-    	  var script = document.createElement("script");
-    	  script.type = "text/javascript";
-    	  script.src = "http://maps.googleapis.com/maps/api/js?key=AIzaSyAP-PSZ5TkuUxa7Lqe8ni0uE1fwS6lrojw&sensor=false&callback=pgu_geo_load_map_api_callback";
-    	  document.body.appendChild(script);
+    	  if (typeof pgu_geo === 'undefined') {
+    		  setTimeout(
+    		      function() {
+    		    	  charts_callback();
+    		      }
+    		      , 1000
+			  );
+    		  return;
+    	  }
+    	  
+    	  pgu_geo.init_charts();    	  
+      }
+      
+      function pgu_geo_load_charts_api_callback() {
+    	  google.load('visualization', '1.0', {'packages': ['geochart'], 'callback':charts_callback});
+      }
+    
+      function load_scripts() {
+    	  
+    	  var map_script = document.createElement("script");
+    	  map_script.type = "text/javascript";
+    	  map_script.src = "http://maps.googleapis.com/maps/api/js?key=AIzaSyAP-PSZ5TkuUxa7Lqe8ni0uE1fwS6lrojw&sensor=false&callback=pgu_geo_load_map_api_callback";
+    	  document.body.appendChild(map_script);
+
+          setTimeout(
+                  function() {
+                	  var charts_script = document.createElement("script");
+                	  charts_script.type = "text/javascript";
+                	  charts_script.src = "https://www.google.com/jsapi?callback=pgu_geo_load_charts_api_callback";
+                	  document.body.appendChild(charts_script);
+                  }
+                  , 1000
+              );
+    	  
       }
       
       function addLoadEvent(func) {
@@ -64,7 +94,7 @@
     	  }
       }
 
-      addLoadEvent(load_script);
+      addLoadEvent(load_scripts);
 //       window.onload = load_script;
 
     </script>    

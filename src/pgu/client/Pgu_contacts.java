@@ -11,6 +11,7 @@ import pgu.client.app.mvp.PublicAppActivityMapper;
 import pgu.client.app.mvp.PublicClientFactory;
 import pgu.client.app.mvp.PublicClientFactoryImpl;
 import pgu.client.app.utils.AsyncCallbackApp;
+import pgu.client.app.utils.ChartsUtils;
 import pgu.client.app.utils.GeoUtils;
 import pgu.client.menu.MenuActivity;
 import pgu.client.menu.MenuView;
@@ -47,6 +48,9 @@ public class Pgu_contacts implements EntryPoint {
         final GeoUtils geoUtils = new GeoUtils();
         geoUtils.exportMethods(isPublic);
 
+        final ChartsUtils chartsUtils = new ChartsUtils();
+        chartsUtils.exportMethods();
+
         if (!isPublic) {
             ProfileViewImpl.exportMethods();
         }
@@ -81,6 +85,8 @@ public class Pgu_contacts implements EntryPoint {
 
         final EventBus eventBus = mvpContext.eventBus;
         final PlaceController placeController = mvpContext.placeController;
+
+        ChartsUtils.setEventBus(eventBus);
 
         if (isPublic) {
 

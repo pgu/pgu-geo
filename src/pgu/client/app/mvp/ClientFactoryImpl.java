@@ -104,7 +104,7 @@ public class ClientFactoryImpl implements ClientFactory {
     @Override
     public ContactsView getContactsView() {
         if (contactsView == null) {
-            contactsView = new ContactsViewImpl();
+            contactsView = new ContactsViewImpl(eventBus);
         }
         return contactsView;
     }
