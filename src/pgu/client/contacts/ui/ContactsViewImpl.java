@@ -15,7 +15,10 @@ import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.CheckBox;
 import com.github.gwtbootstrap.client.ui.TextBox;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.resources.client.CssResource;
@@ -25,6 +28,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.event.shared.EventBus;
 
@@ -103,7 +107,25 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         final Frame frame = new Frame(url);
         frame.addStyleName(style.chartWell());
 
-        fusionContainer.add(frame);
+        final Button closeBtn = new Button();
+        closeBtn.setText("x");
+        closeBtn.addStyleName("close");
+        closeBtn.getElement().getStyle().setMarginTop(11, Unit.PX);
+
+        final HorizontalPanel hp = new HorizontalPanel();
+        hp.getElement().getStyle().setFloat(Style.Float.LEFT);
+        hp.add(frame);
+        hp.add(closeBtn);
+
+        fusionContainer.add(hp);
+
+        closeBtn.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(final ClickEvent event) {
+                hp.removeFromParent();
+            }
+        });
     }
 
     @UiHandler("worldBtn")
