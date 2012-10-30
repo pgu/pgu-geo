@@ -16,6 +16,7 @@ import com.github.gwtbootstrap.client.ui.CheckBox;
 import com.github.gwtbootstrap.client.ui.TextBox;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -32,6 +33,12 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     interface ContactsViewImplUiBinder extends UiBinder<Widget, ContactsViewImpl> {
     }
 
+    interface ChartStyle extends CssResource {
+        String chartWell();
+    }
+
+    @UiField
+    ChartStyle style;
     @UiField
     CheckBox worldBtn, americasBtn, europeBtn, asiaBtn, oceaniaBtn, africaBtn;
     @UiField
@@ -66,14 +73,24 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
 
     @UiHandler("addBtn")
     public void clickAddFusion(final ClickEvent e) {
-        final String text = fusionBox.getText();
+        final String url = fusionBox.getText();
 
-        if ("".equals(text.trim()) || !text.startsWith("https://www.google.com/fusiontables/embedviz")) {
+        if ("".equals(url.trim()) || !url.startsWith("https://www.google.com/fusiontables/embedviz")) {
             return;
         }
 
         //        https://www.google.com/fusiontables/embedviz?viz=MAP&q=select+col0%3E%3E1+from+1dlLBDtnjrqYG7W3eamJX3-1ogV8XdGHXkX2wOaU&h=false&lat=47.74359286233701&lng=6.064453125&z=3&t=1&l=col0%3E%3E1
-        final Frame frame = new Frame(text);
+        //        https://www.google.com/fusiontables/embedviz?viz=GVIZ&t=BAR&containerId=gviz_canvas&q=select+col0%3E%3E0%2C+col1%3E%3E0+from+1dlLBDtnjrqYG7W3eamJX3-1ogV8XdGHXkX2wOaU&qrs=+where+col0%3E%3E0+%3E%3D+&qre=+and+col0%3E%3E0+%3C%3D+&qe=+limit+13&width=500&height=300
+
+        final Frame frame = new Frame(url);
+        frame.addStyleName(style.chartWell());
+        //        frame.setWidth("556px");
+        //        frame.setHeight("347px");
+
+        //        final HTMLPanel container = new HTMLPanel("");
+        //        container.addStyleName("row-fluid");
+        //        container.add(frame);
+
         fusionContainer.add(frame);
     }
 

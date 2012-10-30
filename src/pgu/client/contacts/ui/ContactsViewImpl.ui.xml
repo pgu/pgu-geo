@@ -3,9 +3,15 @@
             xmlns:g="urn:import:com.google.gwt.user.client.ui"
             xmlns:b="urn:import:com.github.gwtbootstrap.client.ui" >
 
-    <ui:style>
-        .map {
+    <ui:style type='pgu.client.contacts.ui.ContactsViewImpl.ChartStyle'>
+        .chartWell {
             float: left;
+            margin: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 4px;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+            width: 556px;
+            height: 347px;
         }
     </ui:style>
     <g:HTMLPanel>
@@ -20,12 +26,12 @@
             </b:Well>
         </g:HTMLPanel>
         <g:HTMLPanel addStyleNames="row-fluid">
-                <g:HTMLPanel ui:field="worldMap" addStyleNames="{style.map}" />
-                <g:HTMLPanel ui:field="americasMap" addStyleNames="{style.map}" />
-                <g:HTMLPanel ui:field="europeMap" addStyleNames="{style.map}" />
-                <g:HTMLPanel ui:field="asiaMap" addStyleNames="{style.map}" />
-                <g:HTMLPanel ui:field="oceaniaMap" addStyleNames="{style.map}" />
-                <g:HTMLPanel ui:field="africaMap" addStyleNames="{style.map}" />
+                <g:HTMLPanel ui:field="worldMap" addStyleNames="{style.chartWell}" />
+                <g:HTMLPanel ui:field="americasMap" addStyleNames="{style.chartWell}" />
+                <g:HTMLPanel ui:field="europeMap" addStyleNames="{style.chartWell}" />
+                <g:HTMLPanel ui:field="asiaMap" addStyleNames="{style.chartWell}" />
+                <g:HTMLPanel ui:field="oceaniaMap" addStyleNames="{style.chartWell}" />
+                <g:HTMLPanel ui:field="africaMap" addStyleNames="{style.chartWell}" />
                 <div style="clear:both" />
         </g:HTMLPanel>
         <g:HTMLPanel addStyleNames="row-fluid">
@@ -35,33 +41,7 @@
                 <b:Button ui:field="addBtn" type="PRIMARY" icon="PLUS" />
             </b:Well>
         </g:HTMLPanel>
-    <!-- 
-        <g:HTMLPanel addStyleNames="row-fluid">
-            <div class="span6">
-                <div id="pgu_geo_contacts_map_world"></div>
-            </div>
-            <div class="span6">
-                <div id="pgu_geo_contacts_map_americas"></div>
-            </div>
-        </g:HTMLPanel>
-        <g:HTMLPanel addStyleNames="row-fluid">
-            <div class="span6">
-                <div id="pgu_geo_contacts_map_europe"></div>
-            </div>
-            <div class="span6">
-                <div id="pgu_geo_contacts_map_asia"></div>
-            </div>
-        </g:HTMLPanel>
-        <g:HTMLPanel addStyleNames="row-fluid">
-            <div class="span6">
-                <div id="pgu_geo_contacts_map_oceania"></div>
-            </div>
-            <div class="span6">
-                <div id="pgu_geo_contacts_map_africa"></div>
-            </div>
-        </g:HTMLPanel>
-         -->
-    <g:HTMLPanel ui:field="fusionContainer" addStyleNames="row-fluid">
-    </g:HTMLPanel>
+        <g:HTMLPanel ui:field="fusionContainer" addStyleNames="row-fluid" />
+        <div style="height:50px" />
     </g:HTMLPanel>
 </ui:UiBinder> 
