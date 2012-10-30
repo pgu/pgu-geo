@@ -16,6 +16,8 @@ import com.github.gwtbootstrap.client.ui.CheckBox;
 import com.github.gwtbootstrap.client.ui.TextBox;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -71,8 +73,24 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         this.presenter = presenter;
     }
 
+    @UiHandler("fusionBox")
+    public void keydownOnAddFusionTable(final KeyDownEvent event) {
+
+        if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            addFusionTable();
+        }
+    }
+
     @UiHandler("addBtn")
     public void clickAddFusion(final ClickEvent e) {
+        addFusionTable();
+    }
+
+    private void addFusionTable() {
         final String url = fusionBox.getText();
 
         if ("".equals(url.trim()) || !url.startsWith("https://www.google.com/fusiontables/embedviz")) {
@@ -84,12 +102,6 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
 
         final Frame frame = new Frame(url);
         frame.addStyleName(style.chartWell());
-        //        frame.setWidth("556px");
-        //        frame.setHeight("347px");
-
-        //        final HTMLPanel container = new HTMLPanel("");
-        //        container.addStyleName("row-fluid");
-        //        container.add(frame);
 
         fusionContainer.add(frame);
     }

@@ -9,7 +9,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -53,9 +53,9 @@ public class OAuthViewImpl extends Composite implements OAuthView {
     }
 
     @UiHandler("oauthCodeInput")
-    public void keyPressCodeInput(final KeyPressEvent e) {
+    public void keyDownCodeInput(final KeyDownEvent e) {
 
-        if (e.getCharCode() == KeyCodes.KEY_ENTER) {
+        if (e.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
             e.preventDefault();
             e.stopPropagation();
 
