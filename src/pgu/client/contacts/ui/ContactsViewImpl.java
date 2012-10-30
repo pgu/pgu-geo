@@ -11,9 +11,17 @@ import pgu.client.contacts.ContactsPresenter;
 import pgu.client.contacts.ContactsView;
 import pgu.shared.dto.Connections;
 
+import com.github.gwtbootstrap.client.ui.Button;
+import com.github.gwtbootstrap.client.ui.CheckBox;
+import com.github.gwtbootstrap.client.ui.TextBox;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Frame;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.event.shared.EventBus;
 
@@ -24,8 +32,27 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     interface ContactsViewImplUiBinder extends UiBinder<Widget, ContactsViewImpl> {
     }
 
+    @UiField
+    CheckBox worldBtn, americasBtn, europeBtn, asiaBtn, oceaniaBtn, africaBtn;
+    @UiField
+    HTMLPanel worldMap, americasMap, europeMap, asiaMap, oceaniaMap, africaMap;
+    @UiField
+    TextBox fusionBox;
+    @UiField
+    Button addBtn;
+    @UiField
+    HTMLPanel fusionContainer;
+
+
     public ContactsViewImpl(final EventBus eventBus) {
         initWidget(uiBinder.createAndBindUi(this));
+
+        worldMap.getElement().setId("pgu_geo_contacts_map_world");
+        americasMap.getElement().setId("pgu_geo_contacts_map_americas");
+        europeMap.getElement().setId("pgu_geo_contacts_map_europe");
+        asiaMap.getElement().setId("pgu_geo_contacts_map_asia");
+        oceaniaMap.getElement().setId("pgu_geo_contacts_map_oceania");
+        africaMap.getElement().setId("pgu_geo_contacts_map_africa");
 
         eventBus.addHandler(ChartsApiIsAvailableEvent.TYPE, this);
     }
@@ -35,6 +62,49 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     @Override
     public void setPresenter(final ContactsPresenter presenter) {
         this.presenter = presenter;
+    }
+
+    @UiHandler("addBtn")
+    public void clickAddFusion(final ClickEvent e) {
+        final String text = fusionBox.getText();
+
+        if ("".equals(text.trim()) || !text.startsWith("https://www.google.com/fusiontables/embedviz")) {
+            return;
+        }
+
+        //        https://www.google.com/fusiontables/embedviz?viz=MAP&q=select+col0%3E%3E1+from+1dlLBDtnjrqYG7W3eamJX3-1ogV8XdGHXkX2wOaU&h=false&lat=47.74359286233701&lng=6.064453125&z=3&t=1&l=col0%3E%3E1
+        final Frame frame = new Frame(text);
+        fusionContainer.add(frame);
+    }
+
+    @UiHandler("worldBtn")
+    public void clickWorld(final ClickEvent e) {
+        worldMap.setVisible(worldBtn.getValue());
+    }
+
+    @UiHandler("americasBtn")
+    public void clickAmericas(final ClickEvent e) {
+        americasMap.setVisible(americasBtn.getValue());
+    }
+
+    @UiHandler("europeBtn")
+    public void clickEurope(final ClickEvent e) {
+        europeMap.setVisible(europeBtn.getValue());
+    }
+
+    @UiHandler("asiaBtn")
+    public void clickAsia(final ClickEvent e) {
+        asiaMap.setVisible(asiaBtn.getValue());
+    }
+
+    @UiHandler("oceaniaBtn")
+    public void clickOceania(final ClickEvent e) {
+        oceaniaMap.setVisible(oceaniaBtn.getValue());
+    }
+
+    @UiHandler("africaBtn")
+    public void clickAfrica(final ClickEvent e) {
+        africaMap.setVisible(africaBtn.getValue());
     }
 
     @Override
