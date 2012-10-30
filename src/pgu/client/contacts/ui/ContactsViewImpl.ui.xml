@@ -5,7 +5,30 @@
             overflow: scroll;
         }
     </ui:style>
-    <g:HTMLPanel addStyleNames="{style.container}">
-        <div id="pgu_geo_contacts_map" style="width: 1000px; height: 600px;"></div>
+    <g:HTMLPanel>
+        <g:HTMLPanel addStyleNames="row-fluid">
+            <div class="span6">
+                <div id="pgu_geo_contacts_map_world"></div>
+            </div>
+            <div class="span6">
+                <div id="pgu_geo_contacts_map_americas"></div>
+            </div>
+        </g:HTMLPanel>
+        <g:HTMLPanel addStyleNames="row-fluid">
+            <div class="span6">
+                <div id="pgu_geo_contacts_map_europe"></div>
+            </div>
+            <div class="span6">
+                <div id="pgu_geo_contacts_map_asia"></div>
+            </div>
+        </g:HTMLPanel>
+        <g:HTMLPanel addStyleNames="row-fluid">
+            <div class="span6">
+                <div id="pgu_geo_contacts_map_oceania"></div>
+            </div>
+            <div class="span6">
+                <div id="pgu_geo_contacts_map_africa"></div>
+            </div>
+        </g:HTMLPanel>
     </g:HTMLPanel>
 </ui:UiBinder> 

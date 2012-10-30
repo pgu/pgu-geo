@@ -6,16 +6,13 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import pgu.client.app.event.ChartsApiIsAvailableEvent;
+import pgu.client.app.utils.ChartsUtils;
 import pgu.client.contacts.ContactsPresenter;
 import pgu.client.contacts.ContactsView;
 import pgu.shared.dto.Connections;
-import pgu.shared.dto.Country;
-import pgu.shared.dto.Location;
-import pgu.shared.dto.Person;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.event.shared.EventBus;
@@ -42,7 +39,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
 
     @Override
     public void setConnections(final Connections connections) {
-
+        /*
         final ArrayList<Person> persons = connections.getValues();
         if (persons == null) {
             return;
@@ -74,10 +71,26 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
                 code2weight.put(code, 1);
             }
         }
-
         logResult(code2weight);
+         */
+        //        ca: 3,it: 1,cz: 2,us: 3,td: 1,gb: 4,au: 1,de: 3,fr: 38,ru: 1,ch: 13,es: 9,be: 1
 
-        final TreeMap<Integer, ArrayList<String>> weight2codes = new TreeMap<Integer, ArrayList<String>>();
+        final HashMap<String, Integer> code2weight = new HashMap<String, Integer>();
+        code2weight.put("ca", 3);
+        code2weight.put("it", 1);
+        code2weight.put("cz", 2);
+        code2weight.put("us", 3);
+        code2weight.put("td", 1);
+        code2weight.put("gb", 4);
+        code2weight.put("au", 1);
+        code2weight.put("de", 3);
+        code2weight.put("fr", 38);
+        code2weight.put("ru", 1);
+        code2weight.put("ch", 13);
+        code2weight.put("es", 9);
+        code2weight.put("be", 1);
+
+        weight2codes.clear();
         for (final Entry<String, Integer> e : code2weight.entrySet()) {
             final String countryCode = e.getKey();
             final Integer weight = e.getValue();
@@ -92,23 +105,23 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
             }
         }
 
-        buildGeoChart(weight2codes);
+        GWT.log("is api loaded? " + ChartsUtils.isApiLoaded());
+
+        if (!ChartsUtils.isApiLoaded()) {
+            hasToBuildGeoChartWhenReady = true;
+
+        } else {
+            hasToBuildGeoChartWhenReady = false;
+            buildGeoCharts();
+
+        }
+
     }
 
-    private void buildGeoChart(final TreeMap<Integer, ArrayList<String>> weight2codes) {
+    private final TreeMap<Integer, ArrayList<String>> weight2codes = new TreeMap<Integer, ArrayList<String>>();
+    private boolean hasToBuildGeoChartWhenReady = false;
 
-        if (!isChartsApiAvailable) {
-            new Timer() {
-
-                @Override
-                public void run() {
-                    buildGeoChart(weight2codes);
-                }
-
-            }.schedule(300);
-
-            return;
-        }
+    private void buildGeoCharts() {
 
         initDataTable();
         for (final Entry<Integer, ArrayList<String>> e : weight2codes.entrySet()) {
@@ -131,13 +144,13 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
                 //                count += 2;
             }
         }
-        buildGeoChartUI();
+        buildGeoChartsUI();
 
         // TODO PGU Oct 30, 2012 proposer un chart avec des bars et combien de maps avec quel zone (une world, une europe, etc), enfin, l'url d'une fusion table. + help/info sur le link google pour en créer une
         // + proposer de telecharger un .csv avec ses données
     }
 
-    private native void buildGeoChartUI() /*-{
+    private native void buildGeoChartsUI() /*-{
         $wnd.console.log('build geo chart');
 
         var data = $wnd.pgu_geo.contacts_table;
@@ -148,8 +161,23 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         // see options @ https://google-developers.appspot.com/chart/interactive/docs/gallery/geochart
         var options = {'region':150};
 
-        var chart = new $wnd.google.visualization.GeoChart($doc.getElementById('pgu_geo_contacts_map'));
-        chart.draw(dataTable, options);
+        var maps = [
+            {'id':'pgu_geo_contacts_map_world', 'options':{}}
+           ,{'id':'pgu_geo_contacts_map_americas','options':{'region':'019'}}
+           ,{'id':'pgu_geo_contacts_map_europe','options':{'region':150}}
+           ,{'id':'pgu_geo_contacts_map_asia','options':{'region':142}}
+           ,{'id':'pgu_geo_contacts_map_oceania','options':{'region':'009'}}
+           ,{'id':'pgu_geo_contacts_map_africa','options':{'region':'002'}}
+        ];
+
+        for (var i = 0, len = maps.length; i < len; i++) {
+
+            var map = maps[i];
+
+            var chart = new $wnd.google.visualization.GeoChart($doc.getElementById(map.id));
+            chart.draw(dataTable, map.options);
+        }
+
     }-*/;
 
     private native void addDataRow(final String countryCode, final int weight) /*-{
@@ -215,14 +243,13 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
 
     }-*/;
 
-    private boolean isChartsApiAvailable = false;
-
     @Override
     public void onChartsApiIsAvailable(final ChartsApiIsAvailableEvent event) {
         GWT.log("!!! ok, charts is ON, let's do some geocharts !!!");
-        isChartsApiAvailable = true;
-
         // TODO PGU Oct 29, 2012 if isChartsApiAvailable is false, let's check that $wnd.google.visualization.GeoChart existe and update isChartsApiAvailable.
+        if (hasToBuildGeoChartWhenReady) {
+            buildGeoCharts();
+        }
     }
 
     // is user logged in linkedin?

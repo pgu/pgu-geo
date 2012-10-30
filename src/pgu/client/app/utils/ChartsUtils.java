@@ -10,6 +10,7 @@ import com.google.web.bindery.event.shared.EventBus;
 public class ChartsUtils {
 
     private static EventBus s_eventBus;
+    private static boolean isApiLoaded = false;
 
     public native void exportMethods() /*-{
         $wnd.pgu_geo.init_charts = $entry(@pgu.client.app.utils.ChartsUtils::initCharts());
@@ -29,6 +30,7 @@ public class ChartsUtils {
 
         } else {
             GWT.log("fire charts api is ON");
+            isApiLoaded = true;
             s_eventBus.fireEvent(new ChartsApiIsAvailableEvent());
         }
 
@@ -36,6 +38,10 @@ public class ChartsUtils {
 
     public static void setEventBus(final EventBus eventBus) {
         s_eventBus = eventBus;
+    }
+
+    public static boolean isApiLoaded() {
+        return isApiLoaded;
     }
 
 }
