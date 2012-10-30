@@ -271,12 +271,21 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
 
     @Override
     public Connections fetchConnections(final AccessToken accessToken) {
-        // TODO PGU Oct 29, 2012 is test
-        final String body = fetchResponseBody(accessToken, CONNECTIONS_URL + ":(first-name,last-name,location)");
-        return new Gson().fromJson(body, Connections.class);
+
+        String jsonConnections = "";
+
+        if (isTest) {
+            jsonConnections = connectionsTest();
+
+        } else {
+            jsonConnections = fetchResponseBody(accessToken, CONNECTIONS_URL + ":(first-name,last-name,location)");
+
+        }
+
+        return new Gson().fromJson(jsonConnections, Connections.class);
     }
 
-    private final boolean                        isTest               = false;
+    private final boolean                        isTest               = true;
 
     /**
      * https://developer.linkedin.com/documents/profile-api
@@ -350,9 +359,17 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         return accessToken;
     }
 
-    private String profileTest() {
+    private String connectionsTest() {
+        return readJsonFromFS("contacts.json");
+    }
 
-        final InputStream is = getServletContext().getResourceAsStream("/WEB-INF/pgu/profile.json");
+    private String profileTest() {
+        return readJsonFromFS("profile.json");
+    }
+
+    private String readJsonFromFS(final String fileName) {
+
+        final InputStream is = getServletContext().getResourceAsStream("/WEB-INF/pgu/" + fileName);
         final BufferedReader br = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
 
         final StringBuilder sb = new StringBuilder();

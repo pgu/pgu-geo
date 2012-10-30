@@ -15,6 +15,7 @@ import pgu.shared.dto.Person;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.event.shared.EventBus;
@@ -91,7 +92,24 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
             }
         }
 
-        //        int count = 1;
+        buildGeoChart(weight2codes);
+    }
+
+    private void buildGeoChart(final TreeMap<Integer, ArrayList<String>> weight2codes) {
+
+        if (!isChartsApiAvailable) {
+            new Timer() {
+
+                @Override
+                public void run() {
+                    buildGeoChart(weight2codes);
+                }
+
+            }.schedule(300);
+
+            return;
+        }
+
         initDataTable();
         for (final Entry<Integer, ArrayList<String>> e : weight2codes.entrySet()) {
             final Integer weight = e.getKey();
@@ -113,24 +131,36 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
                 //                count += 2;
             }
         }
-        buildGeochart();
+        buildGeoChartUI();
+
+        // TODO PGU Oct 30, 2012 proposer un chart avec des bars et combien de maps avec quel zone (une world, une europe, etc), enfin, l'url d'une fusion table. + help/info sur le link google pour en créer une
+        // + proposer de telecharger un .csv avec ses données
     }
 
-    private native void buildGeochart() /*-{
+    private native void buildGeoChartUI() /*-{
+        $wnd.console.log('build geo chart');
 
-        var data = $wnd.google.visualization.arrayToDataTable($wnd.pgu_geo.contacts_table);
+        var data = $wnd.pgu_geo.contacts_table;
+        $wnd.console.log(data);
 
-        var options = {};
+        var dataTable = $wnd.google.visualization.arrayToDataTable(data);
+
+        // see options @ https://google-developers.appspot.com/chart/interactive/docs/gallery/geochart
+        var options = {'region':150};
 
         var chart = new $wnd.google.visualization.GeoChart($doc.getElementById('pgu_geo_contacts_map'));
-        chart.draw(data, options);
+        chart.draw(dataTable, options);
     }-*/;
 
-    private native void addDataRow(final String countryCode, final Integer weight) /*-{
+    private native void addDataRow(final String countryCode, final int weight) /*-{
+        $wnd.console.log('addDataRow ' + countryCode + ', ' + weight);
+
         $wnd.pgu_geo.contacts_table.push([countryCode, weight]);
     }-*/;
 
     private native void initDataTable() /*-{
+        $wnd.console.log('initDataTable ');
+
         $wnd.pgu_geo.contacts_table = [];
         $wnd.pgu_geo.contacts_table.push(['Country', 'Connections']);
 
