@@ -269,6 +269,32 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         }
     }
 
+    // from connections, we got the names (useful for the user)
+    // they are distributed by countries
+    // for this user
+    // what do we stock?
+    //
+    // the issue is: the user can have a lot of contacts..
+    // first, how many contacts?
+    // if more than 500, take the first 500.. (see connections_url + from 0 to 500)
+    // else take them all
+    // (batch de 100?)
+    // --> answer: by default: 500 connections, from 0 to 500. cf https://developer.linkedin.com/documents/connections-api
+    // in the UI, add a panel 'fetching connections and distributing them'
+    //
+    // fetch connections from linkedin only if the user used refresh btn or has no information stocked for connections
+    // else get the distribution with the names from DB (stock user connections distribution and names)
+    // [{country_code, country_name(how to get it?), num of connections}]
+    // [{country_code, [connection names]}] (load them after the geocharts)
+    //
+    // this distribution allows to build the geocharts
+    // build all geocharts but show only the ones the user has selected (stock user preferences of geocharts)
+    // ['world':true,'americas':false,...]
+    // for a click on an area, we have to add an area where to list all the connections names
+    //
+    // also, show all the urls of fusion tables (stock urls of fusion tables)
+    // [url1,url2,...]
+
     @Override
     public Connections fetchConnections(final AccessToken accessToken) {
 
