@@ -27,6 +27,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Frame;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -54,8 +55,13 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     @UiField
     Button addBtn;
     @UiField
-    HTMLPanel fusionContainer;
+    HTMLPanel fusionPanel, contactsNamesPanel;
+    @UiField
+    Button closeContactsNamesPanel;
+    @UiField
+    HTML contactsNamesHtml;
 
+    private final HashMap<String, String[]> region2names = new HashMap<String, String[]>();
 
     public ContactsViewImpl(final EventBus eventBus) {
         initWidget(uiBinder.createAndBindUi(this));
@@ -67,6 +73,8 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         oceaniaMap.getElement().setId("pgu_geo_contacts_map_oceania");
         africaMap.getElement().setId("pgu_geo_contacts_map_africa");
 
+        contactsNamesPanel.getElement().setId("pgu_geo_contacts_names_panel");
+
         americasMap.setVisible(false);
         europeMap.setVisible(false);
         asiaMap.setVisible(false);
@@ -74,7 +82,44 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         africaMap.setVisible(false);
 
         eventBus.addHandler(ChartsApiIsAvailableEvent.TYPE, this);
+
+        region2names.put("FR", new String[] {"Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne"});
+        region2names.put("ES", new String[] {"Toto toto, Titi titi, Toto toto, Titi titi, Toto toto, Titi titi, Toto toto, Titi titi, Toto toto, Titi titi"});
     }
+
+    public void openAndShowContactNames(final String regionCode) {
+
+        final String[] contactsNames = region2names.get(regionCode);
+
+        if (contactsNames == null) {
+            hideContactsNamesPanel();
+            contactsNamesHtml.setHTML("");
+            return;
+        }
+
+        final StringBuilder sb = new StringBuilder();
+        for (final String contactName : contactsNames) {
+            sb.append(contactName);
+            sb.append(", ");
+        }
+
+        contactsNamesHtml.setHTML(sb.toString());
+        showContactsNamesPanel();
+    }
+
+    @UiHandler("closeContactsNamesPanel")
+    public void clickCloseContactsNamesPanel(final ClickEvent e) {
+        hideContactsNamesPanel();
+        contactsNamesHtml.setHTML("");
+    }
+
+    private native void showContactsNamesPanel() /*-{
+        $wnd.$('#pgu_geo_contacts_names_panel').collapse('show');
+    }-*/;
+
+    private native void hideContactsNamesPanel() /*-{
+        $wnd.$('#pgu_geo_contacts_names_panel').collapse('hide');
+    }-*/;
 
     private ContactsPresenter presenter;
 
@@ -123,7 +168,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         hp.add(frame);
         hp.add(closeBtn);
 
-        fusionContainer.add(hp);
+        fusionPanel.add(hp);
 
         closeBtn.addClickHandler(new ClickHandler() {
 
@@ -271,13 +316,13 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
                 //                count += 2;
             }
         }
-        buildGeoChartsUI();
+        buildGeoChartsUI(this);
 
         // TODO PGU Oct 30, 2012 proposer un chart avec des bars et combien de maps avec quel zone (une world, une europe, etc), enfin, l'url d'une fusion table. + help/info sur le link google pour en créer une
         // + proposer de telecharger un .csv avec ses données
     }
 
-    private native void buildGeoChartsUI() /*-{
+    private native void buildGeoChartsUI(ContactsViewImpl view) /*-{
         $wnd.console.log('build geo chart');
 
         var data = $wnd.pgu_geo.contacts_table;
@@ -286,8 +331,6 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         var dataTable = $wnd.google.visualization.arrayToDataTable(data);
 
         // see options @ https://google-developers.appspot.com/chart/interactive/docs/gallery/geochart
-        var options = {'region':150};
-
         var maps = [
             {'id':'pgu_geo_contacts_map_world', 'options':{}}
            ,{'id':'pgu_geo_contacts_map_americas','options':{'region':'019'}}
@@ -303,6 +346,13 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
 
             var chart = new $wnd.google.visualization.GeoChart($doc.getElementById(map.id));
             chart.draw(dataTable, map.options);
+
+            var clickRegionHandler = function(e) {
+                view.@pgu.client.contacts.ui.ContactsViewImpl::openAndShowContactNames(Ljava/lang/String;)(e.region);
+            };
+
+            // https://developers.google.com/chart/interactive/docs/events?hl=en
+            $wnd.google.visualization.events.addListener(chart, 'regionClick', clickRegionHandler);
         }
 
     }-*/;

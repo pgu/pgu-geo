@@ -33,13 +33,19 @@
             </b:Well>
         </g:HTMLPanel>
         <g:HTMLPanel addStyleNames="row-fluid">
-                <g:HTMLPanel ui:field="worldMap" addStyleNames="{style.chartWell}" />
-                <g:HTMLPanel ui:field="americasMap" addStyleNames="{style.chartWell}" />
-                <g:HTMLPanel ui:field="europeMap" addStyleNames="{style.chartWell}" />
-                <g:HTMLPanel ui:field="asiaMap" addStyleNames="{style.chartWell}" />
-                <g:HTMLPanel ui:field="oceaniaMap" addStyleNames="{style.chartWell}" />
-                <g:HTMLPanel ui:field="africaMap" addStyleNames="{style.chartWell}" />
-                <div style="clear:both" />
+            <g:HTMLPanel ui:field="worldMap" addStyleNames="{style.chartWell}" />
+            <g:HTMLPanel ui:field="americasMap" addStyleNames="{style.chartWell}" />
+            <g:HTMLPanel ui:field="europeMap" addStyleNames="{style.chartWell}" />
+            <g:HTMLPanel ui:field="asiaMap" addStyleNames="{style.chartWell}" />
+            <g:HTMLPanel ui:field="oceaniaMap" addStyleNames="{style.chartWell}" />
+            <g:HTMLPanel ui:field="africaMap" addStyleNames="{style.chartWell}" />
+            <div style="clear:both" />
+        </g:HTMLPanel>
+        <g:HTMLPanel addStyleNames="row-fluid">
+            <g:HTMLPanel ui:field="contactsNamesPanel" addStyleNames="collapse" >
+                <b:Button ui:field="closeContactsNamesPanel" addStyleNames="close" text="x"/>
+                <g:HTML ui:field="contactsNamesHtml" />
+            </g:HTMLPanel>
         </g:HTMLPanel>
         <g:HTMLPanel addStyleNames="row-fluid">
             <b:Well>
@@ -50,7 +56,9 @@
                 <b:Button ui:field="addBtn" type="PRIMARY" icon="PLUS" />
             </b:Well>
         </g:HTMLPanel>
-        <g:HTMLPanel ui:field="fusionContainer" addStyleNames="row-fluid" />
+        <g:HTMLPanel addStyleNames="row-fluid" >
+            <g:HTMLPanel ui:field="fusionPanel" />
+        </g:HTMLPanel>
         <div style="height:50px" />
     </g:HTMLPanel>
 </ui:UiBinder> 
