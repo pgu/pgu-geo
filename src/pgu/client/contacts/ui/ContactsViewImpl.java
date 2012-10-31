@@ -13,6 +13,7 @@ import pgu.shared.dto.Connections;
 
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.CheckBox;
+import com.github.gwtbootstrap.client.ui.Popover;
 import com.github.gwtbootstrap.client.ui.TextBox;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
@@ -60,8 +61,12 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     Button closeContactsNamesPanel;
     @UiField
     HTML contactsNamesHtml;
+    @UiField
+    Popover infoPop;
+    @UiField
+    Button infoPopBtn;
 
-    private final HashMap<String, String[]> region2names = new HashMap<String, String[]>();
+    private final HashMap<String, String> region2names = new HashMap<String, String>();
 
     public ContactsViewImpl(final EventBus eventBus) {
         initWidget(uiBinder.createAndBindUi(this));
@@ -83,13 +88,31 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
 
         eventBus.addHandler(ChartsApiIsAvailableEvent.TYPE, this);
 
-        region2names.put("FR", new String[] {"Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne"});
-        region2names.put("ES", new String[] {"Toto toto, Titi titi, Toto toto, Titi titi, Toto toto, Titi titi, Toto toto, Titi titi, Toto toto, Titi titi"});
+        infoPop.setText("Clicking on the regions of the geocharts will display your contacts' names. Note that this information is only available here and not on your public profile.");
+
+        region2names.put("FR", //
+                "Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, " //
+                + "Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, " //
+                + "Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, " //
+                + "Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, " //
+                + "Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, " //
+                + "Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, " //
+                + "Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, " //
+                + "Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne" //
+                );
+
+        region2names.put("ES", "Toto toto, Titi titi, Toto toto, Titi titi, Toto toto, Titi titi, Toto toto, Titi titi, Toto toto, Titi titi");
+
+    }
+
+    @UiHandler("infoPopBtn")
+    public void clickInfoPop(final ClickEvent e) {
+        infoPop.toggle();
     }
 
     public void openAndShowContactNames(final String regionCode) {
 
-        final String[] contactsNames = region2names.get(regionCode);
+        final String contactsNames = region2names.get(regionCode);
 
         if (contactsNames == null) {
             hideContactsNamesPanel();
@@ -98,7 +121,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         }
 
         final StringBuilder sb = new StringBuilder();
-        for (final String contactName : contactsNames) {
+        for (final String contactName : contactsNames.split(", ")) {
             sb.append(contactName);
             sb.append(", ");
         }
