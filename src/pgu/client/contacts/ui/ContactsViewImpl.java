@@ -67,6 +67,12 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         oceaniaMap.getElement().setId("pgu_geo_contacts_map_oceania");
         africaMap.getElement().setId("pgu_geo_contacts_map_africa");
 
+        americasMap.setVisible(false);
+        europeMap.setVisible(false);
+        asiaMap.setVisible(false);
+        oceaniaMap.setVisible(false);
+        africaMap.setVisible(false);
+
         eventBus.addHandler(ChartsApiIsAvailableEvent.TYPE, this);
     }
 

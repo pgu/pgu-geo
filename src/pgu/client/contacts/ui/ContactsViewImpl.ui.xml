@@ -15,14 +15,21 @@
         }
     </ui:style>
     <g:HTMLPanel>
+        <g:HTMLPanel ui:field="infoProcessPanel" addStyleNames="row-fluid">
+        <!-- hide the other panels -->
+        <!-- processing contacts in progress -->
+            <b:Well>
+                Processing contacts is in progress... (only the first 500 are processed)
+            </b:Well>
+        </g:HTMLPanel>
         <g:HTMLPanel addStyleNames="row-fluid">
             <b:Well addStyleNames="form-inline">
                 <b:CheckBox checked="true" ui:field="worldBtn">World</b:CheckBox>
-                <b:CheckBox checked="true" ui:field="americasBtn">Americas</b:CheckBox>
-                <b:CheckBox checked="true" ui:field="europeBtn">Europe</b:CheckBox>
-                <b:CheckBox checked="true" ui:field="asiaBtn">Asia</b:CheckBox>
-                <b:CheckBox checked="true" ui:field="oceaniaBtn">Oceania</b:CheckBox>
-                <b:CheckBox checked="true" ui:field="africaBtn">Africa</b:CheckBox>
+                <b:CheckBox ui:field="americasBtn">Americas</b:CheckBox>
+                <b:CheckBox ui:field="europeBtn">Europe</b:CheckBox>
+                <b:CheckBox ui:field="asiaBtn">Asia</b:CheckBox>
+                <b:CheckBox ui:field="oceaniaBtn">Oceania</b:CheckBox>
+                <b:CheckBox ui:field="africaBtn">Africa</b:CheckBox>
             </b:Well>
         </g:HTMLPanel>
         <g:HTMLPanel addStyleNames="row-fluid">

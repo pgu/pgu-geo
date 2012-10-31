@@ -284,16 +284,34 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
     //
     // fetch connections from linkedin only if the user used refresh btn or has no information stocked for connections
     // else get the distribution with the names from DB (stock user connections distribution and names)
-    // [{country_code, country_name(how to get it?), num of connections}]
-    // [{country_code, [connection names]}] (load them after the geocharts)
+    //
+    // [[DB]] userId, [[country_code, country_name(how to get it?), num of connections]]
+    // ex: [['fr','France',38],['es','Spain',9],...]
+    //
+    // [[DB]] userId, [[country_code, [connection names]]] (load them after the geocharts)
+    // ex: [['fr',['Alice Aceli','Bruno Bourn']],['es',['Alicia Acelia','Bruno Bourno']],...]
+    // save this information once the distribution is done
     //
     // this distribution allows to build the geocharts
     // build all geocharts but show only the ones the user has selected (stock user preferences of geocharts)
-    // ['world':true,'americas':false,...]
-    // for a click on an area, we have to add an area where to list all the connections names
+    // [[DB]] userId, {'world':true,'americas':false,...}
+    // by default, only the world is shown
+    //
+    // for a click on an geo area, we have to add an UI area where to list all the connections names
     //
     // also, show all the urls of fusion tables (stock urls of fusion tables)
-    // [url1,url2,...]
+    // [[DB]] userId, [url1,url2,...]
+    //
+    // DB resume
+    //
+    // [[DB]] userId, distrib_num, charts_prefs, fusion_urls
+    // [[DB]] userId, distrib_name
+    //
+    // distrib_num: [['fr','France',38],['es','Spain',9],...]
+    //distrib_name: [['fr',['Alice Aceli','Bruno Bourn']],['es',['Alicia Acelia','Bruno Bourno']],...]
+    //charts_prefs: {'world':true,'americas':false,...}
+    // fusion_urls: [url1,url2,...]
+    //
 
     @Override
     public Connections fetchConnections(final AccessToken accessToken) {
