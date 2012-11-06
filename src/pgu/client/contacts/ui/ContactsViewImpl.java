@@ -50,7 +50,11 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     @UiField
     CheckBox worldBtn, americasBtn, europeBtn, asiaBtn, oceaniaBtn, africaBtn;
     @UiField
+    CheckBox histoChartBtn, pieChartBtn;
+    @UiField
     HTMLPanel worldMap, americasMap, europeMap, asiaMap, oceaniaMap, africaMap;
+    @UiField
+    HTMLPanel pieChart, histoChart;
     @UiField
     TextBox fusionBox;
     @UiField
@@ -71,6 +75,9 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     public ContactsViewImpl(final EventBus eventBus) {
         initWidget(uiBinder.createAndBindUi(this));
 
+        pieChart.getElement().setId("pgu_geo_contacts_piechart");
+        histoChart.getElement().setId("pgu_geo_contacts_histochart");
+
         worldMap.getElement().setId("pgu_geo_contacts_map_world");
         americasMap.getElement().setId("pgu_geo_contacts_map_americas");
         europeMap.getElement().setId("pgu_geo_contacts_map_europe");
@@ -80,6 +87,10 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
 
         contactsNamesPanel.getElement().setId("pgu_geo_contacts_names_panel");
 
+        pieChart.setVisible(true);
+        histoChart.setVisible(false);
+
+        worldMap.setVisible(true);
         americasMap.setVisible(false);
         europeMap.setVisible(false);
         asiaMap.setVisible(false);
@@ -232,6 +243,11 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         africaMap.setVisible(africaBtn.getValue());
     }
 
+    @UiHandler("pieChartBtn")
+    public void clickPieChart(final ClickEvent e) {
+        pieChart.setVisible(pieChartBtn.getValue());
+    }
+
     @Override
     public void setConnections(final Connections connections) {
         /*
@@ -377,6 +393,10 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
             // https://developers.google.com/chart/interactive/docs/events?hl=en
             $wnd.google.visualization.events.addListener(chart, 'regionClick', clickRegionHandler);
         }
+
+        var pie_options = {title:'Contacts by countries'};
+        var pie_chart = new $wnd.google.visualization.PieChart($doc.getElementById('pgu_geo_contacts_piechart'));
+        pie_chart.draw(dataTable, pie_options);
 
     }-*/;
 
