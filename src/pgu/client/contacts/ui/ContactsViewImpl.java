@@ -398,6 +398,8 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         var pie_chart = new $wnd.google.visualization.PieChart($doc.getElementById('pgu_geo_contacts_piechart'));
         pie_chart.draw(dataTable, pie_options);
 
+        // TODO PGU column or bar chart
+
     }-*/;
 
     private native void addDataRow(final String countryCode, final int weight) /*-{
