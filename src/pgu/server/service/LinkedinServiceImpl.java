@@ -304,7 +304,7 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
     //
     // DB resume
     //
-    // [[DB]] userId, distrib_num, charts_prefs, fusion_urls
+    // [[DB]] userId, distrib_num, charts_prefs, fusion_urls    -- notes: charts_prefs: array of only the codes of the visible charts
     // [[DB]] userId, distrib_name
     //
     // distrib_num: [['fr','France',38],['es','Spain',9],...]

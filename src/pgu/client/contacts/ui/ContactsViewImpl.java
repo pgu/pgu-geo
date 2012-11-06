@@ -300,6 +300,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         code2weight.put("ch", 13);
         code2weight.put("es", 9);
         code2weight.put("be", 1);
+        // TODO PGU Nov 6, 2012 to sort the data by an order for the pie and bar charts
 
         weight2codes.clear();
         for (final Entry<String, Integer> e : code2weight.entrySet()) {
@@ -364,10 +365,12 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     private native void buildGeoChartsUI(ContactsViewImpl view) /*-{
         $wnd.console.log('build geo chart');
 
+        var google = $wnd.google;
+
         var data = $wnd.pgu_geo.contacts_table;
         $wnd.console.log(data);
 
-        var dataTable = $wnd.google.visualization.arrayToDataTable(data);
+        var dataTable = google.visualization.arrayToDataTable(data);
 
         // see options @ https://google-developers.appspot.com/chart/interactive/docs/gallery/geochart
         var maps = [
@@ -383,7 +386,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
 
             var map = maps[i];
 
-            var chart = new $wnd.google.visualization.GeoChart($doc.getElementById(map.id));
+            var chart = new google.visualization.GeoChart($doc.getElementById(map.id));
             chart.draw(dataTable, map.options);
 
             var clickRegionHandler = function(e) {
@@ -391,12 +394,14 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
             };
 
             // https://developers.google.com/chart/interactive/docs/events?hl=en
-            $wnd.google.visualization.events.addListener(chart, 'regionClick', clickRegionHandler);
+            google.visualization.events.addListener(chart, 'regionClick', clickRegionHandler);
         }
 
-        var pie_options = {title:'Contacts by countries'};
-        var pie_chart = new $wnd.google.visualization.PieChart($doc.getElementById('pgu_geo_contacts_piechart'));
+        var pie_options = {title:'Contacts by countries',is3D:true};
+        var pie_chart = new google.visualization.PieChart($doc.getElementById('pgu_geo_contacts_piechart'));
         pie_chart.draw(dataTable, pie_options);
+        // TODO PGU google.visualization.events.addListener(pie_chart, 'select', clickPieHandler)
+        // clickPieHandler = function(e) { pie_chart.getSelection().?? to get the country's code}
 
         // TODO PGU column or bar chart
 
