@@ -396,7 +396,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
             google.visualization.events.addListener(chart, 'regionClick', clickRegionHandler);
         }
 
-        var pie_options = {title:'Contacts by countries',is3D:true};
+        var pie_options = {title:'83 Contacts by countries',is3D:true};
         var pie_chart = new google.visualization.PieChart($doc.getElementById('pgu_geo_contacts_piechart'));
         pie_chart.draw(data_table, pie_options);
 
@@ -408,12 +408,14 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
             if (selection.length != 1) {
                 $wnd.console.log('!! different of one ');
                 $wnd.console.log(selection);
+                // TODO PGU hide the contacts area
+                return;
             }
 
             var item = selection[0];
             var region = data_table.getFormattedValue(item.row, 0); // item.column
 
-            view.@pgu.client.contacts.ui.ContactsViewImpl::openAndShowContactNames(Ljava/lang/String;)(region);
+            view.@pgu.client.contacts.ui.ContactsViewImpl::openAndShowContactNames(Ljava/lang/String;)(region.toUpperCase());
         };
         google.visualization.events.addListener(pie_chart, 'select', clickPieHandler);
 
