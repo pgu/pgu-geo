@@ -368,18 +368,17 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         var google = $wnd.google;
 
         var data = $wnd.pgu_geo.contacts_table;
-        $wnd.console.log(data);
 
-        var dataTable = google.visualization.arrayToDataTable(data);
+        var data_table = google.visualization.arrayToDataTable(data);
 
         // see options @ https://google-developers.appspot.com/chart/interactive/docs/gallery/geochart
         var maps = [
-            {'id':'pgu_geo_contacts_map_world', 'options':{}}
-           ,{'id':'pgu_geo_contacts_map_americas','options':{'region':'019'}}
-           ,{'id':'pgu_geo_contacts_map_europe','options':{'region':150}}
-           ,{'id':'pgu_geo_contacts_map_asia','options':{'region':142}}
-           ,{'id':'pgu_geo_contacts_map_oceania','options':{'region':'009'}}
-           ,{'id':'pgu_geo_contacts_map_africa','options':{'region':'002'}}
+            {id:'pgu_geo_contacts_map_world', options:{height:347}} // default width: 556px
+           ,{id:'pgu_geo_contacts_map_americas',options:{region:'019'}}
+           ,{id:'pgu_geo_contacts_map_europe',options:{region:150}}
+           ,{id:'pgu_geo_contacts_map_asia',options:{region:142}}
+           ,{id:'pgu_geo_contacts_map_oceania',options:{region:'009'}}
+           ,{id:'pgu_geo_contacts_map_africa',options:{region:'002'}}
         ];
 
         for (var i = 0, len = maps.length; i < len; i++) {
@@ -387,7 +386,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
             var map = maps[i];
 
             var chart = new google.visualization.GeoChart($doc.getElementById(map.id));
-            chart.draw(dataTable, map.options);
+            chart.draw(data_table, map.options);
 
             var clickRegionHandler = function(e) {
                 view.@pgu.client.contacts.ui.ContactsViewImpl::openAndShowContactNames(Ljava/lang/String;)(e.region);
@@ -399,8 +398,25 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
 
         var pie_options = {title:'Contacts by countries',is3D:true};
         var pie_chart = new google.visualization.PieChart($doc.getElementById('pgu_geo_contacts_piechart'));
-        pie_chart.draw(dataTable, pie_options);
-        // TODO PGU google.visualization.events.addListener(pie_chart, 'select', clickPieHandler)
+        pie_chart.draw(data_table, pie_options);
+
+        var clickPieHandler = function() {
+
+            $wnd.console.log('click pie');
+
+            var selection = pie_chart.getSelection();
+            if (selection.length != 1) {
+                $wnd.console.log('!! different of one ');
+                $wnd.console.log(selection);
+            }
+
+            var item = selection[0];
+            var region = data_table.getFormattedValue(item.row, 0); // item.column
+
+            view.@pgu.client.contacts.ui.ContactsViewImpl::openAndShowContactNames(Ljava/lang/String;)(region);
+        };
+        google.visualization.events.addListener(pie_chart, 'select', clickPieHandler);
+
         // clickPieHandler = function(e) { pie_chart.getSelection().?? to get the country's code}
 
         // TODO PGU column or bar chart
