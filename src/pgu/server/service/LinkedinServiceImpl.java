@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Scanner;
@@ -37,6 +38,8 @@ import pgu.shared.dto.OauthAuthorizationStart;
 import pgu.shared.dto.Person;
 import pgu.shared.dto.Profile;
 import pgu.shared.dto.RequestToken;
+import pgu.shared.model.Country2ContactNames;
+import pgu.shared.model.Country2ContactNumber;
 import pgu.shared.model.UserAndLocations;
 
 import com.google.appengine.api.search.Document;
@@ -141,12 +144,7 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
                 continue;
             }
 
-            if (code2weight.containsKey(code)) {
-                final Integer count = code2weight.get(code) + 1;
-                code2weight.put(code, count);
-            } else {
-                code2weight.put(code, 1);
-            }
+            incrementContactsForCountry(code, code2weight);
         }
 
         for (final Entry<String, Integer> e : code2weight.entrySet()) {
@@ -274,19 +272,19 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
     // for this user
     // what do we stock?
     //
-    // the issue is: the user can have a lot of contacts..
-    // first, how many contacts?
-    // if more than 500, take the first 500.. (see connections_url + from 0 to 500)
-    // else take them all
-    // (batch de 100?)
-    // --> answer: by default: 500 connections, from 0 to 500. cf https://developer.linkedin.com/documents/connections-api
-    // in the UI, add a panel 'fetching connections and distributing them'
+    // by default: 500 connections, from 0 to 500. cf https://developer.linkedin.com/documents/connections-api
+    //
+    // decision: make the distribution on the server-side
     //
     // fetch connections from linkedin only if the user used refresh btn or has no information stocked for connections
     // else get the distribution with the names from DB (stock user connections distribution and names)
+    // inform about the users without localization
     //
-    // [[DB]] userId, [[country_code, country_name(how to get it?), num of connections]]
+    // [[DB]] userId, [[country_code, country_name(s), num of connections]]
     // ex: [['fr','France',38],['es','Spain',9],...]
+    //
+    // country names will be fetched with if (', ') exists then split.get(1) else take as it is.
+    // we can have for 'us' the states names such as 'ohio', ...
     //
     // [[DB]] userId, [[country_code, [connection names]]] (load them after the geocharts)
     // ex: [['fr',['Alice Aceli','Bruno Bourn']],['es',['Alicia Acelia','Bruno Bourno']],...]
@@ -304,17 +302,18 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
     //
     // DB resume
     //
-    // [[DB]] userId, distrib_num, charts_prefs, fusion_urls    -- notes: charts_prefs: array of only the codes of the visible charts
+    // [[DB]] userId, distrib_num, charts_prefs, fusion_urls -- notes: charts_prefs: array of only the codes of the
+    // visible charts
     // [[DB]] userId, distrib_name
     //
     // distrib_num: [['fr','France',38],['es','Spain',9],...]
-    //distrib_name: [['fr',['Alice Aceli','Bruno Bourn']],['es',['Alicia Acelia','Bruno Bourno']],...]
-    //charts_prefs: {'world':true,'americas':false,...}
+    // distrib_name: [['fr',['Alice Aceli','Bruno Bourn']],['es',['Alicia Acelia','Bruno Bourno']],...]
+    // charts_prefs: {'world':true,'americas':false,...}
     // fusion_urls: [url1,url2,...]
     //
 
     @Override
-    public Connections fetchConnections(final AccessToken accessToken) {
+    public Connections fetchConnections(final AccessToken accessToken, final String userId) {
 
         String jsonConnections = "";
 
@@ -326,10 +325,130 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
 
         }
 
-        return new Gson().fromJson(jsonConnections, Connections.class);
+        final Connections connections = new Gson().fromJson(jsonConnections, Connections.class);
+        final ArrayList<Person> persons = connections.getValues();
+
+        if (persons == null) {
+            return connections;
+        }
+
+        final HashMap<String, ArrayList<String>> code2contactNames = new HashMap<String, ArrayList<String>>();
+
+        final HashMap<String, Integer> code2contactNumber = new HashMap<String, Integer>();
+        final HashMap<String, HashSet<String>> code2locationNames = new HashMap<String, HashSet<String>>();
+
+        for (final Person p : persons) {
+
+            final Location location = p.getLocation();
+
+            if (location == null) {
+                addPersonToUnknownLocalization(p, code2contactNames);
+                continue;
+            }
+
+            final Country country = location.getCountry();
+
+            if (country == null) {
+                addPersonToUnknownLocalization(p, code2contactNames);
+                continue;
+            }
+
+            final String code = country.getCode();
+
+            if (code == null) {
+                addPersonToUnknownLocalization(p, code2contactNames);
+                continue;
+            }
+
+            addContactNameToCountry(code, p, code2contactNames);
+            incrementContactsForCountry(code, code2contactNumber);
+            addLocationNameToCountry(code, location, code2locationNames);
+        }
+
+        final Country2ContactNames country2contactNames = new Country2ContactNames();
+        country2contactNames.setUserId(userId);
+        country2contactNames.setValues(code2contactNames);
+        dao.ofy().async().put(country2contactNames);
+
+        final Country2ContactNumber country2number = new Country2ContactNumber();
+        country2number.setUserId(userId);
+        country2number.setCode2locationNames(code2locationNames);
+        country2number.setCode2contactNumber(code2contactNumber);
+
+        return connections;
     }
 
-    private final boolean                        isTest               = true;
+    private void addLocationNameToCountry(final String code, final Location location, final HashMap<String,HashSet<String>> code2locationNames) {
+        String locationName = location.getName();
+
+        if (locationName.contains(",")) {
+            try {
+                locationName = locationName.split(",")[1];
+            } catch (final Exception e) {
+                // fail silently
+            }
+        }
+
+        if (code2locationNames.containsKey(code)) {
+            code2locationNames.get(code).add(locationName);
+
+        } else {
+            final HashSet<String> locationNames = new HashSet<String>();
+            locationNames.add(locationName);
+            code2locationNames.put(code, locationNames);
+        }
+    }
+
+    private void incrementContactsForCountry(final String code, final HashMap<String, Integer> code2contactNumber) {
+        if (code2contactNumber.containsKey(code)) {
+            final Integer count = code2contactNumber.get(code) + 1;
+            code2contactNumber.put(code, count);
+
+        } else {
+            code2contactNumber.put(code, 1);
+        }
+    }
+
+    private void addPersonToUnknownLocalization(final Person p, final HashMap<String, ArrayList<String>> code2names) {
+        addContactNameToCountry("unknown", p, code2names);
+    }
+
+    private void addContactNameToCountry(final String code, final Person p,
+            final HashMap<String, ArrayList<String>> code2contactNames) {
+
+        if (code2contactNames.containsKey(code)) {
+            code2contactNames.get(code).add(getName(p));
+
+        } else {
+            final ArrayList<String> ps = new ArrayList<String>();
+            ps.add(getName(p));
+            code2contactNames.put(code, ps);
+        }
+    }
+
+    private String getName(final Person p) {
+
+        final String firstName = p.getFirstName();
+        final String lastName = p.getLastName();
+
+        final StringBuilder name = new StringBuilder();
+
+        if (!"private".equals(firstName)) {
+            name.append(firstName);
+            name.append(" ");
+        }
+
+        if (!"private".equals(lastName)) {
+            name.append(lastName);
+            name.append(" ");
+        }
+
+        name.deleteCharAt(name.length() - 1); // remove trailing whitespace
+
+        return name.toString();
+    }
+
+    private final boolean isTest = true;
 
     /**
      * https://developer.linkedin.com/documents/profile-api
