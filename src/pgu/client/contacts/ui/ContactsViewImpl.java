@@ -50,11 +50,11 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     @UiField
     CheckBox worldBtn, americasBtn, europeBtn, asiaBtn, oceaniaBtn, africaBtn;
     @UiField
-    CheckBox histoChartBtn, pieChartBtn;
+    CheckBox barChartBtn, pieChartBtn;
     @UiField
     HTMLPanel worldMap, americasMap, europeMap, asiaMap, oceaniaMap, africaMap;
     @UiField
-    HTMLPanel pieChart, histoChart;
+    HTMLPanel pieChart, barChart;
     @UiField
     TextBox fusionBox;
     @UiField
@@ -76,7 +76,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         initWidget(uiBinder.createAndBindUi(this));
 
         pieChart.getElement().setId("pgu_geo_contacts_piechart");
-        histoChart.getElement().setId("pgu_geo_contacts_histochart");
+        barChart.getElement().setId("pgu_geo_contacts_barchart");
 
         worldMap.getElement().setId("pgu_geo_contacts_map_world");
         americasMap.getElement().setId("pgu_geo_contacts_map_americas");
@@ -88,7 +88,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         contactsNamesPanel.getElement().setId("pgu_geo_contacts_names_panel");
 
         pieChart.setVisible(true);
-        histoChart.setVisible(false);
+        barChart.setVisible(false);
 
         worldMap.setVisible(true);
         americasMap.setVisible(false);
@@ -248,6 +248,11 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         pieChart.setVisible(pieChartBtn.getValue());
     }
 
+    @UiHandler("barChartBtn")
+    public void clickBarChart(final ClickEvent e) {
+        barChart.setVisible(barChartBtn.getValue());
+    }
+
     @Override
     public void setConnections(final Connections connections) {
         /*
@@ -365,46 +370,43 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     private native void buildGeoChartsUI(ContactsViewImpl view) /*-{
         $wnd.console.log('build geo chart');
 
-        var google = $wnd.google;
+        var
+            google = $wnd.google
+          , data = $wnd.pgu_geo.contacts_table
+          , data_table = google.visualization.arrayToDataTable(data)
+        ;
 
-        var data = $wnd.pgu_geo.contacts_table;
-
-        var data_table = google.visualization.arrayToDataTable(data);
-
+        //
+        // geo charts
         // see options @ https://google-developers.appspot.com/chart/interactive/docs/gallery/geochart
         var maps = [
-            {id:'pgu_geo_contacts_map_world', options:{height:347}} // default width: 556px
-           ,{id:'pgu_geo_contacts_map_americas',options:{region:'019'}}
-           ,{id:'pgu_geo_contacts_map_europe',options:{region:150}}
-           ,{id:'pgu_geo_contacts_map_asia',options:{region:142}}
-           ,{id:'pgu_geo_contacts_map_oceania',options:{region:'009'}}
-           ,{id:'pgu_geo_contacts_map_africa',options:{region:'002'}}
+            {id:'pgu_geo_contacts_map_world', options: {height:347}} // default width: 556px
+           ,{id:'pgu_geo_contacts_map_americas', options: {region:'019'}}
+           ,{id:'pgu_geo_contacts_map_europe', options: {region:150}}
+           ,{id:'pgu_geo_contacts_map_asia', options: {region:142}}
+           ,{id:'pgu_geo_contacts_map_oceania', options: {region:'009'}}
+           ,{id:'pgu_geo_contacts_map_africa', options: {region:'002'}}
         ];
 
-        for (var i = 0, len = maps.length; i < len; i++) {
+        var click_region_handler = function(e) {
+            view.@pgu.client.contacts.ui.ContactsViewImpl::openAndShowContactNames(Ljava/lang/String;)(e.region);
+        };
 
+        for (var i = 0, len = maps.length; i < len; i++) {
             var map = maps[i];
 
-            var chart = new google.visualization.GeoChart($doc.getElementById(map.id));
-            chart.draw(data_table, map.options);
-
-            var clickRegionHandler = function(e) {
-                view.@pgu.client.contacts.ui.ContactsViewImpl::openAndShowContactNames(Ljava/lang/String;)(e.region);
-            };
+            var geo_chart = new google.visualization.GeoChart($doc.getElementById(map.id));
+            geo_chart.draw(data_table, map.options);
 
             // https://developers.google.com/chart/interactive/docs/events?hl=en
-            google.visualization.events.addListener(chart, 'regionClick', clickRegionHandler);
+            google.visualization.events.addListener(geo_chart, 'regionClick', click_region_handler);
         }
 
-        var pie_options = {title:'83 Contacts by countries',is3D:true};
-        var pie_chart = new google.visualization.PieChart($doc.getElementById('pgu_geo_contacts_piechart'));
-        pie_chart.draw(data_table, pie_options);
+        //
+        // charts
+        var click_chart_handler = function(the_chart) {
 
-        var clickPieHandler = function() {
-
-            $wnd.console.log('click pie');
-
-            var selection = pie_chart.getSelection();
+            var selection = the_chart.getSelection();
             if (selection.length != 1) {
                 $wnd.console.log('!! different of one ');
                 $wnd.console.log(selection);
@@ -412,16 +414,48 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
                 return;
             }
 
-            var item = selection[0];
-            var region = data_table.getFormattedValue(item.row, 0); // item.column
+            var
+                item = selection[0]
+              , region = data_table.getFormattedValue(item.row, 0) // item.column
+            ;
 
             view.@pgu.client.contacts.ui.ContactsViewImpl::openAndShowContactNames(Ljava/lang/String;)(region.toUpperCase());
         };
-        google.visualization.events.addListener(pie_chart, 'select', clickPieHandler);
 
-        // clickPieHandler = function(e) { pie_chart.getSelection().?? to get the country's code}
+        //
+        // pie chart
+        var
+            pie_options = {title:'83 Contacts by countries', is3D: true}
+          , pie_chart = new google.visualization.PieChart($doc.getElementById('pgu_geo_contacts_piechart'))
+        ;
 
-        // TODO PGU column or bar chart
+        pie_chart.draw(data_table, pie_options);
+
+        var click_pie_handler = function() {
+            return click_chart_handler(pie_chart);
+        }
+
+        google.visualization.events.addListener(pie_chart, 'select', click_pie_handler);
+
+        //
+        // bar chart
+        var
+            bar_options = {
+                  title: '83 Contacts by countries'
+                , vAxis: {title: 'Country'}
+                , width : 556
+                , height : 347
+            }
+          , bar_chart = new google.visualization.BarChart($doc.getElementById('pgu_geo_contacts_barchart'))
+        ;
+
+        bar_chart.draw(data_table, bar_options);
+
+        var click_bar_handler = function() {
+            return click_chart_handler(bar_chart);
+        }
+
+        google.visualization.events.addListener(bar_chart, 'select', click_bar_handler);
 
     }-*/;
 
@@ -435,7 +469,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         $wnd.console.log('initDataTable ');
 
         $wnd.pgu_geo.contacts_table = [];
-        $wnd.pgu_geo.contacts_table.push(['Country', 'Connections']);
+        $wnd.pgu_geo.contacts_table.push(['Country', 'Contacts']);
 
     }-*/;
 

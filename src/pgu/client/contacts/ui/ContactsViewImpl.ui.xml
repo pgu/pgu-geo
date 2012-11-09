@@ -29,11 +29,10 @@
                 </b:Popover>
                 <h2>83 Contacts</h2>
                 <!-- TODO rendre dynamic le h2 -->
-                <!-- TODO add un visualisation.histogramme -->
                 <h4>Choose the charts to show on your public profile</h4>
                 <p></p>
                 <b:CheckBox checked="true" ui:field="pieChartBtn">Pie chart</b:CheckBox>
-                <b:CheckBox ui:field="histoChartBtn">Histogramme</b:CheckBox>
+                <b:CheckBox ui:field="barChartBtn">Bar chart</b:CheckBox>
                 <p></p>
                 <b:CheckBox checked="true" ui:field="worldBtn">World</b:CheckBox>
                 <b:CheckBox ui:field="americasBtn">Americas</b:CheckBox>
@@ -45,7 +44,7 @@
         </g:HTMLPanel>
         <g:HTMLPanel addStyleNames="row-fluid">
             <g:HTMLPanel ui:field="pieChart" addStyleNames="{style.chartWell}" />
-            <g:HTMLPanel ui:field="histoChart" addStyleNames="{style.chartWell}" />
+            <g:HTMLPanel ui:field="barChart" addStyleNames="{style.chartWell}" />
             <g:HTMLPanel ui:field="worldMap" addStyleNames="{style.chartWell}" />
             <g:HTMLPanel ui:field="americasMap" addStyleNames="{style.chartWell}" />
             <g:HTMLPanel ui:field="europeMap" addStyleNames="{style.chartWell}" />
