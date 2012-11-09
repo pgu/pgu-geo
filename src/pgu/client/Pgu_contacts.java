@@ -13,6 +13,7 @@ import pgu.client.app.mvp.PublicClientFactoryImpl;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ChartsUtils;
 import pgu.client.app.utils.GeoUtils;
+import pgu.client.contacts.ui.ContactsViewImpl;
 import pgu.client.menu.MenuActivity;
 import pgu.client.menu.MenuView;
 import pgu.client.profile.ProfilePlace;
@@ -53,6 +54,7 @@ public class Pgu_contacts implements EntryPoint {
 
         if (!isPublic) {
             ProfileViewImpl.exportMethods();
+            ContactsViewImpl.exportMethods();
         }
 
     }

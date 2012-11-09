@@ -100,10 +100,15 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         eventBus.addHandler(ChartsApiIsAvailableEvent.TYPE, this);
 
         infoPop.setHeading("Charts");
-        infoPop.setText("<p>Clicking on the regions of the geocharts will display your contacts' names.</p><br/><p>Note that this information is only available here and <b>not</b> on your public profile.</p>");
+        infoPop.setText("<p>Clicking on the regions of the geocharts will display your contacts' names.</p>" + //
+                "<br/>" + //
+                "<p>Note that this information is only available here and <b>not</b> on your public profile.</p>");
 
         fusionInfoPop.setHeading("Fusion tables");
-        fusionInfoPop.setText("<p>How to create a fusion tables?</p><p>See this <a href=\"http://support.google.com/fusiontables/answer/184641/\" target=\"blank\">video tutorial</a> from google.</p>");
+        fusionInfoPop.setText("<p>How to create a fusion tables?</p>" + //
+                "<p>See this <a href=\"http://support.google.com/fusiontables/answer/184641/\" target=\"blank\">video tutorial</a> from google.</p>" + //
+                "<br/>" + //
+                "<p>You'll need this <a href=\"javascript:;\" onclick=\"pgu_geo.download_contacts_csv();false;\" >csv file</a>.</p>");
 
         region2names.put("FR", //
                 "Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, " //
@@ -119,6 +124,37 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         region2names.put("ES", "Toto toto, Titi titi, Toto toto, Titi titi, Toto toto, Titi titi, Toto toto, Titi titi, Toto toto, Titi titi");
 
     }
+
+    public static native void exportMethods() /*-{
+        $wnd.pgu_geo.download_contacts_csv = $entry(@pgu.client.contacts.ui.ContactsViewImpl::downloadContactsCsv());
+    }-*/;
+
+    public static void downloadContactsCsv() {
+
+        final StringBuilder csv = new StringBuilder();
+        csv.append("Country,Contacts number\r\n");
+
+        for (final Entry<String, Integer> e : code2weight.entrySet()) {
+            csv.append(e.getKey());
+            csv.append(",");
+            csv.append(e.getValue());
+            csv.append("\r\n");
+        }
+
+        downloadContactsCsvInternal(csv.toString());
+    }
+
+    public static native void downloadContactsCsvInternal(String csv) /*-{
+
+        if ($wnd.navigator.appName != 'Microsoft Internet Explorer') {
+            $wnd.open('data:text/csv;charset=utf-8,' + $wnd.encodeURI(csv), 'contacts.csv');
+
+        } else {
+            var popup = $wnd.open('','csv','');
+            popup.document.body.innerHTML = '<pre>' + csv + '</pre>';
+        }
+
+    }-*/;
 
     @UiHandler("infoPopBtn")
     public void clickInfoPop(final ClickEvent e) {
@@ -262,6 +298,8 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         barChart.setVisible(barChartBtn.getValue());
     }
 
+    static final HashMap<String, Integer> code2weight = new HashMap<String, Integer>();
+
     @Override
     public void setConnections(final Connections connections) {
         /*
@@ -300,7 +338,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
          */
         //        ca: 3,it: 1,cz: 2,us: 3,td: 1,gb: 4,au: 1,de: 3,fr: 38,ru: 1,ch: 13,es: 9,be: 1
 
-        final HashMap<String, Integer> code2weight = new HashMap<String, Integer>();
+        code2weight.clear();
         code2weight.put("ca", 3);
         code2weight.put("it", 1);
         code2weight.put("cz", 2);
@@ -361,7 +399,6 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         buildGeoChartsUI(this);
 
         // TODO PGU Oct 30
-        // help/info sur le link google pour en créer une
         // + proposer de telecharger un .csv avec ses données
     }
 
