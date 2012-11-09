@@ -9,7 +9,7 @@ import pgu.client.app.event.ChartsApiIsAvailableEvent;
 import pgu.client.app.utils.ChartsUtils;
 import pgu.client.contacts.ContactsPresenter;
 import pgu.client.contacts.ContactsView;
-import pgu.shared.dto.Connections;
+import pgu.shared.model.Country2ContactNumber;
 
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.CheckBox;
@@ -134,7 +134,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         final StringBuilder csv = new StringBuilder();
         csv.append("Country,Contacts number\r\n");
 
-        for (final Entry<String, Integer> e : code2weight.entrySet()) {
+        for (final Entry<String, Integer> e : code2contactNumber.entrySet()) {
             csv.append(e.getKey());
             csv.append(",");
             csv.append(e.getValue());
@@ -298,64 +298,19 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         barChart.setVisible(barChartBtn.getValue());
     }
 
-    static final HashMap<String, Integer> code2weight = new HashMap<String, Integer>();
+    static final HashMap<String, Integer> code2contactNumber = new HashMap<String, Integer>();
 
     @Override
-    public void setConnections(final Connections connections) {
-        /*
-        final ArrayList<Person> persons = connections.getValues();
-        if (persons == null) {
-            return;
-        }
+    public void showCharts(final Country2ContactNumber country2contactNumber) {
 
-        final HashMap<String, Integer> code2weight = new HashMap<String, Integer>();
-        for (final Person p : persons) {
+        final HashMap<String, Integer> contactNumbers = country2contactNumber.getCode2contactNumber();
 
-            final Location location = p.getLocation();
-            if (location == null) {
-                continue;
-            }
+        code2contactNumber.clear();
+        code2contactNumber.putAll(contactNumbers);
 
-            final Country country = location.getCountry();
-            if (country == null) {
-                continue;
-            }
-
-            final String code = country.getCode();
-            if (code == null) {
-                continue;
-            }
-
-            if (code2weight.containsKey(code)) {
-                final Integer count = code2weight.get(code) + 1;
-                code2weight.put(code, count);
-
-            } else {
-                code2weight.put(code, 1);
-            }
-        }
-        logResult(code2weight);
-         */
-        //        ca: 3,it: 1,cz: 2,us: 3,td: 1,gb: 4,au: 1,de: 3,fr: 38,ru: 1,ch: 13,es: 9,be: 1
-
-        code2weight.clear();
-        code2weight.put("ca", 3);
-        code2weight.put("it", 1);
-        code2weight.put("cz", 2);
-        code2weight.put("us", 3);
-        code2weight.put("td", 1);
-        code2weight.put("gb", 4);
-        code2weight.put("au", 1);
-        code2weight.put("de", 3);
-        code2weight.put("fr", 38);
-        code2weight.put("ru", 1);
-        code2weight.put("ch", 13);
-        code2weight.put("es", 9);
-        code2weight.put("be", 1);
         // TODO PGU Nov 6, 2012 to sort the data by an order for the pie and bar charts
-
         weight2codes.clear();
-        for (final Entry<String, Integer> e : code2weight.entrySet()) {
+        for (final Entry<String, Integer> e : contactNumbers.entrySet()) {
             final String countryCode = e.getKey();
             final Integer weight = e.getValue();
 

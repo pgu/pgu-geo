@@ -313,7 +313,7 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
     //
 
     @Override
-    public Connections fetchConnections(final AccessToken accessToken, final String userId) {
+    public Country2ContactNumber fetchConnections(final AccessToken accessToken, final String userId) {
 
         String jsonConnections = "";
 
@@ -329,7 +329,11 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         final ArrayList<Person> persons = connections.getValues();
 
         if (persons == null) {
-            return connections;
+            final Country2ContactNumber emptyResult = new Country2ContactNumber();
+            emptyResult.setUserId(userId);
+            emptyResult.setCode2contactNumber(new HashMap<String, Integer>());
+            emptyResult.setCode2locationNames(new HashMap<String, HashSet<String>>());
+            return emptyResult;
         }
 
         final HashMap<String, ArrayList<String>> code2contactNames = new HashMap<String, ArrayList<String>>();
@@ -375,7 +379,10 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         country2number.setCode2locationNames(code2locationNames);
         country2number.setCode2contactNumber(code2contactNumber);
 
-        return connections;
+        // TODO PGU this is the code for refresh from linkedin
+        // but when not from linkedin, make it from the DB
+
+        return country2number;
     }
 
     private void addLocationNameToCountry(final String code, final Location location, final HashMap<String,HashSet<String>> code2locationNames) {

@@ -1,8 +1,12 @@
 package pgu.client.contacts;
 
+import pgu.client.app.event.HideWaitingIndicatorEvent;
+import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
+import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.service.LinkedinServiceAsync;
+import pgu.shared.model.Country2ContactNumber;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -30,22 +34,21 @@ public class ContactsActivity extends AbstractActivity implements ContactsPresen
         view.setPresenter(this);
         panel.setWidget(view.asWidget());
 
-        view.setConnections(null);
+        u.fire(eventBus, new ShowWaitingIndicatorEvent());
 
-        //        u.fire(eventBus, new ShowWaitingIndicatorEvent());
+        linkedinService.fetchConnections( //
+                clientFactory.getAppState().getAccessToken() //
+                , clientFactory.getAppState().getUserId() //
+                , new AsyncCallbackApp<Country2ContactNumber>(eventBus) {
 
-        //        linkedinService.fetchConnections( //
-        //                clientFactory.getAppState().getAccessToken() //
-        //                , new AsyncCallbackApp<Connections>(eventBus) {
-        //
-        //                    @Override
-        //                    public void onSuccess(final Connections connections) {
-        //                        u.fire(eventBus, new HideWaitingIndicatorEvent());
-        //
-        //                        view.setConnections(connections);
-        //                    }
-        //
-        //                });
+                    @Override
+                    public void onSuccess(final Country2ContactNumber country2contactNumber) {
+                        u.fire(eventBus, new HideWaitingIndicatorEvent());
+
+                        view.showCharts(country2contactNumber);
+                    }
+
+                });
     }
 
 }
