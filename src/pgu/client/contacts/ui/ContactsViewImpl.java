@@ -397,9 +397,6 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
             }
         }
         buildGeoChartsUI(this);
-
-        // TODO PGU Oct 30
-        // + proposer de telecharger un .csv avec ses données
     }
 
     private native void buildGeoChartsUI(ContactsViewImpl view) /*-{
@@ -560,7 +557,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     @Override
     public void onChartsApiIsAvailable(final ChartsApiIsAvailableEvent event) {
         GWT.log("!!! ok, charts is ON, let's do some geocharts !!!");
-        // TODO PGU Oct 29, 2012 if isChartsApiAvailable is false, let's check that $wnd.google.visualization.GeoChart existe and update isChartsApiAvailable.
+
         if (hasToBuildGeoChartWhenReady) {
             buildGeoCharts();
         }
