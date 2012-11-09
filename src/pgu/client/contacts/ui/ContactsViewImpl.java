@@ -66,9 +66,9 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     @UiField
     HTML contactsNamesHtml;
     @UiField
-    Popover infoPop;
+    Popover infoPop, fusionInfoPop;
     @UiField
-    Button infoPopBtn;
+    Button infoPopBtn, fusionInfoPopBtn;
 
     private final HashMap<String, String> region2names = new HashMap<String, String>();
 
@@ -99,7 +99,11 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
 
         eventBus.addHandler(ChartsApiIsAvailableEvent.TYPE, this);
 
-        infoPop.setText("Clicking on the regions of the geocharts will display your contacts' names. Note that this information is only available here and not on your public profile.");
+        infoPop.setHeading("Charts");
+        infoPop.setText("<p>Clicking on the regions of the geocharts will display your contacts' names.</p><br/><p>Note that this information is only available here and <b>not</b> on your public profile.</p>");
+
+        fusionInfoPop.setHeading("Fusion tables");
+        fusionInfoPop.setText("<p>How to create a fusion tables?</p><p>See this <a href=\"http://support.google.com/fusiontables/answer/184641/\" target=\"blank\">video tutorial</a> from google.</p>");
 
         region2names.put("FR", //
                 "Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, " //
@@ -119,6 +123,11 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     @UiHandler("infoPopBtn")
     public void clickInfoPop(final ClickEvent e) {
         infoPop.toggle();
+    }
+
+    @UiHandler("fusionInfoPopBtn")
+    public void clickFusionInfoPop(final ClickEvent e) {
+        fusionInfoPop.toggle();
     }
 
     public void openAndShowContactNames(final String regionCode) {
@@ -347,23 +356,12 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
 
             for (final String countryCode : countryCodes) {
                 addDataRow(countryCode, weight);
-                //                new Timer() {
-                //
-                //                    @Override
-                //                    public void run() {
-                //                        // TODO PGU Aug 14, 2012 add a marker without geocoder for already existing connections
-                //                        addMarker(countryCode, Integer.toString(weight));
-                //                        GWT.log(countryCode + " is done");
-                //                    }
-                //
-                //                }.schedule(count * 1000);
-                //
-                //                count += 2;
             }
         }
         buildGeoChartsUI(this);
 
-        // TODO PGU Oct 30, 2012 proposer un chart avec des bars et combien de maps avec quel zone (une world, une europe, etc), enfin, l'url d'une fusion table. + help/info sur le link google pour en créer une
+        // TODO PGU Oct 30
+        // help/info sur le link google pour en créer une
         // + proposer de telecharger un .csv avec ses données
     }
 
