@@ -85,7 +85,7 @@ GoToProfileEvent.Handler //
             baseUrl = GWT.getHostPageBaseURL();
         }
 
-        final String publicUrl = baseUrl + "#PublicPlace:" + linkedInSuffix;
+        final String publicUrl = baseUrl + "#!public:" + linkedInSuffix;
         Window.open(publicUrl, "public_profile", null);
     }
 

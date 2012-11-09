@@ -80,7 +80,7 @@ public class Pgu_contacts implements EntryPoint {
     @Override
     public void onModuleLoad() {
 
-        final boolean isPublic = History.getToken().startsWith("PublicPlace");
+        final boolean isPublic = History.getToken().startsWith("!public");
 
         initJSContext(isPublic);
         initMVPContext(isPublic);
