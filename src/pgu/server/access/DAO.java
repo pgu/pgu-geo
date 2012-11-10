@@ -2,6 +2,7 @@ package pgu.server.access;
 
 import pgu.shared.dto.PublicProfile;
 import pgu.shared.model.Country2ContactNames;
+import pgu.shared.model.Country2ContactNumber;
 import pgu.shared.model.UserAndLocations;
 
 import com.googlecode.objectify.ObjectifyService;
@@ -14,6 +15,7 @@ public class DAO extends DAOBase {
         ObjectifyService.register(PublicProfile.class);
 
         ObjectifyService.register(Country2ContactNames.class);
+        ObjectifyService.register(Country2ContactNumber.class);
     }
 
 }

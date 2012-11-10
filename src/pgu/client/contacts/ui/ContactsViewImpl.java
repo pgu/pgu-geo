@@ -10,6 +10,7 @@ import pgu.client.app.utils.ChartsUtils;
 import pgu.client.contacts.ContactsView;
 import pgu.client.contacts.event.FetchContactsNamesEvent;
 import pgu.client.contacts.event.FetchContactsNamesEvent.Handler;
+import pgu.shared.model.Country2ContactNames;
 import pgu.shared.model.Country2ContactNumber;
 
 import com.github.gwtbootstrap.client.ui.Button;
@@ -74,8 +75,6 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     @UiField
     Button infoPopBtn, fusionInfoPopBtn;
 
-    private final HashMap<String, String> region2names = new HashMap<String, String>();
-
     public ContactsViewImpl(final EventBus eventBus) {
         initWidget(uiBinder.createAndBindUi(this));
 
@@ -116,19 +115,6 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
                 "<p>See this <a href=\"http://support.google.com/fusiontables/answer/184641/\" target=\"blank\">video tutorial</a> from google.</p>" + //
                 "<br/>" + //
                 "<p>You'll need this <a href=\"javascript:;\" onclick=\"pgu_geo.download_contacts_csv();false;\" >csv file</a>.</p>");
-
-        region2names.put("FR", //
-                "Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, " //
-                + "Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, " //
-                + "Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, " //
-                + "Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, " //
-                + "Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, " //
-                + "Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, " //
-                + "Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, " //
-                + "Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne, Alice Alicia, Bruno Bourne" //
-                );
-
-        region2names.put("ES", "Toto toto, Titi titi, Toto toto, Titi titi, Toto toto, Titi titi, Toto toto, Titi titi, Toto toto, Titi titi");
 
     }
 
@@ -174,23 +160,17 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     }
 
     public void openAndShowContactNames(final String regionCode) {
+        final String contactsNames = country2contactNames.get(regionCode);
 
-        final String contactsNames = region2names.get(regionCode);
+        if (contactsNames != null) {
+            contactsNamesHtml.setHTML(contactsNames);
+            showContactsNamesPanel();
 
-        if (contactsNames == null) {
+        } else {
             hideContactsNamesPanel();
             contactsNamesHtml.setHTML("");
-            return;
-        }
 
-        final StringBuilder sb = new StringBuilder();
-        for (final String contactName : contactsNames.split(", ")) {
-            sb.append(contactName);
-            sb.append(", ");
         }
-
-        contactsNamesHtml.setHTML(sb.toString());
-        showContactsNamesPanel();
     }
 
     @UiHandler("closeContactsNamesPanel")
@@ -303,11 +283,21 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     @Override
     public void showCharts(final Country2ContactNumber country2contactNumber) {
 
-        final HashMap<String, Integer> contactNumbers = country2contactNumber.getCode2contactNumber();
+        GWT.log(" --- numbers ");
+        GWT.log(country2contactNumber.getCode2contactNumber());
+        // [INFO] [pgu_contacts] - {"ca":3,"it":1,"cz":2,"us":3,"td":1,"gb":4,"au":1,"de":3,"fr":38,"ru":1,"ch":13,"es":9,"be":1}
+
+        GWT.log(" ---  locations");
+        GWT.log(country2contactNumber.getCode2locationNames());
+        // [INFO] [pgu_contacts] - {"ca":[" Canada Area"],"it":[" Italy"],"cz":["Czech Republic"," The Capital"],"us":["Greater Seattle Area"," Ohio Area"],"td":["Chad"],"gb":[" United Kingdom"],"au":[" Australia"],"de":[" Germany","Germany"],"fr":["France"," France"],"ru":["Russian Federation"],"ch":[" Switzerland"],"es":[" Spain"],"be":[" Belgium"]}
+
+        //        final HashMap<String, Integer> contactNumbers = country2contactNumber.getCode2contactNumber();
+        final HashMap<String, Integer> contactNumbers = new HashMap<String, Integer>();
 
         code2contactNumber.clear();
         code2contactNumber.putAll(contactNumbers);
 
+        // TODO PGU Nov 6, 2012 use the country's label
         // TODO PGU Nov 6, 2012 to sort the data by an order for the pie and bar charts
         weight2codes.clear();
         for (final Entry<String, Integer> e : contactNumbers.entrySet()) {
@@ -377,7 +367,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         ];
 
         var click_region_handler = function(e) {
-            view.@pgu.client.contacts.ui.ContactsViewImpl::openAndShowContactNames(Ljava/lang/String;)(e.region);
+            view.@pgu.client.contacts.ui.ContactsViewImpl::openAndShowContactNames(Ljava/lang/String;)(e.region.toLowerCase());
         };
 
         for (var i = 0, len = maps.length; i < len; i++) {
@@ -407,7 +397,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
               , region = data_table.getFormattedValue(item.row, 0) // item.column
             ;
 
-            view.@pgu.client.contacts.ui.ContactsViewImpl::openAndShowContactNames(Ljava/lang/String;)(region.toUpperCase());
+            view.@pgu.client.contacts.ui.ContactsViewImpl::openAndShowContactNames(Ljava/lang/String;)(region.toLowerCase());
         };
 
         //
@@ -496,6 +486,43 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     @Override
     public HandlerRegistration addFetchContactsNamesHandler(final Handler handler) {
         return addHandler(handler, FetchContactsNamesEvent.TYPE);
+    }
+
+    private final HashMap<String, String> country2contactNames = new HashMap<String, String>();
+
+    @Override
+    public void setContactNames(final Country2ContactNames names) {
+        country2contactNames.clear();
+
+        GWT.log(" ----- contact names");
+        GWT.log(names.getValues());
+        // [INFO] [pgu_contacts] - {"it":["Rea Turohan"],"ca":["Quang-Khai Pham","Maxime Terrettaz","Orchidée Vaussard"],"cz":["Silvie Juríková","Zdenek Mikovec"],"us":["Jessica Gross","Michael Hammond","Teresa Loy"],"unknown":["","","",""],"td":["Dounia Keda"],"gb":["James Fairbairn","Pierre Mage","Ferghal McTaggart","Sayaka Yamaichi"],"au":["Charlotte PINEAU"],"de":["Annabella Da Encarnacao","Elmar Klameth","antje peter"],"fr":["David Aboulkheir","Yasmine Aite","Celine Briand","Amelia Carrera","Alexis Davoux","Salvador Diaz","Emmanuel Duchasténier","Alain Escaffre","Geoffrey Garnotel","Didier Girard","Pierre Gosselin","bruno guedes","Yifeng HE","Olivier Hedin","Sylvie Belze","Elie KORKMAZ","jeff LE BERRE","Xavier Lefevre","Jean-Gabriel LIMBOURG","Jérôme Louvel","Céline Louvet","Amandine Marousez","Sébastien Mazzon","Jean-Baptiste Monville","Sebastien Morhan","Audrey Neveu","Emma Nieto","Erell OLIVO","Aurélien Pelletier","Christophe PHU","Nadia Sol","Fabrice Sznajderman","Slim Tebourbi","Axel Tessier","Sovanneary Than","Thierry TREPIED","Francky Trichet","Francois Wauquier"],"ru":["Iya Bordyuzhenko"],"ch":["Reynald Borer","Pierre Dalmaz","Michel Dommen","Samir Guesmia","Manuel Hitz","Laurent Kloetzer","Vincent Larchet","Emmanuel Mayer","Marcos Perez, PMP","Nicolas Rémond","Daniel Rodríguez Postigo","Sébastien Treyvaud","Joseba Urzelai"],"es":["Ainhoa Apesteguía","Jesus Cobo","Guillermo Estévez","Eduardo Haro","Mónica Iglesias Sanzo","Alberto Laguarta Calvo","César Larraga García","Pedro Lindsey Eguiguren","Lucía Nieto Tejada"],"be":["Sara Martín de la Fuente"]}
+
+        //        for (final Entry<String, ArrayList<String>> e : names.getValues().entrySet()) {
+        //
+        //            final String country = e.getKey();
+        //            final ArrayList<String> contactNames = e.getValue();
+        //
+        //            final String htmlNames = formatContactNames(contactNames);
+        //
+        //            country2contactNames.put(country, htmlNames);
+        //        }
+    }
+
+    private String formatContactNames(final ArrayList<String> contactNames) {
+        final StringBuilder html = new StringBuilder();
+
+        for (final String name : contactNames) {
+            html.append(name);
+            html.append(", ");
+        }
+
+        if (html.length() > 0) { // remove trailing ', '
+            html.deleteCharAt(html.length() -1);
+            html.deleteCharAt(html.length() -1);
+        }
+
+        return html.toString();
     }
 
 }

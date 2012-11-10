@@ -331,8 +331,6 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         if (persons == null) {
             final Country2ContactNumber emptyResult = new Country2ContactNumber();
             emptyResult.setUserId(userId);
-            emptyResult.setCode2contactNumber(new HashMap<String, Integer>());
-            emptyResult.setCode2locationNames(new HashMap<String, HashSet<String>>());
             return emptyResult;
         }
 
@@ -369,15 +367,18 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
             addLocationNameToCountry(code, location, code2locationNames);
         }
 
+        final Gson gson = new Gson();
+
         final Country2ContactNames country2contactNames = new Country2ContactNames();
         country2contactNames.setUserId(userId);
-        country2contactNames.setValues(code2contactNames);
+
+        country2contactNames.setValues(gson.toJson(code2contactNames));
         dao.ofy().async().put(country2contactNames);
 
         final Country2ContactNumber country2number = new Country2ContactNumber();
         country2number.setUserId(userId);
-        country2number.setCode2locationNames(code2locationNames);
-        country2number.setCode2contactNumber(code2contactNumber);
+        country2number.setCode2locationNames(gson.toJson(code2locationNames));
+        country2number.setCode2contactNumber(gson.toJson(code2contactNumber));
 
         // TODO PGU this is the code for refresh from linkedin
         // but when not from linkedin, make it from the DB
@@ -395,6 +396,8 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
                 // fail silently
             }
         }
+
+        locationName = locationName.trim();
 
         if (code2locationNames.containsKey(code)) {
             code2locationNames.get(code).add(locationName);
@@ -646,7 +649,6 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
 
         final Country2ContactNames emptyNames = new Country2ContactNames();
         emptyNames.setUserId(userId);
-        emptyNames.setValues(new HashMap<String, ArrayList<String>>());
         return emptyNames;
     }
 

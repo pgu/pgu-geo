@@ -1,9 +1,5 @@
 package pgu.shared.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import javax.persistence.Embedded;
 import javax.persistence.Id;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -13,15 +9,13 @@ public class Country2ContactNames implements IsSerializable {
     @Id
     private String userId;
 
-    @Embedded
-    private HashMap<String, ArrayList<String>> values;
+    private String values;
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + (userId == null ? 0 : userId.hashCode());
-        result = prime * result + (values == null ? 0 : values.hashCode());
         return result;
     }
 
@@ -44,13 +38,6 @@ public class Country2ContactNames implements IsSerializable {
         } else if (!userId.equals(other.userId)) {
             return false;
         }
-        if (values == null) {
-            if (other.values != null) {
-                return false;
-            }
-        } else if (!values.equals(other.values)) {
-            return false;
-        }
         return true;
     }
 
@@ -67,11 +54,11 @@ public class Country2ContactNames implements IsSerializable {
         this.userId = userId;
     }
 
-    public HashMap<String, ArrayList<String>> getValues() {
+    public String getValues() {
         return values;
     }
 
-    public void setValues(final HashMap<String, ArrayList<String>> values) {
+    public void setValues(final String values) {
         this.values = values;
     }
 

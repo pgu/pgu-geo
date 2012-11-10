@@ -78,7 +78,7 @@ FetchContactsNamesEvent.Handler //
 
                     @Override
                     public void onSuccess(final Country2ContactNames result) {
-                        // TODO PGU Nov 10, 2012 view.setContactNames(result);
+                        view.setContactNames(result);
                     }
 
                 }
