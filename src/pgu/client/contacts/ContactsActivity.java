@@ -1,18 +1,24 @@
 package pgu.client.contacts;
 
+import java.util.ArrayList;
+
 import pgu.client.app.event.HideWaitingIndicatorEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
+import pgu.client.contacts.event.FetchContactsNamesEvent;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.shared.model.Country2ContactNumber;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 
-public class ContactsActivity extends AbstractActivity {
+public class ContactsActivity extends AbstractActivity implements //
+FetchContactsNamesEvent.Handler //
+{
 
     private final ClientFactory        clientFactory;
     private final ContactsView         view;
@@ -21,6 +27,8 @@ public class ContactsActivity extends AbstractActivity {
     private final ClientUtils          u = new ClientUtils();
 
     private EventBus                   eventBus;
+
+    private final ArrayList<HandlerRegistration> hRegs = new ArrayList<HandlerRegistration>();
 
     public ContactsActivity(final ContactsPlace place, final ClientFactory clientFactory) {
         this.clientFactory = clientFactory;
@@ -31,6 +39,10 @@ public class ContactsActivity extends AbstractActivity {
     @Override
     public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
         this.eventBus = eventBus;
+
+        hRegs.clear();
+        hRegs.add(view.addFetchContactsNamesHandler(this));
+
         panel.setWidget(view.asWidget());
 
         u.fire(eventBus, new ShowWaitingIndicatorEvent());
@@ -55,6 +67,24 @@ public class ContactsActivity extends AbstractActivity {
                     }
 
                 });
+    }
+
+    @Override
+    public void onFetchContactsNames(final FetchContactsNamesEvent event) {
+        // TODO PGU Nov 10, 2012 linkedService.fetchContactsNames(userId, new AsyncCallback<Country2ContactNames>);
+    }
+
+    @Override
+    public void onStop() {
+
+        for (HandlerRegistration hReg : hRegs) {
+            hReg.removeHandler();
+            hReg = null;
+        }
+
+        hRegs.clear();
+
+        super.onStop();
     }
 
 }

@@ -8,6 +8,8 @@ import java.util.TreeMap;
 import pgu.client.app.event.ChartsApiIsAvailableEvent;
 import pgu.client.app.utils.ChartsUtils;
 import pgu.client.contacts.ContactsView;
+import pgu.client.contacts.event.FetchContactsNamesEvent;
+import pgu.client.contacts.event.FetchContactsNamesEvent.Handler;
 import pgu.shared.model.Country2ContactNumber;
 
 import com.github.gwtbootstrap.client.ui.Button;
@@ -32,6 +34,7 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.event.shared.EventBus;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 
 public class ContactsViewImpl extends Composite implements ContactsView, ChartsApiIsAvailableEvent.Handler {
 
@@ -332,8 +335,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
 
         }
 
-        // TODO PGU Nov 10, 2012 send an event to get the names associated to the countries
-
+        fireEvent(new FetchContactsNamesEvent());
     }
 
     private final TreeMap<Integer, ArrayList<String>> weight2codes = new TreeMap<Integer, ArrayList<String>>();
@@ -489,6 +491,11 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     public void showChartsPanel() {
         loadingPanel.setVisible(false);
         chartsPanel.setVisible(true);
+    }
+
+    @Override
+    public HandlerRegistration addFetchContactsNamesHandler(final Handler handler) {
+        return addHandler(handler, FetchContactsNamesEvent.TYPE);
     }
 
 }
