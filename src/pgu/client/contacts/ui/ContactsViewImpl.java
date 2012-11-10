@@ -320,7 +320,6 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
             hasToBuildGeoChartWhenReady = true;
 
         } else {
-            hasToBuildGeoChartWhenReady = false;
             buildGeoCharts();
 
         }
@@ -467,6 +466,8 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         GWT.log("!!! ok, charts is ON, let's do some geocharts !!!");
 
         if (hasToBuildGeoChartWhenReady) {
+            hasToBuildGeoChartWhenReady = false;
+
             buildGeoCharts();
         }
     }
@@ -494,35 +495,34 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     public void setContactNames(final Country2ContactNames names) {
         country2contactNames.clear();
 
-        GWT.log(" ----- contact names");
-        GWT.log(names.getValues());
-        // [INFO] [pgu_contacts] - {"it":["Rea Turohan"],"ca":["Quang-Khai Pham","Maxime Terrettaz","Orchidée Vaussard"],"cz":["Silvie Juríková","Zdenek Mikovec"],"us":["Jessica Gross","Michael Hammond","Teresa Loy"],"unknown":["","","",""],"td":["Dounia Keda"],"gb":["James Fairbairn","Pierre Mage","Ferghal McTaggart","Sayaka Yamaichi"],"au":["Charlotte PINEAU"],"de":["Annabella Da Encarnacao","Elmar Klameth","antje peter"],"fr":["David Aboulkheir","Yasmine Aite","Celine Briand","Amelia Carrera","Alexis Davoux","Salvador Diaz","Emmanuel Duchasténier","Alain Escaffre","Geoffrey Garnotel","Didier Girard","Pierre Gosselin","bruno guedes","Yifeng HE","Olivier Hedin","Sylvie Belze","Elie KORKMAZ","jeff LE BERRE","Xavier Lefevre","Jean-Gabriel LIMBOURG","Jérôme Louvel","Céline Louvet","Amandine Marousez","Sébastien Mazzon","Jean-Baptiste Monville","Sebastien Morhan","Audrey Neveu","Emma Nieto","Erell OLIVO","Aurélien Pelletier","Christophe PHU","Nadia Sol","Fabrice Sznajderman","Slim Tebourbi","Axel Tessier","Sovanneary Than","Thierry TREPIED","Francky Trichet","Francois Wauquier"],"ru":["Iya Bordyuzhenko"],"ch":["Reynald Borer","Pierre Dalmaz","Michel Dommen","Samir Guesmia","Manuel Hitz","Laurent Kloetzer","Vincent Larchet","Emmanuel Mayer","Marcos Perez, PMP","Nicolas Rémond","Daniel Rodríguez Postigo","Sébastien Treyvaud","Joseba Urzelai"],"es":["Ainhoa Apesteguía","Jesus Cobo","Guillermo Estévez","Eduardo Haro","Mónica Iglesias Sanzo","Alberto Laguarta Calvo","César Larraga García","Pedro Lindsey Eguiguren","Lucía Nieto Tejada"],"be":["Sara Martín de la Fuente"]}
+        // {"it":["Rea Turohan"],"ca":["Quang-Khai Pham","Maxime Terrettaz","Orchidée Vaussard"],"cz":["Silvie Juríková","Zdenek Mikovec"],"us":["Jessica Gross","Michael Hammond","Teresa Loy"],"unknown":["","","",""],"td":["Dounia Keda"],"gb":["James Fairbairn","Pierre Mage","Ferghal McTaggart","Sayaka Yamaichi"],"au":["Charlotte PINEAU"],"de":["Annabella Da Encarnacao","Elmar Klameth","antje peter"],"fr":["David Aboulkheir","Yasmine Aite","Celine Briand","Amelia Carrera","Alexis Davoux","Salvador Diaz","Emmanuel Duchasténier","Alain Escaffre","Geoffrey Garnotel","Didier Girard","Pierre Gosselin","bruno guedes","Yifeng HE","Olivier Hedin","Sylvie Belze","Elie KORKMAZ","jeff LE BERRE","Xavier Lefevre","Jean-Gabriel LIMBOURG","Jérôme Louvel","Céline Louvet","Amandine Marousez","Sébastien Mazzon","Jean-Baptiste Monville","Sebastien Morhan","Audrey Neveu","Emma Nieto","Erell OLIVO","Aurélien Pelletier","Christophe PHU","Nadia Sol","Fabrice Sznajderman","Slim Tebourbi","Axel Tessier","Sovanneary Than","Thierry TREPIED","Francky Trichet","Francois Wauquier"],"ru":["Iya Bordyuzhenko"],"ch":["Reynald Borer","Pierre Dalmaz","Michel Dommen","Samir Guesmia","Manuel Hitz","Laurent Kloetzer","Vincent Larchet","Emmanuel Mayer","Marcos Perez, PMP","Nicolas Rémond","Daniel Rodríguez Postigo","Sébastien Treyvaud","Joseba Urzelai"],"es":["Ainhoa Apesteguía","Jesus Cobo","Guillermo Estévez","Eduardo Haro","Mónica Iglesias Sanzo","Alberto Laguarta Calvo","César Larraga García","Pedro Lindsey Eguiguren","Lucía Nieto Tejada"],"be":["Sara Martín de la Fuente"]}
 
-        //        for (final Entry<String, ArrayList<String>> e : names.getValues().entrySet()) {
-        //
-        //            final String country = e.getKey();
-        //            final ArrayList<String> contactNames = e.getValue();
-        //
-        //            final String htmlNames = formatContactNames(contactNames);
-        //
-        //            country2contactNames.put(country, htmlNames);
-        //        }
+        parseContactNames(this, names.getValues());
     }
 
-    private String formatContactNames(final ArrayList<String> contactNames) {
-        final StringBuilder html = new StringBuilder();
+    private native void parseContactNames(ContactsViewImpl view, String json) /*-{
 
-        for (final String name : contactNames) {
-            html.append(name);
-            html.append(", ");
+        var country2contacts = JSON.parse(json);
+
+        for ( var country in country2contacts) {
+            if ('__gwt_ObjectId' === country) {
+                continue;
+            }
+
+            if (country2contacts.hasOwnProperty(country)) {
+                var contacts = country2contacts[country];
+                var html_names = contacts.join(', ');
+
+                view.@pgu.client.contacts.ui.ContactsViewImpl::addContactsNames(Ljava/lang/String;Ljava/lang/String;)( //
+                country, html_names);
+            }
         }
 
-        if (html.length() > 0) { // remove trailing ', '
-            html.deleteCharAt(html.length() -1);
-            html.deleteCharAt(html.length() -1);
-        }
 
-        return html.toString();
+    }-*/;
+
+    public void addContactsNames(final String country, final String htmlNames) {
+        country2contactNames.put(country, htmlNames);
     }
 
 }
