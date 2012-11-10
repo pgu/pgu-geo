@@ -127,7 +127,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         final StringBuilder csv = new StringBuilder();
         csv.append("Country,Contacts number\r\n");
 
-        for (final Entry<String, Integer> e : code2contactNumber.entrySet()) {
+        for (final Entry<String, Integer> e : country2contactNumber.entrySet()) {
             csv.append(e.getKey());
             csv.append(",");
             csv.append(e.getValue());
@@ -278,29 +278,24 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         barChart.setVisible(barChartBtn.getValue());
     }
 
-    static final HashMap<String, Integer> code2contactNumber = new HashMap<String, Integer>();
+    private static final HashMap<String, Integer> country2contactNumber = new HashMap<String, Integer>();
+    private final HashMap<String, String> country2locationNames = new HashMap<String, String>();
 
     @Override
-    public void showCharts(final Country2ContactNumber country2contactNumber) {
+    public void showCharts(final Country2ContactNumber country2contact) {
 
-        GWT.log(" --- numbers ");
-        GWT.log(country2contactNumber.getCode2contactNumber());
-        // [INFO] [pgu_contacts] - {"ca":3,"it":1,"cz":2,"us":3,"td":1,"gb":4,"au":1,"de":3,"fr":38,"ru":1,"ch":13,"es":9,"be":1}
+        country2contactNumber.clear();
+        parseContactNumber(this, country2contact.getCode2contactNumber());
 
-        GWT.log(" ---  locations");
-        GWT.log(country2contactNumber.getCode2locationNames());
-        // [INFO] [pgu_contacts] - {"ca":[" Canada Area"],"it":[" Italy"],"cz":["Czech Republic"," The Capital"],"us":["Greater Seattle Area"," Ohio Area"],"td":["Chad"],"gb":[" United Kingdom"],"au":[" Australia"],"de":[" Germany","Germany"],"fr":["France"," France"],"ru":["Russian Federation"],"ch":[" Switzerland"],"es":[" Spain"],"be":[" Belgium"]}
-
-        //        final HashMap<String, Integer> contactNumbers = country2contactNumber.getCode2contactNumber();
-        final HashMap<String, Integer> contactNumbers = new HashMap<String, Integer>();
-
-        code2contactNumber.clear();
-        code2contactNumber.putAll(contactNumbers);
+        country2locationNames.clear();
+        parseLocationNames(this, country2contact.getCode2locationNames());
 
         // TODO PGU Nov 6, 2012 use the country's label
         // TODO PGU Nov 6, 2012 to sort the data by an order for the pie and bar charts
+
         weight2codes.clear();
-        for (final Entry<String, Integer> e : contactNumbers.entrySet()) {
+        for (final Entry<String, Integer> e : country2contactNumber.entrySet()) {
+
             final String countryCode = e.getKey();
             final Integer weight = e.getValue();
 
@@ -325,6 +320,55 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         }
 
         fireEvent(new FetchContactsNamesEvent());
+    }
+
+    private native void parseLocationNames(final ContactsViewImpl view, final String json) /*-{
+        // {"ca":["Canada Area"],"it":["Italy"],"us":["Ohio","California"]}
+
+        var country2locations = JSON.parse(json);
+
+        for ( var country in country2locations) {
+            if ('__gwt_ObjectId' === country) {
+                continue;
+            }
+
+            if (country2locations.hasOwnProperty(country)) {
+                var locations = country2locations[country];
+                var html_locations = locations.join(', ');
+
+                view.@pgu.client.contacts.ui.ContactsViewImpl::addLocationsNames(Ljava/lang/String;Ljava/lang/String;)( //
+                country, html_locations);
+            }
+        }
+
+    }-*/;
+
+    public void addLocationsNames(final String country, final String htmlLocations) {
+        country2locationNames.put(country, htmlLocations);
+    }
+
+    private native void parseContactNumber(final ContactsViewImpl view, final String json) /*-{
+        // {"ca":3,"it":1,"cz":2,"us":3,"td":1,"gb":4,"au":1,"de":3,"fr":38,"ru":1,"ch":13,"es":9,"be":1}
+
+        var country2number = JSON.parse(json);
+
+        for ( var country in country2number) {
+            if ('__gwt_ObjectId' === country) {
+                continue;
+            }
+
+            if (country2number.hasOwnProperty(country)) {
+                var number = country2number[country];
+
+                view.@pgu.client.contacts.ui.ContactsViewImpl::addContactsNumber(Ljava/lang/String;I)( //
+                country, number);
+            }
+        }
+
+    }-*/;
+
+    public void addContactsNumber(final String country, final int number) {
+        country2contactNumber.put(country, number);
     }
 
     private final TreeMap<Integer, ArrayList<String>> weight2codes = new TreeMap<Integer, ArrayList<String>>();
@@ -495,12 +539,14 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     public void setContactNames(final Country2ContactNames names) {
         country2contactNames.clear();
 
-        // {"it":["Rea Turohan"],"ca":["Quang-Khai Pham","Maxime Terrettaz","Orchidée Vaussard"],"cz":["Silvie Juríková","Zdenek Mikovec"],"us":["Jessica Gross","Michael Hammond","Teresa Loy"],"unknown":["","","",""],"td":["Dounia Keda"],"gb":["James Fairbairn","Pierre Mage","Ferghal McTaggart","Sayaka Yamaichi"],"au":["Charlotte PINEAU"],"de":["Annabella Da Encarnacao","Elmar Klameth","antje peter"],"fr":["David Aboulkheir","Yasmine Aite","Celine Briand","Amelia Carrera","Alexis Davoux","Salvador Diaz","Emmanuel Duchasténier","Alain Escaffre","Geoffrey Garnotel","Didier Girard","Pierre Gosselin","bruno guedes","Yifeng HE","Olivier Hedin","Sylvie Belze","Elie KORKMAZ","jeff LE BERRE","Xavier Lefevre","Jean-Gabriel LIMBOURG","Jérôme Louvel","Céline Louvet","Amandine Marousez","Sébastien Mazzon","Jean-Baptiste Monville","Sebastien Morhan","Audrey Neveu","Emma Nieto","Erell OLIVO","Aurélien Pelletier","Christophe PHU","Nadia Sol","Fabrice Sznajderman","Slim Tebourbi","Axel Tessier","Sovanneary Than","Thierry TREPIED","Francky Trichet","Francois Wauquier"],"ru":["Iya Bordyuzhenko"],"ch":["Reynald Borer","Pierre Dalmaz","Michel Dommen","Samir Guesmia","Manuel Hitz","Laurent Kloetzer","Vincent Larchet","Emmanuel Mayer","Marcos Perez, PMP","Nicolas Rémond","Daniel Rodríguez Postigo","Sébastien Treyvaud","Joseba Urzelai"],"es":["Ainhoa Apesteguía","Jesus Cobo","Guillermo Estévez","Eduardo Haro","Mónica Iglesias Sanzo","Alberto Laguarta Calvo","César Larraga García","Pedro Lindsey Eguiguren","Lucía Nieto Tejada"],"be":["Sara Martín de la Fuente"]}
-
         parseContactNames(this, names.getValues());
+
+        // TODO PGU Nov 10, 2012 montrer les unknown country as well :-)
     }
 
     private native void parseContactNames(ContactsViewImpl view, String json) /*-{
+
+        // {"it":["Rea Turohan"],"ca":["Quang-Khai Pham","Maxime Terrettaz","Orchidée Vaussard"]}
 
         var country2contacts = JSON.parse(json);
 
