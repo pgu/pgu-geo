@@ -36,6 +36,11 @@ public class ContactsActivity extends AbstractActivity implements ContactsPresen
 
         u.fire(eventBus, new ShowWaitingIndicatorEvent());
 
+        // TODO PGU Nov 10, 2012 get the profile id if not set
+        if (clientFactory.getAppState().getUserId() == null) {
+            clientFactory.getAppState().setUserId("Qjrp4c3fc3");
+        }
+
         linkedinService.fetchConnections( //
                 clientFactory.getAppState().getAccessToken() //
                 , clientFactory.getAppState().getUserId() //

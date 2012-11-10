@@ -3,6 +3,7 @@ package pgu.shared.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.persistence.Embedded;
 import javax.persistence.Id;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -12,6 +13,7 @@ public class Country2ContactNames implements IsSerializable {
     @Id
     private String userId;
 
+    @Embedded
     private HashMap<String, ArrayList<String>> values;
 
     @Override

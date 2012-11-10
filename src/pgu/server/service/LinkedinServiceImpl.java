@@ -450,7 +450,9 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
             name.append(" ");
         }
 
-        name.deleteCharAt(name.length() - 1); // remove trailing whitespace
+        if (name.length() > 0) {
+            name.deleteCharAt(name.length() - 1); // remove trailing whitespace
+        }
 
         return name.toString();
     }
