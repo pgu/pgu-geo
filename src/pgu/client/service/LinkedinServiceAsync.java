@@ -4,6 +4,7 @@ import pgu.shared.dto.AccessToken;
 import pgu.shared.dto.OauthAuthorizationStart;
 import pgu.shared.dto.Profile;
 import pgu.shared.dto.RequestToken;
+import pgu.shared.model.Country2ContactNames;
 import pgu.shared.model.Country2ContactNumber;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -22,5 +23,7 @@ public interface LinkedinServiceAsync {
 
     void saveLocations(String userId, final String items2locations, final String referentialLocations,
             AsyncCallback<Void> callbackApp);
+
+    void fetchContactsNames(String userId, AsyncCallback<Country2ContactNames> asyncCallbackApp);
 
 }

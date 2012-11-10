@@ -635,4 +635,19 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
 
     }
 
+    @Override
+    public Country2ContactNames fetchContactsNames(final String userId) {
+
+        final Country2ContactNames names = dao.ofy().get(Country2ContactNames.class, userId);
+
+        if (names != null) {
+            return names;
+        }
+
+        final Country2ContactNames emptyNames = new Country2ContactNames();
+        emptyNames.setUserId(userId);
+        emptyNames.setValues(new HashMap<String, ArrayList<String>>());
+        return emptyNames;
+    }
+
 }

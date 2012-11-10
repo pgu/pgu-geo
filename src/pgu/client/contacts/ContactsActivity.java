@@ -9,6 +9,7 @@ import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.contacts.event.FetchContactsNamesEvent;
 import pgu.client.service.LinkedinServiceAsync;
+import pgu.shared.model.Country2ContactNames;
 import pgu.shared.model.Country2ContactNumber;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -71,7 +72,17 @@ FetchContactsNamesEvent.Handler //
 
     @Override
     public void onFetchContactsNames(final FetchContactsNamesEvent event) {
-        // TODO PGU Nov 10, 2012 linkedService.fetchContactsNames(userId, new AsyncCallback<Country2ContactNames>);
+        linkedinService.fetchContactsNames( //
+                clientFactory.getAppState().getUserId(), //
+                new AsyncCallbackApp<Country2ContactNames>(eventBus) {
+
+                    @Override
+                    public void onSuccess(final Country2ContactNames result) {
+                        // TODO PGU Nov 10, 2012 view.setContactNames(result);
+                    }
+
+                }
+                );
     }
 
     @Override
