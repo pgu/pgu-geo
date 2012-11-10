@@ -12,7 +12,7 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-public class ContactsActivity extends AbstractActivity implements ContactsPresenter {
+public class ContactsActivity extends AbstractActivity {
 
     private final ClientFactory        clientFactory;
     private final ContactsView         view;
@@ -31,7 +31,6 @@ public class ContactsActivity extends AbstractActivity implements ContactsPresen
     @Override
     public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
         this.eventBus = eventBus;
-        view.setPresenter(this);
         panel.setWidget(view.asWidget());
 
         u.fire(eventBus, new ShowWaitingIndicatorEvent());

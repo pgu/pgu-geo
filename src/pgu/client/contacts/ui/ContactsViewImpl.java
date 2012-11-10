@@ -7,7 +7,6 @@ import java.util.TreeMap;
 
 import pgu.client.app.event.ChartsApiIsAvailableEvent;
 import pgu.client.app.utils.ChartsUtils;
-import pgu.client.contacts.ContactsPresenter;
 import pgu.client.contacts.ContactsView;
 import pgu.shared.model.Country2ContactNumber;
 
@@ -205,13 +204,6 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         $wnd.$('#pgu_geo_contacts_names_panel').collapse('hide');
     }-*/;
 
-    private ContactsPresenter presenter;
-
-    @Override
-    public void setPresenter(final ContactsPresenter presenter) {
-        this.presenter = presenter;
-    }
-
     @UiHandler("fusionBox")
     public void keydownOnAddFusionTable(final KeyDownEvent event) {
 
@@ -339,6 +331,8 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
             buildGeoCharts();
 
         }
+
+        // TODO PGU Nov 10, 2012 send an event to get the names associated to the countries
 
     }
 
@@ -476,44 +470,6 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         GWT.log(sb.toString());
     }
 
-    public static native void addMarker(String countryCode, String weight) /*-{
-
-        var
-            geocoder = @pgu.client.app.utils.GeocoderUtils::geocoder()()
-		  , map = @pgu.client.profile.ui.ProfileUtils::profileMap()()
-		  , google = @pgu.client.app.utils.GoogleUtils::google()()
-		;
-
-		geocoder.geocode(
-						{
-							'address' : 'country: ' + countryCode
-						},
-						function(results, status) {
-
-							if (status != google.maps.GeocoderStatus.OK) {
-								$wnd
-										.alert("Geocode was not successful for the following reason: "
-												+ status);
-								return;
-							}
-
-							var loc = results[0].geometry.location;
-
-							//                          $wnd.map.setCenter(loc);
-							$wnd.console.log(loc);
-
-
-							var marker = new google.maps.Marker({
-								map : map,
-								position : results[0].geometry.location,
-								animation : google.maps.Animation.DROP,
-								title : weight + " contacts"
-							});
-
-						});
-
-    }-*/;
-
     @Override
     public void onChartsApiIsAvailable(final ChartsApiIsAvailableEvent event) {
         GWT.log("!!! ok, charts is ON, let's do some geocharts !!!");
@@ -534,16 +490,5 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         loadingPanel.setVisible(false);
         chartsPanel.setVisible(true);
     }
-
-    // is user logged in linkedin?
-    // if no, then offer him to authorize the app
-    // then we access its account and its contacts
-    // else
-    // - if the user is in our db
-    // - then get its contacts
-    // - else offer him to authorize the app
-
-    // if he connects, then show a logout btn
-    // if he connects, update the appstate with his profile
 
 }
