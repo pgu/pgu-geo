@@ -56,6 +56,8 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     @UiField
     HTMLPanel pieChart, barChart;
     @UiField
+    HTMLPanel loadingPanel, chartsPanel;
+    @UiField
     TextBox fusionBox;
     @UiField
     Button addBtn;
@@ -86,6 +88,9 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         africaMap.getElement().setId("pgu_geo_contacts_map_africa");
 
         contactsNamesPanel.getElement().setId("pgu_geo_contacts_names_panel");
+
+        loadingPanel.setVisible(true);
+        chartsPanel.setVisible(false);
 
         pieChart.setVisible(true);
         barChart.setVisible(false);
@@ -516,6 +521,18 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         if (hasToBuildGeoChartWhenReady) {
             buildGeoCharts();
         }
+    }
+
+    @Override
+    public void showLoadingPanel() {
+        chartsPanel.setVisible(false);
+        loadingPanel.setVisible(true);
+    }
+
+    @Override
+    public void showChartsPanel() {
+        loadingPanel.setVisible(false);
+        chartsPanel.setVisible(true);
     }
 
     // is user logged in linkedin?

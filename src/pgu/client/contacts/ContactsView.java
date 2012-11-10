@@ -10,4 +10,8 @@ public interface ContactsView extends IsWidget {
 
     void showCharts(Country2ContactNumber country2contactNumber);
 
+    void showLoadingPanel();
+
+    void showChartsPanel();
+
 }

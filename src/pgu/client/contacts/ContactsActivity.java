@@ -35,6 +35,7 @@ public class ContactsActivity extends AbstractActivity implements ContactsPresen
         panel.setWidget(view.asWidget());
 
         u.fire(eventBus, new ShowWaitingIndicatorEvent());
+        view.showLoadingPanel();
 
         // TODO PGU Nov 10, 2012 get the profile id if not set
         if (clientFactory.getAppState().getUserId() == null) {
@@ -49,6 +50,7 @@ public class ContactsActivity extends AbstractActivity implements ContactsPresen
                     @Override
                     public void onSuccess(final Country2ContactNumber country2contactNumber) {
                         u.fire(eventBus, new HideWaitingIndicatorEvent());
+                        view.showChartsPanel();
 
                         view.showCharts(country2contactNumber);
                     }

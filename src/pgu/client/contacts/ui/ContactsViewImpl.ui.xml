@@ -15,64 +15,64 @@
         }
     </ui:style>
     <g:HTMLPanel>
-        <g:HTMLPanel ui:field="infoProcessPanel" addStyleNames="row-fluid">
-        <!-- hide the other panels -->
-        <!-- processing contacts in progress -->
+        <g:HTMLPanel ui:field="loadingPanel" addStyleNames="row-fluid">
             <b:Well>
                 Processing contacts is in progress... (only the first 500 are processed)
             </b:Well>
         </g:HTMLPanel>
-        <g:HTMLPanel addStyleNames="row-fluid">
-            <b:Well addStyleNames="form-inline">
-                <b:Popover ui:field="infoPop" trigger="MANUAL" animation="true" placement="LEFT">
-                    <b:Button ui:field="infoPopBtn" icon="INFO_SIGN" type="INFO" iconSize="LARGE" addStyleNames="pull-right" />
-                </b:Popover>
-                <h2>83 Contacts</h2>
-                <!-- TODO rendre dynamic le h2 -->
-                <h4>Choose the charts to show on your public profile</h4>
-                <p></p>
-                <b:CheckBox checked="true" ui:field="pieChartBtn">Pie chart</b:CheckBox>
-                <b:CheckBox ui:field="barChartBtn">Bar chart</b:CheckBox>
-                <p></p>
-                <b:CheckBox checked="true" ui:field="worldBtn">World</b:CheckBox>
-                <b:CheckBox ui:field="americasBtn">Americas</b:CheckBox>
-                <b:CheckBox ui:field="europeBtn">Europe</b:CheckBox>
-                <b:CheckBox ui:field="asiaBtn">Asia</b:CheckBox>
-                <b:CheckBox ui:field="oceaniaBtn">Oceania</b:CheckBox>
-                <b:CheckBox ui:field="africaBtn">Africa</b:CheckBox>
-            </b:Well>
-        </g:HTMLPanel>
-        <g:HTMLPanel addStyleNames="row-fluid">
-            <g:HTMLPanel ui:field="pieChart" addStyleNames="{style.chartWell}" />
-            <g:HTMLPanel ui:field="barChart" addStyleNames="{style.chartWell}" />
-            <g:HTMLPanel ui:field="worldMap" addStyleNames="{style.chartWell}" />
-            <g:HTMLPanel ui:field="americasMap" addStyleNames="{style.chartWell}" />
-            <g:HTMLPanel ui:field="europeMap" addStyleNames="{style.chartWell}" />
-            <g:HTMLPanel ui:field="asiaMap" addStyleNames="{style.chartWell}" />
-            <g:HTMLPanel ui:field="oceaniaMap" addStyleNames="{style.chartWell}" />
-            <g:HTMLPanel ui:field="africaMap" addStyleNames="{style.chartWell}" />
-            <div style="clear:both" />
-        </g:HTMLPanel>
-        <g:HTMLPanel addStyleNames="row-fluid">
-            <g:HTMLPanel ui:field="contactsNamesPanel" addStyleNames="collapse" >
-                <b:Button ui:field="closeContactsNamesPanel" addStyleNames="close" text="x"/>
-                <g:HTML ui:field="contactsNamesHtml" />
+        <g:HTMLPanel ui:field="chartsPanel" addStyleNames="row-fluid">
+            <g:HTMLPanel addStyleNames="row-fluid">
+                <b:Well addStyleNames="form-inline">
+                    <b:Popover ui:field="infoPop" trigger="MANUAL" animation="true" placement="LEFT">
+                        <b:Button ui:field="infoPopBtn" icon="INFO_SIGN" type="INFO" iconSize="LARGE" addStyleNames="pull-right" />
+                    </b:Popover>
+                    <h2>83 Contacts</h2>
+                    <!-- TODO rendre dynamic le h2 -->
+                    <h4>Choose the charts to show on your public profile</h4>
+                    <p></p>
+                    <b:CheckBox checked="true" ui:field="pieChartBtn">Pie chart</b:CheckBox>
+                    <b:CheckBox ui:field="barChartBtn">Bar chart</b:CheckBox>
+                    <p></p>
+                    <b:CheckBox checked="true" ui:field="worldBtn">World</b:CheckBox>
+                    <b:CheckBox ui:field="americasBtn">Americas</b:CheckBox>
+                    <b:CheckBox ui:field="europeBtn">Europe</b:CheckBox>
+                    <b:CheckBox ui:field="asiaBtn">Asia</b:CheckBox>
+                    <b:CheckBox ui:field="oceaniaBtn">Oceania</b:CheckBox>
+                    <b:CheckBox ui:field="africaBtn">Africa</b:CheckBox>
+                </b:Well>
             </g:HTMLPanel>
-        </g:HTMLPanel>
-        <g:HTMLPanel addStyleNames="row-fluid">
-            <b:Well>
-                <b:Popover ui:field="fusionInfoPop" trigger="MANUAL" animation="true" placement="LEFT">
-                    <b:Button ui:field="fusionInfoPopBtn" icon="INFO_SIGN" type="INFO" iconSize="LARGE" addStyleNames="pull-right" />
-                </b:Popover>
-                <h4>Add a fusion table to your public profile</h4>
-                <p></p>
-                <b:TextBox ui:field="fusionBox" placeholder="https://www.google.com/fusiontables/embedviz?viz=..." addStyleNames="input-xxlarge" /> 
-                <p></p>
-                <b:Button ui:field="addBtn" type="PRIMARY" icon="PLUS" />
-            </b:Well>
-        </g:HTMLPanel>
-        <g:HTMLPanel addStyleNames="row-fluid" >
-            <g:HTMLPanel ui:field="fusionPanel" />
+            <g:HTMLPanel addStyleNames="row-fluid">
+                <g:HTMLPanel ui:field="pieChart" addStyleNames="{style.chartWell}" />
+                <g:HTMLPanel ui:field="barChart" addStyleNames="{style.chartWell}" />
+                <g:HTMLPanel ui:field="worldMap" addStyleNames="{style.chartWell}" />
+                <g:HTMLPanel ui:field="americasMap" addStyleNames="{style.chartWell}" />
+                <g:HTMLPanel ui:field="europeMap" addStyleNames="{style.chartWell}" />
+                <g:HTMLPanel ui:field="asiaMap" addStyleNames="{style.chartWell}" />
+                <g:HTMLPanel ui:field="oceaniaMap" addStyleNames="{style.chartWell}" />
+                <g:HTMLPanel ui:field="africaMap" addStyleNames="{style.chartWell}" />
+                <div style="clear:both" />
+            </g:HTMLPanel>
+            <g:HTMLPanel addStyleNames="row-fluid">
+                <g:HTMLPanel ui:field="contactsNamesPanel" addStyleNames="collapse" >
+                    <b:Button ui:field="closeContactsNamesPanel" addStyleNames="close" text="x"/>
+                    <g:HTML ui:field="contactsNamesHtml" />
+                </g:HTMLPanel>
+            </g:HTMLPanel>
+            <g:HTMLPanel addStyleNames="row-fluid">
+                <b:Well>
+                    <b:Popover ui:field="fusionInfoPop" trigger="MANUAL" animation="true" placement="LEFT">
+                        <b:Button ui:field="fusionInfoPopBtn" icon="INFO_SIGN" type="INFO" iconSize="LARGE" addStyleNames="pull-right" />
+                    </b:Popover>
+                    <h4>Add a fusion table to your public profile</h4>
+                    <p></p>
+                    <b:TextBox ui:field="fusionBox" placeholder="https://www.google.com/fusiontables/embedviz?viz=..." addStyleNames="input-xxlarge" /> 
+                    <p></p>
+                    <b:Button ui:field="addBtn" type="PRIMARY" icon="PLUS" />
+                </b:Well>
+            </g:HTMLPanel>
+            <g:HTMLPanel addStyleNames="row-fluid" >
+                <g:HTMLPanel ui:field="fusionPanel" />
+            </g:HTMLPanel>
         </g:HTMLPanel>
         <div style="height:50px" />
     </g:HTMLPanel>
