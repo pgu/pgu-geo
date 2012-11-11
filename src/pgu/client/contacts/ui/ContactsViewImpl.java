@@ -10,6 +10,7 @@ import pgu.client.app.utils.ChartsUtils;
 import pgu.client.contacts.ContactsView;
 import pgu.client.contacts.event.FetchContactsNamesEvent;
 import pgu.client.contacts.event.FetchContactsNamesEvent.Handler;
+import pgu.shared.dto.ContactsForCharts;
 import pgu.shared.model.Country2ContactNames;
 import pgu.shared.model.Country2ContactNumber;
 
@@ -285,7 +286,12 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     private final HashMap<String, String> country2locationNames = new HashMap<String, String>();
 
     @Override
-    public void showCharts(final Country2ContactNumber country2contact) {
+    public void showCharts(final ContactsForCharts contactsForCharts) {
+
+        // TODO PGU Nov 11, 2012
+        // showCharts according to preferences
+
+        final Country2ContactNumber country2contact = contactsForCharts.getCountry2ContactNumber();
 
         country2contactNumber.clear();
         parseContactNumber(this, country2contact.getCode2contactNumber());
@@ -321,6 +327,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
             buildGeoCharts();
 
         }
+
 
         fireEvent(new FetchContactsNamesEvent());
     }

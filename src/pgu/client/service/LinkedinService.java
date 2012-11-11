@@ -1,11 +1,11 @@
 package pgu.client.service;
 
 import pgu.shared.dto.AccessToken;
+import pgu.shared.dto.ContactsForCharts;
 import pgu.shared.dto.OauthAuthorizationStart;
 import pgu.shared.dto.Profile;
 import pgu.shared.dto.RequestToken;
 import pgu.shared.model.Country2ContactNames;
-import pgu.shared.model.Country2ContactNumber;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -17,7 +17,7 @@ public interface LinkedinService extends RemoteService {
 
     OauthAuthorizationStart getLinkedinUrlAuthorization();
 
-    Country2ContactNumber fetchConnections(AccessToken accessToken, String userId);
+    ContactsForCharts fetchConnections(AccessToken accessToken, String userId);
 
     Profile fetchProfile(AccessToken accessToken);
 

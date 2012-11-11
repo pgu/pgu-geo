@@ -31,6 +31,7 @@ import pgu.server.app.AppLog;
 import pgu.server.utils.AppUtils;
 import pgu.shared.dto.AccessToken;
 import pgu.shared.dto.Connections;
+import pgu.shared.dto.ContactsForCharts;
 import pgu.shared.dto.Country;
 import pgu.shared.dto.LinkedinProfile;
 import pgu.shared.dto.Location;
@@ -38,6 +39,7 @@ import pgu.shared.dto.OauthAuthorizationStart;
 import pgu.shared.dto.Person;
 import pgu.shared.dto.Profile;
 import pgu.shared.dto.RequestToken;
+import pgu.shared.model.ChartsPreferences;
 import pgu.shared.model.Country2ContactNames;
 import pgu.shared.model.Country2ContactNumber;
 import pgu.shared.model.UserAndLocations;
@@ -313,7 +315,7 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
     //
 
     @Override
-    public Country2ContactNumber fetchConnections(final AccessToken accessToken, final String userId) {
+    public ContactsForCharts fetchConnections(final AccessToken accessToken, final String userId) {
 
         String jsonConnections = "";
 
@@ -329,9 +331,7 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         final ArrayList<Person> persons = connections.getValues();
 
         if (persons == null) {
-            final Country2ContactNumber emptyResult = new Country2ContactNumber();
-            emptyResult.setUserId(userId);
-            return emptyResult;
+            return new ContactsForCharts();
         }
 
         final HashMap<String, ArrayList<String>> code2contactNames = new HashMap<String, ArrayList<String>>();
@@ -383,7 +383,13 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         // TODO PGU this is the code for refresh from linkedin
         // but when not from linkedin, make it from the DB
 
-        return country2number;
+        final ChartsPreferences chartsPreferences = dao.ofy().get(ChartsPreferences.class, userId);
+        final String preferences = chartsPreferences == null ? "{}" : chartsPreferences.getPreferences();
+
+        final ContactsForCharts contactsForCharts = new ContactsForCharts();
+        contactsForCharts.setCountry2ContactNumber(country2number);
+        contactsForCharts.setChartsPreferences(preferences);
+        return contactsForCharts;
     }
 
     private void addLocationNameToCountry(final String code, final Location location, final HashMap<String,HashSet<String>> code2locationNames) {
