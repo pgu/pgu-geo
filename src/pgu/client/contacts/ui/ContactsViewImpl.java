@@ -288,8 +288,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     @Override
     public void showCharts(final ContactsForCharts contactsForCharts) {
 
-        // TODO PGU Nov 11, 2012
-        // showCharts according to preferences
+        parseChartsPreferences(this, contactsForCharts.getChartsPreferences());
 
         final Country2ContactNumber country2contact = contactsForCharts.getCountry2ContactNumber();
 
@@ -328,9 +327,31 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
 
         }
 
-
         fireEvent(new FetchContactsNamesEvent());
     }
+
+    private native void parseChartsPreferences(final ContactsViewImpl view, final String json) /*-{
+        // ['world','americas']
+
+        $wnd.console.log('charts preferences');
+        $wnd.console.log(json);
+
+        if (!json) {
+            $wnd.console.log('json is undefined');
+            // TODO PGU show defaults charts and send a user preferences with them
+            return;
+        }
+
+        $wnd.console.log('json is defined');
+        var charts_prefs = JSON.parse(json);
+
+            // TODO PGU hide all charts
+        for ( var i = 0, len = charts_prefs.length; i < len; i++) {
+            var charts_pref = charts_prefs[i];
+            // TODO PGU show the chart
+        }
+
+    }-*/;
 
     private native void parseLocationNames(final ContactsViewImpl view, final String json) /*-{
         // {"ca":["Canada Area"],"it":["Italy"],"us":["Ohio","California"]}

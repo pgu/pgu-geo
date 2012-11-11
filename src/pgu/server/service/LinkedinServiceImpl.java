@@ -382,8 +382,8 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         // TODO PGU this is the code for refresh from linkedin
         // but when not from linkedin, make it from the DB
 
-        final ChartsPreferences chartsPreferences = dao.ofy().get(ChartsPreferences.class, userId);
-        final String preferences = chartsPreferences == null ? "{}" : chartsPreferences.getPreferences();
+        final ChartsPreferences chartsPreferences = dao.ofy().find(ChartsPreferences.class, userId);
+        final String preferences = chartsPreferences == null ? null : chartsPreferences.getPreferences();
 
         final ContactsForCharts contactsForCharts = new ContactsForCharts();
         contactsForCharts.setCountry2ContactNumber(country2number);
@@ -646,7 +646,7 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
     @Override
     public Country2ContactNames fetchContactsNames(final String userId) {
 
-        final Country2ContactNames names = dao.ofy().get(Country2ContactNames.class, userId);
+        final Country2ContactNames names = dao.ofy().find(Country2ContactNames.class, userId);
 
         if (names != null) {
             return names;
