@@ -108,7 +108,10 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         infoPop.setHeading("Charts");
         infoPop.setText("<p>Clicking on the regions of the geocharts will display your contacts' names.</p>" + //
                 "<br/>" + //
-                "<p>Note that this information is only available here and <b>not</b> on your public profile.</p>");
+                "<p>Only the <b>first 500</b> contacts have been fetched.</p>" + //
+                "<br/>" + //
+                "<p>Also this information is only available here and <b>not</b> on your public profile.</p>" //
+                );
 
         fusionInfoPop.setHeading("Fusion tables");
         fusionInfoPop.setText("<p>How to create a fusion tables?</p>" + //
