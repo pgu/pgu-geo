@@ -371,7 +371,6 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
 
         final Country2ContactNames country2contactNames = new Country2ContactNames();
         country2contactNames.setUserId(userId);
-
         country2contactNames.setValues(gson.toJson(code2contactNames));
         dao.ofy().async().put(country2contactNames);
 
