@@ -1,6 +1,7 @@
 package pgu.client.contacts;
 
 import pgu.client.contacts.event.FetchContactsNamesEvent;
+import pgu.client.contacts.event.SaveChartsPreferencesEvent;
 import pgu.shared.dto.ContactsForCharts;
 import pgu.shared.model.Country2ContactNames;
 
@@ -8,6 +9,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 public interface ContactsView extends IsWidget //
 , FetchContactsNamesEvent.HasFetchContactsNamesHandlers //
+, SaveChartsPreferencesEvent.HasSaveChartsPreferencesHandlers //
 {
 
     void showCharts(ContactsForCharts contactsForCharts);

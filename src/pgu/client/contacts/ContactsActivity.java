@@ -8,6 +8,7 @@ import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.contacts.event.FetchContactsNamesEvent;
+import pgu.client.contacts.event.SaveChartsPreferencesEvent;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.shared.dto.ContactsForCharts;
 import pgu.shared.model.Country2ContactNames;
@@ -19,6 +20,7 @@ import com.google.web.bindery.event.shared.HandlerRegistration;
 
 public class ContactsActivity extends AbstractActivity implements //
 FetchContactsNamesEvent.Handler //
+, SaveChartsPreferencesEvent.Handler //
 {
 
     private final ClientFactory        clientFactory;
@@ -43,6 +45,7 @@ FetchContactsNamesEvent.Handler //
 
         hRegs.clear();
         hRegs.add(view.addFetchContactsNamesHandler(this));
+        hRegs.add(view.addSaveChartsPreferencesHandler(this));
 
         panel.setWidget(view.asWidget());
 
@@ -96,6 +99,21 @@ FetchContactsNamesEvent.Handler //
         hRegs.clear();
 
         super.onStop();
+    }
+
+    @Override
+    public void onSaveChartsPreferences(final SaveChartsPreferencesEvent event) {
+        linkedinService.saveChartsPreferences(
+                clientFactory.getAppState().getUserId() //
+                , event.getChartTypes() //
+                , new AsyncCallbackApp<Void>(eventBus) {
+
+                    @Override
+                    public void onSuccess(final Void result) {
+                        // no-op
+                    }
+
+                });
     }
 
 }

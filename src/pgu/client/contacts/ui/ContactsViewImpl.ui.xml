@@ -30,10 +30,10 @@
                     <!-- TODO rendre dynamic le h2 -->
                     <h4>Choose the charts to show on your public profile</h4>
                     <p></p>
-                    <b:CheckBox checked="true" ui:field="pieChartBtn">Pie chart</b:CheckBox>
+                    <b:CheckBox ui:field="pieChartBtn">Pie chart</b:CheckBox>
                     <b:CheckBox ui:field="barChartBtn">Bar chart</b:CheckBox>
                     <p></p>
-                    <b:CheckBox checked="true" ui:field="worldBtn">World</b:CheckBox>
+                    <b:CheckBox ui:field="worldBtn">World</b:CheckBox>
                     <b:CheckBox ui:field="americasBtn">Americas</b:CheckBox>
                     <b:CheckBox ui:field="europeBtn">Europe</b:CheckBox>
                     <b:CheckBox ui:field="asiaBtn">Asia</b:CheckBox>

@@ -26,4 +26,6 @@ public interface LinkedinServiceAsync {
 
     void fetchContactsNames(String userId, AsyncCallback<Country2ContactNames> asyncCallbackApp);
 
+    void saveChartsPreferences(String userId, String jsonChartTypes, AsyncCallback<Void> asyncCallbackApp);
+
 }

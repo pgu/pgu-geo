@@ -7,18 +7,23 @@ import java.util.TreeMap;
 
 import pgu.client.app.event.ChartsApiIsAvailableEvent;
 import pgu.client.app.utils.ChartsUtils;
+import pgu.client.app.utils.JsonUtils;
 import pgu.client.contacts.ContactsView;
 import pgu.client.contacts.event.FetchContactsNamesEvent;
 import pgu.client.contacts.event.FetchContactsNamesEvent.Handler;
+import pgu.client.contacts.event.SaveChartsPreferencesEvent;
 import pgu.shared.dto.ContactsForCharts;
 import pgu.shared.model.Country2ContactNames;
 import pgu.shared.model.Country2ContactNumber;
+import pgu.shared.utils.ChartType;
 
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.CheckBox;
 import com.github.gwtbootstrap.client.ui.Popover;
 import com.github.gwtbootstrap.client.ui.TextBox;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -76,6 +81,8 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     @UiField
     Button infoPopBtn, fusionInfoPopBtn;
 
+    private final HashMap<String, HTMLPanel> type2chart = new HashMap<String, HTMLPanel>();
+
     public ContactsViewImpl(final EventBus eventBus) {
         initWidget(uiBinder.createAndBindUi(this));
 
@@ -91,18 +98,19 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
 
         contactsNamesPanel.getElement().setId("pgu_geo_contacts_names_panel");
 
-        loadingPanel.setVisible(true);
-        chartsPanel.setVisible(false);
+        type2chart.put(ChartType.AFRICA, africaMap);
+        type2chart.put(ChartType.AMERICAS, americasMap);
+        type2chart.put(ChartType.ASIA, asiaMap);
+        type2chart.put(ChartType.BAR, barChart);
+        type2chart.put(ChartType.EUROPE, europeMap);
+        type2chart.put(ChartType.OCEANIA, oceaniaMap);
+        type2chart.put(ChartType.PIE, pieChart);
+        type2chart.put(ChartType.WORLD, worldMap);
 
-        pieChart.setVisible(true);
-        barChart.setVisible(false);
+        showLoadingPanel();
+        hideCharts();
 
-        worldMap.setVisible(true);
-        americasMap.setVisible(false);
-        europeMap.setVisible(false);
-        asiaMap.setVisible(false);
-        oceaniaMap.setVisible(false);
-        africaMap.setVisible(false);
+        // TODO PGU Nov 11, 2012 checked the checkbox according to the visibilities
 
         eventBus.addHandler(ChartsApiIsAvailableEvent.TYPE, this);
 
@@ -245,41 +253,49 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     @UiHandler("worldBtn")
     public void clickWorld(final ClickEvent e) {
         worldMap.setVisible(worldBtn.getValue());
+        saveChartsPreferences();
     }
 
     @UiHandler("americasBtn")
     public void clickAmericas(final ClickEvent e) {
         americasMap.setVisible(americasBtn.getValue());
+        saveChartsPreferences();
     }
 
     @UiHandler("europeBtn")
     public void clickEurope(final ClickEvent e) {
         europeMap.setVisible(europeBtn.getValue());
+        saveChartsPreferences();
     }
 
     @UiHandler("asiaBtn")
     public void clickAsia(final ClickEvent e) {
         asiaMap.setVisible(asiaBtn.getValue());
+        saveChartsPreferences();
     }
 
     @UiHandler("oceaniaBtn")
     public void clickOceania(final ClickEvent e) {
         oceaniaMap.setVisible(oceaniaBtn.getValue());
+        saveChartsPreferences();
     }
 
     @UiHandler("africaBtn")
     public void clickAfrica(final ClickEvent e) {
         africaMap.setVisible(africaBtn.getValue());
+        saveChartsPreferences();
     }
 
     @UiHandler("pieChartBtn")
     public void clickPieChart(final ClickEvent e) {
         pieChart.setVisible(pieChartBtn.getValue());
+        saveChartsPreferences();
     }
 
     @UiHandler("barChartBtn")
     public void clickBarChart(final ClickEvent e) {
         barChart.setVisible(barChartBtn.getValue());
+        saveChartsPreferences();
     }
 
     private static final HashMap<String, Integer> country2contactNumber = new HashMap<String, Integer>();
@@ -288,6 +304,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     @Override
     public void showCharts(final ContactsForCharts contactsForCharts) {
 
+        hideCharts();
         parseChartsPreferences(this, contactsForCharts.getChartsPreferences());
 
         final Country2ContactNumber country2contact = contactsForCharts.getCountry2ContactNumber();
@@ -330,28 +347,65 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         fireEvent(new FetchContactsNamesEvent());
     }
 
+    private void hideCharts() {
+        for (final HTMLPanel chart : type2chart.values()) {
+            chart.setVisible(false);
+        }
+    }
+
+    private final ArrayList<String> initDisplayedChartTypes = new ArrayList<String>();
+
     private native void parseChartsPreferences(final ContactsViewImpl view, final String json) /*-{
         // ['world','americas']
 
-        $wnd.console.log('charts preferences');
-        $wnd.console.log(json);
-
         if (!json) {
-            $wnd.console.log('json is undefined');
-            // TODO PGU show defaults charts and send a user preferences with them
+            view.@pgu.client.contacts.ui.ContactsViewImpl::displayDefaultCharts()();
             return;
         }
 
-        $wnd.console.log('json is defined');
-        var charts_prefs = JSON.parse(json);
+        var chart_types = JSON.parse(json);
 
-            // TODO PGU hide all charts
-        for ( var i = 0, len = charts_prefs.length; i < len; i++) {
-            var charts_pref = charts_prefs[i];
-            // TODO PGU show the chart
+        for ( var i = 0, len = chart_types.length; i < len; i++) {
+            var chart_type = chart_types[i];
+            view.@pgu.client.contacts.ui.ContactsViewImpl::addDisplayedChartType(Ljava/lang/String;)(chart_type);
         }
+        view.@pgu.client.contacts.ui.ContactsViewImpl::displayChartTypes()();
 
     }-*/;
+
+    private void addDisplayedChartType(final String chartType) {
+        initDisplayedChartTypes.add(chartType);
+    }
+
+    private void displayChartTypes() {
+        for (final String chartType : initDisplayedChartTypes) {
+            type2chart.get(chartType).setVisible(true);
+        }
+    }
+
+    private void displayDefaultCharts() {
+        pieChart.setVisible(true);
+        worldMap.setVisible(true);
+
+        saveChartsPreferences();
+    }
+
+    private void saveChartsPreferences() {
+
+        final JsArrayString chartTypes = JavaScriptObject.createArray().cast();
+        for (final Entry<String, HTMLPanel> e : type2chart.entrySet()) {
+
+            final String chartType = e.getKey();
+            final HTMLPanel chart = e.getValue();
+
+            if (chart.isVisible()) {
+                chartTypes.push(chartType);
+            }
+        }
+
+        final String jsonChartTypes = JsonUtils.json_stringify(chartTypes);
+        fireEvent(new SaveChartsPreferencesEvent(jsonChartTypes));
+    }
 
     private native void parseLocationNames(final ContactsViewImpl view, final String json) /*-{
         // {"ca":["Canada Area"],"it":["Italy"],"us":["Ohio","California"]}
@@ -600,6 +654,11 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
 
     public void addContactsNames(final String country, final String htmlNames) {
         country2contactNames.put(country, htmlNames);
+    }
+
+    @Override
+    public HandlerRegistration addSaveChartsPreferencesHandler(final SaveChartsPreferencesEvent.Handler handler) {
+        return addHandler(handler, SaveChartsPreferencesEvent.TYPE);
     }
 
 }

@@ -55,9 +55,6 @@ import com.google.appengine.api.search.SearchServiceFactory;
 import com.google.gson.Gson;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-/**
- * The server side implementation of the RPC service.
- */
 @SuppressWarnings("serial")
 public class LinkedinServiceImpl extends RemoteServiceServlet implements LinkedinService {
 
@@ -655,6 +652,14 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         final Country2ContactNames emptyNames = new Country2ContactNames();
         emptyNames.setUserId(userId);
         return emptyNames;
+    }
+
+    @Override
+    public void saveChartsPreferences(final String userId, final String jsonChartTypes) {
+        final ChartsPreferences chartsPreferences = new ChartsPreferences();
+        chartsPreferences.setUserId(userId);
+        chartsPreferences.setPreferences(jsonChartTypes);
+        dao.ofy().async().put(chartsPreferences);
     }
 
 }
