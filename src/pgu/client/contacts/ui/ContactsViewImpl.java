@@ -82,6 +82,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     Button infoPopBtn, fusionInfoPopBtn;
 
     private final HashMap<String, HTMLPanel> type2chart = new HashMap<String, HTMLPanel>();
+    private final HashMap<String, CheckBox> type2chartBox = new HashMap<String, CheckBox>();
 
     public ContactsViewImpl(final EventBus eventBus) {
         initWidget(uiBinder.createAndBindUi(this));
@@ -107,10 +108,17 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         type2chart.put(ChartType.PIE, pieChart);
         type2chart.put(ChartType.WORLD, worldMap);
 
-        showLoadingPanel();
-        hideCharts();
+        type2chartBox.put(ChartType.AFRICA, africaBtn);
+        type2chartBox.put(ChartType.AMERICAS, americasBtn);
+        type2chartBox.put(ChartType.ASIA, asiaBtn);
+        type2chartBox.put(ChartType.BAR, barChartBtn);
+        type2chartBox.put(ChartType.EUROPE, europeBtn);
+        type2chartBox.put(ChartType.OCEANIA, oceaniaBtn);
+        type2chartBox.put(ChartType.PIE, pieChartBtn);
+        type2chartBox.put(ChartType.WORLD, worldBtn);
 
-        // TODO PGU Nov 11, 2012 checked the checkbox according to the visibilities
+        showLoadingPanel();
+        hideAllCharts();
 
         eventBus.addHandler(ChartsApiIsAvailableEvent.TYPE, this);
 
@@ -304,7 +312,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     @Override
     public void showCharts(final ContactsForCharts contactsForCharts) {
 
-        hideCharts();
+        hideAllCharts();
         parseChartsPreferences(this, contactsForCharts.getChartsPreferences());
 
         final Country2ContactNumber country2contact = contactsForCharts.getCountry2ContactNumber();
@@ -347,47 +355,55 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         fireEvent(new FetchContactsNamesEvent());
     }
 
-    private void hideCharts() {
+    private void hideAllCharts() {
         for (final HTMLPanel chart : type2chart.values()) {
             chart.setVisible(false);
         }
+
+        for (final CheckBox checkBox : type2chartBox.values()) {
+            checkBox.setVisible(false);
+        }
     }
 
-    private final ArrayList<String> initDisplayedChartTypes = new ArrayList<String>();
+    private final ArrayList<String> displayChartTypes = new ArrayList<String>();
 
     private native void parseChartsPreferences(final ContactsViewImpl view, final String json) /*-{
         // ['world','americas']
+        var chart_types = [];
 
         if (!json) {
-            view.@pgu.client.contacts.ui.ContactsViewImpl::displayDefaultCharts()();
-            return;
+            chart_types.push('world');
+            chart_types.push('pie');
+
+        } else {
+            chart_types.concat(JSON.parse(json));
         }
 
-        var chart_types = JSON.parse(json);
+        view.@pgu.client.contacts.ui.ContactsViewImpl::clearDisplayedChartTypes()();
 
         for ( var i = 0, len = chart_types.length; i < len; i++) {
             var chart_type = chart_types[i];
-            view.@pgu.client.contacts.ui.ContactsViewImpl::addDisplayedChartType(Ljava/lang/String;)(chart_type);
+            view.@pgu.client.contacts.ui.ContactsViewImpl::addDisplayedChartType(Ljava/lang/String;)( //
+            chart_type);
         }
+
         view.@pgu.client.contacts.ui.ContactsViewImpl::displayChartTypes()();
 
     }-*/;
 
+    private void clearDisplayedChartTypes() {
+        displayChartTypes.clear();
+    }
+
     private void addDisplayedChartType(final String chartType) {
-        initDisplayedChartTypes.add(chartType);
+        displayChartTypes.add(chartType);
     }
 
     private void displayChartTypes() {
-        for (final String chartType : initDisplayedChartTypes) {
+        for (final String chartType : displayChartTypes) {
             type2chart.get(chartType).setVisible(true);
+            type2chartBox.get(chartType).setValue(true);
         }
-    }
-
-    private void displayDefaultCharts() {
-        pieChart.setVisible(true);
-        worldMap.setVisible(true);
-
-        saveChartsPreferences();
     }
 
     private void saveChartsPreferences() {
