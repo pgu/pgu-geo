@@ -3,6 +3,7 @@ package pgu.server.service;
 import pgu.client.service.PublicProfileService;
 import pgu.server.access.DAO;
 import pgu.shared.dto.PublicProfile;
+import pgu.shared.model.PublicContacts;
 import pgu.shared.model.UserAndLocations;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -51,6 +52,12 @@ public class PublicProfileServiceImpl extends RemoteServiceServlet implements Pu
 
         publicProfile.setMapPreferences(mapPreferences);
         dao.ofy().async().put(publicProfile);
+    }
+
+    @Override
+    public PublicContacts fetchPublicContacts(final String userId) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

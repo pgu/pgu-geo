@@ -1,6 +1,7 @@
 package pgu.client.service;
 
 import pgu.shared.dto.PublicProfile;
+import pgu.shared.model.PublicContacts;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -15,6 +16,8 @@ public interface PublicProfileService extends RemoteService {
     void saveProfile(PublicProfile publicProfile);
 
     void saveMapPreferences(String userId, String mapPreferences);
+
+    PublicContacts fetchPublicContacts(String userId);
 
 
 }

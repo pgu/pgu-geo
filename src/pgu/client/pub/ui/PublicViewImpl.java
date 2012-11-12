@@ -21,7 +21,10 @@ import pgu.client.components.playtoolbar.event.StartPlayingEvent;
 import pgu.client.components.playtoolbar.event.StopEvent;
 import pgu.client.pub.PublicPresenter;
 import pgu.client.pub.PublicView;
+import pgu.client.pub.event.FetchPublicContactsEvent;
+import pgu.client.pub.event.FetchPublicContactsEvent.Handler;
 import pgu.shared.dto.PublicProfile;
+import pgu.shared.model.PublicContacts;
 
 import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.Section;
@@ -40,6 +43,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 
 public class PublicViewImpl extends Composite implements PublicView, GoogleIsAvailableEvent.Handler {
 
@@ -73,8 +77,6 @@ public class PublicViewImpl extends Composite implements PublicView, GoogleIsAva
 
         profileSection = new Section("public:profile");
         contactsSection = new Section("public:contacts");
-
-        // TODO PGU Nov 12, 2012 rendre visible ou pas les contacts
 
         initWidget(uiBinder.createAndBindUi(this));
 
@@ -165,6 +167,8 @@ public class PublicViewImpl extends Composite implements PublicView, GoogleIsAva
                 hideProfileCurrentLocation();
             }
         });
+
+        contactsSection.setVisible(false);
 
         singlePanel.setVisible(true);
         multiPanel.setVisible(false);
@@ -350,6 +354,8 @@ public class PublicViewImpl extends Composite implements PublicView, GoogleIsAva
         LocationsUtils.initCaches(profile.getUserAndLocations());
 
         setProfile(this, profile.getProfile());
+
+        fireEvent(new FetchPublicContactsEvent(profile.getUserId()));
     }
 
     private void ensureGoogleIsLoaded() {
@@ -463,6 +469,19 @@ public class PublicViewImpl extends Composite implements PublicView, GoogleIsAva
             PublicUtils.updateMapVisu(mapPreferences);
         }
 
+    }
+
+    @Override
+    public HandlerRegistration addFetchPublicContactsHandler(final Handler handler) {
+        return addHandler(handler, FetchPublicContactsEvent.TYPE);
+    }
+
+    @Override
+    public void setContacts(final PublicContacts result) {
+        // TODO Auto-generated method stub
+        // TODO PGU Nov 12, 2012 rendre visible ou pas les contacts
+
+        contactsSection.setVisible(true);
     }
 
 }

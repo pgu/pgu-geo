@@ -4,7 +4,7 @@ import javax.persistence.Id;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class FusionUrls  implements IsSerializable {
+public class FusionUrls implements IsSerializable {
 
     @Id
     private String userId;
