@@ -67,7 +67,7 @@
                     <p></p>
                     <b:TextBox ui:field="fusionBox" placeholder="https://www.google.com/fusiontables/embedviz?viz=..." addStyleNames="input-xxlarge" /> 
                     <p></p>
-                    <b:Button ui:field="addBtn" type="PRIMARY" icon="PLUS" />
+                    <b:Button ui:field="addFusionBtn" type="PRIMARY" icon="PLUS" />
                 </b:Well>
             </g:HTMLPanel>
             <g:HTMLPanel addStyleNames="row-fluid" >

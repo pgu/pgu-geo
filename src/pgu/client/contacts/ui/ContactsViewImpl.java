@@ -69,7 +69,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     @UiField
     TextBox fusionBox;
     @UiField
-    Button addBtn;
+    Button addFusionBtn;
     @UiField
     HTMLPanel fusionPanel, contactsNamesPanel;
     @UiField
@@ -219,7 +219,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         }
     }
 
-    @UiHandler("addBtn")
+    @UiHandler("addFusionBtn")
     public void clickAddFusion(final ClickEvent e) {
         addFusionTable();
     }
@@ -227,12 +227,16 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     private void addFusionTable() {
         final String url = fusionBox.getText();
 
-        if ("".equals(url.trim()) || !url.startsWith("https://www.google.com/fusiontables/embedviz")) {
+        if (!url.startsWith("https://www.google.com/fusiontables/embedviz")) {
             return;
         }
 
         //        https://www.google.com/fusiontables/embedviz?viz=MAP&q=select+col0%3E%3E1+from+1dlLBDtnjrqYG7W3eamJX3-1ogV8XdGHXkX2wOaU&h=false&lat=47.74359286233701&lng=6.064453125&z=3&t=1&l=col0%3E%3E1
         //        https://www.google.com/fusiontables/embedviz?viz=GVIZ&t=BAR&containerId=gviz_canvas&q=select+col0%3E%3E0%2C+col1%3E%3E0+from+1dlLBDtnjrqYG7W3eamJX3-1ogV8XdGHXkX2wOaU&qrs=+where+col0%3E%3E0+%3E%3D+&qre=+and+col0%3E%3E0+%3C%3D+&qe=+limit+13&width=500&height=300
+        addFusionPanel(url);
+    }
+
+    private void addFusionPanel(final String url) {
 
         final Frame frame = new Frame(url);
         frame.addStyleName(style.chartWell());
@@ -247,8 +251,6 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         hp.add(frame);
         hp.add(closeBtn);
 
-        fusionPanel.add(hp);
-
         closeBtn.addClickHandler(new ClickHandler() {
 
             @Override
@@ -256,6 +258,8 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
                 hp.removeFromParent();
             }
         });
+
+        fusionPanel.add(hp);
     }
 
     @UiHandler("worldBtn")
@@ -312,19 +316,20 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     @Override
     public void showCharts(final ContactsForCharts contactsForCharts) {
 
+        // prepare the charts visibility
         hideAllCharts();
         parseChartsPreferences(this, contactsForCharts.getChartsPreferences());
 
         final Country2ContactNumber country2contact = contactsForCharts.getCountry2ContactNumber();
 
+        // prepare the charts data
         country2contactNumber.clear();
         parseContactNumber(this, country2contact.getCode2contactNumber());
 
+        // prepare the labels for the charts' legends
+        // TODO PGU Nov 6, 2012 use the country's label
         country2locationNames.clear();
         parseLocationNames(this, country2contact.getCode2locationNames());
-
-        // TODO PGU Nov 6, 2012 use the country's label
-        // TODO PGU Nov 6, 2012 to sort the data by an order for the pie and bar charts
 
         weight2codes.clear();
         for (final Entry<String, Integer> e : country2contactNumber.entrySet()) {
@@ -353,7 +358,29 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         }
 
         fireEvent(new FetchContactsNamesEvent());
+
+        // add the fusion panels
+        fusionPanel.clear();
+        parseFusionUrls(this, contactsForCharts.getFusionUrls());
     }
+
+    private native void parseFusionUrls(final ContactsViewImpl view, final String json) /*-{
+        // [url1, url2]
+
+        if (!json) {
+            return;
+        }
+
+        var fusion_urls = JSON.parse(json);
+        for ( var i = 0, len = fusion_urls.length; i < len; i++) {
+
+            var fusion_url = fusion_urls[i];
+            view.@pgu.client.contacts.ui.ContactsViewImpl::addFusionPanel(Ljava/lang/String;)( //
+            fusion_url);
+
+        }
+
+    }-*/;
 
     private void hideAllCharts() {
         for (final HTMLPanel chart : type2chart.values()) {
@@ -364,8 +391,6 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
             checkBox.setValue(false);
         }
     }
-
-    private final ArrayList<String> displayChartTypes = new ArrayList<String>();
 
     private native void parseChartsPreferences(final ContactsViewImpl view, final String json) /*-{
         // ['world','americas']
@@ -383,15 +408,11 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
             chart_types = chart_types.concat(JSON.parse(json));
         }
 
-        view.@pgu.client.contacts.ui.ContactsViewImpl::clearDisplayedChartTypes()();
-
         for ( var i = 0, len = chart_types.length; i < len; i++) {
             var chart_type = chart_types[i];
-            view.@pgu.client.contacts.ui.ContactsViewImpl::addDisplayedChartType(Ljava/lang/String;)( //
+            view.@pgu.client.contacts.ui.ContactsViewImpl::displayChartType(Ljava/lang/String;)( //
             chart_type);
         }
-
-        view.@pgu.client.contacts.ui.ContactsViewImpl::displayChartTypes()();
 
         if (hasToSaveConfig) {
             view.@pgu.client.contacts.ui.ContactsViewImpl::saveChartsPreferences()();
@@ -399,19 +420,9 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
 
     }-*/;
 
-    private void clearDisplayedChartTypes() {
-        displayChartTypes.clear();
-    }
-
-    private void addDisplayedChartType(final String chartType) {
-        displayChartTypes.add(chartType);
-    }
-
-    private void displayChartTypes() {
-        for (final String chartType : displayChartTypes) {
-            type2chart.get(chartType).setVisible(true);
-            type2chartBox.get(chartType).setValue(true);
-        }
+    private void displayChartType(final String chartType) {
+        type2chart.get(chartType).setVisible(true);
+        type2chartBox.get(chartType).setValue(true);
     }
 
     private void saveChartsPreferences() {
