@@ -555,7 +555,12 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         //
         // pie chart
         var
-            pie_options = {title:'83 Contacts by countries', is3D: true}
+            pie_options = {
+                title:'83 Contacts by countries'
+                , is3D: true
+                , width : 556
+                , height : 347
+            }
           , pie_chart = new google.visualization.PieChart($doc.getElementById('pgu_geo_contacts_piechart'))
         ;
 
