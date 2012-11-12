@@ -309,7 +309,7 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
     // [done] distrib_num: [['fr','France',38],['es','Spain',9],...]
     // [done] distrib_name: [['fr',['Alice Aceli','Bruno Bourn']],['es',['Alicia Acelia','Bruno Bourno']],...]
     // [done] charts_prefs: {'world':true,'americas':false,...}
-    // [TODO] fusion_urls: [url1,url2,...]
+    // [done] fusion_urls: [url1,url2,...]
     //
 
     @Override
