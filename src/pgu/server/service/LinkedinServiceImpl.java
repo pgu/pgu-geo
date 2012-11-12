@@ -42,6 +42,7 @@ import pgu.shared.dto.RequestToken;
 import pgu.shared.model.ChartsPreferences;
 import pgu.shared.model.Country2ContactNames;
 import pgu.shared.model.Country2ContactNumber;
+import pgu.shared.model.FusionUrls;
 import pgu.shared.model.UserAndLocations;
 
 import com.google.appengine.api.search.Document;
@@ -380,11 +381,15 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         // but when not from linkedin, make it from the DB
 
         final ChartsPreferences chartsPreferences = dao.ofy().find(ChartsPreferences.class, userId);
-        final String preferences = chartsPreferences == null ? null : chartsPreferences.getPreferences();
+        final String jsonChartsPreferences = chartsPreferences == null ? null : chartsPreferences.getValues();
+
+        final FusionUrls fusionUrls = dao.ofy().find(FusionUrls.class, userId);
+        final String jsonFusionUrls = fusionUrls == null ? null : fusionUrls.getValues();
 
         final ContactsForCharts contactsForCharts = new ContactsForCharts();
         contactsForCharts.setCountry2ContactNumber(country2number);
-        contactsForCharts.setChartsPreferences(preferences);
+        contactsForCharts.setChartsPreferences(jsonChartsPreferences);
+        contactsForCharts.setFusionUrls(jsonFusionUrls);
         return contactsForCharts;
     }
 
@@ -658,8 +663,24 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
     public void saveChartsPreferences(final String userId, final String jsonChartTypes) {
         final ChartsPreferences chartsPreferences = new ChartsPreferences();
         chartsPreferences.setUserId(userId);
-        chartsPreferences.setPreferences(jsonChartTypes);
+        chartsPreferences.setValues(jsonChartTypes);
         dao.ofy().async().put(chartsPreferences);
+    }
+
+    @Override
+    public void saveFusionUrls(final String userId, final String jsonFusionUrls) {
+
+        if (u.isVoid(jsonFusionUrls) //
+                || "[]".equals(jsonFusionUrls)) {
+
+            dao.ofy().async().delete(FusionUrls.class, userId);
+            return;
+        }
+
+        final FusionUrls fusionUrls = new FusionUrls();
+        fusionUrls.setUserId(userId);
+        fusionUrls.setValues(jsonFusionUrls);
+        dao.ofy().async().put(fusionUrls);
     }
 
 }

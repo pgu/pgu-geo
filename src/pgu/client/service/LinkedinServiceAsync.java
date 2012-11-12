@@ -28,4 +28,6 @@ public interface LinkedinServiceAsync {
 
     void saveChartsPreferences(String userId, String jsonChartTypes, AsyncCallback<Void> asyncCallbackApp);
 
+    void saveFusionUrls(String userId, String fusionUrls, AsyncCallback<Void> asyncCallbackApp);
+
 }

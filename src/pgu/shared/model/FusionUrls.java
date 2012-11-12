@@ -4,7 +4,7 @@ import javax.persistence.Id;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class ChartsPreferences implements IsSerializable {
+public class FusionUrls  implements IsSerializable {
 
     @Id
     private String userId;
@@ -30,7 +30,7 @@ public class ChartsPreferences implements IsSerializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final ChartsPreferences other = (ChartsPreferences) obj;
+        final FusionUrls other = (FusionUrls) obj;
         if (userId == null) {
             if (other.userId != null) {
                 return false;
@@ -43,7 +43,7 @@ public class ChartsPreferences implements IsSerializable {
 
     @Override
     public String toString() {
-        return "ChartsPreferences [userId=" + userId + ", values=" + values + "]";
+        return "FusionUrls [userId=" + userId + ", values=" + values + "]";
     }
 
     public String getUserId() {

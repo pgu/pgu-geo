@@ -29,4 +29,6 @@ public interface LinkedinService extends RemoteService {
 
     void saveChartsPreferences(String userId, String jsonChartTypes);
 
+    void saveFusionUrls(String userId, String fusionUrls);
+
 }

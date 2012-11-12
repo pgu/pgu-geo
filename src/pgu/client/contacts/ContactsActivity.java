@@ -9,6 +9,7 @@ import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.contacts.event.FetchContactsNamesEvent;
 import pgu.client.contacts.event.SaveChartsPreferencesEvent;
+import pgu.client.contacts.event.SaveFusionUrlsEvent;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.shared.dto.ContactsForCharts;
 import pgu.shared.model.Country2ContactNames;
@@ -21,6 +22,7 @@ import com.google.web.bindery.event.shared.HandlerRegistration;
 public class ContactsActivity extends AbstractActivity implements //
 FetchContactsNamesEvent.Handler //
 , SaveChartsPreferencesEvent.Handler //
+, SaveFusionUrlsEvent.Handler //
 {
 
     private final ClientFactory        clientFactory;
@@ -46,6 +48,7 @@ FetchContactsNamesEvent.Handler //
         hRegs.clear();
         hRegs.add(view.addFetchContactsNamesHandler(this));
         hRegs.add(view.addSaveChartsPreferencesHandler(this));
+        hRegs.add(view.addSaveFusionUrlsHandler(this));
 
         panel.setWidget(view.asWidget());
 
@@ -103,9 +106,24 @@ FetchContactsNamesEvent.Handler //
 
     @Override
     public void onSaveChartsPreferences(final SaveChartsPreferencesEvent event) {
-        linkedinService.saveChartsPreferences(
+        linkedinService.saveChartsPreferences( //
                 clientFactory.getAppState().getUserId() //
                 , event.getChartTypes() //
+                , new AsyncCallbackApp<Void>(eventBus) {
+
+                    @Override
+                    public void onSuccess(final Void result) {
+                        // no-op
+                    }
+
+                });
+    }
+
+    @Override
+    public void onSaveFusionUrls(final SaveFusionUrlsEvent event) {
+        linkedinService.saveFusionUrls( //
+                clientFactory.getAppState().getUserId() //
+                , event.getFusionUrls() //
                 , new AsyncCallbackApp<Void>(eventBus) {
 
                     @Override

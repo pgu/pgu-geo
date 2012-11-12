@@ -12,6 +12,7 @@ import pgu.client.contacts.ContactsView;
 import pgu.client.contacts.event.FetchContactsNamesEvent;
 import pgu.client.contacts.event.FetchContactsNamesEvent.Handler;
 import pgu.client.contacts.event.SaveChartsPreferencesEvent;
+import pgu.client.contacts.event.SaveFusionUrlsEvent;
 import pgu.shared.dto.ContactsForCharts;
 import pgu.shared.model.Country2ContactNames;
 import pgu.shared.model.Country2ContactNumber;
@@ -83,6 +84,8 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
 
     private final HashMap<String, HTMLPanel> type2chart = new HashMap<String, HTMLPanel>();
     private final HashMap<String, CheckBox> type2chartBox = new HashMap<String, CheckBox>();
+
+    private final ArrayList<String> fusionUrls = new ArrayList<String>();
 
     public ContactsViewImpl(final EventBus eventBus) {
         initWidget(uiBinder.createAndBindUi(this));
@@ -224,6 +227,8 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         addFusionTable();
     }
 
+    //        https://www.google.com/fusiontables/embedviz?viz=MAP&q=select+col0%3E%3E1+from+1dlLBDtnjrqYG7W3eamJX3-1ogV8XdGHXkX2wOaU&h=false&lat=47.74359286233701&lng=6.064453125&z=3&t=1&l=col0%3E%3E1
+    //        https://www.google.com/fusiontables/embedviz?viz=GVIZ&t=BAR&containerId=gviz_canvas&q=select+col0%3E%3E0%2C+col1%3E%3E0+from+1dlLBDtnjrqYG7W3eamJX3-1ogV8XdGHXkX2wOaU&qrs=+where+col0%3E%3E0+%3E%3D+&qre=+and+col0%3E%3E0+%3C%3D+&qe=+limit+13&width=500&height=300
     private void addFusionTable() {
         final String url = fusionBox.getText();
 
@@ -231,12 +236,17 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
             return;
         }
 
-        //        https://www.google.com/fusiontables/embedviz?viz=MAP&q=select+col0%3E%3E1+from+1dlLBDtnjrqYG7W3eamJX3-1ogV8XdGHXkX2wOaU&h=false&lat=47.74359286233701&lng=6.064453125&z=3&t=1&l=col0%3E%3E1
-        //        https://www.google.com/fusiontables/embedviz?viz=GVIZ&t=BAR&containerId=gviz_canvas&q=select+col0%3E%3E0%2C+col1%3E%3E0+from+1dlLBDtnjrqYG7W3eamJX3-1ogV8XdGHXkX2wOaU&qrs=+where+col0%3E%3E0+%3E%3D+&qre=+and+col0%3E%3E0+%3C%3D+&qe=+limit+13&width=500&height=300
         addFusionPanel(url);
+        saveFusionUrls();
     }
 
     private void addFusionPanel(final String url) {
+
+        if (fusionUrls.contains(url)) {
+            return;
+        }
+
+        fusionUrls.add(url);
 
         final Frame frame = new Frame(url);
         frame.addStyleName(style.chartWell());
@@ -256,10 +266,24 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
             @Override
             public void onClick(final ClickEvent event) {
                 hp.removeFromParent();
+                fusionUrls.remove(url);
+                saveFusionUrls();
             }
         });
 
         fusionPanel.add(hp);
+    }
+
+    private void saveFusionUrls() {
+
+        final JsArrayString jsFusionUrls = JavaScriptObject.createArray().cast();
+
+        for (final String fusionUrl : fusionUrls) {
+            jsFusionUrls.push(fusionUrl);
+        }
+
+        final String jsonFusionUrls = JsonUtils.json_stringify(jsFusionUrls);
+        fireEvent(new SaveFusionUrlsEvent(jsonFusionUrls));
     }
 
     @UiHandler("worldBtn")
@@ -361,6 +385,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
 
         // add the fusion panels
         fusionPanel.clear();
+        fusionUrls.clear();
         parseFusionUrls(this, contactsForCharts.getFusionUrls());
     }
 
@@ -699,6 +724,11 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     @Override
     public HandlerRegistration addSaveChartsPreferencesHandler(final SaveChartsPreferencesEvent.Handler handler) {
         return addHandler(handler, SaveChartsPreferencesEvent.TYPE);
+    }
+
+    @Override
+    public HandlerRegistration addSaveFusionUrlsHandler(final SaveFusionUrlsEvent.Handler handler) {
+        return addHandler(handler, SaveFusionUrlsEvent.TYPE);
     }
 
 }
