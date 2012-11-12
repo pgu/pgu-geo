@@ -51,7 +51,7 @@ public class PublicViewImpl extends Composite implements PublicView, GoogleIsAva
     }
 
     @UiField(provided = true)
-    Section                   profileSection;
+    Section                   profileSection, contactsSection;
     @UiField
     NavLink                   locContainer;
     @UiField
@@ -72,6 +72,9 @@ public class PublicViewImpl extends Composite implements PublicView, GoogleIsAva
     public PublicViewImpl() {
 
         profileSection = new Section("public:profile");
+        contactsSection = new Section("public:contacts");
+
+        // TODO PGU Nov 12, 2012 rendre visible ou pas les contacts
 
         initWidget(uiBinder.createAndBindUi(this));
 

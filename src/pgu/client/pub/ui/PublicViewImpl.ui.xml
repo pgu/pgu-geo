@@ -14,6 +14,8 @@
         .profile_section {
             padding-top: 0px;
         }
+        .contacts_section {
+        }
         #pgu_geo_public_profile_map { 
             height: 570px; 
             position: relative; 
@@ -91,6 +93,15 @@
                                 </div>
                             </g:HTMLPanel>
                         </div>
+                    </g:HTMLPanel>
+                </div>
+            </g:HTMLPanel>
+        </b:Section>    
+        <b:Section ui:field="contactsSection" addStyleNames="{style.contacts_section}">
+            <g:HTMLPanel addStyleNames="row-fluid">
+                <div class="span12">
+                    <g:HTMLPanel addStyleNames="page-header">
+                        <h3>Contacts</h3>
                     </g:HTMLPanel>
                 </div>
             </g:HTMLPanel>
