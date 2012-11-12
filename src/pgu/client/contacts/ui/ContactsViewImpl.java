@@ -361,7 +361,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         }
 
         for (final CheckBox checkBox : type2chartBox.values()) {
-            checkBox.setVisible(false);
+            checkBox.setValue(false);
         }
     }
 
@@ -370,13 +370,17 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     private native void parseChartsPreferences(final ContactsViewImpl view, final String json) /*-{
         // ['world','americas']
         var chart_types = [];
+        var hasToSaveConfig = false;
 
         if (!json) {
+
             chart_types.push('world');
             chart_types.push('pie');
 
+            hasToSaveConfig = true;
+
         } else {
-            chart_types.concat(JSON.parse(json));
+            chart_types = chart_types.concat(JSON.parse(json));
         }
 
         view.@pgu.client.contacts.ui.ContactsViewImpl::clearDisplayedChartTypes()();
@@ -388,6 +392,10 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         }
 
         view.@pgu.client.contacts.ui.ContactsViewImpl::displayChartTypes()();
+
+        if (hasToSaveConfig) {
+            view.@pgu.client.contacts.ui.ContactsViewImpl::saveChartsPreferences()();
+        }
 
     }-*/;
 
