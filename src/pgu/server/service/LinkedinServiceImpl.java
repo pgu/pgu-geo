@@ -40,6 +40,7 @@ import pgu.shared.dto.Person;
 import pgu.shared.dto.Profile;
 import pgu.shared.dto.RequestToken;
 import pgu.shared.model.ChartsPreferences;
+import pgu.shared.model.ContactsNumberByCountry;
 import pgu.shared.model.Country2ContactNames;
 import pgu.shared.model.Country2ContactNumber;
 import pgu.shared.model.FusionUrls;
@@ -681,6 +682,22 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         fusionUrls.setUserId(userId);
         fusionUrls.setValues(jsonFusionUrls);
         dao.ofy().async().put(fusionUrls);
+    }
+
+    @Override
+    public void saveContactsNumberByCountry(final String userId, final String jsonContactsNumberByCountry) {
+
+        if (u.isVoid(jsonContactsNumberByCountry) //
+                || "[]".equals(jsonContactsNumberByCountry)) {
+
+            dao.ofy().async().delete(ContactsNumberByCountry.class, userId);
+            return;
+        }
+
+        final ContactsNumberByCountry contactsNumberByCountry = new ContactsNumberByCountry();
+        contactsNumberByCountry.setUserId(userId);
+        contactsNumberByCountry.setValues(jsonContactsNumberByCountry);
+        dao.ofy().async().put(contactsNumberByCountry);
     }
 
 }

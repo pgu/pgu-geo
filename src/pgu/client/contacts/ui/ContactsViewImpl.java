@@ -12,6 +12,7 @@ import pgu.client.contacts.ContactsView;
 import pgu.client.contacts.event.FetchContactsNamesEvent;
 import pgu.client.contacts.event.FetchContactsNamesEvent.Handler;
 import pgu.client.contacts.event.SaveChartsPreferencesEvent;
+import pgu.client.contacts.event.SaveContactsNumberByCountryEvent;
 import pgu.client.contacts.event.SaveFusionUrlsEvent;
 import pgu.client.resources.ResourcesApp;
 import pgu.client.resources.ResourcesApp.CssResourceApp;
@@ -376,7 +377,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
             hasToBuildGeoChartWhenReady = true;
 
         } else {
-            buildGeoCharts();
+            buildCharts();
 
         }
 
@@ -518,7 +519,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     private final TreeMap<Integer, ArrayList<String>> weight2codes = new TreeMap<Integer, ArrayList<String>>();
     private boolean hasToBuildGeoChartWhenReady = false;
 
-    private void buildGeoCharts() {
+    private void buildCharts() {
 
         initDataTable();
         for (final Entry<Integer, ArrayList<String>> e : weight2codes.entrySet()) {
@@ -529,10 +530,17 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
                 addDataRow(countryCode, weight);
             }
         }
-        buildGeoChartsUI(this);
+        buildChartsUI(this);
+
+        final String jsonContactsNumberByCountry = JsonUtils.json_stringify(getContactsTable());
+        fireEvent(new SaveContactsNumberByCountryEvent(jsonContactsNumberByCountry));
     }
 
-    private native void buildGeoChartsUI(ContactsViewImpl view) /*-{
+    private native JavaScriptObject getContactsTable() /*-{
+        return $wnd.pgu_geo.contacts_table;
+    }-*/;
+
+    private native void buildChartsUI(ContactsViewImpl view) /*-{
         $wnd.console.log('build geo chart');
 
         var
@@ -661,7 +669,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         if (hasToBuildGeoChartWhenReady) {
             hasToBuildGeoChartWhenReady = false;
 
-            buildGeoCharts();
+            buildCharts();
         }
     }
 
@@ -728,6 +736,11 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     @Override
     public HandlerRegistration addSaveFusionUrlsHandler(final SaveFusionUrlsEvent.Handler handler) {
         return addHandler(handler, SaveFusionUrlsEvent.TYPE);
+    }
+
+    @Override
+    public HandlerRegistration addSaveContactsNumberByCountryHandler(final SaveContactsNumberByCountryEvent.Handler handler) {
+        return addHandler(handler, SaveContactsNumberByCountryEvent.TYPE);
     }
 
 }

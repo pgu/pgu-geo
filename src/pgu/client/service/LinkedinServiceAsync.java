@@ -30,4 +30,7 @@ public interface LinkedinServiceAsync {
 
     void saveFusionUrls(String userId, String fusionUrls, AsyncCallback<Void> asyncCallbackApp);
 
+    void saveContactsNumberByCountry(String userId, String contactsNumberByCountry,
+            AsyncCallback<Void> asyncCallbackApp);
+
 }

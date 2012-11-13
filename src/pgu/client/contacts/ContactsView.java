@@ -2,6 +2,7 @@ package pgu.client.contacts;
 
 import pgu.client.contacts.event.FetchContactsNamesEvent;
 import pgu.client.contacts.event.SaveChartsPreferencesEvent;
+import pgu.client.contacts.event.SaveContactsNumberByCountryEvent;
 import pgu.client.contacts.event.SaveFusionUrlsEvent;
 import pgu.shared.dto.ContactsForCharts;
 import pgu.shared.model.Country2ContactNames;
@@ -12,6 +13,7 @@ public interface ContactsView extends IsWidget //
 , FetchContactsNamesEvent.HasFetchContactsNamesHandlers //
 , SaveChartsPreferencesEvent.HasSaveChartsPreferencesHandlers //
 , SaveFusionUrlsEvent.HasSaveFusionUrlsHandlers //
+, SaveContactsNumberByCountryEvent.HasSaveContactsNumberByCountryHandlers //
 {
 
     void showCharts(ContactsForCharts contactsForCharts);

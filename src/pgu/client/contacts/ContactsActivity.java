@@ -9,6 +9,7 @@ import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.contacts.event.FetchContactsNamesEvent;
 import pgu.client.contacts.event.SaveChartsPreferencesEvent;
+import pgu.client.contacts.event.SaveContactsNumberByCountryEvent;
 import pgu.client.contacts.event.SaveFusionUrlsEvent;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.shared.dto.ContactsForCharts;
@@ -23,6 +24,7 @@ public class ContactsActivity extends AbstractActivity implements //
 FetchContactsNamesEvent.Handler //
 , SaveChartsPreferencesEvent.Handler //
 , SaveFusionUrlsEvent.Handler //
+, SaveContactsNumberByCountryEvent.Handler //
 {
 
     private final ClientFactory        clientFactory;
@@ -124,6 +126,21 @@ FetchContactsNamesEvent.Handler //
         linkedinService.saveFusionUrls( //
                 clientFactory.getAppState().getUserId() //
                 , event.getFusionUrls() //
+                , new AsyncCallbackApp<Void>(eventBus) {
+
+                    @Override
+                    public void onSuccess(final Void result) {
+                        // no-op
+                    }
+
+                });
+    }
+
+    @Override
+    public void onSaveContactsNumberByCountry(final SaveContactsNumberByCountryEvent event) {
+        linkedinService.saveContactsNumberByCountry( //
+                clientFactory.getAppState().getUserId() //
+                , event.getContactsNumberByCountry() //
                 , new AsyncCallbackApp<Void>(eventBus) {
 
                     @Override

@@ -493,11 +493,22 @@ public class PublicViewImpl extends Composite implements PublicView, GoogleIsAva
         contactsSection.setVisible(true);
         chartsContainer.clear();
 
+        buildCharts(publicContacts.getContactsNumberByCountry());
+        parseFusionUrls(this, publicContacts.getFusionUrls());
+    }
+
+    private void buildCharts(final String contactsNumberByCountry) {
+
         // TODO PGU Nov 12, 2012 charts and maps: for each, create a div with a id
         // that will be used as container for the creation of the map or chart
 
-        parseFusionUrls(this, publicContacts.getFusionUrls());
+        parseContactsNumberByCountry(this, contactsNumberByCountry);
     }
+
+    private native void parseContactsNumberByCountry(final PublicViewImpl publicViewImpl, final String contactsNumberByCountry) /*-{
+        // TODO Auto-generated method stub
+
+    }-*/;
 
     private native void parseFusionUrls(PublicViewImpl view, String fusionUrls) /*-{
         // [url1, url2]

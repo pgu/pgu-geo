@@ -3,6 +3,7 @@ package pgu.server.service;
 import pgu.client.service.PublicProfileService;
 import pgu.server.access.DAO;
 import pgu.shared.dto.PublicContacts;
+import pgu.shared.model.ContactsNumberByCountry;
 import pgu.shared.model.FusionUrls;
 import pgu.shared.model.PublicProfile;
 import pgu.shared.model.UserAndLocations;
@@ -58,11 +59,15 @@ public class PublicProfileServiceImpl extends RemoteServiceServlet implements Pu
     @Override
     public PublicContacts fetchPublicContacts(final String userId) {
 
+        final ContactsNumberByCountry contactsNumberByCountry = dao.ofy().find(ContactsNumberByCountry.class, userId);
+        final String contactsNumberByCountryValues = contactsNumberByCountry == null ? null : contactsNumberByCountry.getValues();
+
         final FusionUrls fusionUrls = dao.ofy().find(FusionUrls.class, userId);
         final String fusionUrlValues = fusionUrls == null ? null : fusionUrls.getValues();
 
         final PublicContacts publicContacts = new PublicContacts();
         publicContacts.setFusionUrls(fusionUrlValues);
+        publicContacts.setContactsNumberByCountry(contactsNumberByCountryValues);
         return publicContacts;
     }
 
