@@ -4,6 +4,8 @@
             xmlns:pgu="urn:import:pgu.client.components.playtoolbar"
             xmlns:b="urn:import:com.github.gwtbootstrap.client.ui" >
 
+    <ui:with field="res" type='pgu.client.resources.ResourcesApp' />
+
     <ui:style>
         .location {
             font-weight: bold;    
@@ -106,10 +108,20 @@
                 </div>
             </g:HTMLPanel>
             <g:HTMLPanel addStyleNames="row-fluid">
-                <div class="span12">
-                    <g:HTMLPanel ui:field="chartsContainer" addStyleNames="row-fluid" />
-                </div>
+                <g:HTMLPanel ui:field="pieChart" addStyleNames="{res.css.chartWell}" />
+                <g:HTMLPanel ui:field="barChart" addStyleNames="{res.css.chartWell}" />
+                <g:HTMLPanel ui:field="worldMap" addStyleNames="{res.css.chartWell}" />
+                <g:HTMLPanel ui:field="americasMap" addStyleNames="{res.css.chartWell}" />
+                <g:HTMLPanel ui:field="europeMap" addStyleNames="{res.css.chartWell}" />
+                <g:HTMLPanel ui:field="asiaMap" addStyleNames="{res.css.chartWell}" />
+                <g:HTMLPanel ui:field="oceaniaMap" addStyleNames="{res.css.chartWell}" />
+                <g:HTMLPanel ui:field="africaMap" addStyleNames="{res.css.chartWell}" />
+                <div style="clear:both" />
             </g:HTMLPanel>
+            <g:HTMLPanel addStyleNames="row-fluid" >
+                <g:HTMLPanel ui:field="fusionPanel" />
+            </g:HTMLPanel>
+            
         </b:Section>    
         
         

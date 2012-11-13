@@ -48,7 +48,7 @@ public class PublicClientFactoryImpl implements PublicClientFactory {
     @Override
     public PublicView getPublicView() {
         if (publicView == null) {
-            publicView = new PublicViewImpl();
+            publicView = new PublicViewImpl(eventBus);
         }
         return publicView;
     }

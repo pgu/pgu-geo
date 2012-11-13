@@ -51,6 +51,7 @@ FetchContactsNamesEvent.Handler //
         hRegs.add(view.addFetchContactsNamesHandler(this));
         hRegs.add(view.addSaveChartsPreferencesHandler(this));
         hRegs.add(view.addSaveFusionUrlsHandler(this));
+        hRegs.add(view.addSaveContactsNumberByCountryHandler(this));
 
         panel.setWidget(view.asWidget());
 

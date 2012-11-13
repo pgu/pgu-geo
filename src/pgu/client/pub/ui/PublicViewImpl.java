@@ -1,9 +1,12 @@
 package pgu.client.pub.ui;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
+import pgu.client.app.event.ChartsApiIsAvailableEvent;
 import pgu.client.app.event.GoogleIsAvailableEvent;
+import pgu.client.app.utils.ChartsUtils;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.GoogleUtils;
 import pgu.client.app.utils.LocationsUtils;
@@ -27,6 +30,7 @@ import pgu.client.resources.ResourcesApp;
 import pgu.client.resources.ResourcesApp.CssResourceApp;
 import pgu.shared.dto.PublicContacts;
 import pgu.shared.model.PublicProfile;
+import pgu.shared.utils.ChartType;
 
 import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.Section;
@@ -38,6 +42,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
@@ -45,10 +50,14 @@ import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
-public class PublicViewImpl extends Composite implements PublicView, GoogleIsAvailableEvent.Handler {
+public class PublicViewImpl extends Composite implements PublicView, GoogleIsAvailableEvent.Handler, ChartsApiIsAvailableEvent.Handler {
+
+    private static final String PREFIX_CHART_ID = "pgu_geo_public_contacts_";
 
     private static final String ACCORDION_ID = "pgu_geo_profile_items_accordion";
 
@@ -73,15 +82,21 @@ public class PublicViewImpl extends Composite implements PublicView, GoogleIsAva
     @UiField
     HTMLPanel                 multiPanel, singlePanel;
     @UiField
-    HTMLPanel                 chartsContainer;
+    HTMLPanel worldMap, americasMap, europeMap, asiaMap, oceaniaMap, africaMap;
+    @UiField
+    HTMLPanel pieChart, barChart;
+    @UiField
+    HTMLPanel fusionPanel;
 
     private PublicPresenter   presenter;
     private final ClientUtils u = new ClientUtils();
     private PublicProfile profile;
 
+    private final HashMap<String, HTMLPanel> type2chart = new HashMap<String, HTMLPanel>();
+
     private final CssResourceApp css;
 
-    public PublicViewImpl() {
+    public PublicViewImpl(final EventBus eventBus) {
 
         profileSection = new Section("public:profile");
         contactsSection = new Section("public:contacts");
@@ -89,6 +104,29 @@ public class PublicViewImpl extends Composite implements PublicView, GoogleIsAva
         initWidget(uiBinder.createAndBindUi(this));
 
         css = ResourcesApp.INSTANCE.css();
+
+        eventBus.addHandler(ChartsApiIsAvailableEvent.TYPE, this);
+
+        pieChart.getElement().setId(PREFIX_CHART_ID + ChartType.PIE);
+        barChart.getElement().setId(PREFIX_CHART_ID + ChartType.BAR);
+
+        worldMap.getElement().setId(PREFIX_CHART_ID + ChartType.WORLD);
+        americasMap.getElement().setId(PREFIX_CHART_ID + ChartType.AMERICAS);
+        europeMap.getElement().setId(PREFIX_CHART_ID + ChartType.EUROPE);
+        asiaMap.getElement().setId(PREFIX_CHART_ID + ChartType.ASIA);
+        oceaniaMap.getElement().setId(PREFIX_CHART_ID + ChartType.OCEANIA);
+        africaMap.getElement().setId(PREFIX_CHART_ID + ChartType.AFRICA);
+
+        type2chart.put(ChartType.AFRICA, africaMap);
+        type2chart.put(ChartType.AMERICAS, americasMap);
+        type2chart.put(ChartType.ASIA, asiaMap);
+        type2chart.put(ChartType.BAR, barChart);
+        type2chart.put(ChartType.EUROPE, europeMap);
+        type2chart.put(ChartType.OCEANIA, oceaniaMap);
+        type2chart.put(ChartType.PIE, pieChart);
+        type2chart.put(ChartType.WORLD, worldMap);
+
+        hideAllCharts();
 
         addHandler(this, GoogleIsAvailableEvent.TYPE);
 
@@ -486,31 +524,175 @@ public class PublicViewImpl extends Composite implements PublicView, GoogleIsAva
         return addHandler(handler, FetchPublicContactsEvent.TYPE);
     }
 
+    private boolean hasAtLeastOneChart = false;
+    private PublicContacts publicContacts;
+
     @Override
     public void setContacts(final PublicContacts publicContacts) {
-        // TODO PGU Nov 12, 2012 rendre visible ou pas les contacts
+        this.publicContacts = publicContacts;
 
-        contactsSection.setVisible(true);
-        chartsContainer.clear();
+        if (!ChartsUtils.isApiLoaded()) {
+            hasToBuildChartsWhenReady = true;
 
-        buildCharts(publicContacts.getContactsNumberByCountry());
+        } else {
+            setContactsInternal();
+
+        }
+    }
+
+    private void setContactsInternal() {
+        hasAtLeastOneChart = false;
+
+        hideAndClearAllCharts();
+        buildCharts(publicContacts);
+
+        fusionPanel.clear();
         parseFusionUrls(this, publicContacts.getFusionUrls());
+
+        contactsSection.setVisible(hasAtLeastOneChart);
     }
 
-    private void buildCharts(final String contactsNumberByCountry) {
+    private void hideAndClearAllCharts() {
+        hideAllCharts();
 
-        // TODO PGU Nov 12, 2012 charts and maps: for each, create a div with a id
-        // that will be used as container for the creation of the map or chart
+        for (final HTMLPanel chart : type2chart.values()) {
+            chart.clear();
+        }
+    }
 
+    private void buildCharts(final PublicContacts publicContacts) {
+
+        chartType2containerId.clear();
+
+        final String chartsPreferences = publicContacts.getChartsPreferences();
+        parseChartsPreferences(this, chartsPreferences);
+
+        if (chartType2containerId.isEmpty()) {
+            return;
+        }
+
+        final String contactsNumberByCountry = publicContacts.getContactsNumberByCountry();
         parseContactsNumberByCountry(this, contactsNumberByCountry);
+
+        for (final Entry<String, String> e : chartType2containerId.entrySet()) {
+
+            final String chartType = e.getKey();
+            final String containerId = e.getValue();
+
+            if (ChartType.PIE.equals(chartType)) {
+                addPieChart(this, containerId);
+
+            } else if (ChartType.BAR.equals(chartType)) {
+                addBarChart(this, containerId);
+
+            } else {
+                addGeoMap(this, containerId, ChartType.regionCode(chartType));
+            }
+
+            hasAtLeastOneChart = true;
+        }
     }
 
-    private native void parseContactsNumberByCountry(final PublicViewImpl publicViewImpl, final String contactsNumberByCountry) /*-{
-        // TODO Auto-generated method stub
+    private native void addGeoMap(PublicViewImpl view, String container_id, String region_code) /*-{
+
+        var
+            google = $wnd.google
+          , data_table = $wnd.pgu_geo.public_contacts_data_table
+        ;
+
+        var map_options = {height: 347, width: 556};
+
+        if ("" != region_code) {
+            map_options.region = region_code;
+        }
+
+        var geo_chart = new google.visualization.GeoChart($doc.getElementById(container_id));
+        geo_chart.draw(data_table, map_options);
 
     }-*/;
 
-    private native void parseFusionUrls(PublicViewImpl view, String fusionUrls) /*-{
+    private native void addBarChart(PublicViewImpl view, String container_id) /*-{
+        var
+            google = $wnd.google
+          , data_table = $wnd.pgu_geo.public_contacts_data_table
+          , bar_options = {
+                  title: '83 Contacts by countries'
+                , vAxis: {title: 'Country'}
+                , width : 556
+                , height : 347
+            }
+          , bar_chart = new google.visualization.BarChart($doc.getElementById(container_id))
+        ;
+
+        bar_chart.draw(data_table, bar_options);
+
+    }-*/;
+
+    private native void addPieChart(final PublicViewImpl view, final String container_id) /*-{
+        var
+            google = $wnd.google
+          , data_table = $wnd.pgu_geo.public_contacts_data_table
+          , pie_options = {
+                title:'83 Contacts by countries'
+                , is3D: true
+                , width : 556
+                , height : 347
+            }
+          , pie_chart = new google.visualization.PieChart($doc.getElementById(container_id))
+        ;
+
+        pie_chart.draw(data_table, pie_options);
+
+    }-*/;
+
+    private native void parseChartsPreferences(final PublicViewImpl view, final String json) /*-{
+        // ['world','americas']
+
+        if (!json) {
+            return;
+        }
+
+        var chart_types = JSON.parse(json);
+
+        for ( var i = 0, len = chart_types.length; i < len; i++) {
+            var chart_type = chart_types[i];
+
+            view.@pgu.client.pub.ui.PublicViewImpl::addChart(Ljava/lang/String;)( //
+            chart_type);
+        }
+
+    }-*/;
+
+    private final HashMap<String, String> chartType2containerId = new HashMap<String, String>();
+
+    private void addChart(final String chartType) {
+
+        final String chartId = PREFIX_CHART_ID + chartType;
+
+        UIObject.setVisible(DOM.getElementById(chartId), true);
+
+        chartType2containerId.put(chartType, chartId);
+    }
+
+    private native void parseContactsNumberByCountry(final PublicViewImpl view, final String json) /*-{
+        // [['Country', 'Contacts'], ['es', 10]]
+
+        var data;
+
+        if (!json) {
+            data = [['Country', 'Contacts']];
+        } else {
+            data = JSON.parse(json);
+        }
+
+        var
+            google = $wnd.google
+        ;
+
+        $wnd.pgu_geo.public_contacts_data_table = google.visualization.arrayToDataTable(data);
+    }-*/;
+
+    private native void parseFusionUrls(PublicViewImpl view, String json) /*-{
         // [url1, url2]
 
         if (!json) {
@@ -533,7 +715,26 @@ public class PublicViewImpl extends Composite implements PublicView, GoogleIsAva
         final Frame frame = new Frame(url);
         frame.addStyleName(css.chartWell());
 
-        chartsContainer.add(frame);
+        fusionPanel.add(frame);
+
+        hasAtLeastOneChart = true;
+    }
+
+    private void hideAllCharts() {
+        for (final HTMLPanel chart : type2chart.values()) {
+            chart.setVisible(false);
+        }
+    }
+
+    private boolean hasToBuildChartsWhenReady = false;
+
+    @Override
+    public void onChartsApiIsAvailable(final ChartsApiIsAvailableEvent event) {
+        if (hasToBuildChartsWhenReady) {
+            hasToBuildChartsWhenReady = false;
+
+            setContactsInternal();
+        }
     }
 
 }

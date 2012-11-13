@@ -136,7 +136,7 @@ public class ClientFactoryImpl implements ClientFactory {
     @Override
     public PublicView getPublicView() {
         if (publicView == null) {
-            publicView = new PublicViewImpl();
+            publicView = new PublicViewImpl(eventBus);
         }
         return publicView;
     }

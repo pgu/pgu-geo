@@ -2,7 +2,9 @@ package pgu.server.service;
 
 import pgu.client.service.PublicProfileService;
 import pgu.server.access.DAO;
+import pgu.server.utils.AppUtils;
 import pgu.shared.dto.PublicContacts;
+import pgu.shared.model.ChartsPreferences;
 import pgu.shared.model.ContactsNumberByCountry;
 import pgu.shared.model.FusionUrls;
 import pgu.shared.model.PublicProfile;
@@ -14,6 +16,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class PublicProfileServiceImpl extends RemoteServiceServlet implements PublicProfileService {
 
     private final DAO           dao             = new DAO();
+    private final AppUtils      u               = new AppUtils();
 
     @Override
     public PublicProfile fetchPreferencesOnly(final String userId) {
@@ -59,8 +62,21 @@ public class PublicProfileServiceImpl extends RemoteServiceServlet implements Pu
     @Override
     public PublicContacts fetchPublicContacts(final String userId) {
 
-        final ContactsNumberByCountry contactsNumberByCountry = dao.ofy().find(ContactsNumberByCountry.class, userId);
-        final String contactsNumberByCountryValues = contactsNumberByCountry == null ? null : contactsNumberByCountry.getValues();
+        final ChartsPreferences chartsPreferences = dao.ofy().find(ChartsPreferences.class, userId);
+        final String chartsPreferenceValues = chartsPreferences == null ? null : chartsPreferences.getValues();
+
+        String contactsNumberByCountryValues;
+
+        if (u.isVoid(chartsPreferenceValues) //
+                || "[]".equals(chartsPreferenceValues)) {
+
+            contactsNumberByCountryValues = null;
+
+        } else {
+            final ContactsNumberByCountry contactsNumberByCountry = dao.ofy().find(ContactsNumberByCountry.class, userId);
+            contactsNumberByCountryValues = contactsNumberByCountry == null ? null : contactsNumberByCountry.getValues();
+        }
+
 
         final FusionUrls fusionUrls = dao.ofy().find(FusionUrls.class, userId);
         final String fusionUrlValues = fusionUrls == null ? null : fusionUrls.getValues();
@@ -68,6 +84,7 @@ public class PublicProfileServiceImpl extends RemoteServiceServlet implements Pu
         final PublicContacts publicContacts = new PublicContacts();
         publicContacts.setFusionUrls(fusionUrlValues);
         publicContacts.setContactsNumberByCountry(contactsNumberByCountryValues);
+        publicContacts.setChartsPreferences(chartsPreferenceValues);
         return publicContacts;
     }
 

@@ -7,6 +7,7 @@ public class PublicContacts implements IsSerializable {
 
     private String contactsNumberByCountry;
     private String fusionUrls;
+    private String chartsPreferences;
 
     public String getFusionUrls() {
         return fusionUrls;
@@ -22,6 +23,14 @@ public class PublicContacts implements IsSerializable {
 
     public void setContactsNumberByCountry(final String contactsNumberByCountry) {
         this.contactsNumberByCountry = contactsNumberByCountry;
+    }
+
+    public String getChartsPreferences() {
+        return chartsPreferences;
+    }
+
+    public void setChartsPreferences(final String chartsPreferences) {
+        this.chartsPreferences = chartsPreferences;
     }
 
 }
