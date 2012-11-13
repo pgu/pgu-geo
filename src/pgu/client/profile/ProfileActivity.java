@@ -20,7 +20,7 @@ import pgu.client.profile.ui.ProfileViewUtils;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.client.service.PublicProfileServiceAsync;
 import pgu.shared.dto.Profile;
-import pgu.shared.dto.PublicProfile;
+import pgu.shared.model.PublicProfile;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;

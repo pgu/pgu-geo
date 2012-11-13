@@ -25,8 +25,8 @@ import pgu.client.pub.event.FetchPublicContactsEvent;
 import pgu.client.pub.event.FetchPublicContactsEvent.Handler;
 import pgu.client.resources.ResourcesApp;
 import pgu.client.resources.ResourcesApp.CssResourceApp;
-import pgu.shared.dto.PublicProfile;
-import pgu.shared.model.PublicContacts;
+import pgu.shared.dto.PublicContacts;
+import pgu.shared.model.PublicProfile;
 
 import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.Section;
@@ -493,13 +493,8 @@ public class PublicViewImpl extends Composite implements PublicView, GoogleIsAva
         contactsSection.setVisible(true);
         chartsContainer.clear();
 
-
-
         // TODO PGU Nov 12, 2012 charts and maps: for each, create a div with a id
         // that will be used as container for the creation of the map or chart
-
-        // TODO PGU Nov 13, 2012 fusion urls: for each, create a frame with the url
-        // it will use the same style as the charts
 
         parseFusionUrls(this, publicContacts.getFusionUrls());
     }

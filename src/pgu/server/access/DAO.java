@@ -1,10 +1,10 @@
 package pgu.server.access;
 
-import pgu.shared.dto.PublicProfile;
 import pgu.shared.model.ChartsPreferences;
 import pgu.shared.model.Country2ContactNames;
 import pgu.shared.model.Country2ContactNumber;
 import pgu.shared.model.FusionUrls;
+import pgu.shared.model.PublicProfile;
 import pgu.shared.model.UserAndLocations;
 
 import com.googlecode.objectify.ObjectifyService;

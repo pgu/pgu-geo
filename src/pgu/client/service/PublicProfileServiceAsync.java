@@ -1,7 +1,7 @@
 package pgu.client.service;
 
-import pgu.shared.dto.PublicProfile;
-import pgu.shared.model.PublicContacts;
+import pgu.shared.dto.PublicContacts;
+import pgu.shared.model.PublicProfile;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 

@@ -1,8 +1,7 @@
-package pgu.shared.dto;
+package pgu.shared.model;
 
 import javax.persistence.Id;
 
-import pgu.shared.model.UserAndLocations;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 

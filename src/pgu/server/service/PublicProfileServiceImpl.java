@@ -2,8 +2,9 @@ package pgu.server.service;
 
 import pgu.client.service.PublicProfileService;
 import pgu.server.access.DAO;
-import pgu.shared.dto.PublicProfile;
-import pgu.shared.model.PublicContacts;
+import pgu.shared.dto.PublicContacts;
+import pgu.shared.model.FusionUrls;
+import pgu.shared.model.PublicProfile;
 import pgu.shared.model.UserAndLocations;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -56,8 +57,13 @@ public class PublicProfileServiceImpl extends RemoteServiceServlet implements Pu
 
     @Override
     public PublicContacts fetchPublicContacts(final String userId) {
-        // TODO Auto-generated method stub
-        return null;
+
+        final FusionUrls fusionUrls = dao.ofy().find(FusionUrls.class, userId);
+        final String fusionUrlValues = fusionUrls == null ? null : fusionUrls.getValues();
+
+        final PublicContacts publicContacts = new PublicContacts();
+        publicContacts.setFusionUrls(fusionUrlValues);
+        return publicContacts;
     }
 
 }

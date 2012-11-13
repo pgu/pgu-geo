@@ -9,8 +9,8 @@ import pgu.client.pub.event.FetchPublicContactsEvent;
 import pgu.client.pub.event.UserHeadlineEvent;
 import pgu.client.pub.event.UserNameEvent;
 import pgu.client.service.PublicProfileServiceAsync;
-import pgu.shared.dto.PublicProfile;
-import pgu.shared.model.PublicContacts;
+import pgu.shared.dto.PublicContacts;
+import pgu.shared.model.PublicProfile;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
