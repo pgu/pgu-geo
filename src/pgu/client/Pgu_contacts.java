@@ -20,6 +20,7 @@ import pgu.client.profile.ProfilePlace;
 import pgu.client.profile.ui.ProfileViewImpl;
 import pgu.client.pub.PublicMenuActivity;
 import pgu.client.pub.PublicMenuView;
+import pgu.client.resources.ResourcesApp;
 import pgu.shared.dto.LoginInfo;
 
 import com.google.gwt.activity.shared.ActivityManager;
@@ -89,6 +90,8 @@ public class Pgu_contacts implements EntryPoint {
         final PlaceController placeController = mvpContext.placeController;
 
         ChartsUtils.setEventBus(eventBus);
+
+        ResourcesApp.INSTANCE.css().ensureInjected();
 
         if (isPublic) {
 

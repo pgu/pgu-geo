@@ -13,6 +13,8 @@ import pgu.client.contacts.event.FetchContactsNamesEvent;
 import pgu.client.contacts.event.FetchContactsNamesEvent.Handler;
 import pgu.client.contacts.event.SaveChartsPreferencesEvent;
 import pgu.client.contacts.event.SaveFusionUrlsEvent;
+import pgu.client.resources.ResourcesApp;
+import pgu.client.resources.ResourcesApp.CssResourceApp;
 import pgu.shared.dto.ContactsForCharts;
 import pgu.shared.model.Country2ContactNames;
 import pgu.shared.model.Country2ContactNumber;
@@ -31,7 +33,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -51,12 +52,6 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     interface ContactsViewImplUiBinder extends UiBinder<Widget, ContactsViewImpl> {
     }
 
-    interface ChartStyle extends CssResource {
-        String chartWell();
-    }
-
-    @UiField
-    ChartStyle style;
     @UiField
     CheckBox worldBtn, americasBtn, europeBtn, asiaBtn, oceaniaBtn, africaBtn;
     @UiField
@@ -82,6 +77,8 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     @UiField
     Button infoPopBtn, fusionInfoPopBtn;
 
+    private final CssResourceApp css;
+
     private final HashMap<String, HTMLPanel> type2chart = new HashMap<String, HTMLPanel>();
     private final HashMap<String, CheckBox> type2chartBox = new HashMap<String, CheckBox>();
 
@@ -89,6 +86,8 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
 
     public ContactsViewImpl(final EventBus eventBus) {
         initWidget(uiBinder.createAndBindUi(this));
+
+        css = ResourcesApp.INSTANCE.css();
 
         pieChart.getElement().setId("pgu_geo_contacts_piechart");
         barChart.getElement().setId("pgu_geo_contacts_barchart");
@@ -249,7 +248,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         fusionUrls.add(url);
 
         final Frame frame = new Frame(url);
-        frame.addStyleName(style.chartWell());
+        frame.addStyleName(css.chartWell());
 
         final Button closeBtn = new Button();
         closeBtn.setText("x");

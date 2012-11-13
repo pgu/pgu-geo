@@ -23,6 +23,8 @@ import pgu.client.pub.PublicPresenter;
 import pgu.client.pub.PublicView;
 import pgu.client.pub.event.FetchPublicContactsEvent;
 import pgu.client.pub.event.FetchPublicContactsEvent.Handler;
+import pgu.client.resources.ResourcesApp;
+import pgu.client.resources.ResourcesApp.CssResourceApp;
 import pgu.shared.dto.PublicProfile;
 import pgu.shared.model.PublicContacts;
 
@@ -39,6 +41,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -66,12 +69,17 @@ public class PublicViewImpl extends Composite implements PublicView, GoogleIsAva
     @UiField
     PlayToolbar               playToolbar;
     @UiField
-    HTMLPanel                 spContainer, summaryPanel, profileItemPanel //
-    , multiPanel, singlePanel;
+    HTMLPanel                 spContainer, summaryPanel, profileItemPanel;
+    @UiField
+    HTMLPanel                 multiPanel, singlePanel;
+    @UiField
+    HTMLPanel                 chartsContainer;
 
     private PublicPresenter   presenter;
     private final ClientUtils u = new ClientUtils();
     private PublicProfile profile;
+
+    private final CssResourceApp css;
 
     public PublicViewImpl() {
 
@@ -79,6 +87,8 @@ public class PublicViewImpl extends Composite implements PublicView, GoogleIsAva
         contactsSection = new Section("public:contacts");
 
         initWidget(uiBinder.createAndBindUi(this));
+
+        css = ResourcesApp.INSTANCE.css();
 
         addHandler(this, GoogleIsAvailableEvent.TYPE);
 
@@ -477,11 +487,47 @@ public class PublicViewImpl extends Composite implements PublicView, GoogleIsAva
     }
 
     @Override
-    public void setContacts(final PublicContacts result) {
-        // TODO Auto-generated method stub
+    public void setContacts(final PublicContacts publicContacts) {
         // TODO PGU Nov 12, 2012 rendre visible ou pas les contacts
 
         contactsSection.setVisible(true);
+        chartsContainer.clear();
+
+
+
+        // TODO PGU Nov 12, 2012 charts and maps: for each, create a div with a id
+        // that will be used as container for the creation of the map or chart
+
+        // TODO PGU Nov 13, 2012 fusion urls: for each, create a frame with the url
+        // it will use the same style as the charts
+
+        parseFusionUrls(this, publicContacts.getFusionUrls());
+    }
+
+    private native void parseFusionUrls(PublicViewImpl view, String fusionUrls) /*-{
+        // [url1, url2]
+
+        if (!json) {
+            return;
+        }
+
+        var fusion_urls = JSON.parse(json);
+        for ( var i = 0, len = fusion_urls.length; i < len; i++) {
+
+            var fusion_url = fusion_urls[i];
+            view.@pgu.client.pub.ui.PublicViewImpl::addFusionPanel(Ljava/lang/String;)( //
+            fusion_url);
+
+        }
+
+    }-*/;
+
+    private void addFusionPanel(final String url) {
+
+        final Frame frame = new Frame(url);
+        frame.addStyleName(css.chartWell());
+
+        chartsContainer.add(frame);
     }
 
 }

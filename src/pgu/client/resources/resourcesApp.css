@@ -1,0 +1,10 @@
+
+.chartWell {
+    float: left;
+    margin: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    width: 556px;
+    height: 347px;
+}

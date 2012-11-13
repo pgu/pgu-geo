@@ -9,5 +9,10 @@ public class PublicContacts implements IsSerializable {
     @Id
     private String userId;
 
+    public String getFusionUrls() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 
 }

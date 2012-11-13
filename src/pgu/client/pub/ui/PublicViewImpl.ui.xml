@@ -105,6 +105,11 @@
                     </g:HTMLPanel>
                 </div>
             </g:HTMLPanel>
+            <g:HTMLPanel addStyleNames="row-fluid">
+                <div class="span12">
+                    <g:HTMLPanel ui:field="chartsContainer" addStyleNames="row-fluid" />
+                </div>
+            </g:HTMLPanel>
         </b:Section>    
         
         
