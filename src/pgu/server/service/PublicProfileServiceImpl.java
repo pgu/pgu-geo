@@ -11,6 +11,7 @@ import pgu.shared.model.PublicProfile;
 import pgu.shared.model.UserAndLocations;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.googlecode.objectify.Result;
 
 @SuppressWarnings("serial")
 public class PublicProfileServiceImpl extends RemoteServiceServlet implements PublicProfileService {
@@ -62,7 +63,10 @@ public class PublicProfileServiceImpl extends RemoteServiceServlet implements Pu
     @Override
     public PublicContacts fetchPublicContacts(final String userId) {
 
-        final ChartsPreferences chartsPreferences = dao.ofy().find(ChartsPreferences.class, userId);
+        final Result<ChartsPreferences> rChartsPreferences = dao.ofy().async().find(ChartsPreferences.class, userId);
+        final Result<FusionUrls> rFusionUrls = dao.ofy().async().find(FusionUrls.class, userId);
+
+        final ChartsPreferences chartsPreferences = rChartsPreferences.get();
         final String chartsPreferenceValues = chartsPreferences == null ? null : chartsPreferences.getValues();
 
         String contactsNumberByCountryValues;
@@ -73,12 +77,13 @@ public class PublicProfileServiceImpl extends RemoteServiceServlet implements Pu
             contactsNumberByCountryValues = null;
 
         } else {
-            final ContactsNumberByCountry contactsNumberByCountry = dao.ofy().find(ContactsNumberByCountry.class, userId);
+
+            final Result<ContactsNumberByCountry> rContactsNumberByCountry = dao.ofy().async().find(ContactsNumberByCountry.class, userId);
+            final ContactsNumberByCountry contactsNumberByCountry = rContactsNumberByCountry.get();
             contactsNumberByCountryValues = contactsNumberByCountry == null ? null : contactsNumberByCountry.getValues();
         }
 
-
-        final FusionUrls fusionUrls = dao.ofy().find(FusionUrls.class, userId);
+        final FusionUrls fusionUrls = rFusionUrls.get();
         final String fusionUrlValues = fusionUrls == null ? null : fusionUrls.getValues();
 
         final PublicContacts publicContacts = new PublicContacts();
