@@ -9,6 +9,12 @@ public class PublicContacts implements IsSerializable {
     private String fusionUrls;
     private String chartsPreferences;
 
+    @Override
+    public String toString() {
+        return "PublicContacts [contactsNumberByCountry=" + contactsNumberByCountry + ", fusionUrls=" + fusionUrls
+                + ", chartsPreferences=" + chartsPreferences + "]";
+    }
+
     public String getFusionUrls() {
         return fusionUrls;
     }
