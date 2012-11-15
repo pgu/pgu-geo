@@ -1,4 +1,4 @@
-<a href="http://pgu-contacts.appspot.com/"><strong>&#8594; Go to the website</strong></a><br/>
+<a href="http://pgu-geo.appspot.com/"><strong>&#8594; Go to the website</strong></a><br/>
 gson, oauth, gwt-bootstrap, objectify
 
 TODOs

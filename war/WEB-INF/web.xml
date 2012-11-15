@@ -22,20 +22,20 @@
   
   <servlet-mapping>
     <servlet-name>pub</servlet-name>
-    <url-pattern>/pgu_contacts/pub</url-pattern>
+    <url-pattern>/pgu_geo/pub</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>linkedinService</servlet-name>
-    <url-pattern>/pgu_contacts/linkedin</url-pattern>
+    <url-pattern>/pgu_geo/linkedin</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>login</servlet-name>
-    <url-pattern>/pgu_contacts/login</url-pattern>
+    <url-pattern>/pgu_geo/login</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->
   <welcome-file-list>
-    <welcome-file>Pgu_contacts.html</welcome-file>
+    <welcome-file>Pgu_geo.html</welcome-file>
   </welcome-file-list>
 
   <servlet>

@@ -80,7 +80,7 @@ GoToProfileEvent.Handler //
 
         String baseUrl = "";
         if (Location.getQueryString().contains("gwt.codesvr")) {
-            baseUrl ="http://127.0.0.1:8888/Pgu_contacts.html?gwt.codesvr=127.0.0.1:9997";
+            baseUrl ="http://127.0.0.1:8888/Pgu_geo.html?gwt.codesvr=127.0.0.1:9997";
         } else {
             baseUrl = GWT.getHostPageBaseURL();
         }

@@ -36,7 +36,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.web.bindery.event.shared.EventBus;
 
-public class Pgu_contacts implements EntryPoint {
+public class Pgu_geo implements EntryPoint {
 
     private native void initAppJSContext() /*-{
         $wnd.pgu_geo = {};

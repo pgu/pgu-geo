@@ -3,7 +3,7 @@ src/pgu.properties
 .project
 .settings/
 .gwt/
-war/pgu_contacts/
+war/pgu_geo/
 war/WEB-INF/deploy/
 war/WEB-INF/lib/
 war/WEB-INF/classes/

@@ -1,8 +1,8 @@
-Sitemap: http://pgu-contacts.appspot.com/sitemap.txt
+Sitemap: http://pgu-geo.appspot.com/sitemap.txt
 User-agent: *
 Disallow: /img/
 Disallow: /js/
-Disallow: /pgu_contacts/
-Disallow: /Pgu_contacts.css
-Disallow: /Pgu_contacts.html
+Disallow: /pgu_geo/
+Disallow: /Pgu_geo.css
+Disallow: /Pgu_geo.html
 Disallow: /WEB-INF/

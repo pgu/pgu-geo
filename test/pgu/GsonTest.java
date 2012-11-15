@@ -52,7 +52,7 @@ public class GsonTest {
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(
-                    "/home/pascal/bin/workspace_juno/pgu-contacts/war/WEB-INF/pgu/profile.json"));
+                    "/home/pascal/bin/workspace_juno/pgu-geo/war/WEB-INF/pgu/profile.json"));
         } catch (final FileNotFoundException e) {
             throw new RuntimeException(e);
         }

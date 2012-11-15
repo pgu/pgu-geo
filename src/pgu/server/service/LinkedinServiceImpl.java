@@ -187,8 +187,8 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
     }
 
     private String getCallbackUrl() {
-        return u.isEnvProd() ? "http://pgu-contacts.appspot.com"
-                : "http://127.0.0.1:8888/Pgu_contacts.html?gwt.codesvr=127.0.0.1:9997";
+        return u.isEnvProd() ? "http://pgu-geo.appspot.com"
+                : "http://127.0.0.1:8888/Pgu_geo.html?gwt.codesvr=127.0.0.1:9997";
     }
 
     private void logResponseCode(final Response response) {
