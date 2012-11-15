@@ -24,9 +24,22 @@
     <link type="text/css" rel="stylesheet" href="Pgu_geo.css">
     
     <title>Geo</title>
-    
+
+    <script type="text/javascript" src="http://platform.linkedin.com/in.js">
+      api_key: qwfxh7u2673i
+      authorize: true
+    </script>    
     <script type="text/javascript">
       
+      function onLinkedInAuth() {
+        IN.API.Profile("me")
+          .result( function(me) {
+    	    var id = me.values[0].id;
+    	    console.log(me);
+    	      // AJAX call to pass back id to your server
+    	    });
+      }
+    
       function pgu_geo_load_map_api_callback() {
     	  
     	  if (typeof pgu_geo === 'undefined') {
@@ -110,5 +123,10 @@
       </div>
     </noscript>
 
+<!--     <script type="in/Login"> -->
+<!--        Hello, <?js= firstName ?> <?js= lastName ?>. -->
+<!--     </script> -->
+
+    <script type="IN/Login" data-onAuth="onLinkedInAuth"></script>
   </body>
 </html>
