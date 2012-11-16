@@ -48,7 +48,6 @@ public class ClientFactoryImpl implements ClientFactory {
     private static LoginServiceAsync         loginService         = GWT.create(LoginService.class);
 
     private static AppState                  appState             = new AppState();
-    private LoginInfo                        loginInfo;
 
     @Override
     public EventBus getEventBus() {
@@ -82,18 +81,8 @@ public class ClientFactoryImpl implements ClientFactory {
     }
 
     @Override
-    public LoginInfo getLoginInfo() {
-        return loginInfo;
-    }
-
-    @Override
     public LinkedinServiceAsync getLinkedinService() {
         return linkedinService;
-    }
-
-    @Override
-    public void setLoginInfo(final LoginInfo loginInfo) {
-        this.loginInfo = loginInfo;
     }
 
     @Override

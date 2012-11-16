@@ -24,143 +24,174 @@
     <link type="text/css" rel="stylesheet" href="Pgu_geo.css">
     
     <title>Geo</title>
-
-    <script type="text/javascript" src="http://platform.linkedin.com/in.js">
-      /*
-      api_key: qwfxh7u2673i
-      authorize: true
-      scope: r_fullprofile r_network
-      onLoad: onLinkedInLoad
-      */
-    </script>    
-    <script type="text/javascript">
-//     https://developer.linkedin.com/documents/javascript-api-tutorial
-      function displayConnections(connections) {
-        console.log(connections); 
-      }  
-    
-    
-      function displayProfiles(profiles) {
-        console.log(profiles); 
-        
-        var member = profiles.values[0];
-        var msg = member.id + ", Hello " +  member.firstName + " " + member.lastName;
-        console.log(msg); 
-      }
-      
-      function onLinkedInLoad() {
-    	  console.log(" in load");
-    	  
-    	  IN.Event.on(IN, "auth", onLinkedInAuth);
-      }
-    
-      function onLinkedInAuth() {
-    	  console.log(" in auth");
-    	  
-        IN.API.Profile("me")
-          .fields(
-                  "id" //
-                  , "first-name" //
-                  , "last-name" //
-                  , "headline" //
-                  , "location" //
-                  , "numConnections" //
-                  , "numConnectionsCapped" //
-                  , "summary" //
-                  , "specialties" //
-                  , "pictureUrl" //
-                  , "publicProfileUrl" //
-                  , "positions:(id,company,endDate,isCurrent,startDate,summary,title,location)" //
-                  , "languages:(language,proficiency)" //
-                  , "educations" //
-          )
-          .result(displayProfiles);
-        
-          IN.API.Connections("me")
-          .fields("firstName", "lastName", "location")
-          .result(displayConnections);
-        
-//         function(me) {
-//             var id = me.values[0].id;
-//             console.log(me);
-//               // AJAX call to pass back id to your server
-//             }
-      }
-
-      
-      function pgu_geo_load_map_api_callback() {
-    	  
-    	  if (typeof pgu_geo === 'undefined') {
-    		  setTimeout(
-    		      function() {
-    		    	  pgu_geo_load_map_api_callback();
-    		      }
-    		      , 1000
-			  );
-    		  return;
-    	  }
-    	  
-    	  pgu_geo.init_geo();    	  
-      }
-      
-      function charts_callback() {
-    	  
-    	  if (typeof pgu_geo === 'undefined') {
-    		  setTimeout(
-    		      function() {
-    		    	  charts_callback();
-    		      }
-    		      , 1000
-			  );
-    		  return;
-    	  }
-    	  
-    	  pgu_geo.init_charts();    	  
-      }
-      
-      function pgu_geo_load_charts_api_callback() {
-    	  google.load('visualization', '1.0', {'packages': ['geochart', 'corechart'], 'callback':charts_callback});
-      }
-    
-      function load_scripts() {
-    	  
-    	  var map_script = document.createElement("script");
-    	  map_script.type = "text/javascript";
-    	  map_script.src = "http://maps.googleapis.com/maps/api/js?key=AIzaSyAJLUd4j8dQFHAuD2gy9Fr60ZR1IDVaGnE&sensor=false&callback=pgu_geo_load_map_api_callback";
-    	  document.body.appendChild(map_script);
-
-          setTimeout(
-                  function() {
-                	  var charts_script = document.createElement("script");
-                	  charts_script.type = "text/javascript";
-                	  charts_script.src = "https://www.google.com/jsapi?callback=pgu_geo_load_charts_api_callback";
-                	  document.body.appendChild(charts_script);
-                  }
-                  , 1000
-              );
-    	  
-      }
-      
-      function addLoadEvent(func) {
-    	  var oldonload = window.onload;
-    	  if (typeof window.onload != 'function') {
-    	    window.onload = func;
-    	  } else {
-    	    window.onload = function() {
-    	      if (oldonload) {
-    	        oldonload();
-    	      }
-    	      func();
-    	    }
-    	  }
-      }
-
-      addLoadEvent(load_scripts);
-//       window.onload = load_script;
-
-    </script>    
-    <script type="text/javascript" src="js/showdown.js"></script>
     <script type="text/javascript" src="pgu_geo/pgu_geo.nocache.js"></script>
+
+    <script type="text/javascript">
+    
+        function pgu_geo_add_load_event(fn) {
+            var old_onload = window.onload;
+            
+            if (typeof window.onload !== 'function') {
+                window.onload = fn;
+                
+            } else {
+                window.onload = function() {
+                    if (old_onload) {
+                        old_onload();
+                    }
+                    
+                    fn();
+                }
+            }
+        }
+
+        function pgu_geo_charts_callback() {
+        	console.log('pgu_geo_charts_callback');
+            
+            if (typeof pgu_geo === 'undefined') {
+                setTimeout(
+                    function() {
+                    	pgu_geo_charts_callback();
+                    }
+                    , 1000
+                );
+                return;
+            }
+            
+            pgu_geo.init_charts();          
+        }
+
+        function pgu_geo_load_charts_api_callback() {
+        	console.log('pgu_geo_load_charts_api_callback');
+            google.load('visualization', '1.0', {'packages': ['geochart', 'corechart'], 'callback':pgu_geo_charts_callback});
+        }
+
+        function pgu_geo_load_map_api_callback() {
+        	console.log('pgu_geo_load_map_api_callback');
+        	
+            if (typeof pgu_geo === 'undefined') {
+                setTimeout(
+                    function() {
+                        pgu_geo_load_map_api_callback();
+                    }
+                    , 1000
+                );
+                return;
+            }
+            
+            pgu_geo.init_geo();         
+        }
+
+        function pgu_geo_load_script(url, innerHTML) {
+        	console.log('pgu_geo_load_script ' + url);
+        	
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = url;
+            
+        	if (innerHTML) {
+        		script.innerHTML = innerHTML;
+        	}
+        		
+            document.body.appendChild(script);
+        }
+        
+        function pgu_geo_load_external_scripts() {
+        	console.log('pgu_geo_load_external_scripts');
+        	
+        	pgu_geo_load_script('js/showdown.js');
+        	pgu_geo_load_script('http://maps.googleapis.com/maps/api/js?key=AIzaSyAJLUd4j8dQFHAuD2gy9Fr60ZR1IDVaGnE&sensor=false&callback=pgu_geo_load_map_api_callback');
+        	pgu_geo_load_script('https://www.google.com/jsapi?callback=pgu_geo_load_charts_api_callback');
+
+        }
+
+        function pgu_geo_on_profile_load(profiles) {
+            console.log('pgu_geo_on_profile_load');
+            console.log(profiles); 
+            
+            var member = profiles.values[0];
+            var msg = member.id + ", Hello " +  member.firstName + " " + member.lastName;
+            console.log(msg); 
+        }       
+        
+        function pgu_geo_on_connections_load(connections) {
+            console.log('pgu_geo_on_connections_load');
+            console.log(connections); 
+        }  
+
+        function pgu_geo_on_linkedin_auth() {
+            console.log('pgu_geo_on_linkedin_auth');
+            
+            IN.API.Profile("me")
+            .fields(
+                    "id" //
+                    , "first-name" //
+                    , "last-name" //
+                    , "headline" //
+                    , "location" //
+                    , "numConnections" //
+                    , "numConnectionsCapped" //
+                    , "summary" //
+                    , "specialties" //
+                    , "pictureUrl" //
+                    , "publicProfileUrl" //
+                    , "positions:(id,company,endDate,isCurrent,startDate,summary,title,location)" //
+                    , "languages:(language,proficiency)" //
+                    , "educations" //
+            )
+            .result(pgu_geo_on_profile_load);
+          
+            IN.API.Connections("me")
+            .fields("firstName", "lastName", "location")
+            .result(pgu_geo_on_connections_load);
+        }
+
+        function pgu_geo_on_linkedin_load() {
+            console.log('pgu_geo_on_linkedin_load');
+            
+            var is_user_logged_in = IN.User.isAuthorized(); 
+            console.log(is_user_logged_in);
+
+            if (is_user_logged_in) {
+                pgu_geo.is_logged_in();
+            } else {
+                pgu_geo.is_logged_out();
+            }
+            
+            IN.Event.on(IN, "auth", pgu_geo_on_linkedin_auth);
+        }
+
+        function pgu_geo_load_linkedin_api() {
+            console.log('pgu_geo_load_linkedin_api');
+            
+            pgu_geo_load_script('http://platform.linkedin.com/in.js', //
+                      '/* \n' + //
+                      'api_key: qwfxh7u2673i \n' + //
+                      'authorize: true \n' + //
+                      'scope: r_fullprofile r_network \n' + //
+                      'onLoad: pgu_geo_on_linkedin_load \n' + //
+                      '*/ \n' //
+            );
+        }
+        
+        var pgu_geo_is_public_view = window.location.hash.indexOf('#!public:') === 0; 
+        
+        if (pgu_geo_is_public_view) {
+          console.log("is public");
+          // load the gwt application -> the public view
+        
+        } else {
+            console.log("is application");
+            // load linkedin api
+            // then load the gwt application
+            //    inside the gwt application: if the user is logged then show the current place
+            //                                else show the signin view
+            
+            // https://developer.linkedin.com/documents/javascript-api-tutorial
+            pgu_geo_add_load_event(pgu_geo_load_linkedin_api);
+        }
+    
+    </script>    
   </head>
   <body>
     <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>

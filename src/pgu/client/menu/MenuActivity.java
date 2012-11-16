@@ -1,6 +1,7 @@
 package pgu.client.menu;
 
 import pgu.client.app.AppState;
+import pgu.client.app.event.FetchLoginInfoEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.contacts.ContactsPlace;
 import pgu.client.menu.event.GoToAppStatsEvent;
@@ -21,17 +22,16 @@ GoToProfileEvent.Handler //
 , GoToContactsEvent.Handler //
 , GoToPublicProfileEvent.Handler //
 , GoToAppStatsEvent.Handler //
+, FetchLoginInfoEvent.Handler //
 {
 
     private final MenuView             view;
-    private final LoginInfo            loginInfo;
     private final ClientFactory        clientFactory;
     private final PlaceController placeController;
 
     public MenuActivity(final ClientFactory clientFactory, final PlaceController placeController) {
         this.clientFactory = clientFactory;
         view = clientFactory.getMenuView();
-        loginInfo = clientFactory.getLoginInfo();
         this.placeController = placeController;
     }
 
@@ -41,22 +41,7 @@ GoToProfileEvent.Handler //
         view.addGoToContactsHandler(this);
         view.addGoToPublicProfileHandler(this);
         view.addGoToAppStatsHandler(this);
-
-        final boolean isAdmin = loginInfo.isLoggedIn();
-        view.setIsAdmin(isAdmin);
-
-        if (isAdmin) {
-            view.setLogoutUrl(loginInfo.getLogoutUrl());
-
-        } else {
-            view.setLoginUrl(loginInfo.getLoginUrl());
-        }
-
-
-        final boolean isSuperAdmin = isAdmin //
-                && "guilcher.pascal.dev@gmail.com".equals(loginInfo.getEmailAddress());
-
-        view.setIsSuperAdmin(isSuperAdmin);
+        eventBus.addHandler(FetchLoginInfoEvent.TYPE, this);
     }
 
     @Override
@@ -92,6 +77,28 @@ GoToProfileEvent.Handler //
     @Override
     public void onGoToAppStats(final GoToAppStatsEvent event) {
         Window.open("appstats/", "appstats", null);
+    }
+
+    @Override
+    public void onFetchLoginInfo(final FetchLoginInfoEvent event) {
+
+        final LoginInfo loginInfo = event.getLoginInfo();
+
+        final boolean isAdmin = loginInfo.isLoggedIn();
+        view.setIsAdmin(isAdmin);
+
+        if (isAdmin) {
+            view.setLogoutUrl(loginInfo.getLogoutUrl());
+
+        } else {
+            view.setLoginUrl(loginInfo.getLoginUrl());
+        }
+
+
+        final boolean isSuperAdmin = isAdmin //
+                && "guilcher.pascal.dev@gmail.com".equals(loginInfo.getEmailAddress());
+
+        view.setIsSuperAdmin(isSuperAdmin);
     }
 
 }

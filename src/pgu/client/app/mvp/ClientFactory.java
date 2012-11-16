@@ -11,17 +11,12 @@ import pgu.client.pub.PublicView;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.client.service.LoginServiceAsync;
 import pgu.client.service.PublicProfileServiceAsync;
-import pgu.shared.dto.LoginInfo;
 
 public interface ClientFactory extends BaseClientFactory {
-
-    void setLoginInfo(LoginInfo loginInfo);
 
     AppState getAppState();
 
     MenuView getMenuView();
-
-    LoginInfo getLoginInfo();
 
     LinkedinServiceAsync getLinkedinService();
 

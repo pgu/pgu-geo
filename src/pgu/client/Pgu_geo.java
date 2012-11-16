@@ -2,6 +2,7 @@ package pgu.client;
 
 import pgu.client.app.AppActivity;
 import pgu.client.app.AppView;
+import pgu.client.app.event.FetchLoginInfoEvent;
 import pgu.client.app.mvp.AppActivityMapper;
 import pgu.client.app.mvp.AppPlaceHistoryMapper;
 import pgu.client.app.mvp.BaseClientFactory;
@@ -78,12 +79,25 @@ public class Pgu_geo implements EntryPoint {
         mvpContext.placeController = mvpContext.clientFactory.getPlaceController();
     }
 
+    private native void exportMethods() /*-{
+        $wnd.pgu_geo.is_logged_in = $entry(@pgu.client.Pgu_geo::isLoggedIn());
+        $wnd.pgu_geo.is_logged_out = $entry(@pgu.client.Pgu_geo::isLoggedOut());
+    }-*/;
+
+    private static Pgu_geo static_self = null;
+
     @Override
     public void onModuleLoad() {
+        GWT.log(" on module load");
+        static_self = this;
+
 
         final boolean isPublic = History.getToken().startsWith("!public");
+        GWT.log(" is public? " + isPublic);
 
         initJSContext(isPublic);
+        exportMethods();
+
         initMVPContext(isPublic);
 
         final EventBus eventBus = mvpContext.eventBus;
@@ -118,45 +132,53 @@ public class Pgu_geo implements EntryPoint {
             });
 
         } else {
-
-            if (true) {
-                return;
-            }
-
-            GWT.runAsync(new RunAsyncCallback() {
-
-                @Override
-                public void onSuccess() {
-
-                    final ClientFactory clientFactory = (ClientFactory) mvpContext.clientFactory;
-
-                    clientFactory.getLoginService().getLoginInfo(GWT.getHostPageBaseURL(),
-                            new AsyncCallbackApp<LoginInfo>(eventBus) {
-
-                        @Override
-                        public void onSuccess(final LoginInfo loginInfo) {
-                            clientFactory.setLoginInfo(loginInfo);
-
-                            final MenuActivity menuActivity = new MenuActivity(clientFactory, placeController);
-                            menuActivity.start(eventBus);
-                            final MenuView menuView = clientFactory.getMenuView();
-
-                            final Place defaultPlace = new ProfilePlace();
-
-                            startApplication(menuView, defaultPlace);
-                        }
-
-                    });
-                }
-
-                @Override
-                public void onFailure(final Throwable reason) {
-                    GWT.log("!!! problem: " + reason.getMessage());
-                }
-            });
-
+            // waits about the logged user information
         }
     }
+
+    public static void isLoggedIn() {
+        GWT.runAsync(new RunAsyncCallback() {
+
+            @Override
+            public void onSuccess() {
+
+                final MVPContext mvpContext = static_self.mvpContext;
+                final EventBus eventBus = mvpContext.eventBus;
+                final PlaceController placeController = mvpContext.placeController;
+
+                final ClientFactory clientFactory = (ClientFactory) mvpContext.clientFactory;
+
+                final MenuActivity menuActivity = new MenuActivity(clientFactory, placeController);
+                menuActivity.start(eventBus);
+                final MenuView menuView = clientFactory.getMenuView();
+
+                final Place defaultPlace = new ProfilePlace();
+
+                static_self.startApplication(menuView, defaultPlace);
+
+                clientFactory.getLoginService().getLoginInfo(GWT.getHostPageBaseURL(),
+                        new AsyncCallbackApp<LoginInfo>(eventBus) {
+
+                    @Override
+                    public void onSuccess(final LoginInfo loginInfo) {
+                        eventBus.fireEvent(new FetchLoginInfoEvent(loginInfo));
+                    }
+
+                });
+            }
+
+            @Override
+            public void onFailure(final Throwable reason) {
+                GWT.log("!!! problem: " + reason.getMessage());
+            }
+        });
+
+    }
+
+    public static void isLoggedOut() {
+        GWT.log(" SHOW SIGNIN PAGE");
+    }
+
 
     private void startApplication(final IsWidget menuView, final Place defaultPlace) {
 
@@ -179,7 +201,13 @@ public class Pgu_geo implements EntryPoint {
 
         RootPanel.get().add(appView);
         historyHandler.handleCurrentHistory();
+
+        loadExternalScripts();
     }
+
+    private native void loadExternalScripts() /*-{
+        $wnd.pgu_geo_load_external_scripts();
+    }-*/;
 
     private static class MVPContext {
         private ActivityMapper activityMapper;
