@@ -119,6 +119,10 @@ public class Pgu_geo implements EntryPoint {
 
         } else {
 
+            if (true) {
+                return;
+            }
+
             GWT.runAsync(new RunAsyncCallback() {
 
                 @Override

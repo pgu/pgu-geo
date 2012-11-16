@@ -52,4 +52,34 @@
     <url-pattern>/_ah/spi/*</url-pattern>
   </servlet-mapping>
 
+<!--     <security-constraint> -->
+<!--         <web-resource-collection> -->
+<!--             <web-resource-name>Secure content</web-resource-name> -->
+<!--             <url-pattern>/*</url-pattern> -->
+<!--         </web-resource-collection> -->
+<!--         <user-data-constraint> -->
+<!--             <transport-guarantee>CONFIDENTIAL</transport-guarantee> -->
+<!--         </user-data-constraint> -->
+<!--     </security-constraint> -->
+    
+<!--     <security-constraint> -->
+<!--         <web-resource-collection> -->
+<!--             <web-resource-name>Public content</web-resource-name> -->
+<!--             <url-pattern>/pgu_geo/pub/*</url-pattern> -->
+<!--         </web-resource-collection> -->
+<!--         <user-data-constraint> -->
+<!--             <transport-guarantee>NONE</transport-guarantee> -->
+<!--         </user-data-constraint> -->
+<!--     </security-constraint> -->
+    
+<!--     <security-constraint> -->
+<!--         <web-resource-collection> -->
+<!--             <web-resource-name>Login</web-resource-name> -->
+<!--             <url-pattern>/pgu_geo/login/*</url-pattern> -->
+<!--         </web-resource-collection> -->
+<!--         <user-data-constraint> -->
+<!--             <transport-guarantee>NONE</transport-guarantee> -->
+<!--         </user-data-constraint> -->
+<!--     </security-constraint> -->
+    
 </web-app>
