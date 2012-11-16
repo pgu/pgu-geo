@@ -28,6 +28,8 @@
 
     <script type="text/javascript">
     
+        var pgu_geo_is_user_already_logged = false;    
+        
         function pgu_geo_add_load_event(fn) {
             var old_onload = window.onload;
             
@@ -122,6 +124,10 @@
         function pgu_geo_on_linkedin_auth() {
             console.log('pgu_geo_on_linkedin_auth');
             
+            if (!pgu_geo_is_user_already_logged) {
+                pgu_geo.is_logged_in();
+            }
+            
             IN.API.Profile("me")
             .fields(
                     "id" //
@@ -150,6 +156,9 @@
             console.log('pgu_geo_on_linkedin_load');
             
             var is_user_logged_in = IN.User.isAuthorized(); 
+            
+            pgu_geo_is_user_already_logged = is_user_logged_in; 
+            
             console.log(is_user_logged_in);
 
             if (is_user_logged_in) {
