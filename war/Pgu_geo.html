@@ -49,18 +49,17 @@
 
         function pgu_geo_charts_callback() {
         	console.log('pgu_geo_charts_callback');
-            
-            if (typeof pgu_geo === 'undefined') {
-                setTimeout(
-                    function() {
-                    	pgu_geo_charts_callback();
-                    }
-                    , 1000
-                );
-                return;
-            }
-            
             pgu_geo.init_charts();          
+            
+//             if (typeof pgu_geo === 'undefined') {
+//                 setTimeout(
+//                     function() {
+//                     	pgu_geo_charts_callback();
+//                     }
+//                     , 1000
+//                 );
+//                 return;
+//             }
         }
 
         function pgu_geo_load_charts_api_callback() {

@@ -106,6 +106,10 @@ public class Pgu_geo implements EntryPoint {
         final boolean isPublic = History.getToken().startsWith("!public");
         GWT.log(" is public? " + isPublic);
 
+        // do everything for the public view
+        // else wait for linkedin api
+
+
         initJSContext(isPublic);
         exportMethods();
 
