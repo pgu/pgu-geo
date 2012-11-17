@@ -9,11 +9,13 @@ import pgu.client.app.event.LocationSuccessDeleteEvent;
 import pgu.client.app.event.LocationsSuccessSaveEvent;
 import pgu.client.app.event.NotificationEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
+import pgu.client.app.event.ShowdownIsAvailableEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.Level;
 import pgu.client.app.utils.LocationsUtils;
+import pgu.client.app.utils.ShowdownUtils;
 import pgu.client.profile.event.SaveLocationEvent;
 import pgu.client.profile.event.SaveMapPreferencesEvent;
 import pgu.client.profile.ui.ProfileViewUtils;
@@ -35,6 +37,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 , LocationShowOnMapEvent.Handler //
 , SaveLocationEvent.Handler //
 , SaveMapPreferencesEvent.Handler //
+, ShowdownIsAvailableEvent.Handler //
 {
 
     private final ClientFactory             clientFactory;
@@ -68,6 +71,8 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         view.showSaveWidget();
     }
 
+    private boolean hasToSetProfile = false;
+
     @Override
     public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
 
@@ -83,9 +88,18 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         eventBus.addHandler(LocationSuccessDeleteEvent.TYPE, this);
         eventBus.addHandler(LocationAddNewEvent.TYPE, this);
         eventBus.addHandler(LocationShowOnMapEvent.TYPE, this);
+        eventBus.addHandler(ShowdownIsAvailableEvent.TYPE, this);
 
         panel.setWidget(view.asWidget());
 
+        if (ShowdownUtils.isLoaded) {
+            setProfile();
+        } else {
+            hasToSetProfile = true;
+        }
+    }
+
+    private void setProfile() {
         u.fire(eventBus, new ShowWaitingIndicatorEvent());
 
         linkedinService.fetchProfile( //
@@ -173,6 +187,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
                 });
 
     }
+
 
     @Override
     public void addNewLocation(final String itemConfigId) {
@@ -350,6 +365,11 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         hRegs.clear();
 
         super.onStop();
+    }
+
+    @Override
+    public void onShowdownIsAvailable(final ShowdownIsAvailableEvent event) {
+        setProfile();
     }
 
 }
