@@ -16,7 +16,6 @@ import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ChartsUtils;
 import pgu.client.app.utils.GeoUtils;
 import pgu.client.app.utils.MarkdownUtils;
-import pgu.client.app.utils.ShowdownUtils;
 import pgu.client.contacts.ui.ContactsViewImpl;
 import pgu.client.menu.MenuActivity;
 import pgu.client.menu.MenuView;
@@ -30,11 +29,9 @@ import pgu.shared.dto.LoginInfo;
 
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
-import com.google.gwt.core.client.Callback;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
-import com.google.gwt.core.client.ScriptInjector;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
@@ -89,7 +86,15 @@ public class Pgu_geo implements EntryPoint {
     private native void exportMethods() /*-{
 		$wnd.pgu_geo.is_logged_in = $entry(@pgu.client.Pgu_geo::isLoggedIn());
 		$wnd.pgu_geo.is_logged_out = $entry(@pgu.client.Pgu_geo::isLoggedOut());
+		$wnd.pgu_geo.showdown_is_available = $entry(@pgu.client.Pgu_geo::showdownIsAvailable());
     }-*/;
+
+    public static void showdownIsAvailable() {
+        GWT.log("  !!!! showdown is available");
+        MarkdownUtils.isLoaded = true;
+        MarkdownUtils.initShowdownConverter();
+        static_self.mvpContext.eventBus.fireEvent(new ShowdownIsAvailableEvent());
+    }
 
     private static Pgu_geo static_self = null;
 
@@ -236,41 +241,7 @@ public class Pgu_geo implements EntryPoint {
         RootPanel.get().add(appView);
         historyHandler.handleCurrentHistory();
 
-        ScriptInjector //
-        .fromUrl(GWT.getHostPageBaseURL() + "js/showdown.js") //
-        .setCallback(getShowdownCallback(eventBus)) //
-        .inject();
-
         loadExternalScripts();
-    }
-
-    static abstract class ScriptCallback implements Callback<Void, Exception> {
-
-        private final EventBus eventBus;
-
-        public ScriptCallback(final EventBus eventBus) {
-            this.eventBus = eventBus;
-        }
-
-    }
-
-    private Callback<Void, Exception> getShowdownCallback(final EventBus eventBus) {
-        return new ScriptCallback(eventBus) {
-
-            @Override
-            public void onSuccess(final Void result) {
-                GWT.log("showdown is here!");
-                ShowdownUtils.isLoaded = true;
-                MarkdownUtils.initShowdownConverter();
-                eventBus.fireEvent(new ShowdownIsAvailableEvent());
-            }
-
-            @Override
-            public void onFailure(final Exception reason) {
-                GWT.log("Oops! showdown is NOT here: " + reason);
-                ShowdownUtils.isLoaded = false;
-            }
-        };
     }
 
     private native void loadExternalScripts() /*-{

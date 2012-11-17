@@ -2,7 +2,9 @@ package pgu.client.app.utils;
 
 public class MarkdownUtils {
 
-    private static native void initShowdownConverter() /*-{
+    public static boolean isLoaded = false;
+
+    public static native void initShowdownConverter() /*-{
         $wnd.pgu_geo.showdown_converter = new $wnd.Showdown.converter();
     }-*/;
 

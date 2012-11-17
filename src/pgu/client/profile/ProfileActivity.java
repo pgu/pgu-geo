@@ -15,7 +15,7 @@ import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.Level;
 import pgu.client.app.utils.LocationsUtils;
-import pgu.client.app.utils.ShowdownUtils;
+import pgu.client.app.utils.MarkdownUtils;
 import pgu.client.profile.event.SaveLocationEvent;
 import pgu.client.profile.event.SaveMapPreferencesEvent;
 import pgu.client.profile.ui.ProfileViewUtils;
@@ -92,7 +92,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
         panel.setWidget(view.asWidget());
 
-        if (ShowdownUtils.isLoaded) {
+        if (MarkdownUtils.isLoaded) {
             setProfile();
         } else {
             hasToSetProfile = true;
