@@ -42,7 +42,7 @@ import com.google.web.bindery.event.shared.EventBus;
 public class Pgu_geo implements EntryPoint {
 
     private native void initAppJSContext() /*-{
-        $wnd.pgu_geo = {};
+		$wnd.pgu_geo = {};
     }-*/;
 
     private final MVPContext mvpContext = new MVPContext();
@@ -82,8 +82,8 @@ public class Pgu_geo implements EntryPoint {
     }
 
     private native void exportMethods() /*-{
-        $wnd.pgu_geo.is_logged_in = $entry(@pgu.client.Pgu_geo::isLoggedIn());
-        $wnd.pgu_geo.is_logged_out = $entry(@pgu.client.Pgu_geo::isLoggedOut());
+		$wnd.pgu_geo.is_logged_in = $entry(@pgu.client.Pgu_geo::isLoggedIn());
+		$wnd.pgu_geo.is_logged_out = $entry(@pgu.client.Pgu_geo::isLoggedOut());
     }-*/;
 
     private static Pgu_geo static_self = null;
@@ -92,7 +92,6 @@ public class Pgu_geo implements EntryPoint {
     public void onModuleLoad() {
         GWT.log(" on module load");
         static_self = this;
-
 
         final boolean isPublic = History.getToken().startsWith("!public");
         GWT.log(" is public? " + isPublic);
@@ -210,7 +209,6 @@ public class Pgu_geo implements EntryPoint {
         });
     }
 
-
     private void startApplication(final IsWidget menuView, final Place defaultPlace) {
 
         final BaseClientFactory clientFactory = mvpContext.clientFactory;
@@ -237,14 +235,14 @@ public class Pgu_geo implements EntryPoint {
     }
 
     private native void loadExternalScripts() /*-{
-        $wnd.pgu_geo_load_external_scripts();
+		$wnd.pgu_geo_load_external_scripts();
     }-*/;
 
     private static class MVPContext {
-        private ActivityMapper activityMapper;
+        private ActivityMapper    activityMapper;
         private BaseClientFactory clientFactory;
-        private EventBus eventBus;
-        private PlaceController placeController;
+        private EventBus          eventBus;
+        private PlaceController   placeController;
     }
 
 }

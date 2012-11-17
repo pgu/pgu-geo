@@ -3,6 +3,7 @@
 
     <g:HTMLPanel>
         <div>Signin page</div>
+        <script type="IN/Login"></script>
     </g:HTMLPanel>
     
 </ui:UiBinder> 

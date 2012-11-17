@@ -16,6 +16,13 @@ public class SigninViewImpl extends Composite implements SigninView {
 
     public SigninViewImpl() {
         initWidget(uiBinder.createAndBindUi(this));
+
+        getElement().setId("pgu_geo_signin_btn");
     }
+
+    @Override
+    public native void reparseByLinkedin() /*-{
+        $wnd.IN.parse($doc.getElementById('pgu_geo_signin_btn'));
+    }-*/;
 
 }

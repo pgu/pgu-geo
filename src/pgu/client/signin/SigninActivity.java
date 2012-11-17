@@ -35,6 +35,7 @@ public class SigninActivity extends AbstractActivity {
         //        eventBus.addHandler(LocationsSuccessSaveEvent.TYPE, this);
 
         panel.setWidget(view.asWidget());
+        view.reparseByLinkedin();
 
         u.fire(eventBus, new ShowWaitingIndicatorEvent());
 
