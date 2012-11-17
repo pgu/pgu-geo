@@ -22,6 +22,7 @@ import pgu.client.profile.ui.ProfileViewImpl;
 import pgu.client.pub.PublicMenuActivity;
 import pgu.client.pub.PublicMenuView;
 import pgu.client.resources.ResourcesApp;
+import pgu.client.signin.SigninPlace;
 import pgu.shared.dto.LoginInfo;
 
 import com.google.gwt.activity.shared.ActivityManager;
@@ -35,6 +36,7 @@ import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.web.bindery.event.shared.EventBus;
 
 public class Pgu_geo implements EntryPoint {
@@ -176,7 +178,36 @@ public class Pgu_geo implements EntryPoint {
     }
 
     public static void isLoggedOut() {
-        GWT.log(" SHOW SIGNIN PAGE");
+        GWT.runAsync(new RunAsyncCallback() {
+
+            @Override
+            public void onSuccess() {
+
+                final MVPContext mvpContext = static_self.mvpContext;
+                final EventBus eventBus = mvpContext.eventBus;
+                final PlaceController placeController = mvpContext.placeController;
+                final ActivityMapper activityMapper = mvpContext.activityMapper;
+
+                final Place defaultPlace = new SigninPlace();
+                final SimplePanel appWidget = new SimplePanel();
+
+                final ActivityManager activityManager = new ActivityManager(activityMapper, eventBus);
+                activityManager.setDisplay(appWidget);
+
+                final AppPlaceHistoryMapper historyMapper = GWT.create(AppPlaceHistoryMapper.class);
+                final PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
+                historyHandler.register(placeController, eventBus, defaultPlace);
+
+                RootPanel.get().add(appWidget);
+                historyHandler.handleCurrentHistory();
+
+            }
+
+            @Override
+            public void onFailure(final Throwable reason) {
+                GWT.log("!!! problem: " + reason.getMessage());
+            }
+        });
     }
 
 

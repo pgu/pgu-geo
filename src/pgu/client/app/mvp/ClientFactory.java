@@ -11,6 +11,7 @@ import pgu.client.pub.PublicView;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.client.service.LoginServiceAsync;
 import pgu.client.service.PublicProfileServiceAsync;
+import pgu.client.signin.SigninView;
 
 public interface ClientFactory extends BaseClientFactory {
 
@@ -35,4 +36,6 @@ public interface ClientFactory extends BaseClientFactory {
     PublicProfileServiceAsync getPublicProfileService();
 
     PublicMenuView getPublicMenuView();
+
+    SigninView getSigninView();
 }

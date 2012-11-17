@@ -4,6 +4,8 @@ import pgu.client.contacts.ContactsActivity;
 import pgu.client.contacts.ContactsPlace;
 import pgu.client.profile.ProfileActivity;
 import pgu.client.profile.ProfilePlace;
+import pgu.client.signin.SigninActivity;
+import pgu.client.signin.SigninPlace;
 
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
@@ -30,6 +32,9 @@ public class AppActivityMapper implements ActivityMapper {
 
         } else if (place instanceof ContactsPlace) {
             return new ContactsActivity((ContactsPlace) place, clientFactory);
+
+        } else if (place instanceof SigninPlace) {
+            return new SigninActivity((SigninPlace) place, clientFactory);
 
         }
 

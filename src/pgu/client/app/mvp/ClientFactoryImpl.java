@@ -23,7 +23,8 @@ import pgu.client.service.LoginService;
 import pgu.client.service.LoginServiceAsync;
 import pgu.client.service.PublicProfileService;
 import pgu.client.service.PublicProfileServiceAsync;
-import pgu.shared.dto.LoginInfo;
+import pgu.client.signin.SigninView;
+import pgu.client.signin.ui.SigninViewImpl;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.PlaceController;
@@ -34,6 +35,7 @@ public class ClientFactoryImpl implements ClientFactory {
 
     private static EventBus                  eventBus             = new SimpleEventBus();
     private static PlaceController           placeController      = new PlaceController(eventBus);
+
     private static AppView                   appView;
     private static MenuView                  menuView;
     private static ContactsView              contactsView;
@@ -42,6 +44,7 @@ public class ClientFactoryImpl implements ClientFactory {
     private static EditLocationView          editLocationView;
     private static PublicView                publicView;
     private static PublicMenuView            publicMenuView;
+    private static SigninView                signinView;
 
     private static PublicProfileServiceAsync publicProfileService = GWT.create(PublicProfileService.class);
     private static LinkedinServiceAsync      linkedinService      = GWT.create(LinkedinService.class);
@@ -141,6 +144,14 @@ public class ClientFactoryImpl implements ClientFactory {
             publicMenuView = new PublicMenuViewImpl();
         }
         return publicMenuView;
+    }
+
+    @Override
+    public SigninView getSigninView() {
+        if (signinView == null) {
+            signinView = new SigninViewImpl();
+        }
+        return signinView;
     }
 
 }
