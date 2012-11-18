@@ -14,6 +14,7 @@ import pgu.client.app.mvp.ClientFactoryImpl;
 import pgu.client.app.mvp.PublicAppActivityMapper;
 import pgu.client.app.mvp.PublicClientFactory;
 import pgu.client.app.mvp.PublicClientFactoryImpl;
+import pgu.client.app.mvp.PublicPlaceHistoryMapper;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ChartsUtils;
 import pgu.client.app.utils.GeoUtils;
@@ -48,7 +49,7 @@ public class Pgu_geo implements EntryPoint {
 		$wnd.pgu_geo = {};
     }-*/;
 
-    private final MVPContext mvpContext = new MVPContext();
+    private final MVPContext mvp = new MVPContext();
 
     private void initJSContext(final boolean isPublic) {
 
@@ -69,21 +70,21 @@ public class Pgu_geo implements EntryPoint {
 
         if (isPublic) {
             final PublicClientFactoryImpl publicClientFactory = new PublicClientFactoryImpl();
-            mvpContext.clientFactory = publicClientFactory;
-            mvpContext.activityMapper = new PublicAppActivityMapper(publicClientFactory);
+            mvp.clientFactory = publicClientFactory;
+            mvp.activityMapper = new PublicAppActivityMapper(publicClientFactory);
 
         } else {
             final ClientFactoryImpl clientFactory = new ClientFactoryImpl();
-            mvpContext.clientFactory = clientFactory;
-            mvpContext.activityMapper = new AppActivityMapper(clientFactory);
+            mvp.clientFactory = clientFactory;
+            mvp.activityMapper = new AppActivityMapper(clientFactory);
 
         }
 
-        mvpContext.eventBus = mvpContext.clientFactory.getEventBus();
-        mvpContext.placeController = mvpContext.clientFactory.getPlaceController();
+        mvp.eventBus = mvp.clientFactory.getEventBus();
+        mvp.placeController = mvp.clientFactory.getPlaceController();
     }
 
-    private native void exportMethods() /*-{
+    private native void exportLinkedinHandlers() /*-{
 		$wnd.pgu_geo.is_logged_in = $entry(@pgu.client.Pgu_geo::isLoggedIn());
 		$wnd.pgu_geo.is_logged_out = $entry(@pgu.client.Pgu_geo::isLoggedOut());
     }-*/;
@@ -112,18 +113,18 @@ public class Pgu_geo implements EntryPoint {
     public static void mapsApiIsLoaded() {
         initMapsApiVar();
         isMapsApiLoaded = true;
-        static_self.mvpContext.eventBus.fireEvent(new MapsApiLoadedEvent());
+        static_self.mvp.eventBus.fireEvent(new MapsApiLoadedEvent());
     }
 
     public static void chartsApiIsLoaded() {
         isChartsApiLoaded = true;
-        static_self.mvpContext.eventBus.fireEvent(new ChartsApiLoadedEvent());
+        static_self.mvp.eventBus.fireEvent(new ChartsApiLoadedEvent());
     }
 
     public static void showdownIsLoaded() {
         initShowdownVar();
         isShowdownLoaded = true;
-        static_self.mvpContext.eventBus.fireEvent(new ShowdownLoadedEvent());
+        static_self.mvp.eventBus.fireEvent(new ShowdownLoadedEvent());
     }
 
     public static native void initMapsApiVar() /*-{
@@ -137,6 +138,14 @@ public class Pgu_geo implements EntryPoint {
         $wnd.pgu_geo.showdown_converter = new $wnd.Showdown.converter();
     }-*/;
 
+    public void buildPublicMvp() {
+        final PublicClientFactoryImpl publicClientFactory = new PublicClientFactoryImpl();
+        mvp.clientFactory = publicClientFactory;
+        mvp.activityMapper = new PublicAppActivityMapper(publicClientFactory);
+        mvp.eventBus = mvp.clientFactory.getEventBus();
+        mvp.placeController = mvp.clientFactory.getPlaceController();
+    }
+
     // //////////////////////////
     // //////////////////////////
     // //////////////////////////
@@ -145,27 +154,79 @@ public class Pgu_geo implements EntryPoint {
         $wnd.pgu_geo_after_loading_module();
     }-*/;
 
+    private native void console(String msg) /*-{
+        $wnd.console.log(msg);
+    }-*/;
+
     @Override
     public void onModuleLoad() {
 
         initPguGeoContext();
         static_self = this;
+        ResourcesApp.INSTANCE.css().ensureInjected();
 
         final boolean isPublic = History.getToken().startsWith("!public");
 
         if (isPublic) {
-            //
-            // define callback actions on loaded apis
-            //
-            // map api
-            exportPublicCallbackOnLoadMapApi();
-            // charts api
-            exportPublicCallbackOnLoadChartsApi();
-            // showdown api
-            exportPublicCallbackOnLoadShowdown();
+            GWT.runAsync(new RunAsyncCallback() {
 
-            // fire loading apis
-            execAfterLoadingModule();
+                @Override
+                public void onSuccess() {
+                    //
+                    // define callback actions on loaded apis
+                    //
+                    // map api
+                    exportPublicCallbackOnLoadMapApi();
+                    // charts api
+                    exportPublicCallbackOnLoadChartsApi();
+                    // showdown api
+                    exportPublicCallbackOnLoadShowdown();
+                    //
+                    // start public app
+                    //
+                    final PublicClientFactoryImpl pClientFactory = new PublicClientFactoryImpl();
+                    final EventBus pEventBus = pClientFactory.getEventBus();
+                    final PlaceController pPlaceController = pClientFactory.getPlaceController();
+                    final ActivityMapper pActivityMapper = new PublicAppActivityMapper(pClientFactory);
+
+                    final PublicMenuActivity pMenuActivity = new PublicMenuActivity(pClientFactory);
+                    pMenuActivity.start(pEventBus);
+                    final PublicMenuView pMenuView = pClientFactory.getPublicMenuView();
+
+                    final Place pPlace = pPlaceController.getWhere();
+                    final AppView appView = pClientFactory.getAppView();
+
+                    final AppActivity pAppActivity = new AppActivity(pMenuView, pClientFactory);
+                    pAppActivity.start(pEventBus);
+
+                    final ActivityManager pActivityManager = new ActivityManager(pActivityMapper, pEventBus);
+                    pActivityManager.setDisplay(appView);
+
+                    final PublicPlaceHistoryMapper pHistoryMapper = GWT.create(PublicPlaceHistoryMapper.class);
+                    final PlaceHistoryHandler pHistoryHandler = new PlaceHistoryHandler(pHistoryMapper);
+                    pHistoryHandler.register(pPlaceController, pEventBus, pPlace);
+
+                    RootPanel.get().add(appView);
+                    pHistoryHandler.handleCurrentHistory();
+
+                    mvp.clientFactory = pClientFactory;
+                    mvp.activityMapper = pActivityMapper;
+                    mvp.eventBus = pEventBus;
+                    mvp.placeController = pPlaceController;
+
+                    //
+                    // fire the load of other apis
+                    //
+                    execAfterLoadingModule();
+                }
+
+                @Override
+                public void onFailure(final Throwable reason) {
+                    final String message = "!!! problem: " + reason.getMessage();
+                    GWT.log(message);
+                    console(message);
+                }
+            });
 
         } else {
 
@@ -173,17 +234,15 @@ public class Pgu_geo implements EntryPoint {
         }
 
 
-        initJSContext(isPublic);
-        exportMethods();
+        initJSContext(isPublic); // done for public
+        exportLinkedinHandlers(); // done for public
 
-        initMVPContext(isPublic);
+        initMVPContext(isPublic); // done for public
 
-        final EventBus eventBus = mvpContext.eventBus;
-        final PlaceController placeController = mvpContext.placeController;
+        final EventBus eventBus = mvp.eventBus;
+        final PlaceController placeController = mvp.placeController;
 
         ChartsUtils.setEventBus(eventBus);
-
-        ResourcesApp.INSTANCE.css().ensureInjected();
 
         if (isPublic) {
 
@@ -192,7 +251,7 @@ public class Pgu_geo implements EntryPoint {
                 @Override
                 public void onSuccess() {
 
-                    final PublicClientFactory clientFactory = (PublicClientFactory) mvpContext.clientFactory;
+                    final PublicClientFactory clientFactory = (PublicClientFactory) mvp.clientFactory;
 
                     final PublicMenuActivity menuActivity = new PublicMenuActivity(clientFactory);
                     menuActivity.start(eventBus);
@@ -220,7 +279,7 @@ public class Pgu_geo implements EntryPoint {
             @Override
             public void onSuccess() {
 
-                final MVPContext mvpContext = static_self.mvpContext;
+                final MVPContext mvpContext = static_self.mvp;
                 final EventBus eventBus = mvpContext.eventBus;
                 final PlaceController placeController = mvpContext.placeController;
 
@@ -259,7 +318,7 @@ public class Pgu_geo implements EntryPoint {
             @Override
             public void onSuccess() {
 
-                final MVPContext mvpContext = static_self.mvpContext;
+                final MVPContext mvpContext = static_self.mvp;
                 final EventBus eventBus = mvpContext.eventBus;
                 final PlaceController placeController = mvpContext.placeController;
                 final ActivityMapper activityMapper = mvpContext.activityMapper;
@@ -288,10 +347,10 @@ public class Pgu_geo implements EntryPoint {
 
     private void startApplication(final IsWidget menuView, final Place defaultPlace) {
 
-        final BaseClientFactory clientFactory = mvpContext.clientFactory;
-        final EventBus eventBus = mvpContext.eventBus;
-        final PlaceController placeController = mvpContext.placeController;
-        final ActivityMapper activityMapper = mvpContext.activityMapper;
+        final BaseClientFactory clientFactory = mvp.clientFactory;
+        final EventBus eventBus = mvp.eventBus;
+        final PlaceController placeController = mvp.placeController;
+        final ActivityMapper activityMapper = mvp.activityMapper;
 
         final AppView appView = clientFactory.getAppView();
 
