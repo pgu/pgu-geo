@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-import pgu.client.app.event.ChartsApiIsAvailableEvent;
+import pgu.client.app.event.ChartsApiLoadedEvent;
 import pgu.client.app.utils.ChartsUtils;
 import pgu.client.app.utils.JsonUtils;
 import pgu.client.contacts.ContactsView;
@@ -46,7 +46,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
-public class ContactsViewImpl extends Composite implements ContactsView, ChartsApiIsAvailableEvent.Handler {
+public class ContactsViewImpl extends Composite implements ContactsView, ChartsApiLoadedEvent.Handler {
 
     private static ContactsViewImplUiBinder uiBinder = GWT.create(ContactsViewImplUiBinder.class);
 
@@ -123,7 +123,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
         showLoadingPanel();
         hideAllCharts();
 
-        eventBus.addHandler(ChartsApiIsAvailableEvent.TYPE, this);
+        eventBus.addHandler(ChartsApiLoadedEvent.TYPE, this);
 
         infoPop.setHeading("Charts");
         infoPop.setText("<p>Clicking on the regions of the geocharts will display your contacts' names.</p>" + //
@@ -663,7 +663,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     }
 
     @Override
-    public void onChartsApiIsAvailable(final ChartsApiIsAvailableEvent event) {
+    public void onChartsApiLoaded(final ChartsApiLoadedEvent event) {
         GWT.log("!!! ok, charts is ON, let's do some geocharts !!!");
 
         if (hasToBuildGeoChartWhenReady) {

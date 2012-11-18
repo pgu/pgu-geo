@@ -3,6 +3,7 @@ package pgu.client;
 import pgu.client.app.AppActivity;
 import pgu.client.app.AppView;
 import pgu.client.app.event.FetchLoginInfoEvent;
+import pgu.client.app.event.MapApiLoadedEvent;
 import pgu.client.app.event.ShowdownIsAvailableEvent;
 import pgu.client.app.mvp.AppActivityMapper;
 import pgu.client.app.mvp.AppPlaceHistoryMapper;
@@ -43,14 +44,13 @@ import com.google.web.bindery.event.shared.EventBus;
 
 public class Pgu_geo implements EntryPoint {
 
-    private native void initAppJSContext() /*-{
+    private native void initPguGeoContext() /*-{
 		$wnd.pgu_geo = {};
     }-*/;
 
     private final MVPContext mvpContext = new MVPContext();
 
     private void initJSContext(final boolean isPublic) {
-        initAppJSContext();
 
         final GeoUtils geoUtils = new GeoUtils();
         geoUtils.exportMethods(isPublic);
@@ -98,16 +98,49 @@ public class Pgu_geo implements EntryPoint {
 
     private static Pgu_geo static_self = null;
 
+    // //////////////////////////
+    // public
+    // //////////////////////////
+    private native void exportPublicCallbackOnLoadMapApi() /*-{
+        $wnd.pgu_geo.map_api_is_loaded = $entry(@pgu.client.Pgu_geo::mapApiIsLoaded());
+    }-*/;
+
+    public static boolean isMapApiLoaded = false;
+
+    public static void mapApiIsLoaded() {
+        initMapApiVar();
+        isMapApiLoaded = true;
+        static_self.mvpContext.eventBus.fireEvent(new MapApiLoadedEvent());
+    }
+
+    public static native void initMapApiVar() /*-{
+        var google = $wnd.google;
+
+        $wnd.pgu_geo.google = google;
+        $wnd.pgu_geo.geocoder = new google.maps.Geocoder();
+    }-*/;
+
     @Override
     public void onModuleLoad() {
-        GWT.log(" on module load");
+
+        initPguGeoContext();
         static_self = this;
 
         final boolean isPublic = History.getToken().startsWith("!public");
-        GWT.log(" is public? " + isPublic);
+        if (isPublic) {
+            //
+            // define callback actions on loaded apis
+            //
+            // map api
+            exportPublicCallbackOnLoadMapApi();
+            // charts api
 
-        // do everything for the public view
-        // else wait for linkedin api
+            // showdown api
+
+        } else {
+
+            // else wait for linkedin api
+        }
 
 
         initJSContext(isPublic);

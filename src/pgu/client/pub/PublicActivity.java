@@ -8,6 +8,7 @@ import pgu.client.app.utils.ClientUtils;
 import pgu.client.pub.event.FetchPublicContactsEvent;
 import pgu.client.pub.event.UserHeadlineEvent;
 import pgu.client.pub.event.UserNameEvent;
+import pgu.client.pub.ui.PublicUtils;
 import pgu.client.service.PublicProfileServiceAsync;
 import pgu.shared.dto.PublicContacts;
 import pgu.shared.model.PublicProfile;
@@ -48,6 +49,7 @@ public class PublicActivity extends AbstractActivity implements PublicPresenter 
         hRegs.add(view.addFetchPublicContactsHandler(this));
 
         panel.setWidget(view.asWidget());
+        PublicUtils.initPublicProfileMap();
 
         publicProfileService.fetchPublicProfileByUrl( //
                 place.getPublicUrl(), //

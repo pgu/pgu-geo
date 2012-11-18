@@ -8,16 +8,16 @@ public class PublicUtils {
 
         var div = $wnd.document.getElementById("pgu_geo_public_profile_map");
 
-        if (div === null) {
-            $wnd.setTimeout(
-                function() {
-                    @pgu.client.pub.ui.PublicUtils::initPublicProfileMap()();
-                }
-                , 1000
-            );
-            return;
-        }
-
+//        if (div === null) {
+//            $wnd.setTimeout(
+//                function() {
+//                    @pgu.client.pub.ui.PublicUtils::initPublicProfileMap()();
+//                }
+//                , 1000
+//            );
+//            return;
+//        }
+//
         $wnd.console.log('initPublicMap');
 
         var

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
-import pgu.client.app.event.ChartsApiIsAvailableEvent;
+import pgu.client.app.event.ChartsApiLoadedEvent;
 import pgu.client.app.event.GoogleIsAvailableEvent;
 import pgu.client.app.utils.ChartsUtils;
 import pgu.client.app.utils.ClientUtils;
@@ -55,7 +55,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
-public class PublicViewImpl extends Composite implements PublicView, GoogleIsAvailableEvent.Handler, ChartsApiIsAvailableEvent.Handler {
+public class PublicViewImpl extends Composite implements PublicView, GoogleIsAvailableEvent.Handler, ChartsApiLoadedEvent.Handler {
 
     private static final String PREFIX_CHART_ID = "pgu_geo_public_contacts_";
 
@@ -105,7 +105,7 @@ public class PublicViewImpl extends Composite implements PublicView, GoogleIsAva
 
         css = ResourcesApp.INSTANCE.css();
 
-        eventBus.addHandler(ChartsApiIsAvailableEvent.TYPE, this);
+        eventBus.addHandler(ChartsApiLoadedEvent.TYPE, this);
 
         pieChart.getElement().setId(PREFIX_CHART_ID + ChartType.PIE);
         barChart.getElement().setId(PREFIX_CHART_ID + ChartType.BAR);
@@ -729,7 +729,7 @@ public class PublicViewImpl extends Composite implements PublicView, GoogleIsAva
     private boolean hasToBuildChartsWhenReady = false;
 
     @Override
-    public void onChartsApiIsAvailable(final ChartsApiIsAvailableEvent event) {
+    public void onChartsApiLoaded(final ChartsApiLoadedEvent event) {
         if (hasToBuildChartsWhenReady) {
             hasToBuildChartsWhenReady = false;
 

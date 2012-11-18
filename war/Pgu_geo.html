@@ -50,16 +50,6 @@
         function pgu_geo_charts_callback() {
         	console.log('pgu_geo_charts_callback');
             pgu_geo.init_charts();          
-            
-//             if (typeof pgu_geo === 'undefined') {
-//                 setTimeout(
-//                     function() {
-//                     	pgu_geo_charts_callback();
-//                     }
-//                     , 1000
-//                 );
-//                 return;
-//             }
         }
 
         function pgu_geo_load_charts_api_callback() {
@@ -69,18 +59,7 @@
 
         function pgu_geo_load_map_api_callback() {
         	console.log('pgu_geo_load_map_api_callback');
-        	
-            if (typeof pgu_geo === 'undefined') {
-                setTimeout(
-                    function() {
-                        pgu_geo_load_map_api_callback();
-                    }
-                    , 1000
-                );
-                return;
-            }
-            
-            pgu_geo.init_geo();         
+            pgu_geo.map_api_is_loaded();         
         }
 
         function pgu_geo_load_script(url, innerHTML, callback) {

@@ -5,14 +5,14 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
-public class ChartsApiIsAvailableEvent extends GwtEvent<ChartsApiIsAvailableEvent.Handler> {
+public class ChartsApiLoadedEvent extends GwtEvent<ChartsApiLoadedEvent.Handler> {
 
-    public interface HasChartsApiIsAvailableHandlers extends HasHandlers {
-        HandlerRegistration addChartsApiIsAvailableHandler(ChartsApiIsAvailableEvent.Handler handler);
+    public interface HasChartsApiLoadedHandlers extends HasHandlers {
+        HandlerRegistration addChartsApiLoadedHandler(ChartsApiLoadedEvent.Handler handler);
     }
 
     public interface Handler extends EventHandler {
-        void onChartsApiIsAvailable(ChartsApiIsAvailableEvent event);
+        void onChartsApiLoaded(ChartsApiLoadedEvent event);
     }
 
     public static final Type<Handler> TYPE = new Type<Handler>();
@@ -24,7 +24,7 @@ public class ChartsApiIsAvailableEvent extends GwtEvent<ChartsApiIsAvailableEven
 
     @Override
     protected void dispatch(final Handler handler) {
-        handler.onChartsApiIsAvailable(this);
+        handler.onChartsApiLoaded(this);
     }
 
 }

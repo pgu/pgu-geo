@@ -1,6 +1,6 @@
 package pgu.client.app.utils;
 
-import pgu.client.app.event.ChartsApiIsAvailableEvent;
+import pgu.client.app.event.ChartsApiLoadedEvent;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
@@ -31,7 +31,7 @@ public class ChartsUtils {
         } else {
             GWT.log("fire charts api is ON");
             isApiLoaded = true;
-            s_eventBus.fireEvent(new ChartsApiIsAvailableEvent());
+            s_eventBus.fireEvent(new ChartsApiLoadedEvent());
         }
 
     }
