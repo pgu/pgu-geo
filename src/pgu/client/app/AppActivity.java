@@ -4,12 +4,11 @@ import pgu.client.app.event.HideWaitingIndicatorEvent;
 import pgu.client.app.event.NotificationEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.event.TechnicalErrorEvent;
-import pgu.client.app.mvp.BaseClientFactory;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.Level;
 import pgu.client.app.utils.Notification;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.web.bindery.event.shared.EventBus;
 
 public class AppActivity implements //
@@ -20,19 +19,13 @@ NotificationEvent.Handler //
 {
 
     private final AppView         view;
-    private final IsWidget        menuView;
     private final ClientUtils     u = new ClientUtils();
 
-    public AppActivity( //
-            final IsWidget menuView //
-            , final BaseClientFactory clientFactory //
-            ) {
-        view = clientFactory.getAppView();
-
-        this.menuView = menuView;
+    public AppActivity(final AppView view) {
+        this.view = view;
     }
 
-    public void start(final EventBus eventBus) {
+    public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
 
         eventBus.addHandler(TechnicalErrorEvent.TYPE, this);
         eventBus.addHandler(NotificationEvent.TYPE, this);
@@ -40,7 +33,7 @@ NotificationEvent.Handler //
         eventBus.addHandler(ShowWaitingIndicatorEvent.TYPE, this);
         eventBus.addHandler(HideWaitingIndicatorEvent.TYPE, this);
 
-        view.getHeader().setWidget(menuView);
+        panel.setWidget(view.asWidget());
     }
 
     @Override

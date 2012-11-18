@@ -1,58 +1,48 @@
 package pgu.client.pub;
 
-import java.util.ArrayList;
-
-import pgu.client.app.mvp.PublicClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.pub.event.FetchPublicContactsEvent;
 import pgu.client.pub.event.UserHeadlineEvent;
 import pgu.client.pub.event.UserNameEvent;
 import pgu.client.pub.ui.PublicUtils;
+import pgu.client.service.PublicProfileService;
 import pgu.client.service.PublicProfileServiceAsync;
 import pgu.shared.dto.PublicContacts;
 import pgu.shared.model.PublicProfile;
 
-import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.web.bindery.event.shared.HandlerRegistration;
+import com.google.web.bindery.event.shared.EventBus;
 
-public class PublicActivity extends AbstractActivity implements PublicPresenter //
+public class PublicActivity implements PublicPresenter //
 , FetchPublicContactsEvent.Handler //
 {
 
-    private final PublicClientFactory       clientFactory;
     private final PublicView                view;
-    private final PublicProfileServiceAsync publicProfileService;
+    private final PublicProfileServiceAsync publicProfileService = GWT.create(PublicProfileService.class);
 
     private final ClientUtils               u = new ClientUtils();
 
     private EventBus                        eventBus;
-    private final PublicPlace               place;
 
-    private final ArrayList<HandlerRegistration> hRegs = new ArrayList<HandlerRegistration>();
-
-    public PublicActivity(final PublicPlace place, final PublicClientFactory clientFactory) {
-        this.place = place;
-        this.clientFactory = clientFactory;
-        view = clientFactory.getPublicView();
-        publicProfileService = clientFactory.getPublicProfileService();
+    public PublicActivity(final PublicView view ) {
+        this.view = view;
     }
 
-    @Override
     public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
         this.eventBus = eventBus;
+
         view.setPresenter(this);
 
-        hRegs.clear();
-        hRegs.add(view.addFetchPublicContactsHandler(this));
+        view.addFetchPublicContactsHandler(this);
 
         panel.setWidget(view.asWidget());
         PublicUtils.initPublicProfileMap();
 
         publicProfileService.fetchPublicProfileByUrl( //
-                place.getPublicUrl(), //
+                Window.Location.getHash(), // // TODO PGU Nov 18, 2012 review this url
                 new AsyncCallbackApp<PublicProfile>(eventBus) {
 
                     @Override

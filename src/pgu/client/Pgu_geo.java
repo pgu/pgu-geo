@@ -11,9 +11,7 @@ import pgu.client.app.mvp.AppPlaceHistoryMapper;
 import pgu.client.app.mvp.BaseClientFactory;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.mvp.ClientFactoryImpl;
-import pgu.client.app.mvp.PublicActivityMapper;
-import pgu.client.app.mvp.PublicClientFactoryImpl;
-import pgu.client.app.mvp.PublicPlaceHistoryMapper;
+import pgu.client.app.ui.AppViewImpl;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ChartsUtils;
 import pgu.client.app.utils.GeoUtils;
@@ -22,8 +20,12 @@ import pgu.client.menu.MenuActivity;
 import pgu.client.menu.MenuView;
 import pgu.client.profile.ProfilePlace;
 import pgu.client.profile.ui.ProfileViewImpl;
+import pgu.client.pub.PublicActivity;
 import pgu.client.pub.PublicMenuActivity;
 import pgu.client.pub.PublicMenuView;
+import pgu.client.pub.PublicView;
+import pgu.client.pub.ui.PublicMenuViewImpl;
+import pgu.client.pub.ui.PublicViewImpl;
 import pgu.client.resources.ResourcesApp;
 import pgu.client.signin.SigninActivity;
 import pgu.client.signin.SigninView;
@@ -70,17 +72,9 @@ public class Pgu_geo implements EntryPoint {
 
     private void initMVPContext(final boolean isPublic) {
 
-        if (isPublic) {
-            final PublicClientFactoryImpl publicClientFactory = new PublicClientFactoryImpl();
-            mvp.clientFactory = publicClientFactory;
-            mvp.activityMapper = new PublicActivityMapper(publicClientFactory);
-
-        } else {
-            final ClientFactoryImpl clientFactory = new ClientFactoryImpl();
-            mvp.clientFactory = clientFactory;
-            mvp.activityMapper = new AppActivityMapper(clientFactory);
-
-        }
+        final ClientFactoryImpl clientFactory = new ClientFactoryImpl();
+        mvp.clientFactory = clientFactory;
+        mvp.activityMapper = new AppActivityMapper(clientFactory);
 
         mvp.eventBus = mvp.clientFactory.getEventBus();
         mvp.placeController = mvp.clientFactory.getPlaceController();
@@ -140,14 +134,6 @@ public class Pgu_geo implements EntryPoint {
         $wnd.pgu_geo.showdown_converter = new $wnd.Showdown.converter();
     }-*/;
 
-    public void buildPublicMvp() {
-        final PublicClientFactoryImpl publicClientFactory = new PublicClientFactoryImpl();
-        mvp.clientFactory = publicClientFactory;
-        mvp.activityMapper = new PublicActivityMapper(publicClientFactory);
-        mvp.eventBus = mvp.clientFactory.getEventBus();
-        mvp.placeController = mvp.clientFactory.getPlaceController();
-    }
-
     // //////////////////////////
     // //////////////////////////
     // //////////////////////////
@@ -205,32 +191,26 @@ public class Pgu_geo implements EntryPoint {
                 //
                 // start public app
                 //
-                final PublicClientFactoryImpl pClientFactory = new PublicClientFactoryImpl();
-                final EventBus pEventBus = pClientFactory.getEventBus();
-                final PlaceController pPlaceController = pClientFactory.getPlaceController();
-                final ActivityMapper pActivityMapper = new PublicActivityMapper(pClientFactory);
+                final EventBus eventBus = new SimpleEventBus();
 
-                final PublicMenuActivity pMenuActivity = new PublicMenuActivity(pClientFactory);
-                pMenuActivity.start(pEventBus);
-                final PublicMenuView pMenuView = pClientFactory.getPublicMenuView();
+                final SimplePanel panel = new SimplePanel();
+                RootPanel.get().add(panel);
 
-                final Place pPlace = pPlaceController.getWhere();
-                final AppView appView = pClientFactory.getAppView();
+                final AppView appView = new AppViewImpl();
+                final AppActivity pAppActivity = new AppActivity(appView);
+                pAppActivity.start(panel, eventBus);
 
-                final AppActivity pAppActivity = new AppActivity(pMenuView, pClientFactory);
-                pAppActivity.start(pEventBus);
+                final PublicMenuView pMenuView = new PublicMenuViewImpl();
+                final PublicMenuActivity pMenuActivity = new PublicMenuActivity(pMenuView);
+                pMenuActivity.start(appView.getHeader(), eventBus);
 
-                final ActivityManager pActivityManager = new ActivityManager(pActivityMapper, pEventBus);
-                pActivityManager.setDisplay(appView);
+                final PublicView pView = new PublicViewImpl(eventBus);
+                final PublicActivity pActivity = new PublicActivity(pView);
+                pActivity.start(appView.getBody(), eventBus);
 
-                final PublicPlaceHistoryMapper pHistoryMapper = GWT.create(PublicPlaceHistoryMapper.class);
-                final PlaceHistoryHandler pHistoryHandler = new PlaceHistoryHandler(pHistoryMapper);
-                pHistoryHandler.register(pPlaceController, pEventBus, pPlace);
+                mvp.eventBus = eventBus;
 
-                RootPanel.get().add(appView);
-                pHistoryHandler.handleCurrentHistory();
-
-                mvp.eventBus = pEventBus;
+                // TODO PGU Nov 18, 2012 see how to deal with navigation between several public profiles
 
                 //
                 // fire the load of other apis
@@ -325,8 +305,12 @@ public class Pgu_geo implements EntryPoint {
 
         final AppView appView = clientFactory.getAppView();
 
-        final AppActivity appActivity = new AppActivity(menuView, clientFactory);
-        appActivity.start(eventBus);
+        appView.getHeader().setWidget(menuView);
+
+        final SimplePanel panel = new SimplePanel();
+
+        final AppActivity appActivity = new AppActivity(appView);
+        appActivity.start(panel, eventBus);
 
         final ActivityManager activityManager = new ActivityManager(activityMapper, eventBus);
         activityManager.setDisplay(appView);
@@ -335,7 +319,7 @@ public class Pgu_geo implements EntryPoint {
         final PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
         historyHandler.register(placeController, eventBus, defaultPlace);
 
-        RootPanel.get().add(appView);
+        RootPanel.get().add(panel);
         historyHandler.handleCurrentHistory();
 
     }

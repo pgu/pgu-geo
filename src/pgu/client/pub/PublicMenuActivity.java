@@ -1,9 +1,9 @@
 package pgu.client.pub;
 
-import pgu.client.app.mvp.PublicClientFactory;
 import pgu.client.pub.event.UserHeadlineEvent;
 import pgu.client.pub.event.UserNameEvent;
 
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.web.bindery.event.shared.EventBus;
 
 public class PublicMenuActivity implements //
@@ -12,19 +12,17 @@ UserNameEvent.Handler //
 {
 
     private final PublicMenuView      view;
-    private EventBus                  eventBus;
-    private final PublicClientFactory clientFactory;
 
-    public PublicMenuActivity(final PublicClientFactory clientFactory) {
-        this.clientFactory = clientFactory;
-        view = clientFactory.getPublicMenuView();
+    public PublicMenuActivity(final PublicMenuView view) {
+        this.view = view;
     }
 
-    public void start(final EventBus eventBus) {
-        this.eventBus = eventBus;
+    public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
 
         eventBus.addHandler(UserNameEvent.TYPE, this);
         eventBus.addHandler(UserHeadlineEvent.TYPE, this);
+
+        panel.setWidget(view.asWidget());
     }
 
     @Override
