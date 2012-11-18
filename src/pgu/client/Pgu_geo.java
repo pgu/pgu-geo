@@ -263,6 +263,8 @@ public class Pgu_geo implements EntryPoint {
             @Override
             public void onSuccess() {
 
+                // TODO PGU Nov 18, 2012
+
                 final MVPContext mvpContext = static_self.mvp;
                 final EventBus eventBus = mvpContext.eventBus;
                 final PlaceController placeController = mvpContext.placeController;
