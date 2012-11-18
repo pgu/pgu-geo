@@ -7,11 +7,11 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
-public class PublicAppActivityMapper implements ActivityMapper {
+public class PublicActivityMapper implements ActivityMapper {
 
     private final PublicClientFactory clientFactory;
 
-    public PublicAppActivityMapper(final PublicClientFactory clientFactory) {
+    public PublicActivityMapper(final PublicClientFactory clientFactory) {
         this.clientFactory = clientFactory;
     }
 

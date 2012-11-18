@@ -28,22 +28,22 @@
     
         var pgu_geo_is_user_already_logged = false;    
         
-        function pgu_geo_add_load_event(fn) {
-            var old_onload = window.onload;
+//         function pgu_geo_add_load_event(fn) {
+//             var old_onload = window.onload;
             
-            if (typeof window.onload !== 'function') {
-                window.onload = fn;
+//             if (typeof window.onload !== 'function') {
+//                 window.onload = fn;
                 
-            } else {
-                window.onload = function() {
-                    if (old_onload) {
-                        old_onload();
-                    }
+//             } else {
+//                 window.onload = function() {
+//                     if (old_onload) {
+//                         old_onload();
+//                     }
                     
-                    fn();
-                }
-            }
-        }
+//                     fn();
+//                 }
+//             }
+//         }
 
         function pgu_geo_charts_callback() {
         	console.log('pgu_geo_charts_callback');
@@ -67,14 +67,6 @@
             script.type = 'text/javascript';
             script.src = url;
             return script;
-        }
-        
-        function pgu_geo_load_external_scripts() {
-        	console.log('pgu_geo_load_external_scripts');
-        	
-        	pgu_geo_load_showdown();
-        	pgu_geo_load_maps_api();
-        	pgu_geo_load_charts_api();
         }
         
         function pgu_geo_load_charts_api() {
@@ -149,22 +141,25 @@
             .result(pgu_geo_on_connections_load);
         }
 
-        function pgu_geo_on_linkedin_load() {
-            console.log('pgu_geo_on_linkedin_load');
+        function pgu_geo_after_signin() {
+            var hash = window.location.hash;
+            window.location.replace('/' + hash);
+        }
+        
+        function pgu_geo_load_linkedin_callback() {
+            console.log('pgu_geo_load_linkedin_callback');
             
             var is_user_logged_in = IN.User.isAuthorized(); 
             
-            pgu_geo_is_user_already_logged = is_user_logged_in; 
-            
-            console.log(is_user_logged_in);
-
             if (is_user_logged_in) {
-                pgu_geo.is_logged_in();
+                IN.Event.on(IN, "auth", pgu_geo_on_linkedin_auth);
+                pgu_geo.load_view();
+                
             } else {
-                pgu_geo.is_logged_out();
+                IN.Event.on(IN, "auth", pgu_geo_after_signin);
+                pgu_geo.go_to_signin();
             }
             
-            IN.Event.on(IN, "auth", pgu_geo_on_linkedin_auth);
         }
 
         function pgu_geo_load_linkedin_api() {
@@ -175,36 +170,25 @@
                       'api_key: qwfxh7u2673i \n' + //
                       'authorize: true \n' + //
                       'scope: r_fullprofile r_network \n' + //
-                      'onLoad: pgu_geo_on_linkedin_load \n' + //
+                      'onLoad: pgu_geo_load_linkedin_callback \n' + //
                       '*/ \n';
             
             document.body.appendChild(linkedin_script);
         }
         
-        function pgu_geo_after_loading_module() {
-            console.log("pgu_geo_after_loading_module");
-            
-            var is_public_view = window.location.hash.indexOf('#!public:') === 0; 
-            
-            if (is_public_view) {
-              console.log("is public");
-              
-              pgu_geo_load_showdown();
-              pgu_geo_load_maps_api();
-              pgu_geo_load_charts_api();
-            
-            } else {
-                console.log("is application");
-                // load linkedin api
-                // then load the gwt application
-                //    inside the gwt application: if the user is logged then show the current place
-                //                                else show the signin view
-                
-                // https://developer.linkedin.com/documents/javascript-api-tutorial
-                pgu_geo_add_load_event(pgu_geo_load_linkedin_api);
-            }
+        function pgu_geo_after_loading_public_module() {
+            console.log("pgu_geo_after_loading_public_module");
+            pgu_geo_load_showdown();
+            pgu_geo_load_maps_api();
+            pgu_geo_load_charts_api();
         }
         
+        function pgu_geo_after_loading_module() {
+            console.log("pgu_geo_after_loading_module");
+            pgu_geo_load_linkedin_api();
+        }
+        
+        // https://developer.linkedin.com/documents/javascript-api-tutorial
     </script>    
     <script type="text/javascript" src="pgu_geo/pgu_geo.nocache.js"></script>
     

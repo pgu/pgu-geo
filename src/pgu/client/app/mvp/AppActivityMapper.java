@@ -22,10 +22,7 @@ public class AppActivityMapper implements ActivityMapper {
     @Override
     public Activity getActivity(final Place place) {
 
-        //        if (!clientFactory.getAppState().hasUser()) {
-        //            return new OAuthActivity(place, clientFactory);
-        //
-        //        }
+        // TODO PGU Nov 18, 2012 is user is not logged in then window.location.replace("signinplace");
 
         if (place instanceof ProfilePlace) {
             return new ProfileActivity((ProfilePlace) place, clientFactory);

@@ -42,11 +42,11 @@ public class ClientFactoryImpl implements ClientFactory {
     private static ProfileView               profileView;
     private static OAuthView                 oauthView;
     private static EditLocationView          editLocationView;
-    private static PublicView                publicView;
-    private static PublicMenuView            publicMenuView;
+    private static PublicView                publicView; // TODO PGU Nov 18, 2012 remove it
+    private static PublicMenuView            publicMenuView; // TODO PGU Nov 18, 2012 remove it
     private static SigninView                signinView;
 
-    private static PublicProfileServiceAsync publicProfileService = GWT.create(PublicProfileService.class);
+    private static PublicProfileServiceAsync publicProfileService = GWT.create(PublicProfileService.class); // TODO PGU Nov 18, 2012 remove it
     private static LinkedinServiceAsync      linkedinService      = GWT.create(LinkedinService.class);
     private static LoginServiceAsync         loginService         = GWT.create(LoginService.class);
 
