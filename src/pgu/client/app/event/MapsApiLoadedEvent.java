@@ -5,14 +5,14 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
-public class ShowdownIsAvailableEvent extends GwtEvent<ShowdownIsAvailableEvent.Handler> {
+public class MapsApiLoadedEvent extends GwtEvent<MapsApiLoadedEvent.Handler> {
 
-    public interface HasShowdownIsAvailableHandlers extends HasHandlers {
-        HandlerRegistration addShowdownIsAvailableHandler(ShowdownIsAvailableEvent.Handler handler);
+    public interface HasMapsApiLoadedHandlers extends HasHandlers {
+        HandlerRegistration addMapsApiLoadedHandler(MapsApiLoadedEvent.Handler handler);
     }
 
     public interface Handler extends EventHandler {
-        void onShowdownIsAvailable(ShowdownIsAvailableEvent event);
+        void onMapsApiLoaded(MapsApiLoadedEvent event);
     }
 
     public static final Type<Handler> TYPE = new Type<Handler>();
@@ -24,7 +24,7 @@ public class ShowdownIsAvailableEvent extends GwtEvent<ShowdownIsAvailableEvent.
 
     @Override
     protected void dispatch(final Handler handler) {
-        handler.onShowdownIsAvailable(this);
+        handler.onMapsApiLoaded(this);
     }
 
 }

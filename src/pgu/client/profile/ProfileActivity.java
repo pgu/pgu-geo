@@ -9,7 +9,7 @@ import pgu.client.app.event.LocationSuccessDeleteEvent;
 import pgu.client.app.event.LocationsSuccessSaveEvent;
 import pgu.client.app.event.NotificationEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
-import pgu.client.app.event.ShowdownIsAvailableEvent;
+import pgu.client.app.event.ShowdownLoadedEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
@@ -37,7 +37,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 , LocationShowOnMapEvent.Handler //
 , SaveLocationEvent.Handler //
 , SaveMapPreferencesEvent.Handler //
-, ShowdownIsAvailableEvent.Handler //
+, ShowdownLoadedEvent.Handler //
 {
 
     private final ClientFactory             clientFactory;
@@ -88,7 +88,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         eventBus.addHandler(LocationSuccessDeleteEvent.TYPE, this);
         eventBus.addHandler(LocationAddNewEvent.TYPE, this);
         eventBus.addHandler(LocationShowOnMapEvent.TYPE, this);
-        eventBus.addHandler(ShowdownIsAvailableEvent.TYPE, this);
+        eventBus.addHandler(ShowdownLoadedEvent.TYPE, this);
 
         panel.setWidget(view.asWidget());
 
@@ -368,7 +368,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     }
 
     @Override
-    public void onShowdownIsAvailable(final ShowdownIsAvailableEvent event) {
+    public void onShowdownLoaded(final ShowdownLoadedEvent event) {
         setProfile();
     }
 

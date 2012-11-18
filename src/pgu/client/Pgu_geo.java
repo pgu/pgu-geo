@@ -2,9 +2,10 @@ package pgu.client;
 
 import pgu.client.app.AppActivity;
 import pgu.client.app.AppView;
+import pgu.client.app.event.ChartsApiLoadedEvent;
 import pgu.client.app.event.FetchLoginInfoEvent;
-import pgu.client.app.event.MapApiLoadedEvent;
-import pgu.client.app.event.ShowdownIsAvailableEvent;
+import pgu.client.app.event.MapsApiLoadedEvent;
+import pgu.client.app.event.ShowdownLoadedEvent;
 import pgu.client.app.mvp.AppActivityMapper;
 import pgu.client.app.mvp.AppPlaceHistoryMapper;
 import pgu.client.app.mvp.BaseClientFactory;
@@ -16,7 +17,6 @@ import pgu.client.app.mvp.PublicClientFactoryImpl;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ChartsUtils;
 import pgu.client.app.utils.GeoUtils;
-import pgu.client.app.utils.MarkdownUtils;
 import pgu.client.contacts.ui.ContactsViewImpl;
 import pgu.client.menu.MenuActivity;
 import pgu.client.menu.MenuView;
@@ -86,15 +86,7 @@ public class Pgu_geo implements EntryPoint {
     private native void exportMethods() /*-{
 		$wnd.pgu_geo.is_logged_in = $entry(@pgu.client.Pgu_geo::isLoggedIn());
 		$wnd.pgu_geo.is_logged_out = $entry(@pgu.client.Pgu_geo::isLoggedOut());
-		$wnd.pgu_geo.showdown_is_available = $entry(@pgu.client.Pgu_geo::showdownIsAvailable());
     }-*/;
-
-    public static void showdownIsAvailable() {
-        GWT.log("  !!!! showdown is available");
-        MarkdownUtils.isLoaded = true;
-        MarkdownUtils.initShowdownConverter();
-        static_self.mvpContext.eventBus.fireEvent(new ShowdownIsAvailableEvent());
-    }
 
     private static Pgu_geo static_self = null;
 
@@ -102,22 +94,55 @@ public class Pgu_geo implements EntryPoint {
     // public
     // //////////////////////////
     private native void exportPublicCallbackOnLoadMapApi() /*-{
-        $wnd.pgu_geo.map_api_is_loaded = $entry(@pgu.client.Pgu_geo::mapApiIsLoaded());
+        $wnd.pgu_geo.maps_api_is_loaded = $entry(@pgu.client.Pgu_geo::mapsApiIsLoaded());
     }-*/;
 
-    public static boolean isMapApiLoaded = false;
+    private native void exportPublicCallbackOnLoadChartsApi() /*-{
+        $wnd.pgu_geo.charts_api_is_loaded = $entry(@pgu.client.Pgu_geo::chartsApiIsLoaded());
+    }-*/;
 
-    public static void mapApiIsLoaded() {
-        initMapApiVar();
-        isMapApiLoaded = true;
-        static_self.mvpContext.eventBus.fireEvent(new MapApiLoadedEvent());
+    private native void exportPublicCallbackOnLoadShowdown() /*-{
+        $wnd.pgu_geo.showdown_is_loaded = $entry(@pgu.client.Pgu_geo::showdownIsLoaded());
+    }-*/;
+
+    public static boolean isMapsApiLoaded = false;
+    public static boolean isChartsApiLoaded = false;
+    public static boolean isShowdownLoaded = false;
+
+    public static void mapsApiIsLoaded() {
+        initMapsApiVar();
+        isMapsApiLoaded = true;
+        static_self.mvpContext.eventBus.fireEvent(new MapsApiLoadedEvent());
     }
 
-    public static native void initMapApiVar() /*-{
+    public static void chartsApiIsLoaded() {
+        isChartsApiLoaded = true;
+        static_self.mvpContext.eventBus.fireEvent(new ChartsApiLoadedEvent());
+    }
+
+    public static void showdownIsLoaded() {
+        initShowdownVar();
+        isShowdownLoaded = true;
+        static_self.mvpContext.eventBus.fireEvent(new ShowdownLoadedEvent());
+    }
+
+    public static native void initMapsApiVar() /*-{
         var google = $wnd.google;
 
         $wnd.pgu_geo.google = google;
         $wnd.pgu_geo.geocoder = new google.maps.Geocoder();
+    }-*/;
+
+    public static native void initShowdownVar() /*-{
+        $wnd.pgu_geo.showdown_converter = new $wnd.Showdown.converter();
+    }-*/;
+
+    // //////////////////////////
+    // //////////////////////////
+    // //////////////////////////
+
+    private native void execAfterLoadingModule() /*-{
+        $wnd.pgu_geo_after_loading_module();
     }-*/;
 
     @Override
@@ -127,6 +152,7 @@ public class Pgu_geo implements EntryPoint {
         static_self = this;
 
         final boolean isPublic = History.getToken().startsWith("!public");
+
         if (isPublic) {
             //
             // define callback actions on loaded apis
@@ -134,8 +160,12 @@ public class Pgu_geo implements EntryPoint {
             // map api
             exportPublicCallbackOnLoadMapApi();
             // charts api
-
+            exportPublicCallbackOnLoadChartsApi();
             // showdown api
+            exportPublicCallbackOnLoadShowdown();
+
+            // fire loading apis
+            execAfterLoadingModule();
 
         } else {
 
@@ -278,7 +308,7 @@ public class Pgu_geo implements EntryPoint {
         RootPanel.get().add(appView);
         historyHandler.handleCurrentHistory();
 
-        loadExternalScripts();
+        //        loadExternalScripts();
     }
 
     private native void loadExternalScripts() /*-{

@@ -24,8 +24,6 @@
     
     <title>Geo</title>
     
-    <script type="text/javascript" src="pgu_geo/pgu_geo.nocache.js"></script>
-
     <script type="text/javascript">
     
         var pgu_geo_is_user_already_logged = false;    
@@ -57,13 +55,13 @@
             google.load('visualization', '1.0', {'packages': ['geochart', 'corechart'], 'callback':pgu_geo_charts_callback});
         }
 
-        function pgu_geo_load_map_api_callback() {
-        	console.log('pgu_geo_load_map_api_callback');
-            pgu_geo.map_api_is_loaded();         
+        function pgu_geo_load_maps_api_callback() {
+        	console.log('pgu_geo_load_maps_api_callback');
+            pgu_geo.maps_api_is_loaded();         
         }
 
-        function pgu_geo_load_script(url, innerHTML, callback) {
-        	console.log('pgu_geo_load_script ' + url);
+        function pgu_geo_new_script(url, innerHTML, callback) {
+        	console.log('pgu_geo_new_script ' + url);
         	
             var script = document.createElement('script');
             script.type = 'text/javascript';
@@ -74,21 +72,36 @@
         function pgu_geo_load_external_scripts() {
         	console.log('pgu_geo_load_external_scripts');
         	
-        	var showdown_script = pgu_geo_load_script('js/showdown.js');
-        	var maps_script = pgu_geo_load_script('http://maps.googleapis.com/maps/api/js?key=AIzaSyAJLUd4j8dQFHAuD2gy9Fr60ZR1IDVaGnE&sensor=false&callback=pgu_geo_load_map_api_callback');
-        	var charts_script = pgu_geo_load_script('https://www.google.com/jsapi?callback=pgu_geo_load_charts_api_callback');
+        	pgu_geo_load_showdown();
+        	pgu_geo_load_maps_api();
+        	pgu_geo_load_charts_api();
+        }
+        
+        function pgu_geo_load_charts_api() {
+        	console.log('pgu_geo_load_charts_api');
         	
+        	var charts_script = pgu_geo_new_script('https://www.google.com/jsapi?callback=pgu_geo_load_charts_api_callback');
+            document.body.appendChild(charts_script);
+        }
+        
+        function pgu_geo_load_maps_api() {
+        	console.log('pgu_geo_load_maps_api');
+        	
+        	var maps_script = pgu_geo_new_script('http://maps.googleapis.com/maps/api/js?key=AIzaSyAJLUd4j8dQFHAuD2gy9Fr60ZR1IDVaGnE&sensor=false&callback=pgu_geo_load_maps_api_callback');
+            document.body.appendChild(maps_script);
+        }
+        
+        function pgu_geo_load_showdown() {
+        	console.log('pgu_geo_load_showdown');
+        	
+        	var showdown_script = pgu_geo_new_script('js/showdown.js');
         	showdown_script.onreadystatechange = function() {  
                 if (this.readyState === 'complete' || this.readyState === 'loaded') {  
-                    pgu_geo.showdown_is_available();   
+                    pgu_geo.showdown_is_loaded();   
                 }  
             };   
-            showdown_script.onload = pgu_geo.showdown_is_available;          	    
-        	
+            showdown_script.onload = pgu_geo.showdown_is_loaded;          	    
             document.body.appendChild(showdown_script);
-            document.body.appendChild(maps_script);
-            document.body.appendChild(charts_script);
-
         }
 
         function pgu_geo_on_profile_load(profiles) {
@@ -157,7 +170,7 @@
         function pgu_geo_load_linkedin_api() {
             console.log('pgu_geo_load_linkedin_api');
             
-            var linkedin_script = pgu_geo_load_script('http://platform.linkedin.com/in.js');
+            var linkedin_script = pgu_geo_new_script('http://platform.linkedin.com/in.js');
             linkedin_script.innerHTML = '/* \n' + //
                       'api_key: qwfxh7u2673i \n' + //
                       'authorize: true \n' + //
@@ -168,24 +181,33 @@
             document.body.appendChild(linkedin_script);
         }
         
-        var pgu_geo_is_public_view = window.location.hash.indexOf('#!public:') === 0; 
-        
-        if (pgu_geo_is_public_view) {
-          console.log("is public");
-          // load the gwt application -> the public view
-        
-        } else {
-            console.log("is application");
-            // load linkedin api
-            // then load the gwt application
-            //    inside the gwt application: if the user is logged then show the current place
-            //                                else show the signin view
+        function pgu_geo_after_loading_module() {
+            console.log("pgu_geo_after_loading_module");
             
-            // https://developer.linkedin.com/documents/javascript-api-tutorial
-            pgu_geo_add_load_event(pgu_geo_load_linkedin_api);
+            var is_public_view = window.location.hash.indexOf('#!public:') === 0; 
+            
+            if (is_public_view) {
+              console.log("is public");
+              
+              pgu_geo_load_showdown();
+              pgu_geo_load_maps_api();
+              pgu_geo_load_charts_api();
+            
+            } else {
+                console.log("is application");
+                // load linkedin api
+                // then load the gwt application
+                //    inside the gwt application: if the user is logged then show the current place
+                //                                else show the signin view
+                
+                // https://developer.linkedin.com/documents/javascript-api-tutorial
+                pgu_geo_add_load_event(pgu_geo_load_linkedin_api);
+            }
         }
-    
+        
     </script>    
+    <script type="text/javascript" src="pgu_geo/pgu_geo.nocache.js"></script>
+    
   </head>
   <body>
     <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
