@@ -18,6 +18,7 @@ import pgu.client.app.utils.LocationsUtils;
 import pgu.client.app.utils.MarkdownUtils;
 import pgu.client.profile.event.SaveLocationEvent;
 import pgu.client.profile.event.SaveMapPreferencesEvent;
+import pgu.client.profile.ui.ProfileUtils;
 import pgu.client.profile.ui.ProfileViewUtils;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.client.service.PublicProfileServiceAsync;
@@ -91,6 +92,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         eventBus.addHandler(ShowdownLoadedEvent.TYPE, this);
 
         panel.setWidget(view.asWidget());
+        ProfileUtils.initProfileMap();
 
         if (MarkdownUtils.isLoaded) {
             setProfile();

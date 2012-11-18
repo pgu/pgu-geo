@@ -8,15 +8,15 @@ public class ProfileUtils {
 
         var div = $wnd.document.getElementById("pgu_geo_profile_map");
 
-        if (div === null) {
-            $wnd.setTimeout(
-                function() {
-                    @pgu.client.profile.ui.ProfileUtils::initProfileMap()();
-                }
-                , 1000
-            );
-            return;
-        }
+//        if (div === null) {
+//            $wnd.setTimeout(
+//                function() {
+//                    @pgu.client.profile.ui.ProfileUtils::initProfileMap()();
+//                }
+//                , 1000
+//            );
+//            return;
+//        }
 
         $wnd.console.log('initProfileMap');
 

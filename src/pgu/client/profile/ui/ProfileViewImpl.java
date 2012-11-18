@@ -89,6 +89,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         educationSection = new Section("profile:education");
 
         initWidget(uiBinder.createAndBindUi(this));
+        exportMethods();
 
         isMapDisplayed = true;
         locationSaveBtn.setVisible(false);
@@ -209,7 +210,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     private static ProfilePresenter staticPresenter;
 
-    public static native void exportMethods() /*-{
+    public native void exportMethods() /*-{
       $wnd.pgu_geo.add_new_location = $entry(@pgu.client.profile.ui.ProfileViewImpl::addNewLocation(Ljava/lang/String;));
       $wnd.pgu_geo.edit_location = $entry(@pgu.client.profile.ui.ProfileViewImpl::editLocation(Ljava/lang/String;Ljava/lang/String;));
     }-*/;

@@ -9,17 +9,12 @@ import pgu.client.app.event.ShowdownLoadedEvent;
 import pgu.client.app.mvp.AppActivityMapper;
 import pgu.client.app.mvp.AppPlaceHistoryMapper;
 import pgu.client.app.mvp.BaseClientFactory;
-import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.mvp.ClientFactoryImpl;
 import pgu.client.app.ui.AppViewImpl;
 import pgu.client.app.utils.AsyncCallbackApp;
-import pgu.client.app.utils.ChartsUtils;
-import pgu.client.app.utils.GeoUtils;
-import pgu.client.contacts.ui.ContactsViewImpl;
 import pgu.client.menu.MenuActivity;
 import pgu.client.menu.MenuView;
 import pgu.client.profile.ProfilePlace;
-import pgu.client.profile.ui.ProfileViewImpl;
 import pgu.client.pub.PublicActivity;
 import pgu.client.pub.PublicMenuActivity;
 import pgu.client.pub.PublicMenuView;
@@ -55,31 +50,6 @@ public class Pgu_geo implements EntryPoint {
 
     private final MVPContext mvp = new MVPContext();
 
-    private void initJSContext(final boolean isPublic) {
-
-        final GeoUtils geoUtils = new GeoUtils();
-        geoUtils.exportMethods(isPublic);
-
-        final ChartsUtils chartsUtils = new ChartsUtils();
-        chartsUtils.exportMethods();
-
-        if (!isPublic) {
-            ProfileViewImpl.exportMethods();
-            ContactsViewImpl.exportMethods();
-        }
-
-    }
-
-    private void initMVPContext(final boolean isPublic) {
-
-        final ClientFactoryImpl clientFactory = new ClientFactoryImpl();
-        mvp.clientFactory = clientFactory;
-        mvp.activityMapper = new AppActivityMapper(clientFactory);
-
-        mvp.eventBus = mvp.clientFactory.getEventBus();
-        mvp.placeController = mvp.clientFactory.getPlaceController();
-    }
-
     private native void exportLinkedinHandlers() /*-{
         $wnd.pgu_geo.load_view = $entry(@pgu.client.Pgu_geo::loadView());
         $wnd.pgu_geo.go_to_signin = $entry(@pgu.client.Pgu_geo::goToSignin());
@@ -87,18 +57,15 @@ public class Pgu_geo implements EntryPoint {
 
     private static Pgu_geo static_self = null;
 
-    // //////////////////////////
-    // public
-    // //////////////////////////
-    private native void exportPublicCallbackOnLoadMapApi() /*-{
+    private native void exportCallbackOnLoadMapsApi() /*-{
         $wnd.pgu_geo.maps_api_is_loaded = $entry(@pgu.client.Pgu_geo::mapsApiIsLoaded());
     }-*/;
 
-    private native void exportPublicCallbackOnLoadChartsApi() /*-{
+    private native void exportCallbackOnLoadChartsApi() /*-{
         $wnd.pgu_geo.charts_api_is_loaded = $entry(@pgu.client.Pgu_geo::chartsApiIsLoaded());
     }-*/;
 
-    private native void exportPublicCallbackOnLoadShowdown() /*-{
+    private native void exportCallbackOnLoadShowdown() /*-{
         $wnd.pgu_geo.showdown_is_loaded = $entry(@pgu.client.Pgu_geo::showdownIsLoaded());
     }-*/;
 
@@ -134,10 +101,6 @@ public class Pgu_geo implements EntryPoint {
         $wnd.pgu_geo.showdown_converter = new $wnd.Showdown.converter();
     }-*/;
 
-    // //////////////////////////
-    // //////////////////////////
-    // //////////////////////////
-
     private native void execAfterLoadingModule() /*-{
         $wnd.pgu_geo_after_loading_module();
     }-*/;
@@ -167,11 +130,6 @@ public class Pgu_geo implements EntryPoint {
             exportLinkedinHandlers();
             execAfterLoadingModule();
         }
-
-        //        initJSContext(isPublic); // done for public
-        //        exportLinkedinHandlers(); // done for public
-        //        initMVPContext(isPublic); // done for public
-        //        ChartsUtils.setEventBus(eventBus); // obsolete
     }
 
     private void loadPublicApp() {
@@ -183,11 +141,11 @@ public class Pgu_geo implements EntryPoint {
                 // define callback actions on loaded apis
                 //
                 // map api
-                exportPublicCallbackOnLoadMapApi();
+                exportCallbackOnLoadMapsApi();
                 // charts api
-                exportPublicCallbackOnLoadChartsApi();
+                exportCallbackOnLoadChartsApi();
                 // showdown api
-                exportPublicCallbackOnLoadShowdown();
+                exportCallbackOnLoadShowdown();
                 //
                 // start public app
                 //
@@ -263,16 +221,28 @@ public class Pgu_geo implements EntryPoint {
             @Override
             public void onSuccess() {
 
+                //
+                // define callback actions on loaded apis
+                //
+                // map api
+                static_self.exportCallbackOnLoadMapsApi();
+                // charts api
+                static_self.exportCallbackOnLoadChartsApi();
+                // showdown api
+                static_self.exportCallbackOnLoadShowdown();
+                //
+                // start public app
+                //
+
+                final ClientFactoryImpl clientFactory = new ClientFactoryImpl();
+                final EventBus eventBus = clientFactory.getEventBus();
+                final PlaceController placeController = clientFactory.getPlaceController();
+                final AppActivityMapper activityMapper = new AppActivityMapper(clientFactory);
+
                 // TODO PGU Nov 18, 2012
-
-                final MVPContext mvpContext = static_self.mvp;
-                final EventBus eventBus = mvpContext.eventBus;
-                final PlaceController placeController = mvpContext.placeController;
-
-                final ClientFactory clientFactory = (ClientFactory) mvpContext.clientFactory;
-
                 final MenuActivity menuActivity = new MenuActivity(clientFactory, placeController);
                 menuActivity.start(eventBus);
+
                 final MenuView menuView = clientFactory.getMenuView();
 
                 final Place defaultPlace = new ProfilePlace();
@@ -288,6 +258,8 @@ public class Pgu_geo implements EntryPoint {
                     }
 
                 });
+
+                static_self.mvp.eventBus = eventBus;
             }
 
             @Override

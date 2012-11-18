@@ -88,6 +88,8 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     public ContactsViewImpl(final EventBus eventBus) {
         initWidget(uiBinder.createAndBindUi(this));
 
+        exportMethods();
+
         css = ResourcesApp.INSTANCE.css();
 
         pieChart.getElement().setId("pgu_geo_contacts_piechart");
@@ -141,7 +143,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
 
     }
 
-    public static native void exportMethods() /*-{
+    public native void exportMethods() /*-{
         $wnd.pgu_geo.download_contacts_csv = $entry(@pgu.client.contacts.ui.ContactsViewImpl::downloadContactsCsv());
     }-*/;
 
