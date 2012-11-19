@@ -183,6 +183,13 @@
             pgu_geo_load_charts_api();
         }
         
+        function pgu_geo_after_loading_app() {
+            console.log("pgu_geo_after_loading_app");
+            pgu_geo_load_showdown();
+            pgu_geo_load_maps_api();
+            pgu_geo_load_charts_api();
+        }
+        
         function pgu_geo_after_loading_module() {
             console.log("pgu_geo_after_loading_module");
             pgu_geo_load_linkedin_api();

@@ -15,6 +15,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.Location;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.web.bindery.event.shared.EventBus;
 
 public class MenuActivity implements //
@@ -25,23 +26,25 @@ GoToProfileEvent.Handler //
 , FetchLoginInfoEvent.Handler //
 {
 
-    private final MenuView             view;
-    private final ClientFactory        clientFactory;
+    private final MenuView        view;
+    private final ClientFactory   clientFactory;
     private final PlaceController placeController;
 
-    public MenuActivity(final ClientFactory clientFactory, final PlaceController placeController) {
+    public MenuActivity(final MenuView view, final ClientFactory clientFactory) {
+        this.view = view;
         this.clientFactory = clientFactory;
-        view = clientFactory.getMenuView();
-        this.placeController = placeController;
+        placeController = clientFactory.getPlaceController();
     }
 
-    public void start(final EventBus eventBus) {
+    public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
 
         view.addGoToProfileHandler(this);
         view.addGoToContactsHandler(this);
         view.addGoToPublicProfileHandler(this);
         view.addGoToAppStatsHandler(this);
         eventBus.addHandler(FetchLoginInfoEvent.TYPE, this);
+
+        panel.setWidget(view.asWidget());
     }
 
     @Override
@@ -65,7 +68,7 @@ GoToProfileEvent.Handler //
 
         String baseUrl = "";
         if (Location.getQueryString().contains("gwt.codesvr")) {
-            baseUrl ="http://127.0.0.1:8888/Pgu_geo.html?gwt.codesvr=127.0.0.1:9997";
+            baseUrl = "http://127.0.0.1:8888/Pgu_geo.html?gwt.codesvr=127.0.0.1:9997";
         } else {
             baseUrl = GWT.getHostPageBaseURL();
         }
@@ -93,7 +96,6 @@ GoToProfileEvent.Handler //
         } else {
             view.setLoginUrl(loginInfo.getLoginUrl());
         }
-
 
         final boolean isSuperAdmin = isAdmin //
                 && "guilcher.pascal.dev@gmail.com".equals(loginInfo.getEmailAddress());

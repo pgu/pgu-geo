@@ -8,7 +8,6 @@ import pgu.client.app.event.MapsApiLoadedEvent;
 import pgu.client.app.event.ShowdownLoadedEvent;
 import pgu.client.app.mvp.AppActivityMapper;
 import pgu.client.app.mvp.AppPlaceHistoryMapper;
-import pgu.client.app.mvp.BaseClientFactory;
 import pgu.client.app.mvp.ClientFactoryImpl;
 import pgu.client.app.ui.AppViewImpl;
 import pgu.client.app.utils.AsyncCallbackApp;
@@ -28,7 +27,6 @@ import pgu.client.signin.ui.SigninViewImpl;
 import pgu.shared.dto.LoginInfo;
 
 import com.google.gwt.activity.shared.ActivityManager;
-import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
@@ -36,7 +34,6 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.web.bindery.event.shared.EventBus;
@@ -103,6 +100,10 @@ public class Pgu_geo implements EntryPoint {
 
     private native void execAfterLoadingModule() /*-{
         $wnd.pgu_geo_after_loading_module();
+    }-*/;
+
+    private native void execAfterLoadingApp() /*-{
+        $wnd.pgu_geo_after_loading_app();
     }-*/;
 
     private native void execAfterLoadingPublicModule() /*-{
@@ -233,76 +234,60 @@ public class Pgu_geo implements EntryPoint {
                 //
                 // start public app
                 //
+                final ClientFactoryImpl aClientFactory = new ClientFactoryImpl();
+                final EventBus aEventBus = aClientFactory.getEventBus();
+                final PlaceController aPlaceController = aClientFactory.getPlaceController();
+                final AppActivityMapper aActivityMapper = new AppActivityMapper(aClientFactory);
 
-                final ClientFactoryImpl clientFactory = new ClientFactoryImpl();
-                final EventBus eventBus = clientFactory.getEventBus();
-                final PlaceController placeController = clientFactory.getPlaceController();
-                final AppActivityMapper activityMapper = new AppActivityMapper(clientFactory);
+                final SimplePanel panel = new SimplePanel();
+                RootPanel.get().add(panel);
 
-                // TODO PGU Nov 18, 2012
-                final MenuActivity menuActivity = new MenuActivity(clientFactory, placeController);
-                menuActivity.start(eventBus);
+                final AppView appView = aClientFactory.getAppView();
+                final AppActivity appActivity = new AppActivity(appView);
+                appActivity.start(panel, aEventBus);
 
-                final MenuView menuView = clientFactory.getMenuView();
+                final MenuView aMenuView = aClientFactory.getMenuView();
+                final MenuActivity aMenuActivity = new MenuActivity(aMenuView, aClientFactory);
+                aMenuActivity.start(appView.getHeader(), aEventBus);
 
-                final Place defaultPlace = new ProfilePlace();
+                final Place profilePlace = new ProfilePlace();
 
-                static_self.startApplication(menuView, defaultPlace);
+                final ActivityManager activityManager = new ActivityManager(aActivityMapper, aEventBus);
+                activityManager.setDisplay(panel);
 
-                clientFactory.getLoginService().getLoginInfo(GWT.getHostPageBaseURL(),
-                        new AsyncCallbackApp<LoginInfo>(eventBus) {
+                final AppPlaceHistoryMapper aHistoryMapper = GWT.create(AppPlaceHistoryMapper.class);
+                final PlaceHistoryHandler aHistoryHandler = new PlaceHistoryHandler(aHistoryMapper);
+                aHistoryHandler.register(aPlaceController, aEventBus, profilePlace);
+
+                aHistoryHandler.handleCurrentHistory();
+
+                aClientFactory.getLoginService().getLoginInfo(GWT.getHostPageBaseURL(),
+                        new AsyncCallbackApp<LoginInfo>(aEventBus) {
 
                     @Override
                     public void onSuccess(final LoginInfo loginInfo) {
-                        eventBus.fireEvent(new FetchLoginInfoEvent(loginInfo));
+                        aEventBus.fireEvent(new FetchLoginInfoEvent(loginInfo));
                     }
 
                 });
 
-                static_self.mvp.eventBus = eventBus;
+                static_self.mvp.eventBus = aEventBus;
+                //
+                // fire the load of other apis
+                //
+                static_self.execAfterLoadingApp();
             }
 
             @Override
             public void onFailure(final Throwable reason) {
-                GWT.log("!!! problem: " + reason.getMessage());
+                static_self.logFailure(reason);
             }
         });
 
     }
 
-    private void startApplication(final IsWidget menuView, final Place defaultPlace) {
-
-        final BaseClientFactory clientFactory = mvp.clientFactory;
-        final EventBus eventBus = mvp.eventBus;
-        final PlaceController placeController = mvp.placeController;
-        final ActivityMapper activityMapper = mvp.activityMapper;
-
-        final AppView appView = clientFactory.getAppView();
-
-        appView.getHeader().setWidget(menuView);
-
-        final SimplePanel panel = new SimplePanel();
-
-        final AppActivity appActivity = new AppActivity(appView);
-        appActivity.start(panel, eventBus);
-
-        final ActivityManager activityManager = new ActivityManager(activityMapper, eventBus);
-        activityManager.setDisplay(appView);
-
-        final AppPlaceHistoryMapper historyMapper = GWT.create(AppPlaceHistoryMapper.class);
-        final PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
-        historyHandler.register(placeController, eventBus, defaultPlace);
-
-        RootPanel.get().add(panel);
-        historyHandler.handleCurrentHistory();
-
-    }
-
     private static class MVPContext {
-        private ActivityMapper    activityMapper;
-        private BaseClientFactory clientFactory;
         private EventBus          eventBus;
-        private PlaceController   placeController;
     }
 
 }
