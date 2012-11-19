@@ -26,8 +26,6 @@
     
     <script type="text/javascript">
     
-        var pgu_geo_is_user_already_logged = false;    
-        
 //         function pgu_geo_add_load_event(fn) {
 //             var old_onload = window.onload;
             
@@ -110,12 +108,14 @@
             console.log(connections); 
         }  
 
+        
+        
         function pgu_geo_on_linkedin_auth() {
             console.log('pgu_geo_on_linkedin_auth');
-            
-            if (!pgu_geo_is_user_already_logged) {
-                pgu_geo.is_logged_in();
-            }
+        
+            // TODO PGU
+            // if hash indexof contacts then load contacts first and then profile
+            // else load profile first and the contacts
             
             IN.API.Profile("me")
             .fields(
@@ -195,10 +195,8 @@
             pgu_geo_load_linkedin_api();
         }
         
-        // https://developer.linkedin.com/documents/javascript-api-tutorial
     </script>    
     <script type="text/javascript" src="pgu_geo/pgu_geo.nocache.js"></script>
-    
   </head>
   <body>
     <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
@@ -209,12 +207,5 @@
       </div>
     </noscript>
 
-<!--     <script type="IN/Login"></script> -->
-    
-<!--     <script type="in/Login"> -->
-<!--        Hello, <?js= firstName ?> <?js= lastName ?>. -->
-<!--     </script> -->
-
-<!--     <script type="IN/Login" data-onAuth="onLinkedInAuth"></script> -->
   </body>
 </html>
