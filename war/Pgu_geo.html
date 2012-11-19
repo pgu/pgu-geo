@@ -95,7 +95,7 @@
         }
 
         function pgu_geo_set_profile(profiles) {
-            console.log('pgu_geo_on_profile_load');
+            console.log('pgu_geo_set_profile');
             console.log(profiles); 
             
             var member = profiles.values[0];
@@ -103,8 +103,8 @@
             console.log(msg); 
         }       
         
-        function pgu_geo_set_connections(connections) {
-            console.log('pgu_geo_set_connections');
+        function pgu_geo_set_contacts(connections) {
+            console.log('pgu_geo_set_contacts');
             console.log(connections); 
         }  
 
@@ -142,7 +142,7 @@
         function pgu_geo_load_profile_after_contacts(connections) {
             console.log('pgu_geo_load_profile_after_contacts');
             
-            pgu_geo_set_connections(connections);
+            pgu_geo_set_contacts(connections);
             pgu_geo_load_profile(pgu_geo_set_profile);            
         }  
 
