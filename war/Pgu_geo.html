@@ -94,7 +94,7 @@
             document.body.appendChild(showdown_script);
         }
 
-        function pgu_geo_on_profile_load(profiles) {
+        function pgu_geo_set_profile(profiles) {
             console.log('pgu_geo_on_profile_load');
             console.log(profiles); 
             
@@ -103,19 +103,13 @@
             console.log(msg); 
         }       
         
-        function pgu_geo_on_connections_load(connections) {
-            console.log('pgu_geo_on_connections_load');
+        function pgu_geo_set_connections(connections) {
+            console.log('pgu_geo_set_connections');
             console.log(connections); 
         }  
 
-        
-        
-        function pgu_geo_on_linkedin_auth() {
-            console.log('pgu_geo_on_linkedin_auth');
-        
-            // TODO PGU
-            // if hash indexof contacts then load contacts first and then profile
-            // else load profile first and the contacts
+        function pgu_geo_load_profile(callback) {
+            console.log('pgu_geo_load_profile');
             
             IN.API.Profile("me")
             .fields(
@@ -134,11 +128,54 @@
                     , "languages:(language,proficiency)" //
                     , "educations" //
             )
-            .result(pgu_geo_on_profile_load);
-          
+            .result(callback);
+        }
+        
+        function pgu_geo_load_contacts(callback) {
+            console.log('pgu_geo_load_contacts');
+        	
             IN.API.Connections("me")
             .fields("firstName", "lastName", "location")
-            .result(pgu_geo_on_connections_load);
+            .result(callback);
+        }
+        
+        function pgu_geo_load_profile_after_contacts(connections) {
+            console.log('pgu_geo_load_profile_after_contacts');
+            
+            pgu_geo_set_connections(connections);
+            pgu_geo_load_profile(pgu_geo_set_profile);            
+        }  
+
+        function pgu_geo_load_contacts_after_profile(profiles) {
+            console.log('pgu_geo_load_contacts_after_profile');
+        	
+        	pgu_geo_set_profile(profiles);
+        	pgu_geo_load_contacts(pgu_geo_set_contacts);
+        }
+        
+        function pgu_geo_load_contacts_first() {
+            console.log('pgu_geo_load_contacts_first');
+        	
+        	pgu_geo_load_contacts(pgu_geo_load_profile_after_contacts);
+        }
+
+        function pgu_geo_load_profile_first() {
+            console.log('pgu_geo_load_profile_first');
+        	
+            pgu_geo_load_profile(pgu_geo_load_contacts_after_profile);
+        }
+        
+        function pgu_geo_on_linkedin_auth() {
+            console.log('pgu_geo_on_linkedin_auth');
+            
+            var is_contacts_view = window.location.hash.indexOf('#contacts:') === 0;
+            
+            if (is_contacts_view) {
+            	pgu_geo_load_contacts_first();
+            	
+            } else {
+            	pgu_geo_load_profile_first();
+            }
         }
 
         function pgu_geo_after_signin() {
