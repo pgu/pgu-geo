@@ -6,6 +6,11 @@ public class ProfileUtils {
 
     public static native void initProfileMap() /*-{
 
+//       TODO PGU review the navigation
+//        if ($wnd.pgu_geo.profile_map) {
+//            return;
+//        }
+
         var div = $wnd.document.getElementById("pgu_geo_profile_map");
 
 //        if (div === null) {

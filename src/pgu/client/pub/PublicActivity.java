@@ -1,5 +1,9 @@
 package pgu.client.pub;
 
+import pgu.client.Pgu_geo;
+import pgu.client.app.event.ChartsApiLoadedEvent;
+import pgu.client.app.event.MapsApiLoadedEvent;
+import pgu.client.app.event.ShowdownLoadedEvent;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.pub.event.FetchPublicContactsEvent;
@@ -18,6 +22,9 @@ import com.google.web.bindery.event.shared.EventBus;
 
 public class PublicActivity implements PublicPresenter //
 , FetchPublicContactsEvent.Handler //
+, ShowdownLoadedEvent.Handler //
+, MapsApiLoadedEvent.Handler //
+, ChartsApiLoadedEvent.Handler //
 {
 
     private final PublicView                view;
@@ -31,6 +38,8 @@ public class PublicActivity implements PublicPresenter //
         this.view = view;
     }
 
+    private boolean hasToSetPublic = false;
+
     public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
         this.eventBus = eventBus;
 
@@ -38,7 +47,29 @@ public class PublicActivity implements PublicPresenter //
 
         view.addFetchPublicContactsHandler(this);
 
+        eventBus.addHandler(ShowdownLoadedEvent.TYPE, this);
+        eventBus.addHandler(MapsApiLoadedEvent.TYPE, this);
+        eventBus.addHandler(ChartsApiLoadedEvent.TYPE, this);
+
         panel.setWidget(view.asWidget());
+
+        if (areApisLoaded()) {
+            setPublic();
+
+        } else {
+            hasToSetPublic = true;
+        }
+
+    }
+
+    private boolean areApisLoaded() {
+        return Pgu_geo.isShowdownLoaded //
+                && Pgu_geo.isChartsApiLoaded //
+                && Pgu_geo.isMapsApiLoaded //
+                ;
+    }
+
+    public void setPublic() {
         PublicUtils.initPublicProfileMap();
 
         publicProfileService.fetchPublicProfileByUrl( //
@@ -51,7 +82,6 @@ public class PublicActivity implements PublicPresenter //
                     }
 
                 });
-
     }
 
     @Override
@@ -76,6 +106,27 @@ public class PublicActivity implements PublicPresenter //
                     }
 
                 });
+    }
+
+    @Override
+    public void onChartsApiLoaded(final ChartsApiLoadedEvent event) {
+        if (hasToSetPublic && areApisLoaded()) {
+            setPublic();
+        }
+    }
+
+    @Override
+    public void onMapsApiLoaded(final MapsApiLoadedEvent event) {
+        if (hasToSetPublic && areApisLoaded()) {
+            setPublic();
+        }
+    }
+
+    @Override
+    public void onShowdownLoaded(final ShowdownLoadedEvent event) {
+        if (hasToSetPublic && areApisLoaded()) {
+            setPublic();
+        }
     }
 
 }

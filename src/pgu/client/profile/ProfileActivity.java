@@ -2,11 +2,14 @@ package pgu.client.profile;
 
 import java.util.ArrayList;
 
+import pgu.client.Pgu_geo;
+import pgu.client.app.event.ChartsApiLoadedEvent;
 import pgu.client.app.event.HideWaitingIndicatorEvent;
 import pgu.client.app.event.LocationAddNewEvent;
 import pgu.client.app.event.LocationShowOnMapEvent;
 import pgu.client.app.event.LocationSuccessDeleteEvent;
 import pgu.client.app.event.LocationsSuccessSaveEvent;
+import pgu.client.app.event.MapsApiLoadedEvent;
 import pgu.client.app.event.NotificationEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.event.ShowdownLoadedEvent;
@@ -15,7 +18,6 @@ import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.Level;
 import pgu.client.app.utils.LocationsUtils;
-import pgu.client.app.utils.MarkdownUtils;
 import pgu.client.profile.event.SaveLocationEvent;
 import pgu.client.profile.event.SaveMapPreferencesEvent;
 import pgu.client.profile.ui.ProfileUtils;
@@ -39,17 +41,19 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 , SaveLocationEvent.Handler //
 , SaveMapPreferencesEvent.Handler //
 , ShowdownLoadedEvent.Handler //
+, MapsApiLoadedEvent.Handler //
+, ChartsApiLoadedEvent.Handler //
 {
 
-    private final ClientFactory             clientFactory;
-    private final ProfileView               view;
-    private final LinkedinServiceAsync      linkedinService;
-    private final PublicProfileServiceAsync publicProfileService;
+    private final ClientFactory                  clientFactory;
+    private final ProfileView                    view;
+    private final LinkedinServiceAsync           linkedinService;
+    private final PublicProfileServiceAsync      publicProfileService;
 
-    private final ClientUtils               u = new ClientUtils();
+    private final ClientUtils                    u     = new ClientUtils();
 
-    private EventBus                        eventBus;
-    private String                     itemConfigId;
+    private EventBus                             eventBus;
+    private String                               itemConfigId;
 
     private final ArrayList<HandlerRegistration> hRegs = new ArrayList<HandlerRegistration>();
 
@@ -85,24 +89,35 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         hRegs.add(view.addLocationShowOnMapHandler(this));
         hRegs.add(view.addSaveMapPreferencesHandler(this));
 
-        eventBus.addHandler(LocationsSuccessSaveEvent.TYPE, this);
-        eventBus.addHandler(LocationSuccessDeleteEvent.TYPE, this);
-        eventBus.addHandler(LocationAddNewEvent.TYPE, this);
-        eventBus.addHandler(LocationShowOnMapEvent.TYPE, this);
-        eventBus.addHandler(ShowdownLoadedEvent.TYPE, this);
+        hRegs.add(eventBus.addHandler(LocationsSuccessSaveEvent.TYPE, this));
+        hRegs.add(eventBus.addHandler(LocationSuccessDeleteEvent.TYPE, this));
+        hRegs.add(eventBus.addHandler(LocationAddNewEvent.TYPE, this));
+        hRegs.add(eventBus.addHandler(LocationShowOnMapEvent.TYPE, this));
+        hRegs.add(eventBus.addHandler(ShowdownLoadedEvent.TYPE, this));
+        hRegs.add(eventBus.addHandler(MapsApiLoadedEvent.TYPE, this));
+        hRegs.add(eventBus.addHandler(ChartsApiLoadedEvent.TYPE, this));
 
         panel.setWidget(view.asWidget());
-        ProfileUtils.initProfileMap();
 
-        if (MarkdownUtils.isLoaded) {
+        if (areApisLoaded()) {
             setProfile();
+
         } else {
             hasToSetProfile = true;
         }
     }
 
+    private boolean areApisLoaded() {
+        return Pgu_geo.isShowdownLoaded //
+                && Pgu_geo.isChartsApiLoaded //
+                && Pgu_geo.isMapsApiLoaded //
+                ;
+    }
+
     private void setProfile() {
         u.fire(eventBus, new ShowWaitingIndicatorEvent());
+
+        ProfileUtils.initProfileMap();
 
         linkedinService.fetchProfile( //
                 clientFactory.getAppState().getAccessToken() //
@@ -122,7 +137,8 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
                                 initUserLocations(eventBus, profile);
                             }
 
-                        }.schedule(3000); // TODO PGU Sep 21, 2012 temporary fix: fire an event when all locations are done
+                        }.schedule(3000); // TODO PGU Sep 21, 2012 temporary fix: fire an event when all locations are
+                        // done
 
                         publicProfileService.fetchPreferencesOnly( //
                                 clientFactory.getAppState().getUserId(), //
@@ -190,7 +206,6 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     }
 
-
     @Override
     public void addNewLocation(final String itemConfigId) {
         // itemId for a position or an education
@@ -251,7 +266,6 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
         updated.setPreferences(view.getPublicPreferences());
         updated.setProfile(view.getPublicProfile());
-
 
         // TODO PGU Sep 18, 2012 factorize this
         final int length = "http://www.linkedin.com/".length();
@@ -322,14 +336,13 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
                             super.onFailure(caught);
                         }
 
-
                     });
 
         }
 
         // TODO PGU we should have [name, item_id, lat and lng]
         // and call directly the service
-        //        ProfileViewUtils.addNewLocation(this, itemConfigId, locationName);
+        // ProfileViewUtils.addNewLocation(this, itemConfigId, locationName);
     }
 
     @Deprecated
@@ -371,7 +384,23 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     @Override
     public void onShowdownLoaded(final ShowdownLoadedEvent event) {
-        setProfile();
+        if (hasToSetProfile && areApisLoaded()) {
+            setProfile();
+        }
+    }
+
+    @Override
+    public void onChartsApiLoaded(final ChartsApiLoadedEvent event) {
+        if (hasToSetProfile && areApisLoaded()) {
+            setProfile();
+        }
+    }
+
+    @Override
+    public void onMapsApiLoaded(final MapsApiLoadedEvent event) {
+        if (hasToSetProfile && areApisLoaded()) {
+            setProfile();
+        }
     }
 
 }
