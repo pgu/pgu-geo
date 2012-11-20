@@ -2,9 +2,11 @@ package pgu.client.app;
 
 public class AppContext {
 
-    public boolean isMapsApiLoaded;
-    public boolean isChartsApiLoaded;
-    public boolean isShowdownLoaded;
+    private boolean isMapsApiLoaded;
+    private boolean isChartsApiLoaded;
+    private boolean isShowdownLoaded;
+    private boolean areContactsLoaded;
+    private boolean isProfileLoaded;
 
     public boolean isMapsApiLoaded() {
         return isMapsApiLoaded;
@@ -28,6 +30,22 @@ public class AppContext {
 
     public void setShowdownLoaded(final boolean isShowdownLoaded) {
         this.isShowdownLoaded = isShowdownLoaded;
+    }
+
+    public boolean areContactsLoaded() {
+        return areContactsLoaded;
+    }
+
+    public void setContactsLoaded(final boolean areContactsLoaded) {
+        this.areContactsLoaded = areContactsLoaded;
+    }
+
+    public boolean isProfileLoaded() {
+        return isProfileLoaded;
+    }
+
+    public void setProfileLoaded(final boolean isProfileLoaded) {
+        this.isProfileLoaded = isProfileLoaded;
     }
 
 }

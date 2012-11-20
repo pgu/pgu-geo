@@ -4,8 +4,10 @@ import pgu.client.app.AppActivity;
 import pgu.client.app.AppContext;
 import pgu.client.app.AppView;
 import pgu.client.app.event.ChartsApiLoadedEvent;
+import pgu.client.app.event.ContactsLoadedEvent;
 import pgu.client.app.event.FetchLoginInfoEvent;
 import pgu.client.app.event.MapsApiLoadedEvent;
+import pgu.client.app.event.ProfileLoadedEvent;
 import pgu.client.app.event.ShowdownLoadedEvent;
 import pgu.client.app.mvp.AppActivityMapper;
 import pgu.client.app.mvp.AppPlaceHistoryMapper;
@@ -58,6 +60,24 @@ public class Pgu_geo implements EntryPoint {
 
     private static Pgu_geo static_self = null;
 
+    private native void exportCallbackOnLoadContacts() /*-{
+        $wnd.pgu_geo.contacts_are_loaded = $entry(@pgu.client.Pgu_geo::contactsAreLoaded());
+    }-*/;
+
+    private native void exportCallbackOnLoadProfile() /*-{
+        $wnd.pgu_geo.profile_is_loaded = $entry(@pgu.client.Pgu_geo::profileIsLoaded());
+    }-*/;
+
+    public static void contactsAreLoaded() {
+        static_self.ctx.setContactsLoaded(true);
+        static_self.mvp.eventBus.fireEvent(new ContactsLoadedEvent());
+    }
+
+    public static void profileIsLoaded() {
+        static_self.ctx.setProfileLoaded(true);
+        static_self.mvp.eventBus.fireEvent(new ProfileLoadedEvent());
+    }
+
     private native void exportCallbackOnLoadMapsApi() /*-{
         $wnd.pgu_geo.maps_api_is_loaded = $entry(@pgu.client.Pgu_geo::mapsApiIsLoaded());
     }-*/;
@@ -72,18 +92,18 @@ public class Pgu_geo implements EntryPoint {
 
     public static void mapsApiIsLoaded() {
         initMapsApiVar();
-        static_self.ctx.isMapsApiLoaded = true;
+        static_self.ctx.setMapsApiLoaded(true);
         static_self.mvp.eventBus.fireEvent(new MapsApiLoadedEvent());
     }
 
     public static void chartsApiIsLoaded() {
-        static_self.ctx.isChartsApiLoaded = true;
+        static_self.ctx.setChartsApiLoaded(true);
         static_self.mvp.eventBus.fireEvent(new ChartsApiLoadedEvent());
     }
 
     public static void showdownIsLoaded() {
         initShowdownVar();
-        static_self.ctx.isShowdownLoaded = true;
+        static_self.ctx.setShowdownLoaded(true);
         static_self.mvp.eventBus.fireEvent(new ShowdownLoadedEvent());
     }
 
@@ -232,7 +252,7 @@ public class Pgu_geo implements EntryPoint {
                 // profile json
                 static_self.exportCallbackOnLoadProfile();
                 // contacts json
-                static_self.exportCallbackOnContactsProfile();
+                static_self.exportCallbackOnLoadContacts();
                 //
                 // start public app
                 //
@@ -285,16 +305,6 @@ public class Pgu_geo implements EntryPoint {
                 static_self.logFailure(reason);
             }
         });
-
-    }
-
-    protected void exportCallbackOnContactsProfile() {
-        // TODO Auto-generated method stub
-
-    }
-
-    protected void exportCallbackOnLoadProfile() {
-        // TODO Auto-generated method stub
 
     }
 
