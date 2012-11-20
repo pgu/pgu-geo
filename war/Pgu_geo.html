@@ -101,11 +101,17 @@
             var member = profiles.values[0];
             var msg = member.id + ", Hello " +  member.firstName + " " + member.lastName;
             console.log(msg); 
+            
+            pgu_geo.profile = member;
+            pgu_geo.profile_is_loaded();
         }       
         
         function pgu_geo_set_contacts(connections) {
             console.log('pgu_geo_set_contacts');
             console.log(connections); 
+            
+            pgu_geo.contacts = contacts;
+            pgu_geo.contacts_are_loaded();
         }  
 
         function pgu_geo_load_profile(callback) {

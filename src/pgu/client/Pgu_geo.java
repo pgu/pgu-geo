@@ -229,6 +229,10 @@ public class Pgu_geo implements EntryPoint {
                 static_self.exportCallbackOnLoadChartsApi();
                 // showdown api
                 static_self.exportCallbackOnLoadShowdown();
+                // profile json
+                static_self.exportCallbackOnLoadProfile();
+                // contacts json
+                static_self.exportCallbackOnContactsProfile();
                 //
                 // start public app
                 //
@@ -281,6 +285,16 @@ public class Pgu_geo implements EntryPoint {
                 static_self.logFailure(reason);
             }
         });
+
+    }
+
+    protected void exportCallbackOnContactsProfile() {
+        // TODO Auto-generated method stub
+
+    }
+
+    protected void exportCallbackOnLoadProfile() {
+        // TODO Auto-generated method stub
 
     }
 
