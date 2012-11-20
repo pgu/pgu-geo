@@ -115,8 +115,10 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     }
 
     private void setProfile() {
+        // TODO PGU Nov 20, 2012 show waiting indicator while loading the app
         u.fire(eventBus, new ShowWaitingIndicatorEvent());
 
+        // TODO PGU Nov 20, 2012 see when is dom available
         ProfileUtils.initProfileMap();
 
         linkedinService.fetchProfile( //

@@ -275,7 +275,7 @@ public class Pgu_geo implements EntryPoint {
                 final Place profilePlace = new ProfilePlace();
 
                 final ActivityManager activityManager = new ActivityManager(aActivityMapper, aEventBus);
-                activityManager.setDisplay(panel);
+                activityManager.setDisplay(appView.getBody());
 
                 final AppPlaceHistoryMapper aHistoryMapper = GWT.create(AppPlaceHistoryMapper.class);
                 final PlaceHistoryHandler aHistoryHandler = new PlaceHistoryHandler(aHistoryMapper);
