@@ -185,6 +185,7 @@ FetchContactsNamesEvent.Handler //
     @Override
     public void onChartsApiLoaded(final ChartsApiLoadedEvent event) {
         if (hasToSetContacts && areApisLoaded()) {
+            hasToSetContacts = false;
             setContacts();
         }
     }
@@ -192,6 +193,7 @@ FetchContactsNamesEvent.Handler //
     @Override
     public void onMapsApiLoaded(final MapsApiLoadedEvent event) {
         if (hasToSetContacts && areApisLoaded()) {
+            hasToSetContacts = false;
             setContacts();
         }
     }
@@ -199,6 +201,7 @@ FetchContactsNamesEvent.Handler //
     @Override
     public void onShowdownLoaded(final ShowdownLoadedEvent event) {
         if (hasToSetContacts && areApisLoaded()) {
+            hasToSetContacts = false;
             setContacts();
         }
     }

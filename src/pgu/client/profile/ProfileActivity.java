@@ -385,6 +385,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     @Override
     public void onShowdownLoaded(final ShowdownLoadedEvent event) {
         if (hasToSetProfile && areApisLoaded()) {
+            hasToSetProfile = false;
             setProfile();
         }
     }
@@ -392,6 +393,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     @Override
     public void onChartsApiLoaded(final ChartsApiLoadedEvent event) {
         if (hasToSetProfile && areApisLoaded()) {
+            hasToSetProfile = false;
             setProfile();
         }
     }
@@ -399,6 +401,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     @Override
     public void onMapsApiLoaded(final MapsApiLoadedEvent event) {
         if (hasToSetProfile && areApisLoaded()) {
+            hasToSetProfile = false;
             setProfile();
         }
     }

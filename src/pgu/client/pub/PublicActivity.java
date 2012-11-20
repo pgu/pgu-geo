@@ -111,6 +111,7 @@ public class PublicActivity implements PublicPresenter //
     @Override
     public void onChartsApiLoaded(final ChartsApiLoadedEvent event) {
         if (hasToSetPublic && areApisLoaded()) {
+            hasToSetPublic = false;
             setPublic();
         }
     }
@@ -118,6 +119,7 @@ public class PublicActivity implements PublicPresenter //
     @Override
     public void onMapsApiLoaded(final MapsApiLoadedEvent event) {
         if (hasToSetPublic && areApisLoaded()) {
+            hasToSetPublic = false;
             setPublic();
         }
     }
@@ -125,6 +127,7 @@ public class PublicActivity implements PublicPresenter //
     @Override
     public void onShowdownLoaded(final ShowdownLoadedEvent event) {
         if (hasToSetPublic && areApisLoaded()) {
+            hasToSetPublic = false;
             setPublic();
         }
     }
