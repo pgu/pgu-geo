@@ -96,15 +96,24 @@ public class GeocoderUtils {
 
 
                     } else if (status == google.maps.GeocoderStatus.ZERO_RESULTS) {
-                        @pgu.client.app.utils.ClientUtils::log(Ljava/lang/String;)("Unknown location: "
-                                  + location_name + ", " + status);
+                        throw {
+                            name: 'Unknown location, status'
+                          , msg: location_name + ", " + status
+                        }
 
                     } else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
                         @pgu.client.app.utils.GeocoderUtils::searchGeopointWithDelay(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;I)(location_name,callback,1000);
-                        @pgu.client.app.utils.ClientUtils::log(Ljava/lang/String;)("over_query_limit... " + location_name);
+                        throw {
+                            name: 'Over query limit'
+                          , msg: location_name
+                        }
+
 
                     } else {
-                        @pgu.client.app.utils.ClientUtils::log(Ljava/lang/String;)("Oups: " + status);
+                        throw {
+                            name: 'Technical error, status'
+                          , msg: location_name + ", " + status
+                        }
                     }
 
                     if (callback) {

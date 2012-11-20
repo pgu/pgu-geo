@@ -158,7 +158,10 @@ public class ProfileItemsUtils {
             profile_item.content_title = "";
             profile_item.long_content = "";
 
-            @pgu.client.app.utils.ClientUtils::log(Ljava/lang/String;)("Unknown type " + type);
+            throw {
+                name: 'Unknown type'
+              , msg: type
+            }
         }
 
         return profile_item;

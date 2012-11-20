@@ -1,6 +1,7 @@
 package pgu.client;
 
 import pgu.client.app.AppActivity;
+import pgu.client.app.AppContext;
 import pgu.client.app.AppView;
 import pgu.client.app.event.ChartsApiLoadedEvent;
 import pgu.client.app.event.FetchLoginInfoEvent;
@@ -11,6 +12,7 @@ import pgu.client.app.mvp.AppPlaceHistoryMapper;
 import pgu.client.app.mvp.ClientFactoryImpl;
 import pgu.client.app.ui.AppViewImpl;
 import pgu.client.app.utils.AsyncCallbackApp;
+import pgu.client.app.utils.ClientUtils;
 import pgu.client.menu.MenuActivity;
 import pgu.client.menu.MenuView;
 import pgu.client.profile.ProfilePlace;
@@ -45,6 +47,8 @@ public class Pgu_geo implements EntryPoint {
         $wnd.pgu_geo = {};
     }-*/;
 
+    private final ClientUtils u = new ClientUtils();
+    private final AppContext ctx = new AppContext();
     private final MVPContext mvp = new MVPContext();
 
     private native void exportLinkedinHandlers() /*-{
@@ -66,24 +70,20 @@ public class Pgu_geo implements EntryPoint {
         $wnd.pgu_geo.showdown_is_loaded = $entry(@pgu.client.Pgu_geo::showdownIsLoaded());
     }-*/;
 
-    public static boolean isMapsApiLoaded   = false;
-    public static boolean isChartsApiLoaded = false;
-    public static boolean isShowdownLoaded  = false;
-
     public static void mapsApiIsLoaded() {
         initMapsApiVar();
-        isMapsApiLoaded = true;
+        static_self.ctx.isMapsApiLoaded = true;
         static_self.mvp.eventBus.fireEvent(new MapsApiLoadedEvent());
     }
 
     public static void chartsApiIsLoaded() {
-        isChartsApiLoaded = true;
+        static_self.ctx.isChartsApiLoaded = true;
         static_self.mvp.eventBus.fireEvent(new ChartsApiLoadedEvent());
     }
 
     public static void showdownIsLoaded() {
         initShowdownVar();
-        isShowdownLoaded = true;
+        static_self.ctx.isShowdownLoaded = true;
         static_self.mvp.eventBus.fireEvent(new ShowdownLoadedEvent());
     }
 
@@ -108,10 +108,6 @@ public class Pgu_geo implements EntryPoint {
 
     private native void execAfterLoadingPublicModule() /*-{
         $wnd.pgu_geo_after_loading_public_module();
-    }-*/;
-
-    private native void console(String msg) /*-{
-        $wnd.console.log(msg);
     }-*/;
 
     @Override
@@ -187,8 +183,9 @@ public class Pgu_geo implements EntryPoint {
 
     private void logFailure(final Throwable reason) {
         final String message = "!!! problem: " + reason.getMessage();
-        GWT.log(message);
-        console(message);
+        u.log(message);
+        u.console(message);
+        u.throwX(message);
     }
 
     public static void goToSignin() {

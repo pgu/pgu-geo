@@ -11,6 +11,17 @@ import com.google.gwt.user.client.Command;
 
 public class ClientUtils {
 
+    public native void console(String msg) /*-{
+        $wnd.console.log(msg);
+    }-*/;
+
+    public native void throwX(String msg) /*-{
+        throw {
+            name: 'Technical error'
+          , msg: msg
+        }
+    }-*/;
+
     public void info(final String message) {
         if (LogConfiguration.loggingIsEnabled()) {
             final Logger logger = Logger.getLogger("pgu");
@@ -67,7 +78,7 @@ public class ClientUtils {
         notification.show();
     }
 
-    public static void log(final String msg) {
+    public void log(final String msg) {
         GWT.log(msg);
     }
 
