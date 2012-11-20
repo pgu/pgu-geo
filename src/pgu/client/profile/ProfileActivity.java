@@ -11,6 +11,7 @@ import pgu.client.app.event.LocationSuccessDeleteEvent;
 import pgu.client.app.event.LocationsSuccessSaveEvent;
 import pgu.client.app.event.MapsApiLoadedEvent;
 import pgu.client.app.event.NotificationEvent;
+import pgu.client.app.event.ProfileLoadedEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.event.ShowdownLoadedEvent;
 import pgu.client.app.mvp.ClientFactory;
@@ -43,6 +44,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 , ShowdownLoadedEvent.Handler //
 , MapsApiLoadedEvent.Handler //
 , ChartsApiLoadedEvent.Handler //
+, ProfileLoadedEvent.Handler //
 {
 
     private final ClientFactory                  clientFactory;
@@ -95,9 +97,12 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         hRegs.add(eventBus.addHandler(LocationSuccessDeleteEvent.TYPE, this));
         hRegs.add(eventBus.addHandler(LocationAddNewEvent.TYPE, this));
         hRegs.add(eventBus.addHandler(LocationShowOnMapEvent.TYPE, this));
+
         hRegs.add(eventBus.addHandler(ShowdownLoadedEvent.TYPE, this));
         hRegs.add(eventBus.addHandler(MapsApiLoadedEvent.TYPE, this));
         hRegs.add(eventBus.addHandler(ChartsApiLoadedEvent.TYPE, this));
+
+        hRegs.add(eventBus.addHandler(ProfileLoadedEvent.TYPE, this));
 
         panel.setWidget(view.asWidget());
 
@@ -379,26 +384,33 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     @Override
     public void onShowdownLoaded(final ShowdownLoadedEvent event) {
-        if (hasToSetProfile && u.areExternalApisLoaded(ctx)) {
-            hasToSetProfile = false;
-            setProfile();
-        }
+        setProfileAsync();
     }
 
     @Override
     public void onChartsApiLoaded(final ChartsApiLoadedEvent event) {
-        if (hasToSetProfile && u.areExternalApisLoaded(ctx)) {
+        setProfileAsync();
+    }
+
+    @Override
+    public void onMapsApiLoaded(final MapsApiLoadedEvent event) {
+        setProfileAsync();
+    }
+
+    @Override
+    public void onProfileLoaded(final ProfileLoadedEvent event) {
+        setProfileAsync();
+    }
+
+    private void setProfileAsync() {
+        if (hasToSetProfile && isAppReady(ctx)) {
             hasToSetProfile = false;
             setProfile();
         }
     }
 
-    @Override
-    public void onMapsApiLoaded(final MapsApiLoadedEvent event) {
-        if (hasToSetProfile && u.areExternalApisLoaded(ctx)) {
-            hasToSetProfile = false;
-            setProfile();
-        }
+    private boolean isAppReady(final AppContext ctx) {
+        return ctx.isProfileLoaded() & u.areExternalApisLoaded(ctx);
     }
 
 }

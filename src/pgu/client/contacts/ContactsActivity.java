@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import pgu.client.app.AppContext;
 import pgu.client.app.event.ChartsApiLoadedEvent;
+import pgu.client.app.event.ContactsLoadedEvent;
 import pgu.client.app.event.HideWaitingIndicatorEvent;
 import pgu.client.app.event.MapsApiLoadedEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
@@ -32,6 +33,7 @@ FetchContactsNamesEvent.Handler //
 , ShowdownLoadedEvent.Handler //
 , MapsApiLoadedEvent.Handler //
 , ChartsApiLoadedEvent.Handler //
+, ContactsLoadedEvent.Handler //
 {
 
     private final ClientFactory                  clientFactory;
@@ -68,9 +70,11 @@ FetchContactsNamesEvent.Handler //
         hRegs.add(eventBus.addHandler(MapsApiLoadedEvent.TYPE, this));
         hRegs.add(eventBus.addHandler(ChartsApiLoadedEvent.TYPE, this));
 
+        hRegs.add(eventBus.addHandler(ContactsLoadedEvent.TYPE, this));
+
         panel.setWidget(view.asWidget());
 
-        if (u.areExternalApisLoaded(ctx)) {
+        if (isAppReady(ctx)) {
             setContacts();
 
         } else {
@@ -178,26 +182,33 @@ FetchContactsNamesEvent.Handler //
 
     @Override
     public void onChartsApiLoaded(final ChartsApiLoadedEvent event) {
-        if (hasToSetContacts && u.areExternalApisLoaded(ctx)) {
-            hasToSetContacts = false;
-            setContacts();
-        }
+        setContactsAsync();
     }
 
     @Override
     public void onMapsApiLoaded(final MapsApiLoadedEvent event) {
-        if (hasToSetContacts && u.areExternalApisLoaded(ctx)) {
+        setContactsAsync();
+    }
+
+    @Override
+    public void onShowdownLoaded(final ShowdownLoadedEvent event) {
+        setContactsAsync();
+    }
+
+    @Override
+    public void onContactsLoaded(final ContactsLoadedEvent event) {
+        setContactsAsync();
+    }
+
+    private void setContactsAsync() {
+        if (hasToSetContacts && isAppReady(ctx)) {
             hasToSetContacts = false;
             setContacts();
         }
     }
 
-    @Override
-    public void onShowdownLoaded(final ShowdownLoadedEvent event) {
-        if (hasToSetContacts && u.areExternalApisLoaded(ctx)) {
-            hasToSetContacts = false;
-            setContacts();
-        }
+    private boolean isAppReady(final AppContext ctx) {
+        return ctx.areContactsLoaded() & u.areExternalApisLoaded(ctx);
     }
 
 }
