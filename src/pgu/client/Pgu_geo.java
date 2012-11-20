@@ -166,6 +166,7 @@ public class Pgu_geo implements EntryPoint {
                 mvp.eventBus = eventBus;
 
                 // TODO PGU Nov 18, 2012 see how to deal with navigation between several public profiles
+                // TODO PGU Nov 20, 2012 extract the code in separate classes
 
                 //
                 // fire the load of other apis
