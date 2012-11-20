@@ -92,6 +92,7 @@ FetchContactsNamesEvent.Handler //
             clientFactory.getAppState().setUserId("Qjrp4c3fc3");
         }
 
+        // TODO PGU Nov 20, 2012 use pgu_geo.contacts
         linkedinService.fetchConnections( //
                 clientFactory.getAppState().getAccessToken() //
                 , clientFactory.getAppState().getUserId() //

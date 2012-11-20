@@ -6,7 +6,7 @@ public class ProfileUtils {
 
     public static native void initProfileMap() /*-{
 
-//       TODO PGU review the navigation
+//       TODO PGU review the navigation / the 'profile state' ??
 //        if ($wnd.pgu_geo.profile_map) {
 //            return;
 //        }

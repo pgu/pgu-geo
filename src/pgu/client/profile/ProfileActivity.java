@@ -121,6 +121,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         // TODO PGU Nov 20, 2012 see when is dom available
         ProfileUtils.initProfileMap();
 
+        // TODO PGU Nov 20, 2012 use pgu_geo.profile + service.fetch user and locations
         linkedinService.fetchProfile( //
                 clientFactory.getAppState().getAccessToken() //
                 , new AsyncCallbackApp<Profile>(eventBus) {
@@ -142,6 +143,9 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
                         }.schedule(3000); // TODO PGU Sep 21, 2012 temporary fix: fire an event when all locations are
                         // done
 
+                        // TODO PGU Nov 20, 2012 fetch preferences in parallel (+event+profileState)
+                        // TODO PGU Nov 20, 2012 move this method inside a 'profile service' and not in the public service
+                        // TODO PGU Nov 20, 2012 create a small entity only for the public preferences
                         publicProfileService.fetchPreferencesOnly( //
                                 clientFactory.getAppState().getUserId(), //
                                 new AsyncCallbackApp<PublicProfile>(eventBus) {
