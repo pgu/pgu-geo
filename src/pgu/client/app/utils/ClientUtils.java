@@ -3,6 +3,8 @@ package pgu.client.app.utils;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import pgu.client.app.AppContext;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.GwtEvent;
@@ -80,6 +82,13 @@ public class ClientUtils {
 
     public void log(final String msg) {
         GWT.log(msg);
+    }
+
+    public boolean areExternalApisLoaded(final AppContext ctx) {
+        return ctx.isShowdownLoaded() //
+                && ctx.isChartsApiLoaded() //
+                && ctx.isMapsApiLoaded() //
+                ;
     }
 
 }

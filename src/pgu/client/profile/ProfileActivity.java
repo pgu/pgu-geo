@@ -2,7 +2,7 @@ package pgu.client.profile;
 
 import java.util.ArrayList;
 
-import pgu.client.Pgu_geo;
+import pgu.client.app.AppContext;
 import pgu.client.app.event.ChartsApiLoadedEvent;
 import pgu.client.app.event.HideWaitingIndicatorEvent;
 import pgu.client.app.event.LocationAddNewEvent;
@@ -49,6 +49,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     private final ProfileView                    view;
     private final LinkedinServiceAsync           linkedinService;
     private final PublicProfileServiceAsync      publicProfileService;
+    private final AppContext                     ctx;
 
     private final ClientUtils                    u     = new ClientUtils();
 
@@ -57,8 +58,9 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     private final ArrayList<HandlerRegistration> hRegs = new ArrayList<HandlerRegistration>();
 
-    public ProfileActivity(final ProfilePlace place, final ClientFactory clientFactory) {
+    public ProfileActivity(final ProfilePlace place, final ClientFactory clientFactory, final AppContext ctx) {
         this.clientFactory = clientFactory;
+        this.ctx = ctx;
         view = clientFactory.getProfileView();
         linkedinService = clientFactory.getLinkedinService();
         publicProfileService = clientFactory.getPublicProfileService();
@@ -99,19 +101,12 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
         panel.setWidget(view.asWidget());
 
-        if (areApisLoaded()) {
+        if (u.areExternalApisLoaded(ctx)) {
             setProfile();
 
         } else {
             hasToSetProfile = true;
         }
-    }
-
-    private boolean areApisLoaded() {
-        return Pgu_geo.isShowdownLoaded //
-                && Pgu_geo.isChartsApiLoaded //
-                && Pgu_geo.isMapsApiLoaded //
-                ;
     }
 
     private void setProfile() {
@@ -384,7 +379,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     @Override
     public void onShowdownLoaded(final ShowdownLoadedEvent event) {
-        if (hasToSetProfile && areApisLoaded()) {
+        if (hasToSetProfile && u.areExternalApisLoaded(ctx)) {
             hasToSetProfile = false;
             setProfile();
         }
@@ -392,7 +387,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     @Override
     public void onChartsApiLoaded(final ChartsApiLoadedEvent event) {
-        if (hasToSetProfile && areApisLoaded()) {
+        if (hasToSetProfile && u.areExternalApisLoaded(ctx)) {
             hasToSetProfile = false;
             setProfile();
         }
@@ -400,7 +395,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     @Override
     public void onMapsApiLoaded(final MapsApiLoadedEvent event) {
-        if (hasToSetProfile && areApisLoaded()) {
+        if (hasToSetProfile && u.areExternalApisLoaded(ctx)) {
             hasToSetProfile = false;
             setProfile();
         }

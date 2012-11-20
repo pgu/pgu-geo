@@ -2,7 +2,7 @@ package pgu.client.contacts;
 
 import java.util.ArrayList;
 
-import pgu.client.Pgu_geo;
+import pgu.client.app.AppContext;
 import pgu.client.app.event.ChartsApiLoadedEvent;
 import pgu.client.app.event.HideWaitingIndicatorEvent;
 import pgu.client.app.event.MapsApiLoadedEvent;
@@ -34,18 +34,20 @@ FetchContactsNamesEvent.Handler //
 , ChartsApiLoadedEvent.Handler //
 {
 
-    private final ClientFactory        clientFactory;
-    private final ContactsView         view;
-    private final LinkedinServiceAsync linkedinService;
+    private final ClientFactory                  clientFactory;
+    private final ContactsView                   view;
+    private final LinkedinServiceAsync           linkedinService;
+    private final AppContext                     ctx;
 
-    private final ClientUtils          u = new ClientUtils();
+    private final ClientUtils                    u     = new ClientUtils();
 
-    private EventBus                   eventBus;
+    private EventBus                             eventBus;
 
     private final ArrayList<HandlerRegistration> hRegs = new ArrayList<HandlerRegistration>();
 
-    public ContactsActivity(final ContactsPlace place, final ClientFactory clientFactory) {
+    public ContactsActivity(final ContactsPlace place, final ClientFactory clientFactory, final AppContext ctx) {
         this.clientFactory = clientFactory;
+        this.ctx = ctx;
         view = clientFactory.getContactsView();
         linkedinService = clientFactory.getLinkedinService();
     }
@@ -68,20 +70,13 @@ FetchContactsNamesEvent.Handler //
 
         panel.setWidget(view.asWidget());
 
-        if (areApisLoaded()) {
+        if (u.areExternalApisLoaded(ctx)) {
             setContacts();
 
         } else {
             hasToSetContacts = true;
         }
 
-    }
-
-    private boolean areApisLoaded() {
-        return Pgu_geo.isShowdownLoaded //
-                && Pgu_geo.isChartsApiLoaded //
-                && Pgu_geo.isMapsApiLoaded //
-                ;
     }
 
     private void setContacts() {
@@ -120,8 +115,7 @@ FetchContactsNamesEvent.Handler //
                         view.setContactNames(result);
                     }
 
-                }
-                );
+                });
     }
 
     @Override
@@ -184,7 +178,7 @@ FetchContactsNamesEvent.Handler //
 
     @Override
     public void onChartsApiLoaded(final ChartsApiLoadedEvent event) {
-        if (hasToSetContacts && areApisLoaded()) {
+        if (hasToSetContacts && u.areExternalApisLoaded(ctx)) {
             hasToSetContacts = false;
             setContacts();
         }
@@ -192,7 +186,7 @@ FetchContactsNamesEvent.Handler //
 
     @Override
     public void onMapsApiLoaded(final MapsApiLoadedEvent event) {
-        if (hasToSetContacts && areApisLoaded()) {
+        if (hasToSetContacts && u.areExternalApisLoaded(ctx)) {
             hasToSetContacts = false;
             setContacts();
         }
@@ -200,7 +194,7 @@ FetchContactsNamesEvent.Handler //
 
     @Override
     public void onShowdownLoaded(final ShowdownLoadedEvent event) {
-        if (hasToSetContacts && areApisLoaded()) {
+        if (hasToSetContacts && u.areExternalApisLoaded(ctx)) {
             hasToSetContacts = false;
             setContacts();
         }

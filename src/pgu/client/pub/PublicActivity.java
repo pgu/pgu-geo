@@ -1,6 +1,6 @@
 package pgu.client.pub;
 
-import pgu.client.Pgu_geo;
+import pgu.client.app.AppContext;
 import pgu.client.app.event.ChartsApiLoadedEvent;
 import pgu.client.app.event.MapsApiLoadedEvent;
 import pgu.client.app.event.ShowdownLoadedEvent;
@@ -29,13 +29,15 @@ public class PublicActivity implements PublicPresenter //
 
     private final PublicView                view;
     private final PublicProfileServiceAsync publicProfileService = GWT.create(PublicProfileService.class);
+    private final AppContext                ctx;
 
-    private final ClientUtils               u = new ClientUtils();
+    private final ClientUtils               u                    = new ClientUtils();
 
     private EventBus                        eventBus;
 
-    public PublicActivity(final PublicView view ) {
+    public PublicActivity(final PublicView view, final AppContext ctx) {
         this.view = view;
+        this.ctx = ctx;
     }
 
     private boolean hasToSetPublic = false;
@@ -53,20 +55,13 @@ public class PublicActivity implements PublicPresenter //
 
         panel.setWidget(view.asWidget());
 
-        if (areApisLoaded()) {
+        if (u.areExternalApisLoaded(ctx)) {
             setPublic();
 
         } else {
             hasToSetPublic = true;
         }
 
-    }
-
-    private boolean areApisLoaded() {
-        return Pgu_geo.isShowdownLoaded //
-                && Pgu_geo.isChartsApiLoaded //
-                && Pgu_geo.isMapsApiLoaded //
-                ;
     }
 
     public void setPublic() {
@@ -110,7 +105,7 @@ public class PublicActivity implements PublicPresenter //
 
     @Override
     public void onChartsApiLoaded(final ChartsApiLoadedEvent event) {
-        if (hasToSetPublic && areApisLoaded()) {
+        if (hasToSetPublic && u.areExternalApisLoaded(ctx)) {
             hasToSetPublic = false;
             setPublic();
         }
@@ -118,7 +113,7 @@ public class PublicActivity implements PublicPresenter //
 
     @Override
     public void onMapsApiLoaded(final MapsApiLoadedEvent event) {
-        if (hasToSetPublic && areApisLoaded()) {
+        if (hasToSetPublic && u.areExternalApisLoaded(ctx)) {
             hasToSetPublic = false;
             setPublic();
         }
@@ -126,7 +121,7 @@ public class PublicActivity implements PublicPresenter //
 
     @Override
     public void onShowdownLoaded(final ShowdownLoadedEvent event) {
-        if (hasToSetPublic && areApisLoaded()) {
+        if (hasToSetPublic && u.areExternalApisLoaded(ctx)) {
             hasToSetPublic = false;
             setPublic();
         }
