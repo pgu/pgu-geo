@@ -160,7 +160,7 @@ public class Pgu_geo implements EntryPoint {
                 pMenuActivity.start(appView.getHeader(), eventBus);
 
                 final PublicView pView = new PublicViewImpl(eventBus);
-                final PublicActivity pActivity = new PublicActivity(pView);
+                final PublicActivity pActivity = new PublicActivity(pView, ctx);
                 pActivity.start(appView.getBody(), eventBus);
 
                 mvp.eventBus = eventBus;
@@ -234,7 +234,7 @@ public class Pgu_geo implements EntryPoint {
                 final ClientFactoryImpl aClientFactory = new ClientFactoryImpl();
                 final EventBus aEventBus = aClientFactory.getEventBus();
                 final PlaceController aPlaceController = aClientFactory.getPlaceController();
-                final AppActivityMapper aActivityMapper = new AppActivityMapper(aClientFactory);
+                final AppActivityMapper aActivityMapper = new AppActivityMapper(aClientFactory, static_self.ctx);
 
                 final SimplePanel panel = new SimplePanel();
                 RootPanel.get().add(panel);
