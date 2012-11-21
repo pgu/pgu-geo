@@ -6,9 +6,7 @@ import pgu.client.app.AppContext;
 import pgu.client.app.event.ChartsApiLoadedEvent;
 import pgu.client.app.event.ContactsLoadedEvent;
 import pgu.client.app.event.HideWaitingIndicatorEvent;
-import pgu.client.app.event.MapsApiLoadedEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
-import pgu.client.app.event.ShowdownLoadedEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
@@ -30,8 +28,6 @@ FetchContactsNamesEvent.Handler //
 , SaveChartsPreferencesEvent.Handler //
 , SaveFusionUrlsEvent.Handler //
 , SaveContactsNumberByCountryEvent.Handler //
-, ShowdownLoadedEvent.Handler //
-, MapsApiLoadedEvent.Handler //
 , ChartsApiLoadedEvent.Handler //
 , ContactsLoadedEvent.Handler //
 {
@@ -66,8 +62,6 @@ FetchContactsNamesEvent.Handler //
         hRegs.add(view.addSaveFusionUrlsHandler(this));
         hRegs.add(view.addSaveContactsNumberByCountryHandler(this));
 
-        hRegs.add(eventBus.addHandler(ShowdownLoadedEvent.TYPE, this));
-        hRegs.add(eventBus.addHandler(MapsApiLoadedEvent.TYPE, this));
         hRegs.add(eventBus.addHandler(ChartsApiLoadedEvent.TYPE, this));
 
         hRegs.add(eventBus.addHandler(ContactsLoadedEvent.TYPE, this));
@@ -187,16 +181,6 @@ FetchContactsNamesEvent.Handler //
     }
 
     @Override
-    public void onMapsApiLoaded(final MapsApiLoadedEvent event) {
-        setContactsAsync();
-    }
-
-    @Override
-    public void onShowdownLoaded(final ShowdownLoadedEvent event) {
-        setContactsAsync();
-    }
-
-    @Override
     public void onContactsLoaded(final ContactsLoadedEvent event) {
         setContactsAsync();
     }
@@ -208,8 +192,12 @@ FetchContactsNamesEvent.Handler //
         }
     }
 
+    public boolean areExternalApisLoaded(final AppContext ctx) {
+        return ctx.isChartsApiLoaded();
+    }
+
     private boolean isAppReady(final AppContext ctx) {
-        return ctx.areContactsLoaded() & u.areExternalApisLoaded(ctx);
+        return ctx.areContactsLoaded() && areExternalApisLoaded(ctx);
     }
 
 }

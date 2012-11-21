@@ -54,7 +54,7 @@ public class PublicActivity implements PublicPresenter //
 
         panel.setWidget(view.asWidget());
 
-        if (u.areExternalApisLoaded(ctx)) {
+        if (isAppReady(ctx)) {
             setPublic();
 
         } else {
@@ -105,26 +105,36 @@ public class PublicActivity implements PublicPresenter //
 
     @Override
     public void onChartsApiLoaded(final ChartsApiLoadedEvent event) {
-        if (hasToSetPublic && u.areExternalApisLoaded(ctx)) {
-            hasToSetPublic = false;
-            setPublic();
-        }
+        setPublicAsync();
     }
 
     @Override
     public void onMapsApiLoaded(final MapsApiLoadedEvent event) {
-        if (hasToSetPublic && u.areExternalApisLoaded(ctx)) {
+        setPublicAsync();
+    }
+
+    @Override
+    public void onShowdownLoaded(final ShowdownLoadedEvent event) {
+        setPublicAsync();
+    }
+
+    private void setPublicAsync() {
+        if (hasToSetPublic && isAppReady(ctx)) {
             hasToSetPublic = false;
             setPublic();
         }
     }
 
-    @Override
-    public void onShowdownLoaded(final ShowdownLoadedEvent event) {
-        if (hasToSetPublic && u.areExternalApisLoaded(ctx)) {
-            hasToSetPublic = false;
-            setPublic();
-        }
+    private boolean areExternalApisLoaded(final AppContext ctx) {
+        return ctx.isShowdownLoaded() //
+                && ctx.isChartsApiLoaded() //
+                && ctx.isMapsApiLoaded() //
+                ;
+    }
+
+    private boolean isAppReady(final AppContext ctx) {
+        // TODO PGU Nov 21, 2012 profile and contacts loaded from service
+        return areExternalApisLoaded(ctx);
     }
 
 }

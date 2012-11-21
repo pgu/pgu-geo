@@ -3,7 +3,6 @@ package pgu.client.profile;
 import java.util.ArrayList;
 
 import pgu.client.app.AppContext;
-import pgu.client.app.event.ChartsApiLoadedEvent;
 import pgu.client.app.event.HideWaitingIndicatorEvent;
 import pgu.client.app.event.LocationAddNewEvent;
 import pgu.client.app.event.LocationShowOnMapEvent;
@@ -42,7 +41,6 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 , SaveMapPreferencesEvent.Handler //
 , ShowdownLoadedEvent.Handler //
 , MapsApiLoadedEvent.Handler //
-, ChartsApiLoadedEvent.Handler //
 , ProfileLoadedEvent.Handler //
 {
 
@@ -99,13 +97,12 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
         hRegs.add(eventBus.addHandler(ShowdownLoadedEvent.TYPE, this));
         hRegs.add(eventBus.addHandler(MapsApiLoadedEvent.TYPE, this));
-        hRegs.add(eventBus.addHandler(ChartsApiLoadedEvent.TYPE, this));
 
         hRegs.add(eventBus.addHandler(ProfileLoadedEvent.TYPE, this));
 
         panel.setWidget(view.asWidget());
 
-        if (u.areExternalApisLoaded(ctx)) {
+        if (isAppReady(ctx)) {
             setProfile();
 
         } else {
@@ -142,7 +139,8 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
                         // done
 
                         // TODO PGU Nov 20, 2012 fetch preferences in parallel (+event+profileState)
-                        // TODO PGU Nov 20, 2012 move this method inside a 'profile service' and not in the public service
+                        // TODO PGU Nov 20, 2012 move this method inside a 'profile service' and not in the public
+                        // service
                         // TODO PGU Nov 20, 2012 create a small entity only for the public preferences
                         publicProfileService.fetchPreferencesOnly( //
                                 clientFactory.getAppState().getUserId(), //
@@ -392,11 +390,6 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     }
 
     @Override
-    public void onChartsApiLoaded(final ChartsApiLoadedEvent event) {
-        setProfileAsync();
-    }
-
-    @Override
     public void onMapsApiLoaded(final MapsApiLoadedEvent event) {
         setProfileAsync();
     }
@@ -413,8 +406,14 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         }
     }
 
+    private boolean areExternalApisLoaded(final AppContext ctx) {
+        return ctx.isShowdownLoaded() //
+                && ctx.isMapsApiLoaded() //
+                ;
+    }
+
     private boolean isAppReady(final AppContext ctx) {
-        return ctx.isProfileLoaded() & u.areExternalApisLoaded(ctx);
+        return ctx.isProfileLoaded() && areExternalApisLoaded(ctx);
     }
 
 }
