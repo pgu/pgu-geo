@@ -36,6 +36,7 @@ public class GeocoderUtils {
         }
     }-*/;
 
+    // TODO PGU Nov 21, 2012 remove this
     private static native boolean isGeocoderAvailable() /*-{
         return typeof $wnd.pgu_geo.geocoder !== 'undefined';
     }-*/;

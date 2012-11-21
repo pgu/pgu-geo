@@ -3,6 +3,7 @@ package pgu.client.app.utils;
 public class MovieUtils {
 
     static {
+        // TODO PGU Nov 21, 2012 delete the class
         initProfileMovieIndex();
     }
 
