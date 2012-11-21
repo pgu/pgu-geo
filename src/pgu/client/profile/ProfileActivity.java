@@ -21,7 +21,6 @@ import pgu.client.app.utils.Level;
 import pgu.client.app.utils.LocationsUtils;
 import pgu.client.profile.event.SaveLocationEvent;
 import pgu.client.profile.event.SaveMapPreferencesEvent;
-import pgu.client.profile.ui.ProfileUtils;
 import pgu.client.profile.ui.ProfileViewUtils;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.client.service.PublicProfileServiceAsync;
@@ -118,8 +117,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         // TODO PGU Nov 20, 2012 show waiting indicator while loading the app
         u.fire(eventBus, new ShowWaitingIndicatorEvent());
 
-        // TODO PGU Nov 20, 2012 see when is dom available
-        ProfileUtils.initProfileMap();
+        view.initProfileMapIfNeeded();
 
         // TODO PGU Nov 20, 2012 use pgu_geo.profile + service.fetch user and locations
         linkedinService.fetchProfile( //

@@ -33,4 +33,6 @@ public interface ProfileView extends IsWidget //
 
     void showNotificationWarning(String msg);
 
+    void initProfileMapIfNeeded();
+
 }

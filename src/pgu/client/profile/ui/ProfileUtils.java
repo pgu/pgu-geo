@@ -6,22 +6,7 @@ public class ProfileUtils {
 
     public static native void initProfileMap() /*-{
 
-//       TODO PGU review the navigation / the 'profile state' ??
-//        if ($wnd.pgu_geo.profile_map) {
-//            return;
-//        }
-
-        var div = $wnd.document.getElementById("pgu_geo_profile_map");
-
-//        if (div === null) {
-//            $wnd.setTimeout(
-//                function() {
-//                    @pgu.client.profile.ui.ProfileUtils::initProfileMap()();
-//                }
-//                , 1000
-//            );
-//            return;
-//        }
+        var div = $wnd.document.getElementById('pgu_geo_profile_map');
 
         $wnd.console.log('initProfileMap');
 

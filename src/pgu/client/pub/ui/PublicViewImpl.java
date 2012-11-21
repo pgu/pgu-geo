@@ -737,4 +737,13 @@ public class PublicViewImpl extends Composite implements PublicView, GoogleIsAva
         }
     }
 
+    private final boolean isPublicMapInitialized = false;
+
+    @Override
+    public void initPublicMapIfNeeded() {
+        if (!isPublicMapInitialized) {
+            PublicUtils.initPublicProfileMap();
+        }
+    }
+
 }

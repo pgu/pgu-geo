@@ -422,4 +422,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         // TODO PGU textbox with the warning msg
     }
 
+    private final boolean isProfileMapInitialized = false;
+
+    @Override
+    public void initProfileMapIfNeeded() {
+        if (!isProfileMapInitialized) {
+            ProfileUtils.initProfileMap();
+        }
+    }
+
 }

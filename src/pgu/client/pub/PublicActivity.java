@@ -9,7 +9,6 @@ import pgu.client.app.utils.ClientUtils;
 import pgu.client.pub.event.FetchPublicContactsEvent;
 import pgu.client.pub.event.UserHeadlineEvent;
 import pgu.client.pub.event.UserNameEvent;
-import pgu.client.pub.ui.PublicUtils;
 import pgu.client.service.PublicProfileService;
 import pgu.client.service.PublicProfileServiceAsync;
 import pgu.shared.dto.PublicContacts;
@@ -65,7 +64,8 @@ public class PublicActivity implements PublicPresenter //
     }
 
     public void setPublic() {
-        PublicUtils.initPublicProfileMap();
+
+        view.initPublicMapIfNeeded();
 
         publicProfileService.fetchPublicProfileByUrl( //
                 Window.Location.getHash(), // // TODO PGU Nov 18, 2012 review this url
