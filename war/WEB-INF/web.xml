@@ -8,6 +8,14 @@
 
   <!-- Servlets -->
   <servlet>
+    <servlet-name>profile</servlet-name>
+    <servlet-class>pgu.server.service.ProfileServiceImpl</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>contacts</servlet-name>
+    <servlet-class>pgu.server.service.ContactsServiceImpl</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>pub</servlet-name>
     <servlet-class>pgu.server.service.PublicProfileServiceImpl</servlet-class>
   </servlet>
@@ -20,6 +28,14 @@
     <servlet-class>pgu.server.service.LoginServiceImpl</servlet-class>
   </servlet>
   
+  <servlet-mapping>
+    <servlet-name>contacts</servlet-name>
+    <url-pattern>/pgu_geo/contacts</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>profile</servlet-name>
+    <url-pattern>/pgu_geo/profile</url-pattern>
+  </servlet-mapping>
   <servlet-mapping>
     <servlet-name>pub</servlet-name>
     <url-pattern>/pgu_geo/pub</url-pattern>
