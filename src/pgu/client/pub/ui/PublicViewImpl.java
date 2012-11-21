@@ -4,9 +4,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
-import pgu.client.app.event.ChartsApiLoadedEvent;
-import pgu.client.app.event.GoogleIsAvailableEvent;
-import pgu.client.app.utils.ChartsUtils;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.GoogleUtils;
 import pgu.client.app.utils.LocationsUtils;
@@ -55,7 +52,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
-public class PublicViewImpl extends Composite implements PublicView, GoogleIsAvailableEvent.Handler, ChartsApiLoadedEvent.Handler {
+public class PublicViewImpl extends Composite implements PublicView {
 
     private static final String PREFIX_CHART_ID = "pgu_geo_public_contacts_";
 
@@ -90,7 +87,6 @@ public class PublicViewImpl extends Composite implements PublicView, GoogleIsAva
 
     private PublicPresenter   presenter;
     private final ClientUtils u = new ClientUtils();
-    private PublicProfile profile;
 
     private final HashMap<String, HTMLPanel> type2chart = new HashMap<String, HTMLPanel>();
 
@@ -104,8 +100,6 @@ public class PublicViewImpl extends Composite implements PublicView, GoogleIsAva
         initWidget(uiBinder.createAndBindUi(this));
 
         css = ResourcesApp.INSTANCE.css();
-
-        eventBus.addHandler(ChartsApiLoadedEvent.TYPE, this);
 
         pieChart.getElement().setId(PREFIX_CHART_ID + ChartType.PIE);
         barChart.getElement().setId(PREFIX_CHART_ID + ChartType.BAR);
@@ -127,8 +121,6 @@ public class PublicViewImpl extends Composite implements PublicView, GoogleIsAva
         type2chart.put(ChartType.WORLD, worldMap);
 
         hideAllCharts();
-
-        addHandler(this, GoogleIsAvailableEvent.TYPE);
 
         playToolbar.setVisible(false);
         playToolbar.addPlayHandler(new PlayEvent.Handler() {
@@ -395,43 +387,16 @@ public class PublicViewImpl extends Composite implements PublicView, GoogleIsAva
     @Override
     public void setProfile(final PublicProfile profile) {
 
-        this.profile = profile;
-
-        ensureGoogleIsLoaded();
+        final String mapPreferences = profile.getMapPreferences();
+        if (!u.isVoid(mapPreferences)) {
+            PublicUtils.updateMapVisu(mapPreferences);
+        }
 
         LocationsUtils.initCaches(profile.getUserAndLocations());
 
         setProfile(this, profile.getProfile());
 
         fireEvent(new FetchPublicContactsEvent(profile.getUserId()));
-    }
-
-    private void ensureGoogleIsLoaded() {
-
-        Scheduler.get().scheduleDeferred(new Command() {
-            @Override
-            public void execute() {
-
-                final JavaScriptObject google = GoogleUtils.google();
-
-                if (google == null) {
-                    new Timer() {
-
-                        @Override
-                        public void run() {
-                            ensureGoogleIsLoaded();
-                        }
-
-                    }.schedule(300);
-
-                } else {
-
-                    fireEvent(new GoogleIsAvailableEvent());
-                }
-
-            }
-        });
-
     }
 
     private native void setProfile(PublicViewImpl view, String profile) /*-{
@@ -510,16 +475,6 @@ public class PublicViewImpl extends Composite implements PublicView, GoogleIsAva
     }
 
     @Override
-    public void onGoogleIsAvailable(final GoogleIsAvailableEvent event) {
-
-        final String mapPreferences = profile.getMapPreferences();
-        if (!u.isVoid(mapPreferences)) {
-            PublicUtils.updateMapVisu(mapPreferences);
-        }
-
-    }
-
-    @Override
     public HandlerRegistration addFetchPublicContactsHandler(final Handler handler) {
         return addHandler(handler, FetchPublicContactsEvent.TYPE);
     }
@@ -530,14 +485,7 @@ public class PublicViewImpl extends Composite implements PublicView, GoogleIsAva
     @Override
     public void setContacts(final PublicContacts publicContacts) {
         this.publicContacts = publicContacts;
-
-        if (!ChartsUtils.isApiLoaded()) {
-            hasToBuildChartsWhenReady = true;
-
-        } else {
-            setContactsInternal();
-
-        }
+        setContactsInternal();
     }
 
     private void setContactsInternal() {
@@ -726,16 +674,6 @@ public class PublicViewImpl extends Composite implements PublicView, GoogleIsAva
         }
     }
 
-    private boolean hasToBuildChartsWhenReady = false;
-
-    @Override
-    public void onChartsApiLoaded(final ChartsApiLoadedEvent event) {
-        if (hasToBuildChartsWhenReady) {
-            hasToBuildChartsWhenReady = false;
-
-            setContactsInternal();
-        }
-    }
 
     private boolean isPublicMapInitialized = false;
 

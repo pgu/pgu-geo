@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-import pgu.client.app.event.ChartsApiLoadedEvent;
-import pgu.client.app.utils.ChartsUtils;
 import pgu.client.app.utils.JsonUtils;
 import pgu.client.contacts.ContactsView;
 import pgu.client.contacts.event.FetchContactsNamesEvent;
@@ -46,7 +44,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
-public class ContactsViewImpl extends Composite implements ContactsView, ChartsApiLoadedEvent.Handler {
+public class ContactsViewImpl extends Composite implements ContactsView {
 
     private static ContactsViewImplUiBinder uiBinder = GWT.create(ContactsViewImplUiBinder.class);
 
@@ -124,8 +122,6 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
 
         showLoadingPanel();
         hideAllCharts();
-
-        eventBus.addHandler(ChartsApiLoadedEvent.TYPE, this);
 
         infoPop.setHeading("Charts");
         infoPop.setText("<p>Clicking on the regions of the geocharts will display your contacts' names.</p>" + //
@@ -373,15 +369,7 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
             }
         }
 
-        GWT.log("is api loaded? " + ChartsUtils.isApiLoaded());
-
-        if (!ChartsUtils.isApiLoaded()) {
-            hasToBuildGeoChartWhenReady = true;
-
-        } else {
-            buildCharts();
-
-        }
+        buildCharts();
 
         fireEvent(new FetchContactsNamesEvent());
 
@@ -519,7 +507,6 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
     }
 
     private final TreeMap<Integer, ArrayList<String>> weight2codes = new TreeMap<Integer, ArrayList<String>>();
-    private boolean hasToBuildGeoChartWhenReady = false;
 
     private void buildCharts() {
 
@@ -662,17 +649,6 @@ public class ContactsViewImpl extends Composite implements ContactsView, ChartsA
             sb.append(",");
         }
         GWT.log(sb.toString());
-    }
-
-    @Override
-    public void onChartsApiLoaded(final ChartsApiLoadedEvent event) {
-        GWT.log("!!! ok, charts is ON, let's do some geocharts !!!");
-
-        if (hasToBuildGeoChartWhenReady) {
-            hasToBuildGeoChartWhenReady = false;
-
-            buildCharts();
-        }
     }
 
     @Override
