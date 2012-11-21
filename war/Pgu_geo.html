@@ -154,12 +154,16 @@
             pgu_geo_load_profile(pgu_geo_load_contacts_after_profile);
         }
         
+        function pgu_geo_is_contacts_view() {
+            console.log('pgu_geo_is_contacts_view');
+            
+            return window.location.hash.indexOf('#contacts:') === 0;
+        }
+        
         function pgu_geo_on_linkedin_auth() {
             console.log('pgu_geo_on_linkedin_auth');
             
-            var is_contacts_view = window.location.hash.indexOf('#contacts:') === 0;
-            
-            if (is_contacts_view) {
+            if (pgu_geo_is_contacts_view()) {
             	pgu_geo_load_contacts_first();
             	
             } else {
@@ -204,16 +208,27 @@
         
         function pgu_geo_after_loading_public_module() {
             console.log("pgu_geo_after_loading_public_module");
-            pgu_geo_load_showdown();
+            
             pgu_geo_load_maps_api();
             pgu_geo_load_charts_api();
+            pgu_geo_load_showdown();
         }
         
         function pgu_geo_after_loading_app() {
             console.log("pgu_geo_after_loading_app");
-            pgu_geo_load_showdown();
-            pgu_geo_load_maps_api();
-            pgu_geo_load_charts_api();
+            
+            if (pgu_geo_is_contacts_view()) {
+            	
+                pgu_geo_load_charts_api();
+                pgu_geo_load_maps_api();
+                pgu_geo_load_showdown();
+            	
+            } else {
+                pgu_geo_load_maps_api();
+                pgu_geo_load_showdown();
+                pgu_geo_load_charts_api();
+            	
+            }
         }
         
         function pgu_geo_after_loading_module() {
