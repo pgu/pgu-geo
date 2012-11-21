@@ -6,12 +6,9 @@ import pgu.client.menu.MenuView;
 import pgu.client.oauth.OAuthView;
 import pgu.client.profile.EditLocationView;
 import pgu.client.profile.ProfileView;
-import pgu.client.pub.PublicMenuView;
-import pgu.client.pub.PublicView;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.client.service.LoginServiceAsync;
 import pgu.client.service.PublicProfileServiceAsync;
-import pgu.client.signin.SigninView;
 
 public interface ClientFactory extends BaseClientFactory {
 
@@ -31,11 +28,6 @@ public interface ClientFactory extends BaseClientFactory {
 
     EditLocationView getEditLocationView();
 
-    PublicView getPublicView();
-
     PublicProfileServiceAsync getPublicProfileService();
 
-    PublicMenuView getPublicMenuView();
-
-    SigninView getSigninView();
 }

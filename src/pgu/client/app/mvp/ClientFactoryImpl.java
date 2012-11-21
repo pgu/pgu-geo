@@ -13,18 +13,12 @@ import pgu.client.profile.EditLocationView;
 import pgu.client.profile.ProfileView;
 import pgu.client.profile.ui.EditLocationViewImpl;
 import pgu.client.profile.ui.ProfileViewImpl;
-import pgu.client.pub.PublicMenuView;
-import pgu.client.pub.PublicView;
-import pgu.client.pub.ui.PublicMenuViewImpl;
-import pgu.client.pub.ui.PublicViewImpl;
 import pgu.client.service.LinkedinService;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.client.service.LoginService;
 import pgu.client.service.LoginServiceAsync;
 import pgu.client.service.PublicProfileService;
 import pgu.client.service.PublicProfileServiceAsync;
-import pgu.client.signin.SigninView;
-import pgu.client.signin.ui.SigninViewImpl;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.PlaceController;
@@ -36,15 +30,12 @@ public class ClientFactoryImpl implements ClientFactory {
     private static EventBus                  eventBus             = new SimpleEventBus();
     private static PlaceController           placeController      = new PlaceController(eventBus);
 
-    private static AppView                   appView;
-    private static MenuView                  menuView;
-    private static ContactsView              contactsView;
-    private static ProfileView               profileView;
-    private static OAuthView                 oauthView;
-    private static EditLocationView          editLocationView;
-    private static PublicView                publicView; // TODO PGU Nov 18, 2012 remove it
-    private static PublicMenuView            publicMenuView; // TODO PGU Nov 18, 2012 remove it
-    private static SigninView                signinView;
+    private static AppView                   appView = new AppViewImpl();
+    private static MenuView                  menuView = new MenuViewImpl();
+    private static ContactsView              contactsView = new ContactsViewImpl(eventBus);
+    private static ProfileView               profileView = new ProfileViewImpl();
+    private static OAuthView                 oauthView = new OAuthViewImpl();
+    private static EditLocationView          editLocationView = new EditLocationViewImpl();
 
     private static PublicProfileServiceAsync publicProfileService = GWT.create(PublicProfileService.class); // TODO PGU Nov 18, 2012 remove it
     private static LinkedinServiceAsync      linkedinService      = GWT.create(LinkedinService.class);
@@ -64,9 +55,6 @@ public class ClientFactoryImpl implements ClientFactory {
 
     @Override
     public AppView getAppView() {
-        if (appView == null) {
-            appView = new AppViewImpl();
-        }
         return appView;
     }
 
@@ -77,9 +65,6 @@ public class ClientFactoryImpl implements ClientFactory {
 
     @Override
     public MenuView getMenuView() {
-        if (menuView == null) {
-            menuView = new MenuViewImpl();
-        }
         return menuView;
     }
 
@@ -95,63 +80,27 @@ public class ClientFactoryImpl implements ClientFactory {
 
     @Override
     public ContactsView getContactsView() {
-        if (contactsView == null) {
-            contactsView = new ContactsViewImpl(eventBus);
-        }
         return contactsView;
     }
 
     @Override
     public ProfileView getProfileView() {
-        if (profileView == null) {
-            profileView = new ProfileViewImpl();
-        }
         return profileView;
     }
 
     @Override
     public OAuthView getOAuthView() {
-        if (oauthView == null) {
-            oauthView = new OAuthViewImpl();
-        }
         return oauthView;
     }
 
     @Override
     public EditLocationView getEditLocationView() {
-        if (editLocationView == null) {
-            editLocationView = new EditLocationViewImpl();
-        }
         return editLocationView;
-    }
-
-    @Override
-    public PublicView getPublicView() {
-        if (publicView == null) {
-            publicView = new PublicViewImpl(eventBus);
-        }
-        return publicView;
     }
 
     @Override
     public PublicProfileServiceAsync getPublicProfileService() {
         return publicProfileService;
-    }
-
-    @Override
-    public PublicMenuView getPublicMenuView() {
-        if (publicMenuView == null) {
-            publicMenuView = new PublicMenuViewImpl();
-        }
-        return publicMenuView;
-    }
-
-    @Override
-    public SigninView getSigninView() {
-        if (signinView == null) {
-            signinView = new SigninViewImpl();
-        }
-        return signinView;
     }
 
 }
