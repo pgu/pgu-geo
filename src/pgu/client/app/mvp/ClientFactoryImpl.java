@@ -17,6 +17,8 @@ import pgu.client.service.LinkedinService;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.client.service.LoginService;
 import pgu.client.service.LoginServiceAsync;
+import pgu.client.service.ProfileService;
+import pgu.client.service.ProfileServiceAsync;
 import pgu.client.service.PublicProfileService;
 import pgu.client.service.PublicProfileServiceAsync;
 
@@ -30,16 +32,19 @@ public class ClientFactoryImpl implements ClientFactory {
     private static EventBus                  eventBus             = new SimpleEventBus();
     private static PlaceController           placeController      = new PlaceController(eventBus);
 
-    private static AppView                   appView = new AppViewImpl();
-    private static MenuView                  menuView = new MenuViewImpl();
-    private static ContactsView              contactsView = new ContactsViewImpl(eventBus);
-    private static ProfileView               profileView = new ProfileViewImpl();
-    private static OAuthView                 oauthView = new OAuthViewImpl();
-    private static EditLocationView          editLocationView = new EditLocationViewImpl();
+    private static AppView                   appView              = new AppViewImpl();
+    private static MenuView                  menuView             = new MenuViewImpl();
+    private static ContactsView              contactsView         = new ContactsViewImpl(eventBus);
+    private static ProfileView               profileView          = new ProfileViewImpl();
+    private static OAuthView                 oauthView            = new OAuthViewImpl();
+    private static EditLocationView          editLocationView     = new EditLocationViewImpl();
 
-    private static PublicProfileServiceAsync publicProfileService = GWT.create(PublicProfileService.class); // TODO PGU Nov 18, 2012 remove it
+    // TODO PGU Nov 22, 2012 remove it
+    private static PublicProfileServiceAsync publicProfileService = GWT.create(PublicProfileService.class);
     private static LinkedinServiceAsync      linkedinService      = GWT.create(LinkedinService.class);
+
     private static LoginServiceAsync         loginService         = GWT.create(LoginService.class);
+    private static ProfileServiceAsync       profileService       = GWT.create(ProfileService.class);
 
     private static AppState                  appState             = new AppState();
 
@@ -101,6 +106,11 @@ public class ClientFactoryImpl implements ClientFactory {
     @Override
     public PublicProfileServiceAsync getPublicProfileService() {
         return publicProfileService;
+    }
+
+    @Override
+    public ProfileServiceAsync getProfileService() {
+        return profileService;
     }
 
 }

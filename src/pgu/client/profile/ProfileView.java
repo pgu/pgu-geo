@@ -1,9 +1,11 @@
 package pgu.client.profile;
 
 import pgu.client.app.event.LocationShowOnMapEvent;
+import pgu.client.profile.event.FetchCustomLocationsEvent;
+import pgu.client.profile.event.FetchPublicPreferencesEvent;
 import pgu.client.profile.event.SaveLocationEvent;
 import pgu.client.profile.event.SaveMapPreferencesEvent;
-import pgu.shared.dto.Profile;
+import pgu.client.profile.event.SavePublicLocationsEvent;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -11,11 +13,12 @@ public interface ProfileView extends IsWidget //
 , SaveLocationEvent.HasSaveLocationHandlers //
 , LocationShowOnMapEvent.HasLocationShowOnMapHandlers //
 , SaveMapPreferencesEvent.HasSaveMapPreferencesHandlers //
+, FetchPublicPreferencesEvent.HasFetchPublicPreferencesHandlers //
+, SavePublicLocationsEvent.HasSavePublicLocationsHandlers //
+, FetchCustomLocationsEvent.HasFetchCustomLocationsHandlers //
 {
 
     void setPresenter(ProfilePresenter presenter);
-
-    void setProfile(Profile profile);
 
     String getPublicProfile();
 
@@ -33,6 +36,6 @@ public interface ProfileView extends IsWidget //
 
     void showNotificationWarning(String msg);
 
-    void initProfileMapIfNeeded();
+    void showProfile();
 
 }

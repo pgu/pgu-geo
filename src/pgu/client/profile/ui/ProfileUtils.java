@@ -41,10 +41,6 @@ public class ProfileUtils {
         map_preferences);
     }-*/;
 
-    public static native void cacheProfile(JavaScriptObject profile) /*-{
-        $wnd.pgu_geo.profile = profile;
-    }-*/;
-
     public static native JavaScriptObject copyProfile() /*-{
         return JSON.parse(@pgu.client.app.utils.JsonUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
         $wnd.pgu_geo.profile));

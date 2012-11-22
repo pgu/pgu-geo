@@ -8,6 +8,7 @@ import pgu.client.profile.EditLocationView;
 import pgu.client.profile.ProfileView;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.client.service.LoginServiceAsync;
+import pgu.client.service.ProfileServiceAsync;
 import pgu.client.service.PublicProfileServiceAsync;
 
 public interface ClientFactory extends BaseClientFactory {
@@ -29,5 +30,7 @@ public interface ClientFactory extends BaseClientFactory {
     EditLocationView getEditLocationView();
 
     PublicProfileServiceAsync getPublicProfileService();
+
+    ProfileServiceAsync getProfileService();
 
 }

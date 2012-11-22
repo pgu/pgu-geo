@@ -9,10 +9,12 @@ import pgu.client.app.utils.LocationsUtils;
 import pgu.client.app.utils.MarkersUtils;
 import pgu.client.profile.ProfilePresenter;
 import pgu.client.profile.ProfileView;
+import pgu.client.profile.event.FetchCustomLocationsEvent;
+import pgu.client.profile.event.FetchPublicPreferencesEvent;
 import pgu.client.profile.event.SaveLocationEvent;
 import pgu.client.profile.event.SaveMapPreferencesEvent;
 import pgu.client.profile.event.SaveMapPreferencesEvent.Handler;
-import pgu.shared.dto.Profile;
+import pgu.client.profile.event.SavePublicLocationsEvent;
 import pgu.shared.utils.PublicProfileItem;
 
 import com.github.gwtbootstrap.client.ui.Button;
@@ -241,15 +243,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         this.presenter = presenter;
     }
 
-    @Override
-    public void setProfile(final Profile profile) {
-
-        LocationsUtils.initCaches(profile.getUserAndLocations());
-        ProfileViewUtils.initCaches();
-
-        setProfile(this, profile.getJson());
-    }
-
     private void setProfileName(final String firstname, final String lastname) {
         nameBasic.setText(firstname + " " + lastname);
     }
@@ -305,12 +298,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         return new LanguagesUtils(lgContainer);
     }
 
-    private native void setProfile(ProfileViewImpl view, String profile) /*-{
+    private native void setProfile(ProfileViewImpl view) /*-{
 
 		@pgu.client.profile.ui.ProfileViewUtils::initDelayForCallingGeocoder()();
 
-		var j_profile = JSON.parse(profile);
-		@pgu.client.profile.ui.ProfileUtils::cacheProfile(Lcom/google/gwt/core/client/JavaScriptObject;)(j_profile);
+		var j_profile = $wnd.pgu_geo.profile;
 		@pgu.client.profile.ui.PublicProfileUtils::initBasePublicProfile()();
 
 		@pgu.client.profile.ui.ProfileSummaryUtils::setProfileId(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
@@ -404,6 +396,21 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     @Override
+    public HandlerRegistration addFetchPublicPreferencesHandler(final FetchPublicPreferencesEvent.Handler handler) {
+        return addHandler(handler, FetchPublicPreferencesEvent.TYPE);
+    }
+
+    @Override
+    public HandlerRegistration addSavePublicLocationsHandler(final SavePublicLocationsEvent.Handler handler) {
+        return addHandler(handler, SavePublicLocationsEvent.TYPE);
+    }
+
+    @Override
+    public HandlerRegistration addFetchCustomLocationsHandler(final FetchCustomLocationsEvent.Handler handler) {
+        return addHandler(handler, FetchCustomLocationsEvent.TYPE);
+    }
+
+    @Override
     public void hideSaveWidget() {
         locationSaveBtn.setVisible(false);
     }
@@ -422,14 +429,27 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         // TODO PGU textbox with the warning msg
     }
 
-    private boolean isProfileMapInitialized = false;
+    private boolean isProfileSetInView = false;
 
     @Override
-    public void initProfileMapIfNeeded() {
-        if (!isProfileMapInitialized) {
-            isProfileMapInitialized = true;
-            ProfileUtils.initProfileMap();
+    public void showProfile() {
+        if (isProfileSetInView) {
+            return;
         }
+
+        isProfileSetInView = true;
+
+        ProfileUtils.initProfileMap();
+        ProfileViewUtils.initCaches();
+
+        // TODO PGU Nov 22, 2012 use pgu_geo.profile
+        setProfile(this);
+
+        fireEvent(new FetchCustomLocationsEvent());
+        fireEvent(new FetchPublicPreferencesEvent());
+
+        // save locations async when no locations are detected
+        fireEvent(new SavePublicLocationsEvent());
     }
 
 }

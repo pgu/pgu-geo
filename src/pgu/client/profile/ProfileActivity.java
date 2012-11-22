@@ -18,12 +18,15 @@ import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.Level;
 import pgu.client.app.utils.LocationsUtils;
+import pgu.client.profile.event.FetchCustomLocationsEvent;
+import pgu.client.profile.event.FetchPublicPreferencesEvent;
 import pgu.client.profile.event.SaveLocationEvent;
 import pgu.client.profile.event.SaveMapPreferencesEvent;
+import pgu.client.profile.event.SavePublicLocationsEvent;
 import pgu.client.profile.ui.ProfileViewUtils;
 import pgu.client.service.LinkedinServiceAsync;
+import pgu.client.service.ProfileServiceAsync;
 import pgu.client.service.PublicProfileServiceAsync;
-import pgu.shared.dto.Profile;
 import pgu.shared.model.PublicProfile;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -42,12 +45,16 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 , ShowdownLoadedEvent.Handler //
 , MapsApiLoadedEvent.Handler //
 , ProfileLoadedEvent.Handler //
+, FetchPublicPreferencesEvent.Handler //
+, SavePublicLocationsEvent.Handler //
+, FetchCustomLocationsEvent.Handler //
 {
 
     private final ClientFactory                  clientFactory;
     private final ProfileView                    view;
     private final LinkedinServiceAsync           linkedinService;
     private final PublicProfileServiceAsync      publicProfileService;
+    private final ProfileServiceAsync            profileService;
     private final AppContext                     ctx;
 
     private final ClientUtils                    u     = new ClientUtils();
@@ -63,6 +70,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         view = clientFactory.getProfileView();
         linkedinService = clientFactory.getLinkedinService();
         publicProfileService = clientFactory.getPublicProfileService();
+        profileService = clientFactory.getProfileService();
     }
 
     @Override
@@ -77,7 +85,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         view.showSaveWidget();
     }
 
-    private boolean hasToSetProfile = false;
+    private boolean hasToShowProfile = false;
 
     @Override
     public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
@@ -89,6 +97,10 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         hRegs.add(view.addSaveLocationHandler(this));
         hRegs.add(view.addLocationShowOnMapHandler(this));
         hRegs.add(view.addSaveMapPreferencesHandler(this));
+
+        hRegs.add(view.addFetchCustomLocationsHandler(this));
+        hRegs.add(view.addFetchPublicPreferencesHandler(this));
+        hRegs.add(view.addSavePublicLocationsHandler(this));
 
         hRegs.add(eventBus.addHandler(LocationsSuccessSaveEvent.TYPE, this));
         hRegs.add(eventBus.addHandler(LocationSuccessDeleteEvent.TYPE, this));
@@ -103,110 +115,114 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         panel.setWidget(view.asWidget());
 
         if (isAppReady(ctx)) {
-            setProfile();
+            showProfile();
 
         } else {
-            hasToSetProfile = true;
+            hasToShowProfile = true;
         }
     }
 
-    private void setProfile() {
+    private void showProfile() {
+        view.showProfile();
+
         // TODO PGU Nov 20, 2012 show waiting indicator while loading the app
-        u.fire(eventBus, new ShowWaitingIndicatorEvent());
+        // u.fire(eventBus, new ShowWaitingIndicatorEvent());
+        // linkedinService.fetchProfile( //
+        // clientFactory.getAppState().getAccessToken() //
+        // , new AsyncCallbackApp<Profile>(eventBus) {
+        //
+        // @Override
+        // public void onSuccess(final Profile profile) {
+        // // u.fire(eventBus, new HideWaitingIndicatorEvent());
+        // // view.setProfile(profile);
+        //
+        // }
+        // });
+    }
 
-        view.initProfileMapIfNeeded();
-
-        // TODO PGU Nov 20, 2012 use pgu_geo.profile + service.fetch user and locations
-        linkedinService.fetchProfile( //
-                clientFactory.getAppState().getAccessToken() //
-                , new AsyncCallbackApp<Profile>(eventBus) {
+    private void fetchPublicPreferences() {
+        publicProfileService.fetchPreferencesOnly( //
+                clientFactory.getAppState().getUserId(), //
+                new AsyncCallbackApp<PublicProfile>(eventBus) {
 
                     @Override
-                    public void onSuccess(final Profile profile) {
-                        u.fire(eventBus, new HideWaitingIndicatorEvent());
-                        view.setProfile(profile);
+                    public void onSuccess(final PublicProfile publicProfile) {
 
-                        // if the user has no registered locations
-                        // then save our current cache silently
-                        new Timer() {
+                        final boolean isCreation = publicProfile == null;
+                        if (isCreation) {
+                            view.showPublicPreferences(null);
 
-                            @Override
-                            public void run() {
-                                initUserLocations(eventBus, profile);
-                            }
+                        } else {
+                            final String publicPreferences = publicProfile.getPreferences();
+                            view.showPublicPreferences(publicPreferences);
 
-                        }.schedule(3000); // TODO PGU Sep 21, 2012 temporary fix: fire an event when all locations are
-                        // done
+                        }
 
-                        // TODO PGU Nov 20, 2012 fetch preferences in parallel (+event+profileState)
-                        // TODO PGU Nov 20, 2012 move this method inside a 'profile service' and not in the public
-                        // service
-                        // TODO PGU Nov 20, 2012 create a small entity only for the public preferences
-                        publicProfileService.fetchPreferencesOnly( //
-                                clientFactory.getAppState().getUserId(), //
-                                new AsyncCallbackApp<PublicProfile>(eventBus) {
+                        // update public preferences
+                        final PublicProfile updated = getUpdatedPublicProfile();
+
+                        publicProfileService.saveProfile( //
+                                updated, //
+                                new AsyncCallbackApp<Void>(eventBus) {
 
                                     @Override
-                                    public void onSuccess(final PublicProfile publicProfile) {
-
-                                        final boolean isCreation = publicProfile == null;
-                                        if (isCreation) {
-                                            view.showPublicPreferences(null);
-
-                                        } else {
-                                            final String publicPreferences = publicProfile.getPreferences();
-                                            view.showPublicPreferences(publicPreferences);
-
-                                        }
-
-                                        final PublicProfile updated = getUpdatedPublicProfile();
-
-                                        publicProfileService.saveProfile( //
-                                                updated, //
-                                                new AsyncCallbackApp<Void>(eventBus) {
-
-                                                    @Override
-                                                    public void onSuccess(final Void result) {
-                                                        // no-op
-                                                    }
-
-                                                });
+                                    public void onSuccess(final Void result) {
+                                        // no-op
                                     }
 
                                 });
                     }
 
-                    private void initUserLocations(final EventBus eventBus, final Profile profile) {
-                        // TODO PGU Sep 25, 2012 if userAndLocations != currentUserAndLocations
-                        // TODO PGU Sep 25, 2012 clean locations when not used anymore
-                        if (profile.getUserAndLocations() == null) {
-
-                            LocationsUtils.copyLocationCaches();
-
-                            linkedinService.saveLocations( //
-                                    //
-                                    clientFactory.getAppState().getUserId() //
-                                    , LocationsUtils.json_copyCacheItems() //
-                                    , LocationsUtils.json_copyCacheReferential() //
-                                    //
-                                    , new AsyncCallbackApp<Void>(eventBus) {
-
-                                        @Override
-                                        public void onSuccess(final Void result) {
-                                            LocationsUtils.replaceCachesByCopies();
-                                        }
-
-                                        @Override
-                                        public void onFailure(final Throwable caught) {
-                                            LocationsUtils.deleteCopies();
-                                        }
-
-                                    });
-                        }
-                    }
                 });
 
     }
+
+    private void saveLocationsAsync() {
+        new Timer() {
+
+            @Override
+            public void run() {
+                initUserLocations(eventBus);
+            }
+
+            // TODO PGU Sep 21, 2012 temporary fix: fire an event when all locations are done
+        }.schedule(3000);
+    }
+
+    private void initUserLocations(final EventBus eventBus) {
+        // TODO PGU Sep 25, 2012 if userAndLocations != currentUserAndLocations
+        // TODO PGU Sep 25, 2012 clean locations when not used anymore
+        // if (profile.getUserAndLocations() == null) {
+        if (!userHasLocations()) {
+
+            LocationsUtils.copyLocationCaches();
+
+            linkedinService.saveLocations( //
+                    //
+                    clientFactory.getAppState().getUserId() //
+                    , LocationsUtils.json_copyCacheItems() //
+                    , LocationsUtils.json_copyCacheReferential() //
+                    //
+                    , new AsyncCallbackApp<Void>(eventBus) {
+
+                        @Override
+                        public void onSuccess(final Void result) {
+                            LocationsUtils.replaceCachesByCopies();
+                        }
+
+                        @Override
+                        public void onFailure(final Throwable caught) {
+                            LocationsUtils.deleteCopies();
+                        }
+
+                    });
+        }
+    }
+
+    private native boolean userHasLocations() /*-{
+		// TODO profile.getUserAndLocations() == null
+		return true;
+    }-*/;
 
     @Override
     public void addNewLocation(final String itemConfigId) {
@@ -386,23 +402,23 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     @Override
     public void onShowdownLoaded(final ShowdownLoadedEvent event) {
-        setProfileAsync();
+        showProfileAsync();
     }
 
     @Override
     public void onMapsApiLoaded(final MapsApiLoadedEvent event) {
-        setProfileAsync();
+        showProfileAsync();
     }
 
     @Override
     public void onProfileLoaded(final ProfileLoadedEvent event) {
-        setProfileAsync();
+        showProfileAsync();
     }
 
-    private void setProfileAsync() {
-        if (hasToSetProfile && isAppReady(ctx)) {
-            hasToSetProfile = false;
-            setProfile();
+    private void showProfileAsync() {
+        if (hasToShowProfile && isAppReady(ctx)) {
+            hasToShowProfile = false;
+            showProfile();
         }
     }
 
@@ -414,6 +430,28 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     private boolean isAppReady(final AppContext ctx) {
         return ctx.isProfileLoaded() && areExternalApisLoaded(ctx);
+    }
+
+    @Override
+    public void onSavePublicLocations(final SavePublicLocationsEvent event) {
+        // if the user has no registered locations
+        // then save our current cache silently
+        saveLocationsAsync();
+    }
+
+    @Override
+    public void onFetchPublicPreferences(final FetchPublicPreferencesEvent event) {
+        // TODO PGU Nov 20, 2012 fetch preferences in parallel (+event+profileState)
+        // TODO PGU Nov 20, 2012 move this method inside a 'profile service' and not in the public
+        // service
+        // TODO PGU Nov 20, 2012 create a small entity only for the public preferences
+        fetchPublicPreferences();
+    }
+
+    @Override
+    public void onFetchCustomLocations(final FetchCustomLocationsEvent event) {
+        // TODO PGU Nov 22, 2012
+        //        LocationsUtils.initCaches(profile.getUserAndLocations());
     }
 
 }
