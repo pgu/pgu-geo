@@ -15,6 +15,7 @@ import pgu.client.profile.event.SaveLocationEvent;
 import pgu.client.profile.event.SaveMapPreferencesEvent;
 import pgu.client.profile.event.SaveMapPreferencesEvent.Handler;
 import pgu.client.profile.event.SavePublicLocationsEvent;
+import pgu.client.profile.event.SavePublicProfileEvent;
 import pgu.shared.utils.PublicProfileItem;
 
 import com.github.gwtbootstrap.client.ui.Button;
@@ -286,14 +287,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         summaryBasic.getElement().getFirstChildElement().setAttribute("data-content", htmlSummary);
     }
 
-    void setProfileId(final String id) {
-        presenter.setProfileId(id);
-    }
-
-    void setProfilePublicUrl(final String url) {
-        presenter.setProfilePublicUrl(url);
-    }
-
     public LanguagesUtils getLanguagesUtils() {
         return new LanguagesUtils(lgContainer);
     }
@@ -302,22 +295,57 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
 		@pgu.client.profile.ui.ProfileViewUtils::initDelayForCallingGeocoder()();
 
-		var j_profile = $wnd.pgu_geo.profile;
+		// TODO review the way to handle the public profile
 		@pgu.client.profile.ui.PublicProfileUtils::initBasePublicProfile()();
 
-		@pgu.client.profile.ui.ProfileSummaryUtils::setProfileId(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
-		@pgu.client.profile.ui.ProfileSummaryUtils::setProfilePublicUrl(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
-		@pgu.client.profile.ui.ProfileSummaryUtils::setProfileName(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
-		@pgu.client.profile.ui.ProfileSummaryUtils::setProfileHeadline(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
-		@pgu.client.profile.ui.ProfileSummaryUtils::setProfileLocation(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
-		@pgu.client.profile.ui.ProfileSummaryUtils::setProfileSpecialties(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
+//		@pgu.client.profile.ui.ProfileSummaryUtils::setProfileId(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
+//		@pgu.client.profile.ui.ProfileSummaryUtils::setProfilePublicUrl(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
+//		@pgu.client.profile.ui.ProfileSummaryUtils::setProfileName(Lpgu/client/profile/ui/ProfileViewImpl;)(view);
+//		@pgu.client.profile.ui.ProfileSummaryUtils::setProfileHeadline(Lpgu/client/profile/ui/ProfileViewImpl;)(view);
+//      @pgu.client.profile.ui.ProfileSummaryUtils::setProfileLocation(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
+//      @pgu.client.profile.ui.ProfileSummaryUtils::setProfileSpecialties(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
+//      @pgu.client.profile.ui.ProfileSummaryUtils::setProfileSummary(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
+
+        var
+            p = $wnd.pgu_geo.profile //
+          , first_name = p.firstName || '' //
+          , last_name = p.lastName || '' //
+          , headline = p.headline || '' //
+          , current_location = p.location || {} //
+          , current_location_name = current_location.name || '' //
+          , specialties = p.specialties || '' //
+          , summary = p.summary || '' //
+        ;
+
+        view.@pgu.client.profile.ui.ProfileViewImpl::setProfileName(Ljava/lang/String;Ljava/lang/String;)( //
+        first_name, last_name);
+
+        view.@pgu.client.profile.ui.ProfileViewImpl::setProfileHeadline(Ljava/lang/String;)( //
+        headline);
+
+        view.@pgu.client.profile.ui.ProfileViewImpl::setProfileLocation(Ljava/lang/String;)( //
+        current_location_name);
+
+        view.@pgu.client.profile.ui.ProfileViewImpl::setProfileSpecialties(Ljava/lang/String;)( //
+        specialties);
+
+        var html_summary = @pgu.client.app.utils.MarkdownUtils::markdown(Ljava/lang/String;)( //
+        summary);
+        view.@pgu.client.profile.ui.ProfileViewImpl::setProfileSummary(Ljava/lang/String;)( //
+        html_summary);
+
+        // TODO PGU
+        // TODO PGU
+        // TODO PGU
+        // TODO PGU
+        var j_profile = $wnd.pgu_geo.profile;
 
         var languages_utils = view.@pgu.client.profile.ui.ProfileViewImpl::getLanguagesUtils()();
-        @pgu.client.app.utils.LanguagesUtils::setProfileLanguages(Lpgu/client/app/utils/LanguagesUtils;Lcom/google/gwt/core/client/JavaScriptObject;)(languages_utils,j_profile);
+        @pgu.client.app.utils.LanguagesUtils::setProfileLanguages(Lpgu/client/app/utils/LanguagesUtils;Lcom/google/gwt/core/client/JavaScriptObject;)( //
+        languages_utils,j_profile);
 
-		@pgu.client.profile.ui.ProfileSummaryUtils::setProfileSummary(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
-
-		@pgu.client.profile.ui.ProfilePositionsUtils::updateProfilePositions(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
+		@pgu.client.profile.ui.ProfilePositionsUtils::updateProfilePositions(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)( //
+		view,j_profile);
 
 		// TODO display "wish" locations
 		// TODO display "holidays" locations
@@ -411,6 +439,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     @Override
+    public HandlerRegistration addSavePublicProfileHandler(final SavePublicProfileEvent.Handler handler) {
+        return addHandler(handler, SavePublicProfileEvent.TYPE);
+    }
+
+    @Override
     public void hideSaveWidget() {
         locationSaveBtn.setVisible(false);
     }
@@ -450,6 +483,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
         // save locations async when no locations are detected
         fireEvent(new SavePublicLocationsEvent());
+        // TODO PGU Nov 22, 2012 update public profile
+        fireEvent(new SavePublicProfileEvent());
     }
 
 }

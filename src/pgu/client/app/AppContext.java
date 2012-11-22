@@ -48,4 +48,7 @@ public class AppContext {
         this.isProfileLoaded = isProfileLoaded;
     }
 
+    public native void getProfileId() /*-{
+        return pgu_geo.profile.id;
+    }-*/;
 }

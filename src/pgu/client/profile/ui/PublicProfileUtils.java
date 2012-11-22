@@ -93,34 +93,34 @@ public class PublicProfileUtils {
         $wnd.pgu_geo.public_prefs);
     }-*/;
 
-    public static native void setProfileId(String profile_id) /*-{
+    //    public static native void setProfileId(String profile_id) /*-{
+    //
+    //        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
+    //        base_public_profile.id = profile_id;
+    //
+    //    }-*/;
 
-        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
-        base_public_profile.id = profile_id;
+    //    public static native void setProfilePublicUrl(String public_url) /*-{
+    //
+    //        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
+    //        base_public_profile.publicProfileUrl = public_url;
+    //
+    //    }-*/;
 
-    }-*/;
+    //    public static native void setProfileName(String first_name, String last_name) /*-{
+    //
+    //        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
+    //        base_public_profile.firstName = first_name;
+    //        base_public_profile.lastName = last_name;
+    //
+    //    }-*/;
 
-    public static native void setProfilePublicUrl(String public_url) /*-{
-
-        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
-        base_public_profile.publicProfileUrl = public_url;
-
-    }-*/;
-
-    public static native void setProfileName(String first_name, String last_name) /*-{
-
-        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
-        base_public_profile.firstName = first_name;
-        base_public_profile.lastName = last_name;
-
-    }-*/;
-
-    public static native void setProfileHeadline(String headline) /*-{
-
-        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
-        base_public_profile.headline = headline;
-
-    }-*/;
+    //    public static native void setProfileHeadline(String headline) /*-{
+    //
+    //        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
+    //        base_public_profile.headline = headline;
+    //
+    //    }-*/;
 
     public static native void setSpecialties(String html_specialties) /*-{
 
@@ -136,12 +136,12 @@ public class PublicProfileUtils {
 
     }-*/;
 
-    public static native void setProfileLocation(String location_name) /*-{
-
-        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
-        base_public_profile.location = location_name;
-
-    }-*/;
+    //    public static native void setProfileLocation(String location_name) /*-{
+    //
+    //        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
+    //        base_public_profile.location = location_name;
+    //
+    //    }-*/;
 
     public static native void setProfileSummary(String html_summary) /*-{
 

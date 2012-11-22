@@ -6,6 +6,7 @@ import pgu.client.profile.event.FetchPublicPreferencesEvent;
 import pgu.client.profile.event.SaveLocationEvent;
 import pgu.client.profile.event.SaveMapPreferencesEvent;
 import pgu.client.profile.event.SavePublicLocationsEvent;
+import pgu.client.profile.event.SavePublicProfileEvent;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -16,6 +17,7 @@ public interface ProfileView extends IsWidget //
 , FetchPublicPreferencesEvent.HasFetchPublicPreferencesHandlers //
 , SavePublicLocationsEvent.HasSavePublicLocationsHandlers //
 , FetchCustomLocationsEvent.HasFetchCustomLocationsHandlers //
+, SavePublicProfileEvent.HasSavePublicProfileHandlers //
 {
 
     void setPresenter(ProfilePresenter presenter);

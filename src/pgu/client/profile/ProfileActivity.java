@@ -23,6 +23,7 @@ import pgu.client.profile.event.FetchPublicPreferencesEvent;
 import pgu.client.profile.event.SaveLocationEvent;
 import pgu.client.profile.event.SaveMapPreferencesEvent;
 import pgu.client.profile.event.SavePublicLocationsEvent;
+import pgu.client.profile.event.SavePublicProfileEvent;
 import pgu.client.profile.ui.ProfileViewUtils;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.client.service.ProfileServiceAsync;
@@ -48,6 +49,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 , FetchPublicPreferencesEvent.Handler //
 , SavePublicLocationsEvent.Handler //
 , FetchCustomLocationsEvent.Handler //
+, SavePublicProfileEvent.Handler //
 {
 
     private final ClientFactory                  clientFactory;
@@ -101,6 +103,8 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         hRegs.add(view.addFetchCustomLocationsHandler(this));
         hRegs.add(view.addFetchPublicPreferencesHandler(this));
         hRegs.add(view.addSavePublicLocationsHandler(this));
+
+        hRegs.add(view.addSavePublicProfileHandler(this));
 
         hRegs.add(eventBus.addHandler(LocationsSuccessSaveEvent.TYPE, this));
         hRegs.add(eventBus.addHandler(LocationSuccessDeleteEvent.TYPE, this));
@@ -248,16 +252,6 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     @Override
     public void onLocationSuccessDelete(final LocationSuccessDeleteEvent event) {
         ProfileViewUtils.refreshHtmlLocationsForItem(event.getItemConfigId());
-    }
-
-    @Override
-    public void setProfileId(final String id) {
-        clientFactory.getAppState().setUserId(id);
-    }
-
-    @Override
-    public void setProfilePublicUrl(final String url) {
-        clientFactory.getAppState().setPublicProfileUrl(url);
     }
 
     @Override
@@ -452,6 +446,12 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     public void onFetchCustomLocations(final FetchCustomLocationsEvent event) {
         // TODO PGU Nov 22, 2012
         //        LocationsUtils.initCaches(profile.getUserAndLocations());
+    }
+
+    @Override
+    public void onSavePublicProfile(final SavePublicProfileEvent event) {
+        // TODO Auto-generated method stub
+
     }
 
 }
