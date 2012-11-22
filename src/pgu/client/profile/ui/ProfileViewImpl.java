@@ -288,6 +288,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     public LanguagesUtils getLanguagesUtils() {
+        // TODO PGU Nov 22, 2012 review this
         return new LanguagesUtils(lgContainer);
     }
 
