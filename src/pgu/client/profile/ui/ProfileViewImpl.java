@@ -287,48 +287,20 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         summaryBasic.getElement().getFirstChildElement().setAttribute("data-content", htmlSummary);
     }
 
-    public void setProfileLanguages(final String lg_html) {
+    public void setLanguages() {
         lgContainer.clear();
-        lgContainer.add(new HTML(lg_html));
+
+        final String lgHtml = createLanguagesHtml();
+        lgContainer.add(new HTML(lgHtml));
     }
 
-    private native void setProfile() /*-{
-
-		@pgu.client.profile.ui.ProfileViewUtils::initDelayForCallingGeocoder()();
-
-		// TODO review the way to handle the public profile
-		@pgu.client.profile.ui.PublicProfileUtils::initBasePublicProfile()();
+    private native String createLanguagesHtml() /*-{
 
         var
             p = $wnd.pgu_geo.profile //
-          , first_name = p.firstName || '' //
-          , last_name = p.lastName || '' //
-          , headline = p.headline || '' //
-          , current_location = p.location || {} //
-          , current_location_name = current_location.name || '' //
-          , specialties = p.specialties || '' //
-          , summary = p.summary || '' //
+          , languages = p.languages || {} //
+          , language_values = languages.values || [] //
         ;
-
-        this.@pgu.client.profile.ui.ProfileViewImpl::setName(Ljava/lang/String;Ljava/lang/String;)
-        (first_name, last_name);
-
-        this.@pgu.client.profile.ui.ProfileViewImpl::setHeadline(Ljava/lang/String;)
-        (headline);
-
-        this.@pgu.client.profile.ui.ProfileViewImpl::setCurrentLocation(Ljava/lang/String;)
-        (current_location_name);
-
-        this.@pgu.client.profile.ui.ProfileViewImpl::setSpecialties(Ljava/lang/String;)
-        (specialties);
-
-        var html_summary = @pgu.client.app.utils.MarkdownUtils::markdown(Ljava/lang/String;)
-        (summary);
-        this.@pgu.client.profile.ui.ProfileViewImpl::setSummary(Ljava/lang/String;)
-        (html_summary);
-
-        var languages = p.languages || {};
-        var language_values = languages.values || [];
 
         var cache_lg = {};
         for (var i = 0, len = language_values.length; i < len; i++) {
@@ -397,9 +369,47 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             }
         }
 
+        return lg_rows.join('');
+    }-*/;
+
+    private native void setProfile() /*-{
+
+		@pgu.client.profile.ui.ProfileViewUtils::initDelayForCallingGeocoder()();
+
+		// TODO review the way to handle the public profile
+		@pgu.client.profile.ui.PublicProfileUtils::initBasePublicProfile()();
+
+        var
+            p = $wnd.pgu_geo.profile //
+          , first_name = p.firstName || '' //
+          , last_name = p.lastName || '' //
+          , headline = p.headline || '' //
+          , current_location = p.location || {} //
+          , current_location_name = current_location.name || '' //
+          , specialties = p.specialties || '' //
+          , summary = p.summary || '' //
+        ;
+
+        this.@pgu.client.profile.ui.ProfileViewImpl::setName(Ljava/lang/String;Ljava/lang/String;)
+        (first_name, last_name);
+
+        this.@pgu.client.profile.ui.ProfileViewImpl::setHeadline(Ljava/lang/String;)
+        (headline);
+
+        this.@pgu.client.profile.ui.ProfileViewImpl::setCurrentLocation(Ljava/lang/String;)
+        (current_location_name);
+
+        this.@pgu.client.profile.ui.ProfileViewImpl::setSpecialties(Ljava/lang/String;)
+        (specialties);
+
+        var html_summary = @pgu.client.app.utils.MarkdownUtils::markdown(Ljava/lang/String;)
+        (summary);
+        this.@pgu.client.profile.ui.ProfileViewImpl::setSummary(Ljava/lang/String;)
+        (html_summary);
+
         // TODO save the resulting html of lg for the public profile ?
-        this.@pgu.client.profile.ui.ProfileViewImpl::setProfileLanguages(Ljava/lang/String;)
-        (lg_rows.join(''));
+        this.@pgu.client.profile.ui.ProfileViewImpl::setLanguages()
+        ();
 
         // TODO PGU
         // TODO PGU
