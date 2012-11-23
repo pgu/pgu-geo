@@ -27,6 +27,7 @@ import com.github.gwtbootstrap.client.ui.TextBox;
 import com.github.gwtbootstrap.client.ui.Tooltip;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
@@ -284,20 +285,14 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         summaryBasic.getElement().getFirstChildElement().setAttribute("data-content", htmlSummary);
     }
 
-    public void setLanguages() {
+    public void setLanguages(final JavaScriptObject language_values) {
         lgContainer.clear();
 
-        final String lgHtml = createLanguagesHtml();
+        final String lgHtml = createLanguagesHtml(language_values);
         lgContainer.add(new HTML(lgHtml));
     }
 
-    private native String createLanguagesHtml() /*-{
-
-        var
-            p = $wnd.pgu_geo.profile //
-          , languages = p.languages || {} //
-          , language_values = languages.values || [] //
-        ;
+    private native String createLanguagesHtml(JavaScriptObject language_values) /*-{
 
         var cache_lg = {};
         for (var i = 0, len = language_values.length; i < len; i++) {
@@ -373,9 +368,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
 		@pgu.client.profile.ui.ProfileViewUtils::initDelayForCallingGeocoder()();
 
-		// TODO review the way to handle the public profile
-		@pgu.client.profile.ui.PublicProfileUtils::initBasePublicProfile()();
-
         var
             p = $wnd.pgu_geo.profile
           , first_name = p.firstName || ''
@@ -385,6 +377,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
           , current_location_name = current_location.name || ''
           , specialties = p.specialties || ''
           , summary = p.summary || ''
+          , languages = p.languages || {} //
+          , language_values = languages.values || [] //
+          , positions = p.positions || {}
+          , educations = p.educations || {}
+          , position_values = positions.values || []
         ;
 
         this.@pgu.client.profile.ui.ProfileViewImpl::setName(Ljava/lang/String;Ljava/lang/String;)
@@ -404,23 +401,25 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         this.@pgu.client.profile.ui.ProfileViewImpl::setSummary(Ljava/lang/String;)
         (html_summary);
 
-        this.@pgu.client.profile.ui.ProfileViewImpl::setLanguages()
-        ();
+        this.@pgu.client.profile.ui.ProfileViewImpl::setLanguages(Lcom/google/gwt/core/client/JavaScriptObject;)
+        (language_values);
 
-		this.@pgu.client.profile.ui.ProfileViewImpl::updateCachePositions()
-		();
+		this.@pgu.client.profile.ui.ProfileViewImpl::updateCachePositions(Lcom/google/gwt/core/client/JavaScriptObject;)
+		(position_values);
 
 		$doc.getElementById('pgu_geo.profile:xp_table').innerHTML = //
 		@pgu.client.profile.ui.ProfileViewUtils::createExperienceTable(Lcom/google/gwt/core/client/JavaScriptObject;)
-		(p.positions);
+		(positions);
 
 		$doc.getElementById('pgu_geo.profile:edu_table').innerHTML = //
 		@pgu.client.profile.ui.ProfileViewUtils::createEducationTable(Lcom/google/gwt/core/client/JavaScriptObject;)
-		(p.educations);
+		(educations);
 
 		// TODO display "wish" locations
 		// TODO display "holidays" locations
 
+        // TODO review the way to handle the public profile
+        @pgu.client.profile.ui.PublicProfileUtils::initBasePublicProfile()();
         //        @pgu.client.profile.ui.PublicProfileUtils::setProfileId(Ljava/lang/String;)(profile_id);
         //        @pgu.client.profile.ui.PublicProfileUtils::setProfilePublicUrl(Ljava/lang/String;)(public_url);
         ////        @pgu.client.profile.ui.PublicProfileUtils::setProfileName(Ljava/lang/String;Ljava/lang/String;)(first_name, last_name);
@@ -557,17 +556,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         fireEvent(new SavePublicProfileEvent());
     }
 
-    private native void updateCachePositions() /*-{
+    private native void updateCachePositions(JavaScriptObject position_values) /*-{
 
-        var
-            p = $wnd.pgu_geo.profile
-          , pos = profile.positions || {}
-          , positions = pos.values || []
-        ;
-
-        for (var i = 0, len = positions.length; i < len; i++) {
+        for (var i = 0, len = position_values.length; i < len; i++) {
             var
-                position = positions[i]
+                position = position_values[i]
               , experience_id = position.id
               , location = position.location || {}
               , location_names = location.name
