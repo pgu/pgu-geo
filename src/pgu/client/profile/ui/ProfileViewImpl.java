@@ -376,7 +376,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
           , language_values = languages.values || [] //
           , positions = p.positions || {}
           , educations = p.educations || {}
-          , position_values = positions.values || []
         ;
 
         this.@pgu.client.profile.ui.ProfileViewImpl::setName(Ljava/lang/String;Ljava/lang/String;)
@@ -396,9 +395,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
         this.@pgu.client.profile.ui.ProfileViewImpl::setLanguages(Lcom/google/gwt/core/client/JavaScriptObject;)
         (language_values);
-
-		this.@pgu.client.profile.ui.ProfileViewImpl::updateCachePositions(Lcom/google/gwt/core/client/JavaScriptObject;)
-		(position_values);
 
 		$doc.getElementById('pgu_geo.profile:xp_table').innerHTML = //
         this.@pgu.client.profile.ui.ProfileViewImpl::createExperienceTable(Lcom/google/gwt/core/client/JavaScriptObject;)
@@ -558,7 +554,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         fireEvent(new SavePublicProfileEvent());
     }
 
-    private native void updateCachePositions(JavaScriptObject position_values) /*-{
+    private native void updateLocationsCacheFromPositions() /*-{
+
+        var
+            p = $wnd.pgu_geo.profile
+          , positions = p.positions || {}
+          , position_values = positions.values || []
+        ;
 
         for (var i = 0, len = position_values.length; i < len; i++) {
             var
@@ -591,6 +593,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             LocationsUtils.addCurrentLocationToCache(locationName);
         }
 
+        updateLocationsCacheFromPositions();
         viewHelper.updateTablesWithLocations();
     }
 
