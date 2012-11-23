@@ -115,15 +115,12 @@ public class ProfileViewHelper {
     public native String createTableRow(final String type, final JavaScriptObject item) /*-{
 
 		var item_config = @pgu.client.app.utils.ProfileItemsUtils::toProfileItem(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;)(type,item);
-		var item_locations = @pgu.client.profile.ui.ProfileViewHelper::createListLocations(Ljava/lang/String;)(item_config.id);
-
 		$wnd.pgu_geo.item_configs.push(item_config);
 
 		return ''
 				+ '<tr>                                                                                '
 				+ '  <td>                                                                              '
 				+ '    <ul id="locations_' + item_config.id + '" class="nav nav-pills">                '
-				+ item_locations
 				+ '    </ul>                                                                           '
 				+ '    <i class="icon-plus-sign icon-large add-location"                               '
 				+ '      onclick="javascript:pgu_geo.add_new_location(\'' + item_config.id + '\');"      '
@@ -286,6 +283,17 @@ public class ProfileViewHelper {
                         false,location_name);
                     }
                 });
+    }-*/;
+
+    public native void updateTablesWithLocations() /*-{
+
+        var items = $wnd.pgu_geo.item_configs;
+        for (var i = 0, len = items.length; i < len; i++) {
+
+            var item = items[i];
+            $doc.getElementById('locations_' + item.id).innerHTML = @pgu.client.profile.ui.ProfileViewHelper::createListLocations(Ljava/lang/String;)(item.id);
+        }
+
     }-*/;
 
 }

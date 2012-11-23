@@ -2,6 +2,7 @@ package pgu.client.profile.ui;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
+// TODO PGU migrer vers profileViewHelper
 public class ProfileUtils {
 
     public static native JavaScriptObject profileMap() /*-{

@@ -6,6 +6,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 public class LocationsUtils {
 
+    @Deprecated
     public static void initCaches(final UserAndLocations ual) {
         if (ual == null) {
             LocationsUtils.initCaches("", "");

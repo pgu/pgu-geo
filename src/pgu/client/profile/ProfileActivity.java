@@ -28,6 +28,7 @@ import pgu.client.profile.ui.ProfileViewHelper;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.client.service.ProfileServiceAsync;
 import pgu.client.service.PublicProfileServiceAsync;
+import pgu.shared.model.ProfileLocations;
 import pgu.shared.model.PublicProfile;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -444,8 +445,15 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     @Override
     public void onFetchCustomLocations(final FetchCustomLocationsEvent event) {
-        // TODO PGU Nov 22, 2012
-        //        LocationsUtils.initCaches(profile.getUserAndLocations());
+        profileService.fetchCustomLocations(ctx.getProfileId(), new AsyncCallbackApp<ProfileLocations>(eventBus) {
+
+            @Override
+            public void onSuccess(final ProfileLocations profileLocations) {
+                LocationsUtils.initCaches(profileLocations.getItems2locations(), profileLocations.getReferentialLocations());
+                view.setInfoWithLocations();
+            }
+
+        });
     }
 
     @Override

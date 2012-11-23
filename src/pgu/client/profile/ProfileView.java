@@ -40,4 +40,6 @@ public interface ProfileView extends IsWidget //
 
     void showProfile();
 
+    void setInfoWithLocations();
+
 }

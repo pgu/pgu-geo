@@ -274,13 +274,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     private void setCurrentLocation(final String locationName) {
-
-        final boolean hasLocation = !u.isVoid(locationName);
-        locContainer.setText(hasLocation ? locationName : "");
-
-        if (hasLocation) {
-            LocationsUtils.addCurrentLocationToCache(locationName);
-        }
+        locContainer.setText(u.isVoid(locationName) ? "" : locationName);
     }
 
     private void setSummary(final String summary) {
@@ -554,6 +548,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
         setProfile();
 
+        // TODO PGU
         fireEvent(new FetchCustomLocationsEvent());
         fireEvent(new FetchPublicPreferencesEvent());
 
@@ -587,5 +582,16 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         }
 
     }-*/;
+
+    @Override
+    public void setInfoWithLocations() {
+        final String locationName = locContainer.getText();
+
+        if (!u.isVoid(locationName)) {
+            LocationsUtils.addCurrentLocationToCache(locationName);
+        }
+
+        viewHelper.updateTablesWithLocations();
+    }
 
 }
