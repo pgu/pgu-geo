@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 import pgu.client.app.event.LocationShowOnMapEvent;
 import pgu.client.app.utils.ClientUtils;
-import pgu.client.app.utils.LanguagesUtils;
 import pgu.client.app.utils.LocationsUtils;
 import pgu.client.app.utils.MarkersUtils;
 import pgu.client.profile.ProfilePresenter;
@@ -287,9 +286,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         summaryBasic.getElement().getFirstChildElement().setAttribute("data-content", htmlSummary);
     }
 
-    public LanguagesUtils getLanguagesUtils() {
-        // TODO PGU Nov 22, 2012 review this
-        return new LanguagesUtils(lgContainer);
+    public void setProfileLanguages(final String lg_html) {
+        lgContainer.clear();
+        lgContainer.add(new HTML(lg_html));
     }
 
     private native void setProfile(ProfileViewImpl view) /*-{
@@ -335,15 +334,86 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         view.@pgu.client.profile.ui.ProfileViewImpl::setProfileSummary(Ljava/lang/String;)( //
         html_summary);
 
-        // TODO PGU
-        // TODO PGU
-        // TODO PGU
-        // TODO PGU
-        var j_profile = $wnd.pgu_geo.profile;
+        var languages = p.languages || {};
+        var language_values = languages.values || [];
 
-        var languages_utils = view.@pgu.client.profile.ui.ProfileViewImpl::getLanguagesUtils()();
-        @pgu.client.app.utils.LanguagesUtils::setProfileLanguages(Lpgu/client/app/utils/LanguagesUtils;Lcom/google/gwt/core/client/JavaScriptObject;)( //
-        languages_utils,j_profile);
+        var cache_lg = {};
+        for (var i = 0, len = language_values.length; i < len; i++) {
+
+            var //
+            language_value = language_values[i] //
+            //
+            , language = language_value.language || {} //
+            , language_name = language.name || '' //
+            //
+            , language_proficiency = language_value.proficiency || {} //
+            , language_level = language_proficiency.level || '' //
+            ;
+
+            if (cache_lg.hasOwnProperty(language_level)) {
+                cache_lg.get(language_level).push(language_name);
+
+            } else {
+                cache_lg[language_level] = [].concat(language_name);
+
+            }
+        }
+
+        // sort language names
+        for (var key in cache_lg) {
+            if ('__gwt_ObjectId' === key) {
+                continue;
+            }
+            if (cache_lg.hasOwnProperty(key)) {
+                cache_lg[key].sort();
+            }
+        }
+
+        var lg_levels = [
+              {lvl: 'native_or_bilingual', nb: 4}
+            , {lvl: 'full_professional', nb: 3}
+            , {lvl: 'professional_working', nb: 2}
+            , {lvl: 'limited_working', nb: 1}
+            , {lvl: 'elementary', nb: 0}
+        ];
+
+        var lg_rows = [];
+
+        for (var i = 0, len = lg_levels.length; i < len; i++) {
+            var lg_level = lg_levels[i];
+
+            if (cache_lg.hasOwnProperty(lg_level.lvl)) {
+                //
+                var trophies = [];
+                var trophies_nb = lg_level.nb;
+
+                for (var k = 0; k < trophies_nb; k++) {
+                    trophies.push('<i class=\"icon-trophy\"></i>');
+                }
+                var trophies_html = trophies.join('');
+
+                //
+                var lg_names = cache_lg[lg_level.lvl];
+
+                for (var j = 0, lenN = lg_names.length; j < lenN; j++) {
+                    var name = lg_names[j];
+
+                    var row = '<div>' + name + '</div><div>' + trophies_html + '</div>';
+                    lg_rows.push(row);
+                }
+            }
+        }
+
+        // TODO save the resulting html of lg for the public profile ?
+        view.@pgu.client.profile.ui.ProfileViewImpl::setProfileLanguages(Ljava/lang/String;)( //
+        lg_rows.join(''));
+
+        // TODO PGU
+        // TODO PGU
+        // TODO PGU
+        // TODO PGU
+
+        var j_profile = $wnd.pgu_geo.profile;
 
 		@pgu.client.profile.ui.ProfilePositionsUtils::updateProfilePositions(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)( //
 		view,j_profile);
@@ -476,7 +546,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         ProfileUtils.initProfileMap();
         ProfileViewUtils.initCaches();
 
-        // TODO PGU Nov 22, 2012 use pgu_geo.profile
         setProfile(this);
 
         fireEvent(new FetchCustomLocationsEvent());
