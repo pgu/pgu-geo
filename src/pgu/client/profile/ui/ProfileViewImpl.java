@@ -292,7 +292,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         lgContainer.add(new HTML(lg_html));
     }
 
-    private native void setProfile(ProfileViewImpl view) /*-{
+    private native void setProfile() /*-{
 
 		@pgu.client.profile.ui.ProfileViewUtils::initDelayForCallingGeocoder()();
 
@@ -310,22 +310,22 @@ public class ProfileViewImpl extends Composite implements ProfileView {
           , summary = p.summary || '' //
         ;
 
-        view.@pgu.client.profile.ui.ProfileViewImpl::setName(Ljava/lang/String;Ljava/lang/String;)( //
-        first_name, last_name);
+        this.@pgu.client.profile.ui.ProfileViewImpl::setName(Ljava/lang/String;Ljava/lang/String;)
+        (first_name, last_name);
 
-        view.@pgu.client.profile.ui.ProfileViewImpl::setHeadline(Ljava/lang/String;)( //
-        headline);
+        this.@pgu.client.profile.ui.ProfileViewImpl::setHeadline(Ljava/lang/String;)
+        (headline);
 
-        view.@pgu.client.profile.ui.ProfileViewImpl::setCurrentLocation(Ljava/lang/String;)( //
-        current_location_name);
+        this.@pgu.client.profile.ui.ProfileViewImpl::setCurrentLocation(Ljava/lang/String;)
+        (current_location_name);
 
-        view.@pgu.client.profile.ui.ProfileViewImpl::setSpecialties(Ljava/lang/String;)( //
-        specialties);
+        this.@pgu.client.profile.ui.ProfileViewImpl::setSpecialties(Ljava/lang/String;)
+        (specialties);
 
-        var html_summary = @pgu.client.app.utils.MarkdownUtils::markdown(Ljava/lang/String;)( //
-        summary);
-        view.@pgu.client.profile.ui.ProfileViewImpl::setSummary(Ljava/lang/String;)( //
-        html_summary);
+        var html_summary = @pgu.client.app.utils.MarkdownUtils::markdown(Ljava/lang/String;)
+        (summary);
+        this.@pgu.client.profile.ui.ProfileViewImpl::setSummary(Ljava/lang/String;)
+        (html_summary);
 
         var languages = p.languages || {};
         var language_values = languages.values || [];
@@ -398,8 +398,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         }
 
         // TODO save the resulting html of lg for the public profile ?
-        view.@pgu.client.profile.ui.ProfileViewImpl::setProfileLanguages(Ljava/lang/String;)( //
-        lg_rows.join(''));
+        this.@pgu.client.profile.ui.ProfileViewImpl::setProfileLanguages(Ljava/lang/String;)
+        (lg_rows.join(''));
 
         // TODO PGU
         // TODO PGU
@@ -408,19 +408,21 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
         var j_profile = $wnd.pgu_geo.profile;
 
-		@pgu.client.profile.ui.ProfilePositionsUtils::updateProfilePositions(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)( //
-		view,j_profile);
+		@pgu.client.profile.ui.ProfilePositionsUtils::updateProfilePositions(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)
+		(this,j_profile);
 
 		// TODO display "wish" locations
 		// TODO display "holidays" locations
 
 		var positions = j_profile.positions;
 		$doc.getElementById('pgu_geo.profile:xp_table').innerHTML = //
-		@pgu.client.profile.ui.ProfileViewUtils::createExperienceTable(Lcom/google/gwt/core/client/JavaScriptObject;)(positions);
+		@pgu.client.profile.ui.ProfileViewUtils::createExperienceTable(Lcom/google/gwt/core/client/JavaScriptObject;)
+		(positions);
 
 		var educations = j_profile.educations;
 		$doc.getElementById('pgu_geo.profile:edu_table').innerHTML = //
-		@pgu.client.profile.ui.ProfileViewUtils::createEducationTable(Lcom/google/gwt/core/client/JavaScriptObject;)(educations);
+		@pgu.client.profile.ui.ProfileViewUtils::createEducationTable(Lcom/google/gwt/core/client/JavaScriptObject;)
+		(educations);
 
     }-*/;
 
@@ -539,7 +541,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         ProfileUtils.initProfileMap();
         ProfileViewUtils.initCaches();
 
-        setProfile(this);
+        setProfile();
 
         fireEvent(new FetchCustomLocationsEvent());
         fireEvent(new FetchPublicPreferencesEvent());
