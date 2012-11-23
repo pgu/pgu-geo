@@ -5,6 +5,7 @@ import java.util.HashMap;
 import pgu.client.app.event.LocationShowOnMapEvent;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.LocationsUtils;
+import pgu.client.app.utils.MarkdownUtils;
 import pgu.client.app.utils.MarkersUtils;
 import pgu.client.profile.ProfilePresenter;
 import pgu.client.profile.ProfileView;
@@ -282,7 +283,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         }
     }
 
-    private void setSummary(final String htmlSummary) {
+    private void setSummary(final String summary) {
+        final String htmlSummary = MarkdownUtils.markdown(summary);
         summaryBasic.getElement().getFirstChildElement().setAttribute("data-content", htmlSummary);
     }
 
@@ -395,10 +397,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         this.@pgu.client.profile.ui.ProfileViewImpl::setSpecialties(Ljava/lang/String;)
         (specialties);
 
-        var html_summary = @pgu.client.app.utils.MarkdownUtils::markdown(Ljava/lang/String;)
-        (summary);
         this.@pgu.client.profile.ui.ProfileViewImpl::setSummary(Ljava/lang/String;)
-        (html_summary);
+        (summary);
 
         this.@pgu.client.profile.ui.ProfileViewImpl::setLanguages(Lcom/google/gwt/core/client/JavaScriptObject;)
         (language_values);
