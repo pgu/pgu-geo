@@ -84,6 +84,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     private String              lastSearchItemLocation      = null;
     private boolean             isMapDisplayed = true;
+    private final ProfileViewHelper   viewHelper = new ProfileViewHelper();
 
     public ProfileViewImpl() {
 
@@ -171,7 +172,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             return;
         }
 
-        ProfileViewUtils.searchLocationAndAddMarker(this, locationText);
+        ProfileViewHelper.searchLocationAndAddMarker(this, locationText);
     }
 
 
@@ -366,8 +367,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     private native void setProfile() /*-{
 
-		@pgu.client.profile.ui.ProfileViewUtils::initDelayForCallingGeocoder()();
-
         var
             p = $wnd.pgu_geo.profile
           , first_name = p.firstName || ''
@@ -408,11 +407,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 		(position_values);
 
 		$doc.getElementById('pgu_geo.profile:xp_table').innerHTML = //
-		@pgu.client.profile.ui.ProfileViewUtils::createExperienceTable(Lcom/google/gwt/core/client/JavaScriptObject;)
+        this.@pgu.client.profile.ui.ProfileViewImpl::createExperienceTable(Lcom/google/gwt/core/client/JavaScriptObject;)
 		(positions);
 
 		$doc.getElementById('pgu_geo.profile:edu_table').innerHTML = //
-		@pgu.client.profile.ui.ProfileViewUtils::createEducationTable(Lcom/google/gwt/core/client/JavaScriptObject;)
+		this.@pgu.client.profile.ui.ProfileViewImpl::createEducationTable(Lcom/google/gwt/core/client/JavaScriptObject;)
 		(educations);
 
 		// TODO display "wish" locations
@@ -429,6 +428,14 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         ////        @pgu.client.profile.ui.PublicProfileUtils::setProfileSummary(Ljava/lang/String;)(html_summary);
         // save the resulting html of lg for the public profile ?
     }-*/;
+
+    public String createExperienceTable(final JavaScriptObject positions) {
+        return viewHelper.createExperienceTable(positions);
+    }
+
+    public String createEducationTable(final JavaScriptObject educations) {
+        return viewHelper.createEducationTable(educations);
+    }
 
     @Override
     public void showPublicPreferences(final String publicPreferences) {
@@ -543,7 +550,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         isProfileSetInView = true;
 
         ProfileUtils.initProfileMap();
-        ProfileViewUtils.initCaches();
+        viewHelper.initCaches();
 
         setProfile();
 
