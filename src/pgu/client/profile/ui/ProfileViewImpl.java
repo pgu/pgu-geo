@@ -243,15 +243,15 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         this.presenter = presenter;
     }
 
-    private void setProfileName(final String firstname, final String lastname) {
+    private void setName(final String firstname, final String lastname) {
         nameBasic.setText(firstname + " " + lastname);
     }
 
-    private void setProfileHeadline(final String headline) {
+    private void setHeadline(final String headline) {
         headlineBasic.setText(headline);
     }
 
-    private void setProfileSpecialties(final String specialtiesLabel) {
+    private void setSpecialties(final String specialtiesLabel) {
         final StringBuilder sb = new StringBuilder();
 
         final String[] rawLabels = specialtiesLabel.split(",");
@@ -267,12 +267,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         }
 
         final String htmlSpecialties = sb.toString();
-
-        PublicProfileUtils.setSpecialties(htmlSpecialties);
         spContainer.add(new HTML(htmlSpecialties));
+
+        // TODO PGU Nov 23, 2012 public specialties?
+        PublicProfileUtils.setSpecialties(htmlSpecialties);
     }
 
-    private void setProfileLocation(final String locationName) {
+    private void setCurrentLocation(final String locationName) {
 
         final boolean hasLocation = !u.isVoid(locationName);
         locContainer.setText(hasLocation ? locationName : "");
@@ -282,7 +283,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         }
     }
 
-    private void setProfileSummary(final String htmlSummary) {
+    private void setSummary(final String htmlSummary) {
         summaryBasic.getElement().getFirstChildElement().setAttribute("data-content", htmlSummary);
     }
 
@@ -298,14 +299,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 		// TODO review the way to handle the public profile
 		@pgu.client.profile.ui.PublicProfileUtils::initBasePublicProfile()();
 
-//		@pgu.client.profile.ui.ProfileSummaryUtils::setProfileId(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
-//		@pgu.client.profile.ui.ProfileSummaryUtils::setProfilePublicUrl(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
-//		@pgu.client.profile.ui.ProfileSummaryUtils::setProfileName(Lpgu/client/profile/ui/ProfileViewImpl;)(view);
-//		@pgu.client.profile.ui.ProfileSummaryUtils::setProfileHeadline(Lpgu/client/profile/ui/ProfileViewImpl;)(view);
-//      @pgu.client.profile.ui.ProfileSummaryUtils::setProfileLocation(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
-//      @pgu.client.profile.ui.ProfileSummaryUtils::setProfileSpecialties(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
-//      @pgu.client.profile.ui.ProfileSummaryUtils::setProfileSummary(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
-
         var
             p = $wnd.pgu_geo.profile //
           , first_name = p.firstName || '' //
@@ -317,21 +310,21 @@ public class ProfileViewImpl extends Composite implements ProfileView {
           , summary = p.summary || '' //
         ;
 
-        view.@pgu.client.profile.ui.ProfileViewImpl::setProfileName(Ljava/lang/String;Ljava/lang/String;)( //
+        view.@pgu.client.profile.ui.ProfileViewImpl::setName(Ljava/lang/String;Ljava/lang/String;)( //
         first_name, last_name);
 
-        view.@pgu.client.profile.ui.ProfileViewImpl::setProfileHeadline(Ljava/lang/String;)( //
+        view.@pgu.client.profile.ui.ProfileViewImpl::setHeadline(Ljava/lang/String;)( //
         headline);
 
-        view.@pgu.client.profile.ui.ProfileViewImpl::setProfileLocation(Ljava/lang/String;)( //
+        view.@pgu.client.profile.ui.ProfileViewImpl::setCurrentLocation(Ljava/lang/String;)( //
         current_location_name);
 
-        view.@pgu.client.profile.ui.ProfileViewImpl::setProfileSpecialties(Ljava/lang/String;)( //
+        view.@pgu.client.profile.ui.ProfileViewImpl::setSpecialties(Ljava/lang/String;)( //
         specialties);
 
         var html_summary = @pgu.client.app.utils.MarkdownUtils::markdown(Ljava/lang/String;)( //
         summary);
-        view.@pgu.client.profile.ui.ProfileViewImpl::setProfileSummary(Ljava/lang/String;)( //
+        view.@pgu.client.profile.ui.ProfileViewImpl::setSummary(Ljava/lang/String;)( //
         html_summary);
 
         var languages = p.languages || {};

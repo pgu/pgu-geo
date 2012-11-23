@@ -1,6 +1,6 @@
 package pgu.client.profile.ui;
 
-
+// TODO PGU Nov 23, 2012 to delete
 public class ProfileSummaryUtils {
 
     //    public static native void setProfileId(ProfileViewImpl view, JavaScriptObject profile) /*-{
