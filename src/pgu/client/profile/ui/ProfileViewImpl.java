@@ -549,7 +549,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
         isProfileSetInView = true;
 
-        ProfileUtils.initProfileMap();
+        viewHelper.initProfileMap();
         viewHelper.initCaches();
 
         setProfile();

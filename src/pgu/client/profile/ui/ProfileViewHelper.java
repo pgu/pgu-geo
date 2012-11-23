@@ -7,6 +7,27 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 public class ProfileViewHelper {
 
+    public native void initProfileMap() /*-{
+
+        var div = $wnd.document.getElementById('pgu_geo_profile_map');
+
+        $wnd.console.log('initProfileMap');
+
+        var
+            google = @pgu.client.app.utils.GoogleUtils::google()()
+          , mapOptions = {
+              zoom: 2,
+              center: new google.maps.LatLng(0, 0),
+              mapTypeId: google.maps.MapTypeId.ROADMAP
+            }
+        ;
+
+        $wnd.pgu_geo.profile_map = new google.maps.Map( //
+            div //
+            , mapOptions);
+
+    }-*/;
+
     public native void initCaches() /*-{
 		$wnd.pgu_geo.cache_location2anchorIds = {};
         $wnd.pgu_geo.item_configs = [];
