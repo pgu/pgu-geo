@@ -268,9 +268,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
         final String htmlSpecialties = sb.toString();
         spContainer.add(new HTML(htmlSpecialties));
-
-        // TODO PGU Nov 23, 2012 public specialties?
-        PublicProfileUtils.setSpecialties(htmlSpecialties);
     }
 
     private void setCurrentLocation(final String locationName) {
@@ -380,14 +377,14 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 		@pgu.client.profile.ui.PublicProfileUtils::initBasePublicProfile()();
 
         var
-            p = $wnd.pgu_geo.profile //
-          , first_name = p.firstName || '' //
-          , last_name = p.lastName || '' //
-          , headline = p.headline || '' //
-          , current_location = p.location || {} //
-          , current_location_name = current_location.name || '' //
-          , specialties = p.specialties || '' //
-          , summary = p.summary || '' //
+            p = $wnd.pgu_geo.profile
+          , first_name = p.firstName || ''
+          , last_name = p.lastName || ''
+          , headline = p.headline || ''
+          , current_location = p.location || {}
+          , current_location_name = current_location.name || ''
+          , specialties = p.specialties || ''
+          , summary = p.summary || ''
         ;
 
         this.@pgu.client.profile.ui.ProfileViewImpl::setName(Ljava/lang/String;Ljava/lang/String;)
@@ -407,33 +404,31 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         this.@pgu.client.profile.ui.ProfileViewImpl::setSummary(Ljava/lang/String;)
         (html_summary);
 
-        // TODO save the resulting html of lg for the public profile ?
         this.@pgu.client.profile.ui.ProfileViewImpl::setLanguages()
         ();
 
-        // TODO PGU
-        // TODO PGU
-        // TODO PGU
-        // TODO PGU
+		this.@pgu.client.profile.ui.ProfileViewImpl::updateCachePositions()
+		();
 
-        var j_profile = $wnd.pgu_geo.profile;
+		$doc.getElementById('pgu_geo.profile:xp_table').innerHTML = //
+		@pgu.client.profile.ui.ProfileViewUtils::createExperienceTable(Lcom/google/gwt/core/client/JavaScriptObject;)
+		(p.positions);
 
-		@pgu.client.profile.ui.ProfilePositionsUtils::updateProfilePositions(Lpgu/client/profile/ui/ProfileViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)
-		(this,j_profile);
+		$doc.getElementById('pgu_geo.profile:edu_table').innerHTML = //
+		@pgu.client.profile.ui.ProfileViewUtils::createEducationTable(Lcom/google/gwt/core/client/JavaScriptObject;)
+		(p.educations);
 
 		// TODO display "wish" locations
 		// TODO display "holidays" locations
 
-		var positions = j_profile.positions;
-		$doc.getElementById('pgu_geo.profile:xp_table').innerHTML = //
-		@pgu.client.profile.ui.ProfileViewUtils::createExperienceTable(Lcom/google/gwt/core/client/JavaScriptObject;)
-		(positions);
-
-		var educations = j_profile.educations;
-		$doc.getElementById('pgu_geo.profile:edu_table').innerHTML = //
-		@pgu.client.profile.ui.ProfileViewUtils::createEducationTable(Lcom/google/gwt/core/client/JavaScriptObject;)
-		(educations);
-
+        //        @pgu.client.profile.ui.PublicProfileUtils::setProfileId(Ljava/lang/String;)(profile_id);
+        //        @pgu.client.profile.ui.PublicProfileUtils::setProfilePublicUrl(Ljava/lang/String;)(public_url);
+        ////        @pgu.client.profile.ui.PublicProfileUtils::setProfileName(Ljava/lang/String;Ljava/lang/String;)(first_name, last_name);
+        ////        @pgu.client.profile.ui.PublicProfileUtils::setProfileHeadline(Ljava/lang/String;)(headline);
+        //PublicProfileUtils.setSpecialties(htmlSpecialties);
+        ////        @pgu.client.profile.ui.PublicProfileUtils::setProfileLocation(Ljava/lang/String;)(location_name);
+        ////        @pgu.client.profile.ui.PublicProfileUtils::setProfileSummary(Ljava/lang/String;)(html_summary);
+        // save the resulting html of lg for the public profile ?
     }-*/;
 
     @Override
@@ -561,5 +556,36 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         // TODO PGU Nov 22, 2012 update public profile
         fireEvent(new SavePublicProfileEvent());
     }
+
+    private native void updateCachePositions() /*-{
+
+        var
+            p = $wnd.pgu_geo.profile
+          , pos = profile.positions || {}
+          , positions = pos.values || []
+        ;
+
+        for (var i = 0, len = positions.length; i < len; i++) {
+            var
+                position = positions[i]
+              , experience_id = position.id
+              , location = position.location || {}
+              , location_names = location.name
+            ;
+
+            if (location_names) {
+                var locations = location_names.split(";");
+                for (var j = 0, lenL = locations.length; j < lenL; j++) {
+                    var
+                        raw_location = locations[j]
+                      , location_name = raw_location.trim()
+                    ;
+
+                    @pgu.client.app.utils.LocationsUtils::addExperienceLocationToCache(DLjava/lang/String;)(experience_id, location_name);
+                }
+            }
+        }
+
+    }-*/;
 
 }
