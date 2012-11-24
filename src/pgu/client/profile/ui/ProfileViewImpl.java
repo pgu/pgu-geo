@@ -16,6 +16,7 @@ import pgu.client.profile.event.SaveMapPreferencesEvent;
 import pgu.client.profile.event.SaveMapPreferencesEvent.Handler;
 import pgu.client.profile.event.SavePublicLocationsEvent;
 import pgu.client.profile.event.SavePublicProfileEvent;
+import pgu.shared.model.ProfileLocations;
 import pgu.shared.utils.PublicProfileItem;
 
 import com.github.gwtbootstrap.client.ui.Button;
@@ -417,6 +418,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         ////        @pgu.client.profile.ui.PublicProfileUtils::setProfileLocation(Ljava/lang/String;)(location_name);
         ////        @pgu.client.profile.ui.PublicProfileUtils::setProfileSummary(Ljava/lang/String;)(html_summary);
         // save the resulting html of lg for the public profile ?
+
+        this.@pgu.client.profile.ui.ProfileViewImpl::setProfileAfter()();
+
     }-*/;
 
     public String createExperienceTable(final JavaScriptObject positions) {
@@ -543,7 +547,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         viewHelper.initCaches();
 
         setProfile();
+    }
 
+    private void setProfileAfter() {
         // TODO PGU
         fireEvent(new FetchCustomLocationsEvent());
         fireEvent(new FetchPublicPreferencesEvent());
@@ -586,7 +592,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }-*/;
 
     @Override
-    public void setInfoWithLocations() {
+    public void setInfoWithLocations(final ProfileLocations profileLocations) {
+
+        LocationsUtils.initCaches(profileLocations.getItems2locations(), profileLocations.getReferentialLocations());
+
         final String locationName = locContainer.getText();
 
         if (!u.isVoid(locationName)) {

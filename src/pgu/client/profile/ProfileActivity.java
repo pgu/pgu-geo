@@ -449,8 +449,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
             @Override
             public void onSuccess(final ProfileLocations profileLocations) {
-                LocationsUtils.initCaches(profileLocations.getItems2locations(), profileLocations.getReferentialLocations());
-                view.setInfoWithLocations();
+                view.setInfoWithLocations(profileLocations);
             }
 
         });
