@@ -5,6 +5,7 @@ import pgu.server.access.DAO;
 import pgu.server.app.AppLog;
 import pgu.server.utils.AppUtils;
 import pgu.shared.model.ProfileLocations;
+import pgu.shared.model.PublicPreferences;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -24,6 +25,17 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
         }
 
         return profileLocations;
+    }
+
+    @Override
+    public PublicPreferences fetchPublicPreferences(final String profileId) {
+
+        final PublicPreferences publicPreferences = dao.ofy().find(PublicPreferences.class, profileId);
+        if (publicPreferences == null) {
+            return new PublicPreferences();
+        }
+
+        return publicPreferences;
     }
 
 }

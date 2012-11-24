@@ -29,6 +29,7 @@ import pgu.client.service.LinkedinServiceAsync;
 import pgu.client.service.ProfileServiceAsync;
 import pgu.client.service.PublicProfileServiceAsync;
 import pgu.shared.model.ProfileLocations;
+import pgu.shared.model.PublicPreferences;
 import pgu.shared.model.PublicProfile;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -440,7 +441,16 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         // TODO PGU Nov 20, 2012 move this method inside a 'profile service' and not in the public
         // service
         // TODO PGU Nov 20, 2012 create a small entity only for the public preferences
-        fetchPublicPreferences();
+        //        fetchPublicPreferences();
+
+        profileService.fetchPublicPreferences(ctx.getProfileId(), new AsyncCallbackApp<PublicPreferences>(eventBus) {
+
+            @Override
+            public void onSuccess(final PublicPreferences result) {
+                view.setPublicPreferencesInfo(result);
+            }
+
+        });
     }
 
     @Override
@@ -449,7 +459,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
             @Override
             public void onSuccess(final ProfileLocations profileLocations) {
-                view.setInfoWithLocations(profileLocations);
+                view.setLocationsInfo(profileLocations);
             }
 
         });

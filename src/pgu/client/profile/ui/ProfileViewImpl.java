@@ -17,6 +17,7 @@ import pgu.client.profile.event.SaveMapPreferencesEvent.Handler;
 import pgu.client.profile.event.SavePublicLocationsEvent;
 import pgu.client.profile.event.SavePublicProfileEvent;
 import pgu.shared.model.ProfileLocations;
+import pgu.shared.model.PublicPreferences;
 import pgu.shared.utils.PublicProfileItem;
 
 import com.github.gwtbootstrap.client.ui.Button;
@@ -592,7 +593,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }-*/;
 
     @Override
-    public void setInfoWithLocations(final ProfileLocations profileLocations) {
+    public void setLocationsInfo(final ProfileLocations profileLocations) {
 
         LocationsUtils.initCaches(profileLocations.getItems2locations(), profileLocations.getReferentialLocations());
 
@@ -604,6 +605,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
         updateLocationsCacheFromPositions();
         viewHelper.updateTablesWithLocations();
+    }
+
+    @Override
+    public void setPublicPreferencesInfo(final PublicPreferences result) {
+        final String publicPreferences = result == null ? "" : result.getValues();
+        final String prefs = u.isVoid(publicPreferences) ? "" : publicPreferences;
+        PublicProfileUtils.showPublicPreferences(this, prefs);
     }
 
 }

@@ -8,6 +8,7 @@ import pgu.client.profile.event.SaveMapPreferencesEvent;
 import pgu.client.profile.event.SavePublicLocationsEvent;
 import pgu.client.profile.event.SavePublicProfileEvent;
 import pgu.shared.model.ProfileLocations;
+import pgu.shared.model.PublicPreferences;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -41,6 +42,8 @@ public interface ProfileView extends IsWidget //
 
     void showProfile();
 
-    void setInfoWithLocations(ProfileLocations profileLocations);
+    void setLocationsInfo(ProfileLocations profileLocations);
+
+    void setPublicPreferencesInfo(PublicPreferences result);
 
 }
