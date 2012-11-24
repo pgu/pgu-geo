@@ -551,7 +551,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     private void setProfileAfter() {
-        // TODO PGU
         fireEvent(new FetchCustomLocationsEvent());
         fireEvent(new FetchPublicPreferencesEvent());
 

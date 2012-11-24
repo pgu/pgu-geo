@@ -6,6 +6,7 @@ import pgu.server.app.AppLog;
 import pgu.server.utils.AppUtils;
 import pgu.shared.model.ProfileLocations;
 import pgu.shared.model.PublicPreferences;
+import pgu.shared.model.UserAndLocations;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -36,6 +37,20 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
         }
 
         return publicPreferences;
+    }
+
+    @Override
+    public void saveLocations(final String profileId, final String items2locations, final String referentialLocations) {
+        log.info(this, "(\nuser[%s]\n%s\n\n%s\n)", profileId, items2locations, referentialLocations);
+
+        final UserAndLocations userAndLocations = new UserAndLocations();
+        userAndLocations.setUserId(profileId);
+
+        userAndLocations.setItems2locations(items2locations);
+        userAndLocations.setReferentialLocations(referentialLocations);
+        dao.ofy().async().put(userAndLocations);
+
+        // TODO PGU Sep 12, 2012 async: complete document profile with locations
     }
 
 }

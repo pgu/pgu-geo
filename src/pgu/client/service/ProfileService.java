@@ -13,4 +13,6 @@ public interface ProfileService extends RemoteService {
 
     PublicPreferences fetchPublicPreferences(String profileId);
 
+    void saveLocations(String profileId, String json_copyCacheItems, String json_copyCacheReferential);
+
 }

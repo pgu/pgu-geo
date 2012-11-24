@@ -11,4 +11,7 @@ public interface ProfileServiceAsync {
 
     void fetchPublicPreferences(String profileId, AsyncCallback<PublicPreferences> asyncCallbackApp);
 
+    void saveLocations(String profileId, String json_copyCacheItems, String json_copyCacheReferential,
+            AsyncCallback<Void> asyncCallbackApp);
+
 }

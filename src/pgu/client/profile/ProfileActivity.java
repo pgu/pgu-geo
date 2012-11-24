@@ -203,9 +203,9 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
             LocationsUtils.copyLocationCaches();
 
-            linkedinService.saveLocations( //
+            profileService.saveLocations( //
                     //
-                    clientFactory.getAppState().getUserId() //
+                    ctx.getProfileId() //
                     , LocationsUtils.json_copyCacheItems() //
                     , LocationsUtils.json_copyCacheReferential() //
                     //
@@ -437,16 +437,13 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     @Override
     public void onFetchPublicPreferences(final FetchPublicPreferencesEvent event) {
-        // TODO PGU Nov 20, 2012 fetch preferences in parallel (+event+profileState)
-        // TODO PGU Nov 20, 2012 move this method inside a 'profile service' and not in the public
-        // service
-        // TODO PGU Nov 20, 2012 create a small entity only for the public preferences
-        //        fetchPublicPreferences();
+        //  see fetchPublicPreferences();
 
         profileService.fetchPublicPreferences(ctx.getProfileId(), new AsyncCallbackApp<PublicPreferences>(eventBus) {
 
             @Override
             public void onSuccess(final PublicPreferences result) {
+                // TODO PGU Nov 24, 2012 if result == null then save all public
                 view.setPublicPreferencesInfo(result);
             }
 
