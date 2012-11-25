@@ -128,45 +128,6 @@ public class ProfileItemsUtils {
     }-*/;
 
 
-    public static native JavaScriptObject toProfileItem(String type, JavaScriptObject item) /*-{
-
-        var profile_item = {};
-        profile_item.id = type + '_' + item.id;
-
-        profile_item.dates = @pgu.client.profile.ui.ProfileDateUtils::labelDates(Lcom/google/gwt/core/client/JavaScriptObject;)(item);
-        profile_item.startD = @pgu.client.profile.ui.ProfileDateUtils::getStartDate(Lcom/google/gwt/core/client/JavaScriptObject;)(item);
-
-        if (@pgu.client.app.utils.ProfileItemsUtils::isEdu(Ljava/lang/String;)(type)) {
-
-            profile_item.short_content = @pgu.client.app.utils.ProfileItemsUtils::labelEduTitle(Lcom/google/gwt/core/client/JavaScriptObject;)(item);
-            profile_item.content_title = "Education";
-            profile_item.long_content = @pgu.client.app.utils.MarkdownUtils::markdown(Ljava/lang/String;)(item.notes);
-
-            @pgu.client.profile.ui.PublicProfileUtils::addEducation(Lcom/google/gwt/core/client/JavaScriptObject;)(profile_item);
-
-        } else if (@pgu.client.app.utils.ProfileItemsUtils::isXp(Ljava/lang/String;)(type)) {
-
-            profile_item.short_content = @pgu.client.app.utils.ProfileItemsUtils::labelXpTitle(Lcom/google/gwt/core/client/JavaScriptObject;)(item);
-            profile_item.content_title = "Experience";
-            profile_item.long_content = @pgu.client.app.utils.MarkdownUtils::markdown(Ljava/lang/String;)(item.summary);
-
-            @pgu.client.profile.ui.PublicProfileUtils::addExperience(Lcom/google/gwt/core/client/JavaScriptObject;)(profile_item);
-
-        } else {
-
-            profile_item.short_content = "";
-            profile_item.content_title = "";
-            profile_item.long_content = "";
-
-            throw {
-                name: 'Unknown type'
-              , msg: type
-            }
-        }
-
-        return profile_item;
-    }-*/;
-
     public static native boolean hasAllOption() /*-{
         var type_2_profile_items = @pgu.client.app.utils.ProfileItemsUtils::type2profileItems()();
         return type_2_profile_items.hasOwnProperty('all');

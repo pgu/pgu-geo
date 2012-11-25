@@ -93,7 +93,7 @@ public class ProfileViewTables {
 
     private native String createTableRow(final String type, final JavaScriptObject item) /*-{
 
-        var item_config = @pgu.client.app.utils.ProfileItemsUtils::toProfileItem(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;)
+        var item_config = this.@pgu.client.profile.ui.ProfileViewTables::toProfileItem(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;)
                           (type,item);
         $wnd.pgu_geo.item_configs.push(item_config);
 
@@ -123,6 +123,44 @@ public class ProfileViewTables {
                 + '</tr>                                                                               '
                 + '';
     }-*/;
+
+    public native JavaScriptObject toProfileItem(String type, JavaScriptObject item) /*-{
+
+        var profile_item = {};
+
+        profile_item.id = type + '_' + item.id;
+        profile_item.type = type;
+
+        profile_item.dates = @pgu.client.profile.ui.ProfileDateUtils::labelDates(Lcom/google/gwt/core/client/JavaScriptObject;)(item);
+        profile_item.startD = @pgu.client.profile.ui.ProfileDateUtils::getStartDate(Lcom/google/gwt/core/client/JavaScriptObject;)(item);
+
+        if (@pgu.client.app.utils.ProfileItemsUtils::isEdu(Ljava/lang/String;)(type)) {
+
+            profile_item.short_content = @pgu.client.app.utils.ProfileItemsUtils::labelEduTitle(Lcom/google/gwt/core/client/JavaScriptObject;)(item);
+            profile_item.content_title = "Education";
+            profile_item.long_content = @pgu.client.app.utils.MarkdownUtils::markdown(Ljava/lang/String;)(item.notes);
+
+        } else if (@pgu.client.app.utils.ProfileItemsUtils::isXp(Ljava/lang/String;)(type)) {
+
+            profile_item.short_content = @pgu.client.app.utils.ProfileItemsUtils::labelXpTitle(Lcom/google/gwt/core/client/JavaScriptObject;)(item);
+            profile_item.content_title = "Experience";
+            profile_item.long_content = @pgu.client.app.utils.MarkdownUtils::markdown(Ljava/lang/String;)(item.summary);
+
+        } else {
+
+            profile_item.short_content = "";
+            profile_item.content_title = "";
+            profile_item.long_content = "";
+
+            throw {
+                name: 'Unknown type'
+              , msg: type
+            }
+        }
+
+        return profile_item;
+    }-*/;
+
 
     public native void updateTablesWithLocations() /*-{
 

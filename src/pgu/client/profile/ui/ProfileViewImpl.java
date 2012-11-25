@@ -562,9 +562,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                 , fmtSummary //
                 , languagesHtml //
                 );
-        // TODO review the way to handle the public profile
-        //          @pgu.client.profile.ui.PublicProfileUtils::sortProfileItems(Ljava/lang/String;)
-        //          (type);
     }
 
 }

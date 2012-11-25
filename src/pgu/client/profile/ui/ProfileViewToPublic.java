@@ -38,6 +38,38 @@ public class ProfileViewToPublic {
         public_p.location = locationName;
         public_p.summary = fmtSummary;
         public_p.languages = languagesHtml;
+        public_p.educations = [];
+        public_p.positions = [];
+
+        var item_configs = $wnd.pgu_geo.item_configs;
+        for (var i = 0, len = item_configs.length; i < len; i++) {
+
+            var
+                item_config = item_configs[i]
+              , type = item_config.type
+            ;
+
+            if (@pgu.client.app.utils.ProfileItemsUtils::isEdu(Ljava/lang/String;)(type)) {
+                public_p.educations.push(item_config);
+
+            } else if (@pgu.client.app.utils.ProfileItemsUtils::isXp(Ljava/lang/String;)(type)) {
+                public_p.positions.push(item_config);
+
+            } else {
+                throw {
+                    name: 'Unknown type'
+                  , msg: type
+                }
+            }
+        }
+
+        @pgu.client.app.utils.ProfileItemsUtils::sortProfileItemsByDateFromOldToNew(Lcom/google/gwt/core/client/JavaScriptObject;)
+        (public_p.educations);
+
+        @pgu.client.app.utils.ProfileItemsUtils::sortProfileItemsByDateFromOldToNew(Lcom/google/gwt/core/client/JavaScriptObject;)
+        (public_p.positions);
+
+        // TODO PGU algo mas?
 
         return @pgu.client.app.utils.JsonUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)
                (public_profile);
