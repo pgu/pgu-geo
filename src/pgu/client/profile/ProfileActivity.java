@@ -24,7 +24,6 @@ import pgu.client.profile.event.SaveLocationEvent;
 import pgu.client.profile.event.SaveMapPreferencesEvent;
 import pgu.client.profile.event.SavePublicLocationsEvent;
 import pgu.client.profile.event.SavePublicProfileEvent;
-import pgu.client.profile.ui.ProfileViewHelper;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.client.service.ProfileServiceAsync;
 import pgu.client.service.PublicProfileServiceAsync;
@@ -248,12 +247,12 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     @Override
     public void onLocationsSuccessSave(final LocationsSuccessSaveEvent event) {
-        ProfileViewHelper.refreshHtmlLocationsForItem(event.getItemConfigId());
+        view.refreshHtmlLocationsForItem(event.getItemConfigId());
     }
 
     @Override
     public void onLocationSuccessDelete(final LocationSuccessDeleteEvent event) {
-        ProfileViewHelper.refreshHtmlLocationsForItem(event.getItemConfigId());
+        view.refreshHtmlLocationsForItem(event.getItemConfigId());
     }
 
     @Override

@@ -46,4 +46,6 @@ public interface ProfileView extends IsWidget //
 
     void setPublicPreferencesInfo(PublicPreferences result);
 
+    void refreshHtmlLocationsForItem(String itemConfigId);
+
 }

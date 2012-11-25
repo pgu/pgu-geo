@@ -88,6 +88,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     private String              lastSearchItemLocation      = null;
     private boolean             isMapDisplayed = true;
     private final ProfileViewHelper   viewHelper = new ProfileViewHelper();
+    private final ProfileViewTables   viewTables = new ProfileViewTables();
+    private final ProfileViewMap      viewMap    = new ProfileViewMap();
 
     public ProfileViewImpl() {
 
@@ -285,83 +287,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     public void setLanguages(final JavaScriptObject language_values) {
-        lgContainer.clear();
 
-        final String lgHtml = createLanguagesHtml(language_values);
+        final ProfileViewLanguages helper = new ProfileViewLanguages();
+        final String lgHtml = helper.createLanguagesHtml(language_values);
+
+        lgContainer.clear();
         lgContainer.add(new HTML(lgHtml));
     }
-
-    private native String createLanguagesHtml(JavaScriptObject language_values) /*-{
-
-        var cache_lg = {};
-        for (var i = 0, len = language_values.length; i < len; i++) {
-
-            var //
-            language_value = language_values[i] //
-            //
-            , language = language_value.language || {} //
-            , language_name = language.name || '' //
-            //
-            , language_proficiency = language_value.proficiency || {} //
-            , language_level = language_proficiency.level || '' //
-            ;
-
-            if (cache_lg.hasOwnProperty(language_level)) {
-                cache_lg.get(language_level).push(language_name);
-
-            } else {
-                cache_lg[language_level] = [].concat(language_name);
-
-            }
-        }
-
-        // sort language names
-        for (var key in cache_lg) {
-            if ('__gwt_ObjectId' === key) {
-                continue;
-            }
-            if (cache_lg.hasOwnProperty(key)) {
-                cache_lg[key].sort();
-            }
-        }
-
-        var lg_levels = [
-              {lvl: 'native_or_bilingual', nb: 4}
-            , {lvl: 'full_professional', nb: 3}
-            , {lvl: 'professional_working', nb: 2}
-            , {lvl: 'limited_working', nb: 1}
-            , {lvl: 'elementary', nb: 0}
-        ];
-
-        var lg_rows = [];
-
-        for (var i = 0, len = lg_levels.length; i < len; i++) {
-            var lg_level = lg_levels[i];
-
-            if (cache_lg.hasOwnProperty(lg_level.lvl)) {
-                //
-                var trophies = [];
-                var trophies_nb = lg_level.nb;
-
-                for (var k = 0; k < trophies_nb; k++) {
-                    trophies.push('<i class=\"icon-trophy\"></i>');
-                }
-                var trophies_html = trophies.join('');
-
-                //
-                var lg_names = cache_lg[lg_level.lvl];
-
-                for (var j = 0, lenN = lg_names.length; j < lenN; j++) {
-                    var name = lg_names[j];
-
-                    var row = '<div>' + name + '</div><div>' + trophies_html + '</div>';
-                    lg_rows.push(row);
-                }
-            }
-        }
-
-        return lg_rows.join('');
-    }-*/;
 
     private native void setProfile() /*-{
 
@@ -398,12 +330,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         this.@pgu.client.profile.ui.ProfileViewImpl::setLanguages(Lcom/google/gwt/core/client/JavaScriptObject;)
         (language_values);
 
-		$doc.getElementById('pgu_geo.profile:xp_table').innerHTML = //
-        this.@pgu.client.profile.ui.ProfileViewImpl::createExperienceTable(Lcom/google/gwt/core/client/JavaScriptObject;)
+        this.@pgu.client.profile.ui.ProfileViewImpl::setExperienceTable(Lcom/google/gwt/core/client/JavaScriptObject;)
 		(positions);
 
-		$doc.getElementById('pgu_geo.profile:edu_table').innerHTML = //
-		this.@pgu.client.profile.ui.ProfileViewImpl::createEducationTable(Lcom/google/gwt/core/client/JavaScriptObject;)
+		this.@pgu.client.profile.ui.ProfileViewImpl::setEducationTable(Lcom/google/gwt/core/client/JavaScriptObject;)
 		(educations);
 
 		// TODO display "wish" locations
@@ -419,18 +349,31 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         ////        @pgu.client.profile.ui.PublicProfileUtils::setProfileLocation(Ljava/lang/String;)(location_name);
         ////        @pgu.client.profile.ui.PublicProfileUtils::setProfileSummary(Ljava/lang/String;)(html_summary);
         // save the resulting html of lg for the public profile ?
+//            @pgu.client.profile.ui.PublicProfileUtils::sortProfileItems(Ljava/lang/String;)
+//            (type);
+
 
         this.@pgu.client.profile.ui.ProfileViewImpl::setProfileAfter()();
 
     }-*/;
 
-    public String createExperienceTable(final JavaScriptObject positions) {
-        return viewHelper.createExperienceTable(positions);
+    public void setExperienceTable(final JavaScriptObject positions) {
+        final String html = viewTables.createExperienceTable(positions);
+        setExperienceTableHtml(html);
+    };
+
+    private native void setExperienceTableHtml(String html) /*-{
+        $doc.getElementById('pgu_geo.profile:xp_table').innerHTML = html;
+    }-*/;
+
+    public void setEducationTable(final JavaScriptObject educations) {
+        final String html = viewTables.createEducationTable(educations);
+        setEducationTableHtml(html);
     }
 
-    public String createEducationTable(final JavaScriptObject educations) {
-        return viewHelper.createEducationTable(educations);
-    }
+    private native void setEducationTableHtml(String html) /*-{
+        $doc.getElementById('pgu_geo.profile:edu_table').innerHTML = html;
+    }-*/;
 
     @Override
     public void showPublicPreferences(final String publicPreferences) {
@@ -544,7 +487,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
         isProfileSetInView = true;
 
-        viewHelper.initProfileMap();
+        viewMap.initProfileMap();
         viewHelper.initCaches();
 
         setProfile();
@@ -603,7 +546,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         }
 
         updateLocationsCacheFromPositions();
-        viewHelper.updateTablesWithLocations();
+        viewTables.updateTablesWithLocations();
     }
 
     @Override
@@ -611,6 +554,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         final String publicPreferences = result == null ? "" : result.getValues();
         final String prefs = u.isVoid(publicPreferences) ? "" : publicPreferences;
         PublicProfileUtils.showPublicPreferences(this, prefs);
+    }
+
+    @Override
+    public void refreshHtmlLocationsForItem(final String itemConfigId) {
+        viewTables.refreshHtmlLocationsForItem(itemConfigId);
     }
 
 }
