@@ -6,6 +6,11 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 public class ProfileViewTables {
 
+    public native void initCaches() /*-{
+        $wnd.pgu_geo.cache_location2anchorIds = {};
+        $wnd.pgu_geo.item_configs = [];
+    }-*/;
+
     public String createExperienceTable(final JavaScriptObject jsonExperiences) {
         return createTable(ItemType.experience, jsonExperiences, "No experience has been found");
     }

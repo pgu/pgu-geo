@@ -2,26 +2,9 @@ package pgu.client.profile.ui;
 
 import pgu.client.profile.ProfileActivity;
 
-import com.google.gwt.core.client.JavaScriptObject;
+public class ProfileViewSearch {
 
-public class ProfileViewHelper {
-
-    public native void initCaches() /*-{
-		$wnd.pgu_geo.cache_location2anchorIds = {};
-        $wnd.pgu_geo.item_configs = [];
-    }-*/;
-
-    // TODO to delete
-    public static native int nbItems() /*-{
-        return $wnd.pgu_geo.item_configs.length;
-    }-*/;
-
-    // TODO to delete
-    public static native JavaScriptObject getItemConfig(int i) /*-{
-        return $wnd.pgu_geo.item_configs[i];
-    }-*/;
-
-    public static native void searchLocationAndAddMarker(ProfileViewImpl view, String location_name) /*-{
+    public native void searchLocationAndAddMarker(ProfileViewImpl view, String location_name) /*-{
 
         $wnd.console.log('searchLocationAndAddMarker');
 
