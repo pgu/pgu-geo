@@ -48,4 +48,6 @@ public interface ProfileView extends IsWidget //
 
     void refreshHtmlLocationsForItem(String itemConfigId);
 
+    String getJsonPublicProfile();
+
 }

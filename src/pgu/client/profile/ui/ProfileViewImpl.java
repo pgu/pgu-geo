@@ -90,6 +90,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     private final ProfileViewSearch   viewSearch = new ProfileViewSearch();
     private final ProfileViewTables   viewTables = new ProfileViewTables();
     private final ProfileViewMap      viewMap    = new ProfileViewMap();
+    private final ProfileViewToPublic viewPublic = new ProfileViewToPublic();
 
     public ProfileViewImpl() {
 
@@ -339,20 +340,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 		// TODO display "wish" locations
 		// TODO display "holidays" locations
 
-        // TODO review the way to handle the public profile
-        @pgu.client.profile.ui.PublicProfileUtils::initBasePublicProfile()();
-        //        @pgu.client.profile.ui.PublicProfileUtils::setProfileId(Ljava/lang/String;)(profile_id);
-        //        @pgu.client.profile.ui.PublicProfileUtils::setProfilePublicUrl(Ljava/lang/String;)(public_url);
-        ////        @pgu.client.profile.ui.PublicProfileUtils::setProfileName(Ljava/lang/String;Ljava/lang/String;)(first_name, last_name);
-        ////        @pgu.client.profile.ui.PublicProfileUtils::setProfileHeadline(Ljava/lang/String;)(headline);
-        //PublicProfileUtils.setSpecialties(htmlSpecialties);
-        ////        @pgu.client.profile.ui.PublicProfileUtils::setProfileLocation(Ljava/lang/String;)(location_name);
-        ////        @pgu.client.profile.ui.PublicProfileUtils::setProfileSummary(Ljava/lang/String;)(html_summary);
-        // save the resulting html of lg for the public profile ?
-//            @pgu.client.profile.ui.PublicProfileUtils::sortProfileItems(Ljava/lang/String;)
-//            (type);
-
-
         this.@pgu.client.profile.ui.ProfileViewImpl::setProfileAfter()();
 
     }-*/;
@@ -559,6 +546,25 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     @Override
     public void refreshHtmlLocationsForItem(final String itemConfigId) {
         viewTables.refreshHtmlLocationsForItem(itemConfigId);
+    }
+
+    @Override
+    public String getJsonPublicProfile() {
+
+        final String specialtiesHtml = spContainer.getElement().getInnerHTML();
+        final String locationName = locContainer.getText();
+
+        final String fmtSummary = summaryBasic.getElement().getFirstChildElement().getAttribute("data-content");
+        final String languagesHtml = lgContainer.getElement().getInnerHTML();
+
+        return viewPublic.getJsonPublicProfile(specialtiesHtml //
+                , locationName //
+                , fmtSummary //
+                , languagesHtml //
+                );
+        // TODO review the way to handle the public profile
+        //          @pgu.client.profile.ui.PublicProfileUtils::sortProfileItems(Ljava/lang/String;)
+        //          (type);
     }
 
 }

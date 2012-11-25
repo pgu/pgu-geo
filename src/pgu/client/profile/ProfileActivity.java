@@ -464,6 +464,8 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     @Override
     public void onSavePublicProfile(final SavePublicProfileEvent event) {
         // TODO Auto-generated method stub
+        //        profileService.savePublicProfile();
+        final String jsonPublicProfile = view.getJsonPublicProfile();
 
     }
 
