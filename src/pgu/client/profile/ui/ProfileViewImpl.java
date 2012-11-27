@@ -18,7 +18,7 @@ import pgu.client.profile.event.SavePublicLocationsEvent;
 import pgu.client.profile.event.SavePublicProfileEvent;
 import pgu.shared.model.ProfileLocations;
 import pgu.shared.model.PublicPreferences;
-import pgu.shared.utils.PublicProfileItem;
+import pgu.shared.utils.PublicProfileItemType;
 
 import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.Heading;
@@ -193,25 +193,25 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     @UiHandler("expPublicState")
     public void clickOnExpPublicState(final ClickEvent e) {
 
-        updatePublicHeader(!isExpPublic, PublicProfileItem.experiences);
-        presenter.updatePublicProfile(PublicProfileItem.experiences);
+        updatePublicHeader(!isExpPublic, PublicProfileItemType.experiences);
+        presenter.updatePublicProfile(PublicProfileItemType.experiences);
     }
 
     @UiHandler("eduPublicState")
     public void clickOnEduPublicState(final ClickEvent e) {
 
-        updatePublicHeader(!isEduPublic, PublicProfileItem.educations);
-        presenter.updatePublicProfile(PublicProfileItem.educations);
+        updatePublicHeader(!isEduPublic, PublicProfileItemType.educations);
+        presenter.updatePublicProfile(PublicProfileItemType.educations);
     }
 
     public void updatePublicHeader(final boolean isPublic, final String publicProfileItem) {
         GWT.log("update " + isPublic + ", " + publicProfileItem);
 
-        if (PublicProfileItem.experiences.equals(publicProfileItem)) {
+        if (PublicProfileItemType.experiences.equals(publicProfileItem)) {
             expPublicState.setIcon(isPublic ? IconType.EYE_OPEN : IconType.EYE_CLOSE);
             isExpPublic = isPublic;
 
-        } else if (PublicProfileItem.educations.equals(publicProfileItem)) {
+        } else if (PublicProfileItemType.educations.equals(publicProfileItem)) {
             eduPublicState.setIcon(isPublic ? IconType.EYE_OPEN : IconType.EYE_CLOSE);
             isEduPublic = isPublic;
 
@@ -378,10 +378,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     public void confirmChangeOnPublicProfile(final String publicProfileItem) {
 
         Tooltip tooltip;
-        if (PublicProfileItem.experiences.equals(publicProfileItem)) {
+        if (PublicProfileItemType.experiences.equals(publicProfileItem)) {
             tooltip = expPublicTooltip;
 
-        } else if (PublicProfileItem.educations.equals(publicProfileItem)) {
+        } else if (PublicProfileItemType.educations.equals(publicProfileItem)) {
             tooltip = eduPublicTooltip;
         } else {
             throw new IllegalArgumentException("item? " + publicProfileItem);
@@ -400,8 +400,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     public static void updateCachePublicPreferences() {
-        PublicProfileUtils.updatePublicProfileItem(PublicProfileItem.experiences, isExpPublic);
-        PublicProfileUtils.updatePublicProfileItem(PublicProfileItem.educations, isEduPublic);
+        PublicProfileUtils.updatePublicProfileItem(PublicProfileItemType.experiences, isExpPublic);
+        PublicProfileUtils.updatePublicProfileItem(PublicProfileItemType.educations, isEduPublic);
     }
 
     @Override

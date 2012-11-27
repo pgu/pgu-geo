@@ -69,7 +69,7 @@ public class ProfileViewToPublic {
         @pgu.client.app.utils.ProfileItemsUtils::sortProfileItemsByDateFromOldToNew(Lcom/google/gwt/core/client/JavaScriptObject;)
         (public_p.positions);
 
-        // TODO PGU algo mas?
+        // remember: item_configs do not contain locations
 
         return @pgu.client.app.utils.JsonUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)
                (public_profile);

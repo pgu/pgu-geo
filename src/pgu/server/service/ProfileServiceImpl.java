@@ -4,6 +4,7 @@ import pgu.client.service.ProfileService;
 import pgu.server.access.DAO;
 import pgu.server.app.AppLog;
 import pgu.server.utils.AppUtils;
+import pgu.shared.model.BasePublicProfile;
 import pgu.shared.model.ProfileLocations;
 import pgu.shared.model.PublicPreferences;
 import pgu.shared.model.UserAndLocations;
@@ -51,6 +52,15 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
         dao.ofy().async().put(userAndLocations);
 
         // TODO PGU Sep 12, 2012 async: complete document profile with locations
+    }
+
+    @Override
+    public void savePublicProfile(final String profileId, final String jsonPublicProfile) {
+
+        final BasePublicProfile publicP = new BasePublicProfile();
+        publicP.setUserId(profileId);
+
+        dao.ofy().async().put(publicP);
     }
 
 }

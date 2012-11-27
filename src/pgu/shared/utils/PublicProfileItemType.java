@@ -1,8 +1,8 @@
 package pgu.shared.utils;
 
-public class PublicProfileItem {
+public class PublicProfileItemType {
 
-    private PublicProfileItem() {
+    private PublicProfileItemType() {
         throw new UnsupportedOperationException();
     }
 
