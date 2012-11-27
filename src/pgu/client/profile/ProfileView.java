@@ -1,7 +1,7 @@
 package pgu.client.profile;
 
 import pgu.client.app.event.LocationShowOnMapEvent;
-import pgu.client.profile.event.FetchCustomLocationsEvent;
+import pgu.client.profile.event.FetchProfileLocationsEvent;
 import pgu.client.profile.event.FetchPublicPreferencesEvent;
 import pgu.client.profile.event.SaveLocationEvent;
 import pgu.client.profile.event.SaveMapPreferencesEvent;
@@ -18,7 +18,7 @@ public interface ProfileView extends IsWidget //
 , SaveMapPreferencesEvent.HasSaveMapPreferencesHandlers //
 , FetchPublicPreferencesEvent.HasFetchPublicPreferencesHandlers //
 , SavePublicLocationsEvent.HasSavePublicLocationsHandlers //
-, FetchCustomLocationsEvent.HasFetchCustomLocationsHandlers //
+, FetchProfileLocationsEvent.HasFetchProfileLocationsHandlers //
 , SavePublicProfileEvent.HasSavePublicProfileHandlers //
 {
 
@@ -42,7 +42,7 @@ public interface ProfileView extends IsWidget //
 
     void showProfile();
 
-    void setLocationsInfo(ProfileLocations profileLocations);
+    void setProfileLocations(ProfileLocations profileLocations);
 
     void setPublicPreferencesInfo(PublicPreferences result);
 

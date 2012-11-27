@@ -4,12 +4,13 @@ import java.util.HashMap;
 
 import pgu.client.app.event.LocationShowOnMapEvent;
 import pgu.client.app.utils.ClientUtils;
+import pgu.client.app.utils.LocationsHelper;
 import pgu.client.app.utils.LocationsUtils;
 import pgu.client.app.utils.MarkdownUtils;
 import pgu.client.app.utils.MarkersUtils;
 import pgu.client.profile.ProfilePresenter;
 import pgu.client.profile.ProfileView;
-import pgu.client.profile.event.FetchCustomLocationsEvent;
+import pgu.client.profile.event.FetchProfileLocationsEvent;
 import pgu.client.profile.event.FetchPublicPreferencesEvent;
 import pgu.client.profile.event.SaveLocationEvent;
 import pgu.client.profile.event.SaveMapPreferencesEvent;
@@ -91,6 +92,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     private final ProfileViewTables   viewTables = new ProfileViewTables();
     private final ProfileViewMap      viewMap    = new ProfileViewMap();
     private final ProfileViewToPublic viewPublic = new ProfileViewToPublic();
+
+    private final LocationsHelper     locationsHelper = new LocationsHelper();
 
     public ProfileViewImpl() {
 
@@ -436,8 +439,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     @Override
-    public HandlerRegistration addFetchCustomLocationsHandler(final FetchCustomLocationsEvent.Handler handler) {
-        return addHandler(handler, FetchCustomLocationsEvent.TYPE);
+    public HandlerRegistration addFetchProfileLocationsHandler(final FetchProfileLocationsEvent.Handler handler) {
+        return addHandler(handler, FetchProfileLocationsEvent.TYPE);
     }
 
     @Override
@@ -481,12 +484,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     private void setProfileAfter() {
-        fireEvent(new FetchCustomLocationsEvent());
+        fireEvent(new FetchProfileLocationsEvent());
         fireEvent(new FetchPublicPreferencesEvent());
-
-        // save locations async when no locations are detected
         fireEvent(new SavePublicLocationsEvent());
-        // TODO PGU Nov 22, 2012 update public profile
         fireEvent(new SavePublicProfileEvent());
     }
 
@@ -522,14 +522,15 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }-*/;
 
     @Override
-    public void setLocationsInfo(final ProfileLocations profileLocations) {
+    public void setProfileLocations(final ProfileLocations profileLocations) {
 
-        LocationsUtils.initCaches(profileLocations.getItems2locations(), profileLocations.getReferentialLocations());
+        locationsHelper.initCaches(profileLocations.getItems2locations(), profileLocations.getReferentialLocations());
 
         final String locationName = locContainer.getText();
 
         if (!u.isVoid(locationName)) {
-            LocationsUtils.addCurrentLocationToCache(locationName);
+            // TODO PGU Nov 27, 2012 continue review
+            locationsHelper.addCurrentLocationToCache(locationName);
         }
 
         updateLocationsCacheFromPositions();

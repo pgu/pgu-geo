@@ -19,7 +19,7 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
     private final DAO           dao             = new DAO();
 
     @Override
-    public ProfileLocations fetchCustomLocations(final String profileId) {
+    public ProfileLocations fetchProfileLocations(final String profileId) {
 
         final ProfileLocations profileLocations = dao.ofy().find(ProfileLocations.class, profileId);
         if (profileLocations == null) {

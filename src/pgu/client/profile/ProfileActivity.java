@@ -18,7 +18,7 @@ import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.Level;
 import pgu.client.app.utils.LocationsUtils;
-import pgu.client.profile.event.FetchCustomLocationsEvent;
+import pgu.client.profile.event.FetchProfileLocationsEvent;
 import pgu.client.profile.event.FetchPublicPreferencesEvent;
 import pgu.client.profile.event.SaveLocationEvent;
 import pgu.client.profile.event.SaveMapPreferencesEvent;
@@ -49,7 +49,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 , ProfileLoadedEvent.Handler //
 , FetchPublicPreferencesEvent.Handler //
 , SavePublicLocationsEvent.Handler //
-, FetchCustomLocationsEvent.Handler //
+, FetchProfileLocationsEvent.Handler //
 , SavePublicProfileEvent.Handler //
 {
 
@@ -60,12 +60,12 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     private final ProfileServiceAsync            profileService;
     private final AppContext                     ctx;
 
-    private final ClientUtils                    u     = new ClientUtils();
+    private final ClientUtils                    u               = new ClientUtils();
 
     private EventBus                             eventBus;
     private String                               itemConfigId;
 
-    private final ArrayList<HandlerRegistration> hRegs = new ArrayList<HandlerRegistration>();
+    private final ArrayList<HandlerRegistration> hRegs           = new ArrayList<HandlerRegistration>();
 
     public ProfileActivity(final ProfilePlace place, final ClientFactory clientFactory, final AppContext ctx) {
         this.clientFactory = clientFactory;
@@ -101,7 +101,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         hRegs.add(view.addLocationShowOnMapHandler(this));
         hRegs.add(view.addSaveMapPreferencesHandler(this));
 
-        hRegs.add(view.addFetchCustomLocationsHandler(this));
+        hRegs.add(view.addFetchProfileLocationsHandler(this));
         hRegs.add(view.addFetchPublicPreferencesHandler(this));
         hRegs.add(view.addSavePublicLocationsHandler(this));
 
@@ -436,7 +436,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     @Override
     public void onFetchPublicPreferences(final FetchPublicPreferencesEvent event) {
-        //  see fetchPublicPreferences();
+        // see fetchPublicPreferences();
 
         profileService.fetchPublicPreferences(ctx.getProfileId(), new AsyncCallbackApp<PublicPreferences>(eventBus) {
 
@@ -450,12 +450,12 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     }
 
     @Override
-    public void onFetchCustomLocations(final FetchCustomLocationsEvent event) {
-        profileService.fetchCustomLocations(ctx.getProfileId(), new AsyncCallbackApp<ProfileLocations>(eventBus) {
+    public void onFetchProfileLocations(final FetchProfileLocationsEvent event) {
+        profileService.fetchProfileLocations(ctx.getProfileId(), new AsyncCallbackApp<ProfileLocations>(eventBus) {
 
             @Override
             public void onSuccess(final ProfileLocations profileLocations) {
-                view.setLocationsInfo(profileLocations);
+                view.setProfileLocations(profileLocations);
             }
 
         });
@@ -467,8 +467,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
         profileService.savePublicProfile( //
                 ctx.getProfileId(), //
-                jsonPublicProfile,
-                new AsyncCallbackApp<Void>(eventBus) {
+                jsonPublicProfile, new AsyncCallbackApp<Void>(eventBus) {
 
                     @Override
                     public void onSuccess(final Void result) {

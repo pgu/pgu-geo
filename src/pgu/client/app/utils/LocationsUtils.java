@@ -17,7 +17,7 @@ public class LocationsUtils {
     }
 
     // item2locations: {"education,1":["Paris","Nantes"],"experience,1":["Madrid"]}
-    //    referential: {"Paris":{"lat":1.2323,"lng":4.5555},"Nantes":{"lat":9.99,"lng":2.22}]
+    //    referential: ["Paris":{"lat":1.2323,"lng":4.5555},"Nantes":{"lat":9.99,"lng":2.22}]
     public static native void initCaches( //
             final String items2locations //
             , final String referential //
@@ -54,50 +54,6 @@ public class LocationsUtils {
         ;
 
         @pgu.client.app.utils.LocationsUtils::removeLocationFromItemInternal(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;)(cache_items, cache_referential, item_config_id, location_name);
-    }-*/;
-
-    public static native void addCurrentLocationToCache(String location_name) /*-{
-        if (location_name) {
-            var
-                cache = $wnd.pgu_geo.cache_items
-              , key = 'current' // see ItemType
-            ;
-
-            var locations = cache[key] || [];
-            if (locations.length === 0) {
-
-                var new_location = [];
-                new_location.push(location_name);
-                cache[key] = new_location;
-
-            } else if (locations.length === 1) {
-
-                var curr_location = locations[0];
-                if (curr_location !== location_name) {
-
-                    @pgu.client.app.utils.LocationsUtils::removeLocationFromItem(Ljava/lang/String;Ljava/lang/String;)(key,location_name);
-
-                    var new_location = [];
-                    new_location.push(location_name);
-                    cache[key] = new_location;
-                }
-
-            } else {
-                throw "More than one current location: " + locations;
-            }
-
-            var callback = function(status) {
-
-                $wnd.console.log('addCurrentLocationToCache');
-
-                var google = @pgu.client.app.utils.GoogleUtils::google()();
-                if (status == google.maps.GeocoderStatus.OK) {
-                    @pgu.client.app.utils.MarkersUtils::createMarkerOnProfileMap(Ljava/lang/String;)(location_name);
-                }
-            };
-
-            @pgu.client.app.utils.GeocoderUtils::searchGeopoint(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;)(location_name,callback);
-        }
     }-*/;
 
     public static native void addExperienceLocationToCache(double experience_id, String location_name) /*-{
@@ -230,15 +186,6 @@ public class LocationsUtils {
             }
         }
 
-    }-*/;
-
-    public static native void removeLocationFromItem(String item_config_id, String location_name) /*-{
-        var
-            cache_items = $wnd.pgu_geo.cache_items
-          , cache_referential = $wnd.pgu_geo.cache_referential
-        ;
-
-        @pgu.client.app.utils.LocationsUtils::removeLocationFromItemInternal(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;)(cache_items, cache_referential, item_config_id, location_name);
     }-*/;
 
     static native void removeLocationFromItemInternal( //

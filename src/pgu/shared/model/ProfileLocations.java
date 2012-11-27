@@ -9,7 +9,10 @@ public class ProfileLocations implements IsSerializable {
     @Id
     private String userId;
 
+    // item2locations: {"education,1":["Paris","Nantes"],"experience,1":["Madrid"]}
     private String items2locations;
+
+    //    referential: ["Paris":{"lat":1.2323,"lng":4.5555},"Nantes":{"lat":9.99,"lng":2.22}]
     private String referentialLocations;
 
     @Override

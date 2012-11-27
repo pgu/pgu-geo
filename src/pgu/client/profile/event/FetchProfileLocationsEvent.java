@@ -5,14 +5,14 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
-public class FetchCustomLocationsEvent extends GwtEvent<FetchCustomLocationsEvent.Handler> {
+public class FetchProfileLocationsEvent extends GwtEvent<FetchProfileLocationsEvent.Handler> {
 
-    public interface HasFetchCustomLocationsHandlers extends HasHandlers {
-        HandlerRegistration addFetchCustomLocationsHandler(FetchCustomLocationsEvent.Handler handler);
+    public interface HasFetchProfileLocationsHandlers extends HasHandlers {
+        HandlerRegistration addFetchProfileLocationsHandler(FetchProfileLocationsEvent.Handler handler);
     }
 
     public interface Handler extends EventHandler {
-        void onFetchCustomLocations(FetchCustomLocationsEvent event);
+        void onFetchProfileLocations(FetchProfileLocationsEvent event);
     }
 
     public static final Type<Handler> TYPE = new Type<Handler>();
@@ -24,7 +24,7 @@ public class FetchCustomLocationsEvent extends GwtEvent<FetchCustomLocationsEven
 
     @Override
     protected void dispatch(final Handler handler) {
-        handler.onFetchCustomLocations(this);
+        handler.onFetchProfileLocations(this);
     }
 
 }

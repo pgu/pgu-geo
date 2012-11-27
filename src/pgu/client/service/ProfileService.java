@@ -9,7 +9,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("profile")
 public interface ProfileService extends RemoteService {
 
-    ProfileLocations fetchCustomLocations(String profileId);
+    ProfileLocations fetchProfileLocations(String profileId);
 
     PublicPreferences fetchPublicPreferences(String profileId);
 
