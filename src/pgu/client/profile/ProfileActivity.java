@@ -467,7 +467,8 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
         profileService.savePublicProfile( //
                 ctx.getProfileId(), //
-                jsonPublicProfile, new AsyncCallbackApp<Void>(eventBus) {
+                jsonPublicProfile, //
+                new AsyncCallbackApp<Void>(eventBus) {
 
                     @Override
                     public void onSuccess(final Void result) {

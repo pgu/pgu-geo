@@ -530,6 +530,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
         if (!u.isVoid(locationName)) {
             // TODO PGU Nov 27, 2012 continue review
+            // TODO PGU Nov 27, 2012 continue review
+            // TODO PGU Nov 27, 2012 continue review
+            // TODO PGU Nov 27, 2012 continue review
+            // TODO PGU Nov 27, 2012 continue review
             locationsHelper.addCurrentLocationToCache(locationName);
         }
 
