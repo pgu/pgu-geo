@@ -1,5 +1,7 @@
 package pgu.client.profile.ui;
 
+import pgu.client.app.utils.MarkdownHelper;
+import pgu.client.app.utils.ProfileItemsHelper;
 import pgu.shared.utils.ItemType;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -7,6 +9,8 @@ import com.google.gwt.core.client.JavaScriptObject;
 public class ProfileViewTables {
 
     private final ProfileViewDates viewDates = new ProfileViewDates();
+    private final ProfileItemsHelper profileItems = new ProfileItemsHelper();
+    private final MarkdownHelper markdown = new MarkdownHelper();
 
     public native void initCaches() /*-{
         $wnd.pgu_geo.cache_location2anchorIds = {};
@@ -57,16 +61,23 @@ public class ProfileViewTables {
 
     }-*/;
 
-    // TODO PGU Nov 28, 2012 extract methods
+    private boolean isEdu(final String type) {
+        return profileItems.isEdu(type);
+    }
+
+    private boolean isXp(final String type) {
+        return profileItems.isXp(type);
+    }
+
     private native String createTableHead(final String type) /*-{
         var title = '';
 
-        if (@pgu.client.app.utils.ProfileItemsUtils::isEdu(Ljava/lang/String;)
-            (type)) {
+        if (this.@pgu.client.profile.ui.ProfileViewTables::isEdu(Ljava/lang/String;)
+                 (type)) {
             title = 'Education';
 
-        } else if (@pgu.client.app.utils.ProfileItemsUtils::isXp(Ljava/lang/String;)
-                   (type)) {
+        } else if (this.@pgu.client.profile.ui.ProfileViewTables::isXp(Ljava/lang/String;)
+                        (type)) {
             title = 'Position';
 
         }
@@ -127,7 +138,18 @@ public class ProfileViewTables {
                 + '';
     }-*/;
 
-    // TODO PGU Nov 28, 2012 extract methods
+    private void labelEduTitle(final JavaScriptObject item) {
+        profileItems.labelEduTitle(item);
+    }
+
+    private void labelXpTitle(final JavaScriptObject item) {
+        profileItems.labelXpTitle(item);
+    }
+
+    private String markdown(final String text) {
+        return markdown.markdown(text);
+    }
+
     public native JavaScriptObject toProfileItem(String type, JavaScriptObject item) /*-{
 
         var profile_item = {};
@@ -141,23 +163,25 @@ public class ProfileViewTables {
         profile_item.startD = this.@pgu.client.profile.ui.ProfileViewTables::getStartDate(Lcom/google/gwt/core/client/JavaScriptObject;)
                                    (item);
 
-        if (@pgu.client.app.utils.ProfileItemsUtils::isEdu(Ljava/lang/String;)(type)) {
+        if (this.@pgu.client.profile.ui.ProfileViewTables::isEdu(Ljava/lang/String;)
+                 (type)) {
 
-            profile_item.short_content = @pgu.client.app.utils.ProfileItemsUtils::labelEduTitle(Lcom/google/gwt/core/client/JavaScriptObject;)(item);
             profile_item.content_title = "Education";
-            profile_item.long_content = @pgu.client.app.utils.MarkdownUtils::markdown(Ljava/lang/String;)(item.notes);
+            profile_item.short_content = this.@pgu.client.profile.ui.ProfileViewTables::labelEduTitle(Lcom/google/gwt/core/client/JavaScriptObject;)
+                                              (item);
+            profile_item.long_content = this.@pgu.client.profile.ui.ProfileViewTables::markdown(Ljava/lang/String;)
+                                             (item.notes);
 
-        } else if (@pgu.client.app.utils.ProfileItemsUtils::isXp(Ljava/lang/String;)(type)) {
+        } else if (this.@pgu.client.profile.ui.ProfileViewTables::isXp(Ljava/lang/String;)
+                        (type)) {
 
-            profile_item.short_content = @pgu.client.app.utils.ProfileItemsUtils::labelXpTitle(Lcom/google/gwt/core/client/JavaScriptObject;)(item);
             profile_item.content_title = "Experience";
-            profile_item.long_content = @pgu.client.app.utils.MarkdownUtils::markdown(Ljava/lang/String;)(item.summary);
+            profile_item.short_content = this.@pgu.client.profile.ui.ProfileViewTables::labelXpTitle(Lcom/google/gwt/core/client/JavaScriptObject;)
+                                              (item);
+            profile_item.long_content = this.@pgu.client.profile.ui.ProfileViewTables::markdown(Ljava/lang/String;)
+                                             (item.summary);
 
         } else {
-
-            profile_item.short_content = "";
-            profile_item.content_title = "";
-            profile_item.long_content = "";
 
             throw {
                 name: 'Unknown type'
