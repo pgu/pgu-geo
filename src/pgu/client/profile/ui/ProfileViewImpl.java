@@ -491,37 +491,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         fireEvent(new SavePublicProfileEvent());
     }
 
-    private native void updateLocationsCacheFromPositions() /*-{
-
-        var
-            p = $wnd.pgu_geo.profile
-          , positions = p.positions || {}
-          , position_values = positions.values || []
-        ;
-
-        for (var i = 0, len = position_values.length; i < len; i++) {
-            var
-                position = position_values[i]
-              , experience_id = position.id
-              , location = position.location || {}
-              , location_names = location.name
-            ;
-
-            if (location_names) {
-                var locations = location_names.split(";");
-                for (var j = 0, lenL = locations.length; j < lenL; j++) {
-                    var
-                        raw_location = locations[j]
-                      , location_name = raw_location.trim()
-                    ;
-
-                    @pgu.client.app.utils.LocationsUtils::addExperienceLocationToCache(DLjava/lang/String;)(experience_id, location_name);
-                }
-            }
-        }
-
-    }-*/;
-
     @Override
     public void setProfileLocations(final ProfileLocations profileLocations) {
 
@@ -538,7 +507,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         // TODO PGU Nov 27, 2012 continue review
         // TODO PGU Nov 27, 2012 continue review
         // TODO PGU Nov 27, 2012 continue review
-        updateLocationsCacheFromPositions();
+        viewLocations.updateLocationsCacheFromPositions();
         viewTables.updateTablesWithLocations();
     }
 

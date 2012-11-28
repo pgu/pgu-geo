@@ -107,5 +107,47 @@ public class ProfileViewLocations {
         LocationsUtils.removeLocationFromItemInternal(cache_items, cache_referential, item_config_id, location_name);
     }
 
+    public native void updateLocationsCacheFromPositions() /*-{
+
+        var
+            p = $wnd.pgu_geo.profile
+          , positions = p.positions || {}
+          , position_values = positions.values || []
+        ;
+
+        for (var i = 0, len = position_values.length; i < len; i++) {
+            var
+                position = position_values[i]
+              , experience_id = position.id
+              , location = position.location || {}
+              , location_names = location.name
+            ;
+
+            if (location_names) {
+                var locations = location_names.split(";");
+                for (var j = 0, lenL = locations.length; j < lenL; j++) {
+                    var
+                        raw_location = locations[j]
+                      , location_name = raw_location.trim()
+                    ;
+
+                    this.@pgu.client.profile.ui.ProfileViewLocations::addExperienceLocationToCache(DLjava/lang/String;)
+                    (experience_id, location_name);
+                }
+            }
+        }
+
+    }-*/;
+
+    private void addExperienceLocationToCache(final double experience_id, final String location_name) {
+        // TODO PGU Nov 27, 2012 continue review
+        // TODO PGU Nov 27, 2012 continue review
+        // TODO PGU Nov 27, 2012 continue review
+        // TODO PGU Nov 27, 2012 continue review
+        // TODO PGU Nov 27, 2012 continue review
+
+        // TODO PGU Nov 28, 2012 export this method here
+        LocationsUtils.addExperienceLocationToCache(experience_id, location_name);
+    }
 
 }
