@@ -5,9 +5,7 @@ import java.util.HashMap;
 import pgu.client.app.event.LocationShowOnMapEvent;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.LocationsHelper;
-import pgu.client.app.utils.LocationsUtils;
 import pgu.client.app.utils.MarkdownUtils;
-import pgu.client.app.utils.MarkersUtils;
 import pgu.client.profile.ProfilePresenter;
 import pgu.client.profile.ProfileView;
 import pgu.client.profile.event.FetchProfileLocationsEvent;
@@ -93,6 +91,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     private final ProfileViewMap       viewMap    = new ProfileViewMap();
     private final ProfileViewToPublic  viewPublic = new ProfileViewToPublic();
     private final ProfileViewLocations viewLocations = new ProfileViewLocations();
+    private final ProfileViewMarkers   viewMarkers = new ProfileViewMarkers();
 
     private final LocationsHelper     locationsHelper = new LocationsHelper();
 
@@ -121,10 +120,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     @UiHandler("showAllBtn")
     public void clickOnShowAllBtn(final ClickEvent e) {
         // clear current markers
-        MarkersUtils.deleteSearchMarkers();
+        viewMarkers.deleteSearchMarkers();
 
         // show profile_item markers
-        LocationsUtils.showProfileItemsOnProfileMap();
+        viewLocations.showProfileItemsOnProfileMap();
     }
 
     @UiHandler("locationSearchBox")
@@ -162,7 +161,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     @Override
     public void showOnMap(final String locationName) {
         Window.scrollTo(0, 0);
-        MarkersUtils.createMarkerOnProfileMap(locationName);
+        viewMarkers.createMarkerOnProfileMap(locationName);
     }
 
     private final HashMap<String, String> loc2lat = new HashMap<String, String>();
@@ -188,7 +187,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     @UiHandler("clearSearchMarkersBtn")
     public void clickOnClearMarkersBtn(final ClickEvent e) {
-        MarkersUtils.deleteSearchMarkers();
+        viewMarkers.deleteSearchMarkers();
     }
 
     private static boolean isEduPublic = false;
@@ -370,11 +369,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     public void showPublicPreferences(final String publicPreferences) {
 
         final String prefs = u.isVoid(publicPreferences) ? "" : publicPreferences;
+        // TODO PGU to transform
         PublicProfileUtils.showPublicPreferences(this, prefs);
     }
 
     @Override
     public String getPublicProfile() {
+        // TODO PGU to transform
         return PublicProfileUtils.getPublicProfile();
     }
 
@@ -404,12 +405,14 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     public static void updateCachePublicPreferences() {
+        // TODO PGU to transform
         PublicProfileUtils.updatePublicProfileItem(PublicProfileItemType.experiences, isExpPublic);
         PublicProfileUtils.updatePublicProfileItem(PublicProfileItemType.educations, isEduPublic);
     }
 
     @Override
     public String getPublicPreferences() {
+        // TODO PGU to transform
         return PublicProfileUtils.json_publicPreferences();
     }
 

@@ -5,7 +5,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 public class MarkersUtils {
 
-    private static native JavaScriptObject searchMarkers() /*-{
+    public static native JavaScriptObject searchMarkers() /*-{
 
         if (!$wnd.pgu_geo.search_markers) {
             $wnd.pgu_geo.search_markers = [];
@@ -23,13 +23,6 @@ public class MarkersUtils {
         return $wnd.pgu_geo.movie_markers;
     }-*/;
 
-    public static native void deleteSearchMarkers() /*-{
-        var search_markers = @pgu.client.app.utils.MarkersUtils::searchMarkers()();
-
-        @pgu.client.app.utils.MarkersUtils::deleteMarkers(Lcom/google/gwt/core/client/JavaScriptObject;)( //
-        search_markers);
-    }-*/;
-
     public static native void deleteMovieMarkers() /*-{
         var movie_markers = @pgu.client.app.utils.MarkersUtils::movieMarkers()();
 
@@ -38,7 +31,7 @@ public class MarkersUtils {
     }-*/;
 
     // Deletes all markers in the array by removing references to them
-    private static native void deleteMarkers(JavaScriptObject markers) /*-{
+    public static native void deleteMarkers(JavaScriptObject markers) /*-{
 
         for (var i = 0; i < markers.length; i++) {
               markers[i].setMap(null);

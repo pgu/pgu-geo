@@ -1,6 +1,14 @@
 package pgu.client.profile.ui;
 
+import pgu.client.app.utils.JsonHelper;
+import pgu.client.app.utils.ProfileItemsHelper;
+
+import com.google.gwt.core.client.JavaScriptObject;
+
 public class ProfileViewToPublic {
+
+    private final ProfileItemsHelper profileItems = new ProfileItemsHelper();
+    private final JsonHelper json = new JsonHelper();
 
     public native String getJsonPublicProfile(
             String specialtiesHtml
@@ -49,10 +57,14 @@ public class ProfileViewToPublic {
               , type = item_config.type
             ;
 
-            if (@pgu.client.app.utils.ProfileItemsUtils::isEdu(Ljava/lang/String;)(type)) {
+            if (this.@pgu.client.profile.ui.ProfileViewToPublic::isEdu(Ljava/lang/String;)
+                     (type)) {
+
                 public_p.educations.push(item_config);
 
-            } else if (@pgu.client.app.utils.ProfileItemsUtils::isXp(Ljava/lang/String;)(type)) {
+            } else if (this.@pgu.client.profile.ui.ProfileViewToPublic::isXp(Ljava/lang/String;)
+                            (type)) {
+
                 public_p.positions.push(item_config);
 
             } else {
@@ -63,18 +75,33 @@ public class ProfileViewToPublic {
             }
         }
 
-        @pgu.client.app.utils.ProfileItemsUtils::sortProfileItemsByDateFromOldToNew(Lcom/google/gwt/core/client/JavaScriptObject;)
-        (public_p.educations);
+        this.@pgu.client.profile.ui.ProfileViewToPublic::sortProfileItemsByDateFromOldToNew(Lcom/google/gwt/core/client/JavaScriptObject;)
+             (public_p.educations);
 
-        @pgu.client.app.utils.ProfileItemsUtils::sortProfileItemsByDateFromOldToNew(Lcom/google/gwt/core/client/JavaScriptObject;)
-        (public_p.positions);
+        this.@pgu.client.profile.ui.ProfileViewToPublic::sortProfileItemsByDateFromOldToNew(Lcom/google/gwt/core/client/JavaScriptObject;)
+             (public_p.positions);
 
         // remember: item_configs do not contain locations
 
-        return @pgu.client.app.utils.JsonUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)
+        return this.@pgu.client.profile.ui.ProfileViewToPublic::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)
                (public_profile);
 
     }-*/;
 
+    private void sortProfileItemsByDateFromOldToNew(final JavaScriptObject profile_items) {
+        profileItems.sortProfileItemsByDateFromOldToNew(profile_items);
+    }
+
+    private boolean isEdu(final String type) {
+        return profileItems.isEdu(type);
+    }
+
+    private boolean isXp(final String type) {
+        return profileItems.isXp(type);
+    }
+
+    private String stringify(final JavaScriptObject jso) {
+        return json.stringify(jso);
+    }
 
 }

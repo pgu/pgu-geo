@@ -1,5 +1,6 @@
 package pgu.client.profile.ui;
 
+import pgu.client.app.utils.GoogleHelper;
 import pgu.client.app.utils.JsonHelper;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -7,6 +8,11 @@ import com.google.gwt.core.client.JavaScriptObject;
 public class ProfileViewMap {
 
     private final JsonHelper json = new JsonHelper();
+    private final GoogleHelper google = new GoogleHelper();
+
+    private JavaScriptObject google() {
+        return google.google();
+    }
 
     public native void initProfileMap() /*-{
 
@@ -14,9 +20,10 @@ public class ProfileViewMap {
 
         $wnd.console.log('initProfileMap');
 
-        var
-            google = @pgu.client.app.utils.GoogleUtils::google()()
-          , mapOptions = {
+        var google = this.@pgu.client.profile.ui.ProfileViewMap::google()
+                          ();
+
+        var mapOptions = {
               zoom: 2,
               center: new google.maps.LatLng(0, 0),
               mapTypeId: google.maps.MapTypeId.ROADMAP

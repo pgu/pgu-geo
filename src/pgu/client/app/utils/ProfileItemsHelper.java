@@ -14,36 +14,9 @@ public class ProfileItemsHelper {
         return ItemType.experience.equals(itemType);
     }
 
-    public native String labelEduTitle(JavaScriptObject education) /*-{
-        // Universität Rostock<br/>International Trade
-        var title = [];
+    public native void sortProfileItemsByDateFromOldToNew(JavaScriptObject profile_items) /*-{
 
-        if (education.schoolName) {
-            title.push(education.schoolName);
-        }
-
-        if (education.fieldOfStudy) {
-            title.push(education.fieldOfStudy);
-        }
-
-        return title.join('<br/>');
+        profile_items.sort(function(a,b) { return a.startD.getTime() - b.startD.getTime() } );
     }-*/;
-
-    public native String labelXpTitle(JavaScriptObject position) /*-{
-        //  SFEIR<br/>Senior Web Java J2EE Engineer Developer
-        var title = [];
-
-        if (position.company && position.company.name) {
-
-            title.push(position.company.name);
-        }
-
-        if (position.title) {
-            title.push(position.title);
-        }
-
-        return title.join('<br/>');
-    }-*/;
-
 
 }

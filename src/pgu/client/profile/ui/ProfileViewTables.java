@@ -9,6 +9,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 public class ProfileViewTables {
 
     private final ProfileViewDates viewDates = new ProfileViewDates();
+    private final ProfileViewItems viewItems = new ProfileViewItems();
     private final ProfileItemsHelper profileItems = new ProfileItemsHelper();
     private final MarkdownHelper markdown = new MarkdownHelper();
 
@@ -139,11 +140,11 @@ public class ProfileViewTables {
     }-*/;
 
     private void labelEduTitle(final JavaScriptObject item) {
-        profileItems.labelEduTitle(item);
+        viewItems.labelEduTitle(item);
     }
 
     private void labelXpTitle(final JavaScriptObject item) {
-        profileItems.labelXpTitle(item);
+        viewItems.labelXpTitle(item);
     }
 
     private String markdown(final String text) {

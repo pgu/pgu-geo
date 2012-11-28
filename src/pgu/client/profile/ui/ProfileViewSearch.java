@@ -1,18 +1,46 @@
 package pgu.client.profile.ui;
 
+import pgu.client.app.utils.GeocoderHelper;
+import pgu.client.app.utils.GoogleHelper;
 import pgu.client.profile.ProfileActivity;
 
+import com.google.gwt.core.client.JavaScriptObject;
+
 public class ProfileViewSearch {
+
+    private final GeocoderHelper geocoder = new GeocoderHelper();
+    private final GoogleHelper google = new GoogleHelper();
+    private final ProfileViewMap viewMap = new ProfileViewMap();
+    private final ProfileViewMarkers markers = new ProfileViewMarkers();
+
+    private JavaScriptObject geocoder() {
+        return geocoder.geocoder();
+    }
+
+    private JavaScriptObject google() {
+        return google.google();
+    }
+
+    private JavaScriptObject profileMap() {
+        return viewMap.profileMap();
+    }
+
+    private void createMarkerOnProfileMap(final String location_name, final String lat, final String lng) {
+        markers.createMarkerOnProfileMap(location_name, lat, lng);
+    }
 
     public native void searchLocationAndAddMarker(ProfileViewImpl view, String location_name) /*-{
 
         $wnd.console.log('searchLocationAndAddMarker');
 
-        var
-          geocoder = @pgu.client.app.utils.GeocoderUtils::geocoder()()
-        , google = @pgu.client.app.utils.GoogleUtils::google()()
-        , map = @pgu.client.profile.ui.ProfileUtils::profileMap()()
-        ;
+        var geocoder = this.@pgu.client.profile.ui.ProfileViewSearch::geocoder()
+                            ();
+
+        var google = this.@pgu.client.profile.ui.ProfileViewSearch::google()
+                          ();
+
+        var map = this.@pgu.client.profile.ui.ProfileViewSearch::profileMap()
+                       ();
 
         geocoder
                 .geocode(
@@ -23,21 +51,22 @@ public class ProfileViewSearch {
 
                             if (status != google.maps.GeocoderStatus.OK) {
                                 var msg = "Geocode was not successful for the following reason: " + status;
-                                view.@pgu.client.profile.ui.ProfileViewImpl::showNotificationWarning(Ljava/lang/String;)( //
-                                msg);
+                                view.@pgu.client.profile.ui.ProfileViewImpl::showNotificationWarning(Ljava/lang/String;)
+                                     (msg);
                                 return;
                             }
 
-                            var loc = results[0].geometry.location
-                            , lat = '' + loc.lat()
-                            , lng = '' + loc.lng()
+                            var
+                                loc = results[0].geometry.location
+                              , lat = '' + loc.lat()
+                              , lng = '' + loc.lng()
                             ;
 
-                            @pgu.client.app.utils.MarkersUtils::createMarkerOnProfileMap(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)( //
-                            location_name,lat,lng);
+                            this.@pgu.client.profile.ui.ProfileViewSearch::createMarkerOnProfileMap(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)
+                                 (location_name,lat,lng);
 
-                            view.@pgu.client.profile.ui.ProfileViewImpl::cacheLastSearchedLocation(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)( //
-                            location_name,lat,lng);
+                            view.@pgu.client.profile.ui.ProfileViewImpl::cacheLastSearchedLocation(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)
+                                 (location_name,lat,lng);
                         });
     }-*/;
 

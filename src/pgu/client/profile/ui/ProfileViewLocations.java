@@ -2,13 +2,12 @@ package pgu.client.profile.ui;
 
 import pgu.client.app.utils.GeocoderHelper;
 import pgu.client.app.utils.LocationsUtils;
-import pgu.client.app.utils.MarkersHelper;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
 public class ProfileViewLocations {
 
-    private final MarkersHelper markers = new MarkersHelper();
+    private final ProfileViewMarkers viewMarkers = new ProfileViewMarkers();
     private final GeocoderHelper geocoder = new GeocoderHelper();
 
     public native void initCaches( //
@@ -96,7 +95,7 @@ public class ProfileViewLocations {
     }-*/;
 
     private void createMarkerOnProfileMap(final String location_name) {
-        markers.createMarkerOnProfileMap(location_name);
+        viewMarkers.createMarkerOnProfileMap(location_name);
     }
 
     private void searchGeopoint(final String location_name, final JavaScriptObject callback) {
@@ -166,5 +165,30 @@ public class ProfileViewLocations {
 
         }
     }-*/;
+
+    public native void showProfileItemsOnProfileMap() /*-{
+        var
+            cache_referential = $wnd.pgu_geo.cache_referential
+          , cache_items = $wnd.pgu_geo.cache_items
+        ;
+
+        for (var key in cache_items) {
+            if ('__gwt_ObjectId' === key) {
+                continue;
+            }
+            if (cache_items.hasOwnProperty(key)) {
+
+                var locations = cache_items[key];
+                for ( var j = 0, len = locations.length; j < len; j++) {
+
+                    var location = locations[j];
+                    this.@pgu.client.profile.ui.ProfileViewLocations::createMarkerOnProfileMap(Ljava/lang/String;)
+                         (location);
+                }
+            }
+        }
+
+    }-*/;
+
 
 }

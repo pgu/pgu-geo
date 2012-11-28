@@ -109,22 +109,4 @@ public class PublicProfileUtils {
         base_public_profile.positions.push(profile_item);
     }-*/;
 
-    public static native void sortProfileItems(String type) /*-{
-
-        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
-
-        if (@pgu.client.app.utils.ProfileItemsUtils::isEdu(Ljava/lang/String;)(type)) {
-            if (base_public_profile.educations) {
-                @pgu.client.app.utils.ProfileItemsUtils::sortProfileItemsByDateFromOldToNew(Lcom/google/gwt/core/client/JavaScriptObject;)(base_public_profile.educations);
-            }
-
-        } else if (@pgu.client.app.utils.ProfileItemsUtils::isXp(Ljava/lang/String;)(type)) {
-            if (base_public_profile.positions) {
-                @pgu.client.app.utils.ProfileItemsUtils::sortProfileItemsByDateFromOldToNew(Lcom/google/gwt/core/client/JavaScriptObject;)(base_public_profile.positions);
-            }
-
-        }
-
-    }-*/;
-
 }
