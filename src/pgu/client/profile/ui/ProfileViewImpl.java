@@ -113,7 +113,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     @UiHandler("mapPreferencesBtn")
     public void clickOnMapPreferences(final ClickEvent e) {
 
-        final String mapPreferences = ProfileUtils.getCurrentMapPreferences();
+        final String mapPreferences = viewMap.getCurrentMapPreferences();
 
         fireEvent(new SaveMapPreferencesEvent(mapPreferences));
     }
@@ -503,11 +503,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         }
 
         viewLocations.updateLocationsCacheFromPositions();
-        // TODO PGU Nov 27, 2012 continue review
-        // TODO PGU Nov 27, 2012 continue review
-        // TODO PGU Nov 27, 2012 continue review
-        // TODO PGU Nov 27, 2012 continue review
-        // TODO PGU Nov 27, 2012 continue review
         viewTables.updateTablesWithLocations();
     }
 
