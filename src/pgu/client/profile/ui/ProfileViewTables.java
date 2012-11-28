@@ -194,8 +194,7 @@ public class ProfileViewTables {
 
     private native String createListLocations(String item_config_id) /*-{
 
-        var location_names = this.@pgu.client.profile.ui.ProfileViewTables::getLocationNames(Ljava/lang/String;)
-                                  (item_config_id);
+        var location_names = $wnd.pgu_geo.cache_items[item_config_id] || [];
 
         var
             list = []
@@ -229,10 +228,6 @@ public class ProfileViewTables {
 
         return list.join('');
     }-*/;
-
-    private JavaScriptObject getLocationNames(final String item_config_id) {
-        return locationsHelper.getLocationNames(item_config_id);
-    }
 
     private String labelDates(final JavaScriptObject item) {
         return viewDates.labelDates(item);
