@@ -88,10 +88,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     private String              lastSearchItemLocation      = null;
     private boolean             isMapDisplayed = true;
-    private final ProfileViewSearch   viewSearch = new ProfileViewSearch();
-    private final ProfileViewTables   viewTables = new ProfileViewTables();
-    private final ProfileViewMap      viewMap    = new ProfileViewMap();
-    private final ProfileViewToPublic viewPublic = new ProfileViewToPublic();
+    private final ProfileViewSearch    viewSearch = new ProfileViewSearch();
+    private final ProfileViewTables    viewTables = new ProfileViewTables();
+    private final ProfileViewMap       viewMap    = new ProfileViewMap();
+    private final ProfileViewToPublic  viewPublic = new ProfileViewToPublic();
+    private final ProfileViewLocations viewLocations = new ProfileViewLocations();
 
     private final LocationsHelper     locationsHelper = new LocationsHelper();
 
@@ -524,19 +525,19 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     @Override
     public void setProfileLocations(final ProfileLocations profileLocations) {
 
-        locationsHelper.initCaches(profileLocations.getItems2locations(), profileLocations.getReferentialLocations());
+        viewLocations.initCaches(profileLocations.getItems2locations(), profileLocations.getReferentialLocations());
 
         final String locationName = locContainer.getText();
 
         if (!u.isVoid(locationName)) {
-            // TODO PGU Nov 27, 2012 continue review
-            // TODO PGU Nov 27, 2012 continue review
-            // TODO PGU Nov 27, 2012 continue review
-            // TODO PGU Nov 27, 2012 continue review
-            // TODO PGU Nov 27, 2012 continue review
-            locationsHelper.addCurrentLocationToCache(locationName);
+            viewLocations.addCurrentLocationToCache(locationName);
         }
 
+        // TODO PGU Nov 27, 2012 continue review
+        // TODO PGU Nov 27, 2012 continue review
+        // TODO PGU Nov 27, 2012 continue review
+        // TODO PGU Nov 27, 2012 continue review
+        // TODO PGU Nov 27, 2012 continue review
         updateLocationsCacheFromPositions();
         viewTables.updateTablesWithLocations();
     }

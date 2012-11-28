@@ -188,7 +188,7 @@ public class LocationsUtils {
 
     }-*/;
 
-    static native void removeLocationFromItemInternal( //
+    public static native void removeLocationFromItemInternal( //
             JavaScriptObject cache_items //
             , JavaScriptObject cache_referential //
             , String item_config_id //
