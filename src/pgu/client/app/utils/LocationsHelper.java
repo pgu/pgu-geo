@@ -63,7 +63,7 @@ public class LocationsHelper {
                 var google = @pgu.client.app.utils.GoogleUtils::google()
                 ();
 
-                if (status == google.maps.GeocoderStatus.OK) {
+                if (status === google.maps.GeocoderStatus.OK) {
 
                     @pgu.client.app.utils.MarkersUtils::createMarkerOnProfileMap(Ljava/lang/String;)
                     (location_name);
