@@ -1,13 +1,11 @@
 package pgu.client.profile.ui;
 
-import pgu.client.app.utils.LocationsHelper;
 import pgu.shared.utils.ItemType;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
 public class ProfileViewTables {
 
-    private final LocationsHelper locationsHelper = new LocationsHelper();
     private final ProfileViewDates viewDates = new ProfileViewDates();
 
     public native void initCaches() /*-{
