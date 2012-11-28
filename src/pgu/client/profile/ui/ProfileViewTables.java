@@ -1,10 +1,14 @@
 package pgu.client.profile.ui;
 
+import pgu.client.app.utils.LocationsHelper;
 import pgu.shared.utils.ItemType;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
 public class ProfileViewTables {
+
+    private final LocationsHelper locationsHelper = new LocationsHelper();
+    private final ProfileViewDates viewDates = new ProfileViewDates();
 
     public native void initCaches() /*-{
         $wnd.pgu_geo.cache_location2anchorIds = {};
@@ -55,6 +59,7 @@ public class ProfileViewTables {
 
     }-*/;
 
+    // TODO PGU Nov 28, 2012 extract methods
     private native String createTableHead(final String type) /*-{
         var title = '';
 
@@ -94,7 +99,7 @@ public class ProfileViewTables {
     private native String createTableRow(final String type, final JavaScriptObject item) /*-{
 
         var item_config = this.@pgu.client.profile.ui.ProfileViewTables::toProfileItem(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;)
-                          (type,item);
+                               (type,item);
         $wnd.pgu_geo.item_configs.push(item_config);
 
         return ''
@@ -124,6 +129,7 @@ public class ProfileViewTables {
                 + '';
     }-*/;
 
+    // TODO PGU Nov 28, 2012 extract methods
     public native JavaScriptObject toProfileItem(String type, JavaScriptObject item) /*-{
 
         var profile_item = {};
@@ -131,8 +137,11 @@ public class ProfileViewTables {
         profile_item.id = type + '_' + item.id;
         profile_item.type = type;
 
-        profile_item.dates = @pgu.client.profile.ui.ProfileDateUtils::labelDates(Lcom/google/gwt/core/client/JavaScriptObject;)(item);
-        profile_item.startD = @pgu.client.profile.ui.ProfileDateUtils::getStartDate(Lcom/google/gwt/core/client/JavaScriptObject;)(item);
+        profile_item.dates = this.@pgu.client.profile.ui.ProfileViewTables::labelDates(Lcom/google/gwt/core/client/JavaScriptObject;)
+                                  (item);
+
+        profile_item.startD = this.@pgu.client.profile.ui.ProfileViewTables::getStartDate(Lcom/google/gwt/core/client/JavaScriptObject;)
+                                   (item);
 
         if (@pgu.client.app.utils.ProfileItemsUtils::isEdu(Ljava/lang/String;)(type)) {
 
@@ -184,10 +193,13 @@ public class ProfileViewTables {
 
 
     private native String createListLocations(String item_config_id) /*-{
+
+        var location_names = this.@pgu.client.profile.ui.ProfileViewTables::getLocationNames(Ljava/lang/String;)
+                                  (item_config_id);
+
         var
-          location_names = @pgu.client.app.utils.LocationsUtils::getLocationNames(Ljava/lang/String;)(item_config_id)
-        , list = []
-        , cache_anchor = $wnd.pgu_geo.cache_location2anchorIds
+            list = []
+          , cache_anchor = $wnd.pgu_geo.cache_location2anchorIds
         ;
 
         for (var i=0, len=location_names.length; i <len; i++) {
@@ -217,5 +229,17 @@ public class ProfileViewTables {
 
         return list.join('');
     }-*/;
+
+    private JavaScriptObject getLocationNames(final String item_config_id) {
+        return locationsHelper.getLocationNames(item_config_id);
+    }
+
+    private String labelDates(final JavaScriptObject item) {
+        return viewDates.labelDates(item);
+    }
+
+    private JavaScriptObject getStartDate(final JavaScriptObject item) {
+        return viewDates.getStartDate(item);
+    }
 
 }

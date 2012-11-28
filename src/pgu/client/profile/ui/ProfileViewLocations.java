@@ -50,7 +50,7 @@ public class ProfileViewLocations {
                 if (curr_location !== location_name) {
 
                     this.@pgu.client.profile.ui.ProfileViewLocations::removeLocationFromItem(Ljava/lang/String;Ljava/lang/String;)
-                    (key,location_name);
+                         (key, location_name);
 
                     var new_location = [];
                     new_location.push(location_name);
@@ -75,12 +75,12 @@ public class ProfileViewLocations {
                 if (status === google.maps.GeocoderStatus.OK) {
 
                     this.@pgu.client.profile.ui.ProfileViewLocations::createMarkerOnProfileMap(Ljava/lang/String;)
-                    (location_name);
+                         (location_name);
                 }
             };
 
             this.@pgu.client.profile.ui.ProfileViewLocations::searchGeopoint(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;)
-            (location_name,callback);
+                 (location_name, callback);
 
         }
     }-*/;
@@ -92,7 +92,7 @@ public class ProfileViewLocations {
         ;
 
         this.@pgu.client.profile.ui.ProfileViewLocations::removeLocationFromItemInternal(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;)
-        (cache_items, cache_referential, item_config_id, location_name);
+             (cache_items, cache_referential, item_config_id, location_name);
     }-*/;
 
     private void createMarkerOnProfileMap(final String location_name) {
@@ -132,22 +132,39 @@ public class ProfileViewLocations {
                     ;
 
                     this.@pgu.client.profile.ui.ProfileViewLocations::addExperienceLocationToCache(DLjava/lang/String;)
-                    (experience_id, location_name);
+                         (experience_id, location_name);
                 }
             }
         }
 
     }-*/;
 
-    private void addExperienceLocationToCache(final double experience_id, final String location_name) {
-        // TODO PGU Nov 27, 2012 continue review
-        // TODO PGU Nov 27, 2012 continue review
-        // TODO PGU Nov 27, 2012 continue review
-        // TODO PGU Nov 27, 2012 continue review
-        // TODO PGU Nov 27, 2012 continue review
+    private native void addExperienceLocationToCache(double experience_id, String location_name) /*-{
+        if (location_name) {
+            var
+                cache = $wnd.pgu_geo.cache_items
+              , key = 'experience_' + experience_id
+              , locations = cache[key] || []
+              , has_location = false
+            ;
 
-        // TODO PGU Nov 28, 2012 export this method here
-        LocationsUtils.addExperienceLocationToCache(experience_id, location_name);
-    }
+            for ( var i = 0, len = locations.length; i < len; i++) {
+                var location = locations[i];
+                if (location === location_name) {
+                    has_location = true;
+                    break;
+                }
+            }
+
+            if (!has_location) {
+                locations.push(location_name);
+                cache[key] = locations;
+            }
+
+            this.@pgu.client.profile.ui.ProfileViewLocations::searchGeopoint(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;)
+                 (location_name);
+
+        }
+    }-*/;
 
 }

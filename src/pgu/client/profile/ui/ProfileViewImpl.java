@@ -502,12 +502,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             viewLocations.addCurrentLocationToCache(locationName);
         }
 
-        // TODO PGU Nov 27, 2012 continue review
-        // TODO PGU Nov 27, 2012 continue review
-        // TODO PGU Nov 27, 2012 continue review
-        // TODO PGU Nov 27, 2012 continue review
-        // TODO PGU Nov 27, 2012 continue review
         viewLocations.updateLocationsCacheFromPositions();
+        // TODO PGU Nov 27, 2012 continue review
+        // TODO PGU Nov 27, 2012 continue review
+        // TODO PGU Nov 27, 2012 continue review
+        // TODO PGU Nov 27, 2012 continue review
+        // TODO PGU Nov 27, 2012 continue review
         viewTables.updateTablesWithLocations();
     }
 
