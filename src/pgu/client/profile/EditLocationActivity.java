@@ -213,7 +213,7 @@ public class EditLocationActivity {
                 view.disableEditionForm();
 
                 LocationsUtils.copyLocationCaches();
-                LocationsUtils.removeLocationFromCopyCaches(itemConfigId, locationName);
+                locationHelper.removeLocationFromCopyCaches(itemConfigId, locationName);
 
                 linkedinService.saveLocations( //
                         //

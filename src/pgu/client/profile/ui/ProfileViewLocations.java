@@ -1,7 +1,8 @@
 package pgu.client.profile.ui;
 
 import pgu.client.app.utils.GeocoderHelper;
-import pgu.client.app.utils.LocationsUtils;
+import pgu.client.app.utils.GoogleHelper;
+import pgu.client.app.utils.LocationsHelper;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
@@ -9,6 +10,12 @@ public class ProfileViewLocations {
 
     private final ProfileViewMarkers viewMarkers = new ProfileViewMarkers();
     private final GeocoderHelper geocoder = new GeocoderHelper();
+    private final GoogleHelper google = new GoogleHelper();
+    private final LocationsHelper locations = new LocationsHelper();
+
+    private JavaScriptObject google() {
+        return google.google();
+    }
 
     public native void initCaches( //
             final String items2locations //
@@ -68,8 +75,8 @@ public class ProfileViewLocations {
 
                 $wnd.console.log('addCurrentLocationToCache');
 
-                var google = @pgu.client.app.utils.GoogleUtils::google()
-                ();
+                var google = this.@pgu.client.profile.ui.ProfileViewLocations::google()
+                                  ();
 
                 if (status === google.maps.GeocoderStatus.OK) {
 
@@ -90,7 +97,7 @@ public class ProfileViewLocations {
           , cache_referential = $wnd.pgu_geo.cache_referential
         ;
 
-        this.@pgu.client.profile.ui.ProfileViewLocations::removeLocationFromItemInternal(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;)
+        this.@pgu.client.profile.ui.ProfileViewLocations::removeLocationFromItem(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;)
              (cache_items, cache_referential, item_config_id, location_name);
     }-*/;
 
@@ -102,8 +109,8 @@ public class ProfileViewLocations {
         geocoder.searchGeopoint(location_name, callback);
     }
 
-    private void removeLocationFromItemInternal(final JavaScriptObject cache_items, final JavaScriptObject cache_referential, final String item_config_id, final String location_name) {
-        LocationsUtils.removeLocationFromItemInternal(cache_items, cache_referential, item_config_id, location_name);
+    private void removeLocationFromItem(final JavaScriptObject cache_items, final JavaScriptObject cache_referential, final String item_config_id, final String location_name) {
+        locations.removeLocationFromItem(cache_items, cache_referential, item_config_id, location_name);
     }
 
     public native void updateLocationsCacheFromPositions() /*-{
@@ -189,6 +196,5 @@ public class ProfileViewLocations {
         }
 
     }-*/;
-
 
 }

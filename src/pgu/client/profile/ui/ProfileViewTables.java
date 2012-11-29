@@ -9,12 +9,14 @@ import com.google.gwt.core.client.JavaScriptObject;
 public class ProfileViewTables {
 
     private final ProfileViewDates viewDates = new ProfileViewDates();
-    private final ProfileViewItems viewItems = new ProfileViewItems();
     private final ProfileItemsHelper profileItems = new ProfileItemsHelper();
     private final MarkdownHelper markdown = new MarkdownHelper();
 
-    public native void initCaches() /*-{
+    public native void initCacheAnchor() /*-{
         $wnd.pgu_geo.cache_location2anchorIds = {};
+    }-*/;
+
+    public native void initCacheItemConfigs() /*-{
         $wnd.pgu_geo.item_configs = [];
     }-*/;
 
@@ -139,14 +141,6 @@ public class ProfileViewTables {
                 + '';
     }-*/;
 
-    private void labelEduTitle(final JavaScriptObject item) {
-        viewItems.labelEduTitle(item);
-    }
-
-    private void labelXpTitle(final JavaScriptObject item) {
-        viewItems.labelXpTitle(item);
-    }
-
     private String markdown(final String text) {
         return markdown.markdown(text);
     }
@@ -259,5 +253,36 @@ public class ProfileViewTables {
     private JavaScriptObject getStartDate(final JavaScriptObject item) {
         return viewDates.getStartDate(item);
     }
+
+    private native String labelEduTitle(JavaScriptObject education) /*-{
+        // Universität Rostock<br/>International Trade
+        var title = [];
+
+        if (education.schoolName) {
+            title.push(education.schoolName);
+        }
+
+        if (education.fieldOfStudy) {
+            title.push(education.fieldOfStudy);
+        }
+
+        return title.join('<br/>');
+    }-*/;
+
+    private native String labelXpTitle(JavaScriptObject position) /*-{
+        //  SFEIR<br/>Senior Web Java J2EE Engineer Developer
+        var title = [];
+
+        if (position.company && position.company.name) {
+
+            title.push(position.company.name);
+        }
+
+        if (position.title) {
+            title.push(position.title);
+        }
+
+        return title.join('<br/>');
+    }-*/;
 
 }

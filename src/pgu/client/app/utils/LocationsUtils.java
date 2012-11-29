@@ -47,15 +47,6 @@ public class LocationsUtils {
 
     }-*/;
 
-    public static native void removeLocationFromCopyCaches(String item_config_id, String location_name) /*-{
-        var
-            cache_items = $wnd.pgu_geo.copy_cache_items
-          , cache_referential = $wnd.pgu_geo.copy_cache_referential
-        ;
-
-        @pgu.client.app.utils.LocationsUtils::removeLocationFromItemInternal(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;)(cache_items, cache_referential, item_config_id, location_name);
-    }-*/;
-
     public static native void addExperienceLocationToCache(double experience_id, String location_name) /*-{
         if (location_name) {
             var
@@ -161,53 +152,6 @@ public class LocationsUtils {
             locations = [];
             locations.push(location_name);
             cache_items[item_config_id] = locations;
-        }
-
-    }-*/;
-
-    public static native void removeLocationFromItemInternal( //
-            JavaScriptObject cache_items //
-            , JavaScriptObject cache_referential //
-            , String item_config_id //
-            , String location_name) /*-{
-
-
-        var location_names = cache_items[item_config_id];
-        var updated_locations = [];
-
-        for ( var i = 0, len = location_names.length; i < len; i++) {
-            var name = location_names[i];
-
-            if (location_name !== name) {
-                updated_locations.push(name);
-            }
-        }
-
-        cache_items[item_config_id] = updated_locations;
-
-        var has_at_least_once = false;
-
-        mainloop: for (var key in cache_items) {
-            if ('__gwt_ObjectId' === key) {
-                continue;
-            }
-            if (cache_items.hasOwnProperty(key)) {
-
-                var locations = cache_items[key];
-                for ( var j = 0, len = locations.length; j < len; j++) {
-
-                    var location = locations[j];
-                    if (location === location_name) {
-
-                        has_at_least_once = true;
-                        break mainloop;
-                    }
-                }
-            }
-        }
-
-        if (!has_at_least_once) {
-            delete cache_referential[location_name];
         }
 
     }-*/;

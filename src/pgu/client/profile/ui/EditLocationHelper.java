@@ -1,6 +1,12 @@
 package pgu.client.profile.ui;
 
+import pgu.client.app.utils.LocationsHelper;
+
+import com.google.gwt.core.client.JavaScriptObject;
+
 public class EditLocationHelper {
+
+    private final LocationsHelper locations = new LocationsHelper();
 
     public native boolean isLocationFromLinkedin(final String item_config_id, final String location_name) /*-{
 
@@ -51,5 +57,21 @@ public class EditLocationHelper {
         view.@pgu.client.profile.ui.EditLocationViewImpl::showLatitudeAndLongitude(Ljava/lang/String;Ljava/lang/String;)(lat,lng);
 
     }-*/;
+
+    public native void removeLocationFromCopyCaches(String item_config_id, String location_name) /*-{
+        var
+            cache_items = $wnd.pgu_geo.copy_cache_items
+          , cache_referential = $wnd.pgu_geo.copy_cache_referential
+        ;
+
+        this.@pgu.client.profile.ui.EditLocationHelper::removeLocationFromItem(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;)
+             (cache_items, cache_referential, item_config_id, location_name);
+
+    }-*/;
+
+    private void removeLocationFromItem(final JavaScriptObject cache_items, final JavaScriptObject cache_referential, final String item_config_id, final String location_name) {
+        locations.removeLocationFromItem(cache_items, cache_referential, item_config_id, location_name);
+    }
+
 
 }

@@ -317,33 +317,34 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         ;
 
         this.@pgu.client.profile.ui.ProfileViewImpl::setName(Ljava/lang/String;Ljava/lang/String;)
-        (first_name, last_name);
+             (first_name, last_name);
 
         this.@pgu.client.profile.ui.ProfileViewImpl::setHeadline(Ljava/lang/String;)
-        (headline);
+             (headline);
 
         this.@pgu.client.profile.ui.ProfileViewImpl::setCurrentLocation(Ljava/lang/String;)
-        (current_location_name);
+             (current_location_name);
 
         this.@pgu.client.profile.ui.ProfileViewImpl::setSpecialties(Ljava/lang/String;)
-        (specialties);
+             (specialties);
 
         this.@pgu.client.profile.ui.ProfileViewImpl::setSummary(Ljava/lang/String;)
-        (summary);
+             (summary);
 
         this.@pgu.client.profile.ui.ProfileViewImpl::setLanguages(Lcom/google/gwt/core/client/JavaScriptObject;)
-        (language_values);
+             (language_values);
 
         this.@pgu.client.profile.ui.ProfileViewImpl::setExperienceTable(Lcom/google/gwt/core/client/JavaScriptObject;)
-		(positions);
+		     (positions);
 
 		this.@pgu.client.profile.ui.ProfileViewImpl::setEducationTable(Lcom/google/gwt/core/client/JavaScriptObject;)
-		(educations);
+		     (educations);
 
 		// TODO display "wish" locations
 		// TODO display "holidays" locations
 
-        this.@pgu.client.profile.ui.ProfileViewImpl::setProfileAfter()();
+        this.@pgu.client.profile.ui.ProfileViewImpl::setProfileAfter()
+             ();
 
     }-*/;
 
@@ -481,7 +482,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         isProfileSetInView = true;
 
         viewMap.initProfileMap();
-        viewTables.initCaches();
+        viewTables.initCacheAnchor();
+        viewTables.initCacheItemConfigs();
 
         setProfile();
     }
