@@ -4,10 +4,12 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 public class PublicProfileUtils {
 
+    @Deprecated
     private static native JavaScriptObject basePublicProfile() /*-{
         return $wnd.pgu_geo.base_public_profile;
     }-*/;
 
+    @Deprecated
     public static native void updatePublicProfileItem(String public_profile_item, boolean is_public) /*-{
         $wnd.pgu_geo.public_prefs[public_profile_item] = is_public;
     }-*/;
@@ -51,6 +53,7 @@ public class PublicProfileUtils {
   		            copy_profile);
     }-*/;
 
+    @Deprecated
     public static native String json_publicPreferences() /*-{
 
         // update $wnd.pgu_geo.public_prefs

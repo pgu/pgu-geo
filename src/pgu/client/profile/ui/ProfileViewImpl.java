@@ -403,8 +403,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         }.schedule(3000);
     }
 
+    @Deprecated
     public static void updateCachePublicPreferences() {
-        // TODO PGU to transform
         PublicProfileUtils.updatePublicProfileItem(PublicProfileItemType.experiences, isExpPublic);
         PublicProfileUtils.updatePublicProfileItem(PublicProfileItemType.educations, isEduPublic);
     }
@@ -412,7 +412,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     @Deprecated
     @Override
     public String getPublicPreferences() {
-        // TODO PGU to transform
         return PublicProfileUtils.json_publicPreferences();
     }
 
