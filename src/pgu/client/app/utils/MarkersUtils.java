@@ -22,6 +22,7 @@ public class MarkersUtils {
     }-*/;
 
     // Deletes all markers in the array by removing references to them
+    @Deprecated
     public static native void deleteMarkers(JavaScriptObject markers) /*-{
 
         for (var i = 0; i < markers.length; i++) {

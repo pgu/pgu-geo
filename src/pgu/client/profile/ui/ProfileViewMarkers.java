@@ -3,7 +3,6 @@ package pgu.client.profile.ui;
 import pgu.client.app.utils.GeocoderHelper;
 import pgu.client.app.utils.GoogleHelper;
 import pgu.client.app.utils.MarkersHelper;
-import pgu.client.app.utils.MarkersUtils;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
@@ -77,9 +76,8 @@ public class ProfileViewMarkers {
 
 
     public void deleteSearchMarkers() {
-
-        final JavaScriptObject jso = searchMarkers();
-        MarkersUtils.deleteMarkers(jso);
+        final JavaScriptObject searchMarkers = searchMarkers();
+        markers.deleteMarkers(searchMarkers);
     }
 
     public native void searchLocationAndAddMarker(ProfileViewImpl view, String location_name) /*-{

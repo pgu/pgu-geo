@@ -46,4 +46,13 @@ public class MarkersHelper {
         return marker;
     }-*/;
 
+    // Deletes all markers in the array by removing references to them
+    public native void deleteMarkers(JavaScriptObject markers) /*-{
+
+        for (var i = 0; i < markers.length; i++) {
+              markers[i].setMap(null);
+        }
+        markers.length = 0;
+    }-*/;
+
 }
