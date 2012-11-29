@@ -39,18 +39,6 @@ public class MarkersUtils {
         markers.length = 0;
     }-*/;
 
-    public static native JavaScriptObject createMarkerOnProfileMap(String location_name) /*-{
-        var profile_map = @pgu.client.profile.ui.ProfileUtils::profileMap()();
-
-        var marker = @pgu.client.app.utils.MarkersUtils::createMarker(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;)( //
-                     profile_map,location_name);
-
-        var search_markers = @pgu.client.app.utils.MarkersUtils::searchMarkers()();
-        search_markers.push(marker);
-
-        return marker;
-    }-*/;
-
     public static native JavaScriptObject createMarkerOnProfileMap(String location_name, String lat, String lng) /*-{
         var profile_map = @pgu.client.profile.ui.ProfileUtils::profileMap()();
 
