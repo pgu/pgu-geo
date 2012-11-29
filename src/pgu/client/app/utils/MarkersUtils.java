@@ -5,15 +5,6 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 public class MarkersUtils {
 
-    public static native JavaScriptObject searchMarkers() /*-{
-
-        if (!$wnd.pgu_geo.search_markers) {
-            $wnd.pgu_geo.search_markers = [];
-        }
-
-        return $wnd.pgu_geo.search_markers;
-    }-*/;
-
     private static native JavaScriptObject movieMarkers() /*-{
 
         if (!$wnd.pgu_geo.movie_markers) {
@@ -37,18 +28,6 @@ public class MarkersUtils {
               markers[i].setMap(null);
         }
         markers.length = 0;
-    }-*/;
-
-    public static native JavaScriptObject createMarkerOnProfileMap(String location_name, String lat, String lng) /*-{
-        var profile_map = @pgu.client.profile.ui.ProfileUtils::profileMap()();
-
-        var marker = @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)( //
-                     profile_map,location_name,lat,lng);
-
-        var search_markers = @pgu.client.app.utils.MarkersUtils::searchMarkers()();
-        search_markers.push(marker);
-
-        return marker;
     }-*/;
 
     public static native JavaScriptObject createMovieMarkerOnPublicMap(String location_name) /*-{

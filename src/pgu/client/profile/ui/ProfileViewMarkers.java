@@ -5,7 +5,6 @@ import pgu.client.app.utils.MarkersUtils;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
-// TODO PGU rapatrier les search markers ici
 public class ProfileViewMarkers {
 
     private final ProfileViewMap viewMap = new ProfileViewMap();

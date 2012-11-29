@@ -11,7 +11,7 @@ import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.LocationsUtils;
 import pgu.client.app.utils.Notification;
-import pgu.client.profile.ui.ProfileUtils;
+import pgu.client.profile.ui.EditLocationHelper;
 import pgu.client.service.LinkedinServiceAsync;
 
 import com.github.gwtbootstrap.client.ui.event.HiddenEvent;
@@ -31,6 +31,8 @@ public class EditLocationActivity {
     private final LinkedinServiceAsync           linkedinService;
     private final ClientFactory                  clientFactory;
     private Timer                                timerCloseView = null;
+
+    private final EditLocationHelper             locationHelper = new EditLocationHelper();
 
     public EditLocationActivity(final ClientFactory clientFactory) {
         this.clientFactory = clientFactory;
@@ -177,7 +179,7 @@ public class EditLocationActivity {
 
         } else {
 
-            final boolean isFromLinkedin = ProfileUtils.isLocationFromLinkedin(itemConfigId, locName);
+            final boolean isFromLinkedin = locationHelper.isLocationFromLinkedin(itemConfigId, locName);
 
             if (!isFromLinkedin) {
                 handlerRegs.add(addDeleteHandler(itemConfigId, locName));
