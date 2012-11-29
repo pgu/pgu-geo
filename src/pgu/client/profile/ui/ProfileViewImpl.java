@@ -86,7 +86,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     private String              lastSearchItemLocation      = null;
     private boolean             isMapDisplayed = true;
-    private final ProfileViewSearch    viewSearch = new ProfileViewSearch();
+
     private final ProfileViewTables    viewTables = new ProfileViewTables();
     private final ProfileViewMap       viewMap    = new ProfileViewMap();
     private final ProfileViewToPublic  viewPublic = new ProfileViewToPublic();
@@ -181,7 +181,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             return;
         }
 
-        viewSearch.searchLocationAndAddMarker(this, locationText);
+        viewMarkers.searchLocationAndAddMarker(this, locationText);
     }
 
 
