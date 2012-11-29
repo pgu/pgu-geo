@@ -104,4 +104,35 @@ public class ProfileViewToPublic {
         return json.stringify(jso);
     }
 
+    public native void showPublicPreferences(final ProfileViewImpl view, final String preferences) /*-{
+
+        if ("" === preferences) {
+
+            $wnd.pgu_geo.public_prefs = {};
+
+            view.@pgu.client.profile.ui.ProfileViewImpl::updatePublicHeader(ZLjava/lang/String;)(true,"experiences");
+            view.@pgu.client.profile.ui.ProfileViewImpl::updatePublicHeader(ZLjava/lang/String;)(true,"educations");
+
+            return;
+        }
+
+        // {"wishes":true,"positions":true,"educations":false,"contacts":true}, see PublicProfileItem
+        $wnd.pgu_geo.public_prefs = JSON.parse(preferences);
+
+        var public_prefs = $wnd.pgu_geo.public_prefs;
+
+        for (var key in public_prefs) {
+            if ('__gwt_ObjectId' === key) {
+                continue;
+            }
+            if (public_prefs.hasOwnProperty(key)) {
+                var is_public = public_prefs[key];
+
+                view.@pgu.client.profile.ui.ProfileViewImpl::updatePublicHeader(ZLjava/lang/String;)(is_public,key);
+            }
+        }
+
+    }-*/;
+
+
 }

@@ -24,12 +24,14 @@ public interface ProfileView extends IsWidget //
 
     void setPresenter(ProfilePresenter presenter);
 
+    @Deprecated
     String getPublicProfile();
 
     void showPublicPreferences(String publicPreferences);
 
     void confirmChangeOnPublicProfile(String publicProfileItem);
 
+    @Deprecated
     String getPublicPreferences();
 
     void hideSaveWidget();

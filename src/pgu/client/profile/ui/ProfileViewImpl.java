@@ -369,13 +369,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     public void showPublicPreferences(final String publicPreferences) {
 
         final String prefs = u.isVoid(publicPreferences) ? "" : publicPreferences;
-        // TODO PGU to transform
-        PublicProfileUtils.showPublicPreferences(this, prefs);
+        viewPublic.showPublicPreferences(this, prefs);
     }
 
+    @Deprecated
     @Override
     public String getPublicProfile() {
-        // TODO PGU to transform
         return PublicProfileUtils.getPublicProfile();
     }
 
@@ -410,6 +409,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         PublicProfileUtils.updatePublicProfileItem(PublicProfileItemType.educations, isEduPublic);
     }
 
+    @Deprecated
     @Override
     public String getPublicPreferences() {
         // TODO PGU to transform
@@ -513,7 +513,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     public void setPublicPreferencesInfo(final PublicPreferences result) {
         final String publicPreferences = result == null ? "" : result.getValues();
         final String prefs = u.isVoid(publicPreferences) ? "" : publicPreferences;
-        PublicProfileUtils.showPublicPreferences(this, prefs);
+
+        viewPublic.showPublicPreferences(this, prefs);
     }
 
     @Override

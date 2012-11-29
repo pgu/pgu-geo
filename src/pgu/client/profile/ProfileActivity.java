@@ -272,6 +272,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
                 });
     }
 
+    @Deprecated
     private PublicProfile getUpdatedPublicProfile() {
 
         final PublicProfile updated = new PublicProfile();
