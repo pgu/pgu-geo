@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import pgu.client.app.event.LocationShowOnMapEvent;
 import pgu.client.app.utils.ClientUtils;
+import pgu.client.app.utils.JsonHelper;
 import pgu.client.app.utils.LocationsHelper;
 import pgu.client.app.utils.MarkdownUtils;
 import pgu.client.profile.ProfilePresenter;
@@ -93,7 +94,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     private final ProfileViewLocations viewLocations = new ProfileViewLocations();
     private final ProfileViewMarkers   viewMarkers = new ProfileViewMarkers();
 
-    private final LocationsHelper     locationsHelper = new LocationsHelper();
+    private final LocationsHelper      locationsHelper = new LocationsHelper();
+    private final JsonHelper           json = new JsonHelper();
 
     public ProfileViewImpl() {
 
@@ -366,13 +368,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         $doc.getElementById('pgu_geo.profile:edu_table').innerHTML = html;
     }-*/;
 
-    @Override
-    public void showPublicPreferences(final String publicPreferences) {
-
-        final String prefs = u.isVoid(publicPreferences) ? "" : publicPreferences;
-        viewPublic.showPublicPreferences(this, prefs);
-    }
-
     @Deprecated
     @Override
     public String getPublicProfile() {
@@ -512,10 +507,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     @Override
     public void setPublicPreferencesInfo(final PublicPreferences result) {
-        final String publicPreferences = result == null ? "" : result.getValues();
-        final String prefs = u.isVoid(publicPreferences) ? "" : publicPreferences;
-
-        viewPublic.showPublicPreferences(this, prefs);
+        viewPublic.showPublicPreferences(this, result.getValues());
     }
 
     @Override
@@ -537,6 +529,18 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                 , fmtSummary //
                 , languagesHtml //
                 );
+    }
+
+    @Override
+    public native String getJsonRawProfile() /*-{
+        var p = $wnd.pgu_geo.profile;
+
+        return this.@pgu.client.profile.ui.ProfileViewImpl::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)
+                    (p);
+    }-*/;
+
+    private String stringify(final JavaScriptObject jso) {
+        return json.stringify(jso);
     }
 
     //    public static native JavaScriptObject copyProfile() /*-{

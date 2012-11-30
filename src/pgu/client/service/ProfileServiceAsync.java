@@ -16,4 +16,6 @@ public interface ProfileServiceAsync {
 
     void savePublicProfile(String profileId, String jsonPublicProfile, AsyncCallback<Void> asyncCallbackApp);
 
+    void saveProfile(String profileId, String jsonProfile, AsyncCallback<Void> asyncCallbackApp);
+
 }

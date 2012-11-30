@@ -33,8 +33,16 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
     public PublicPreferences fetchPublicPreferences(final String profileId) {
 
         final PublicPreferences publicPreferences = dao.ofy().find(PublicPreferences.class, profileId);
+
         if (publicPreferences == null) {
-            return new PublicPreferences();
+            final PublicPreferences initialPublicPreferences = new PublicPreferences();
+
+            initialPublicPreferences.setUserId(profileId);
+            initialPublicPreferences.setValues("{\"positions\":false,\"educations\":false}");
+
+            dao.ofy().async().put(initialPublicPreferences);
+
+            return initialPublicPreferences;
         }
 
         return publicPreferences;
@@ -61,6 +69,14 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
         publicP.setUserId(profileId);
 
         dao.ofy().async().put(publicP);
+    }
+
+    @Override
+    public void saveProfile(final String profileId, final String jsonProfile) {
+        // TODO PGU Nov 30, 2012 create a document with the json profile
+        // TODO PGU Nov 30, 2012 create a document with the json profile
+        // TODO PGU Nov 30, 2012 create a document with the json profile
+        // TODO PGU Nov 30, 2012 create a document with the json profile
     }
 
 }

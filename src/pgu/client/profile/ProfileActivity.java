@@ -71,9 +71,11 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         this.clientFactory = clientFactory;
         this.ctx = ctx;
         view = clientFactory.getProfileView();
+        profileService = clientFactory.getProfileService();
+
+        // TODO PGU Nov 30, 2012 to remove
         linkedinService = clientFactory.getLinkedinService();
         publicProfileService = clientFactory.getPublicProfileService();
-        profileService = clientFactory.getProfileService();
     }
 
     @Override
@@ -128,6 +130,18 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     }
 
     private void showProfile() {
+        profileService.saveProfile( //
+                ctx.getProfileId() //
+                , getJsonProfile() //
+                , new AsyncCallbackApp<Void>(eventBus) {
+
+                    @Override
+                    public void onSuccess(final Void result) {
+                        // do nothing
+                    }
+
+                });
+
         view.showProfile();
 
         // TODO PGU Nov 20, 2012 show waiting indicator while loading the app
@@ -145,41 +159,8 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         // });
     }
 
-    private void fetchPublicPreferences() {
-        publicProfileService.fetchPreferencesOnly( //
-                clientFactory.getAppState().getUserId(), //
-                new AsyncCallbackApp<PublicProfile>(eventBus) {
-
-                    @Override
-                    public void onSuccess(final PublicProfile publicProfile) {
-
-                        final boolean isCreation = publicProfile == null;
-                        if (isCreation) {
-                            view.showPublicPreferences(null);
-
-                        } else {
-                            final String publicPreferences = publicProfile.getPreferences();
-                            view.showPublicPreferences(publicPreferences);
-
-                        }
-
-                        // update public preferences
-                        final PublicProfile updated = getUpdatedPublicProfile();
-
-                        publicProfileService.saveProfile( //
-                                updated, //
-                                new AsyncCallbackApp<Void>(eventBus) {
-
-                                    @Override
-                                    public void onSuccess(final Void result) {
-                                        // no-op
-                                    }
-
-                                });
-                    }
-
-                });
-
+    private String getJsonProfile() {
+        return view.getJsonRawProfile();
     }
 
     private void saveLocationsAsync() {
@@ -430,6 +411,12 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     @Override
     public void onSavePublicLocations(final SavePublicLocationsEvent event) {
+        // TODO PGU Nov 30, 2012
+        // TODO PGU Nov 30, 2012
+        // TODO PGU Nov 30, 2012
+        // TODO PGU Nov 30, 2012
+        // TODO PGU Nov 30, 2012
+
         // if the user has no registered locations
         // then save our current cache silently
         saveLocationsAsync();
@@ -437,13 +424,10 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     @Override
     public void onFetchPublicPreferences(final FetchPublicPreferencesEvent event) {
-        // see fetchPublicPreferences();
-
         profileService.fetchPublicPreferences(ctx.getProfileId(), new AsyncCallbackApp<PublicPreferences>(eventBus) {
 
             @Override
             public void onSuccess(final PublicPreferences result) {
-                // TODO PGU Nov 24, 2012 if result == null then save all public
                 view.setPublicPreferencesInfo(result);
             }
 

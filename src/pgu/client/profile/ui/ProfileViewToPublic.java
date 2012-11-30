@@ -106,16 +106,6 @@ public class ProfileViewToPublic {
 
     public native void showPublicPreferences(final ProfileViewImpl view, final String preferences) /*-{
 
-        if ("" === preferences) {
-
-            $wnd.pgu_geo.public_prefs = {};
-
-            view.@pgu.client.profile.ui.ProfileViewImpl::updatePublicHeader(ZLjava/lang/String;)(true,"experiences");
-            view.@pgu.client.profile.ui.ProfileViewImpl::updatePublicHeader(ZLjava/lang/String;)(true,"educations");
-
-            return;
-        }
-
         // {"wishes":true,"positions":true,"educations":false,"contacts":true}, see PublicProfileItem
         $wnd.pgu_geo.public_prefs = JSON.parse(preferences);
 

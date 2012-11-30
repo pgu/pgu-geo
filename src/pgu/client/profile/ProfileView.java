@@ -27,8 +27,6 @@ public interface ProfileView extends IsWidget //
     @Deprecated
     String getPublicProfile();
 
-    void showPublicPreferences(String publicPreferences);
-
     void confirmChangeOnPublicProfile(String publicProfileItem);
 
     @Deprecated
@@ -51,5 +49,7 @@ public interface ProfileView extends IsWidget //
     void refreshHtmlLocationsForItem(String itemConfigId);
 
     String getJsonPublicProfile();
+
+    String getJsonRawProfile();
 
 }
