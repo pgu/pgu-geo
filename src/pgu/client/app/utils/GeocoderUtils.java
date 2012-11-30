@@ -79,24 +79,28 @@ public class GeocoderUtils {
 
 
                     } else if (status == google.maps.GeocoderStatus.ZERO_RESULTS) {
-                        throw {
+                        var warn = {
                             name: 'Unknown location, status'
                           , msg: location_name + ", " + status
                         }
+                        $wnd.console.log(warn);
 
                     } else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
                         @pgu.client.app.utils.GeocoderUtils::searchGeopointWithDelay(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;I)(location_name,callback,1000);
-                        throw {
+
+                        var warn = {
                             name: 'Over query limit'
                           , msg: location_name
                         }
-
+                        $wnd.console.log(warn);
 
                     } else {
-                        throw {
+
+                        var err = {
                             name: 'Technical error, status'
                           , msg: location_name + ", " + status
                         }
+                        $wnd.console.log(err);
                     }
 
                     if (callback) {
