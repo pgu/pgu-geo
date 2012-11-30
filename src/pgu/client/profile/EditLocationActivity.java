@@ -11,7 +11,7 @@ import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.LocationsUtils;
 import pgu.client.app.utils.Notification;
-import pgu.client.profile.ui.EditLocationHelper;
+import pgu.client.profile.ui.EditLocationViewHelper;
 import pgu.client.service.LinkedinServiceAsync;
 
 import com.github.gwtbootstrap.client.ui.event.HiddenEvent;
@@ -32,7 +32,7 @@ public class EditLocationActivity {
     private final ClientFactory                  clientFactory;
     private Timer                                timerCloseView = null;
 
-    private final EditLocationHelper             locationHelper = new EditLocationHelper();
+    private final EditLocationViewHelper             locationHelper = new EditLocationViewHelper();
 
     public EditLocationActivity(final ClientFactory clientFactory) {
         this.clientFactory = clientFactory;
