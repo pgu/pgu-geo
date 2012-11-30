@@ -9,6 +9,11 @@ import pgu.shared.model.ProfileLocations;
 import pgu.shared.model.PublicPreferences;
 import pgu.shared.model.UserAndLocations;
 
+import com.google.appengine.api.search.Document;
+import com.google.appengine.api.search.Field;
+import com.google.appengine.api.search.Index;
+import com.google.appengine.api.search.IndexSpec;
+import com.google.appengine.api.search.SearchServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings("serial")
@@ -17,6 +22,9 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
     private final AppUtils      u               = new AppUtils();
     private final AppLog        log             = new AppLog();
     private final DAO           dao             = new DAO();
+
+    private static final Index PROFILE_IDX = SearchServiceFactory.getSearchService()
+            .getIndex(IndexSpec.newBuilder().setName("profile_index"));
 
     @Override
     public ProfileLocations fetchProfileLocations(final String profileId) {
@@ -37,7 +45,7 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
         if (publicPreferences == null) {
             final PublicPreferences initialPublicPreferences = new PublicPreferences();
 
-            initialPublicPreferences.setUserId(profileId);
+            initialPublicPreferences.setProfileId(profileId);
             initialPublicPreferences.setValues("{\"positions\":false,\"educations\":false}");
 
             dao.ofy().async().put(initialPublicPreferences);
@@ -53,7 +61,7 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
         log.info(this, "(\nuser[%s]\n%s\n\n%s\n)", profileId, items2locations, referentialLocations);
 
         final UserAndLocations userAndLocations = new UserAndLocations();
-        userAndLocations.setUserId(profileId);
+        userAndLocations.setProfileId(profileId);
 
         userAndLocations.setItems2locations(items2locations);
         userAndLocations.setReferentialLocations(referentialLocations);
@@ -66,17 +74,21 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
     public void savePublicProfile(final String profileId, final String jsonPublicProfile) {
 
         final BasePublicProfile publicP = new BasePublicProfile();
-        publicP.setUserId(profileId);
+        publicP.setProfileId(profileId);
 
         dao.ofy().async().put(publicP);
     }
 
     @Override
     public void saveProfile(final String profileId, final String jsonProfile) {
-        // TODO PGU Nov 30, 2012 create a document with the json profile
-        // TODO PGU Nov 30, 2012 create a document with the json profile
-        // TODO PGU Nov 30, 2012 create a document with the json profile
-        // TODO PGU Nov 30, 2012 create a document with the json profile
+
+        final Document.Builder docBuilder = Document.newBuilder() //
+                .addField(Field.newBuilder().setName("profile_id").setText(profileId)) //
+                .addField(Field.newBuilder().setName("json").setText(jsonProfile)) //
+                ;
+
+        final Document doc = docBuilder.build();
+        PROFILE_IDX.putAsync(doc);
     }
 
 }

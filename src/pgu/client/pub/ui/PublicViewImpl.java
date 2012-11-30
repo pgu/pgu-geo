@@ -396,7 +396,7 @@ public class PublicViewImpl extends Composite implements PublicView {
 
         setProfile(this, profile.getProfile());
 
-        fireEvent(new FetchPublicContactsEvent(profile.getUserId()));
+        fireEvent(new FetchPublicContactsEvent(profile.getProfileId()));
     }
 
     private native void setProfile(PublicViewImpl view, String profile) /*-{

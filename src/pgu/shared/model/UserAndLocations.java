@@ -7,7 +7,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class UserAndLocations implements IsSerializable {
 
     @Id
-    private String userId;
+    private String profileId;
 
     private String items2locations;
     private String referentialLocations;
@@ -16,7 +16,7 @@ public class UserAndLocations implements IsSerializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (userId == null ? 0 : userId.hashCode());
+        result = prime * result + (profileId == null ? 0 : profileId.hashCode());
         return result;
     }
 
@@ -32,11 +32,11 @@ public class UserAndLocations implements IsSerializable {
             return false;
         }
         final UserAndLocations other = (UserAndLocations) obj;
-        if (userId == null) {
-            if (other.userId != null) {
+        if (profileId == null) {
+            if (other.profileId != null) {
                 return false;
             }
-        } else if (!userId.equals(other.userId)) {
+        } else if (!profileId.equals(other.profileId)) {
             return false;
         }
         return true;
@@ -44,16 +44,16 @@ public class UserAndLocations implements IsSerializable {
 
     @Override
     public String toString() {
-        return "UserAndLocations [userId=" + userId + ", items2locations=" + items2locations
+        return "UserAndLocations [userId=" + profileId + ", items2locations=" + items2locations
                 + ", referentialLocations=" + referentialLocations + "]";
     }
 
-    public String getUserId() {
-        return userId;
+    public String getProfileId() {
+        return profileId;
     }
 
-    public void setUserId(final String userId) {
-        this.userId = userId;
+    public void setProfileId(final String profileId) {
+        this.profileId = profileId;
     }
 
     public String getItems2locations() {

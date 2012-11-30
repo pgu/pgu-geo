@@ -7,7 +7,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class Country2ContactNumber implements IsSerializable {
 
     @Id
-    private String userId;
+    private String profileId;
 
     private String code2locationNames;
     private String code2contactNumber;
@@ -16,7 +16,7 @@ public class Country2ContactNumber implements IsSerializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (userId == null ? 0 : userId.hashCode());
+        result = prime * result + (profileId == null ? 0 : profileId.hashCode());
         return result;
     }
 
@@ -32,11 +32,11 @@ public class Country2ContactNumber implements IsSerializable {
             return false;
         }
         final Country2ContactNumber other = (Country2ContactNumber) obj;
-        if (userId == null) {
-            if (other.userId != null) {
+        if (profileId == null) {
+            if (other.profileId != null) {
                 return false;
             }
-        } else if (!userId.equals(other.userId)) {
+        } else if (!profileId.equals(other.profileId)) {
             return false;
         }
         return true;
@@ -44,16 +44,16 @@ public class Country2ContactNumber implements IsSerializable {
 
     @Override
     public String toString() {
-        return "Country2ContactNumber [userId=" + userId + ", code2locationNames=" + code2locationNames
+        return "Country2ContactNumber [userId=" + profileId + ", code2locationNames=" + code2locationNames
                 + ", code2contactNumber=" + code2contactNumber + "]";
     }
 
-    public String getUserId() {
-        return userId;
+    public String getProfileId() {
+        return profileId;
     }
 
-    public void setUserId(final String userId) {
-        this.userId = userId;
+    public void setProfileId(final String profileId) {
+        this.profileId = profileId;
     }
 
     public String getCode2locationNames() {

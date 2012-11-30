@@ -369,12 +369,12 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         final Gson gson = new Gson();
 
         final Country2ContactNames country2contactNames = new Country2ContactNames();
-        country2contactNames.setUserId(userId);
+        country2contactNames.setProfileId(userId);
         country2contactNames.setValues(gson.toJson(code2contactNames));
         dao.ofy().async().put(country2contactNames);
 
         final Country2ContactNumber country2number = new Country2ContactNumber();
-        country2number.setUserId(userId);
+        country2number.setProfileId(userId);
         country2number.setCode2locationNames(gson.toJson(code2locationNames));
         country2number.setCode2contactNumber(gson.toJson(code2contactNumber));
 
@@ -589,7 +589,7 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         }
 
         final UserAndLocations userAndLocations = new UserAndLocations();
-        userAndLocations.setUserId(userId);
+        userAndLocations.setProfileId(userId);
         return userAndLocations;
     }
 
@@ -656,14 +656,14 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         }
 
         final Country2ContactNames emptyNames = new Country2ContactNames();
-        emptyNames.setUserId(userId);
+        emptyNames.setProfileId(userId);
         return emptyNames;
     }
 
     @Override
     public void saveChartsPreferences(final String userId, final String jsonChartTypes) {
         final ChartsPreferences chartsPreferences = new ChartsPreferences();
-        chartsPreferences.setUserId(userId);
+        chartsPreferences.setProfileId(userId);
         chartsPreferences.setValues(jsonChartTypes);
         dao.ofy().async().put(chartsPreferences);
     }
@@ -679,23 +679,23 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         }
 
         final FusionUrls fusionUrls = new FusionUrls();
-        fusionUrls.setUserId(userId);
+        fusionUrls.setProfileId(userId);
         fusionUrls.setValues(jsonFusionUrls);
         dao.ofy().async().put(fusionUrls);
     }
 
     @Override
-    public void saveContactsNumberByCountry(final String userId, final String jsonContactsNumberByCountry) {
+    public void saveContactsNumberByCountry(final String profileId, final String jsonContactsNumberByCountry) {
 
         if (u.isVoid(jsonContactsNumberByCountry) //
                 || "[]".equals(jsonContactsNumberByCountry)) {
 
-            dao.ofy().async().delete(ContactsNumberByCountry.class, userId);
+            dao.ofy().async().delete(ContactsNumberByCountry.class, profileId);
             return;
         }
 
         final ContactsNumberByCountry contactsNumberByCountry = new ContactsNumberByCountry();
-        contactsNumberByCountry.setUserId(userId);
+        contactsNumberByCountry.setProfileId(profileId);
         contactsNumberByCountry.setValues(jsonContactsNumberByCountry);
         dao.ofy().async().put(contactsNumberByCountry);
     }

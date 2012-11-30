@@ -257,7 +257,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     private PublicProfile getUpdatedPublicProfile() {
 
         final PublicProfile updated = new PublicProfile();
-        updated.setUserId(clientFactory.getAppState().getUserId());
+        updated.setProfileId(clientFactory.getAppState().getUserId());
 
         updated.setPreferences(view.getPublicPreferences());
         updated.setProfile(view.getPublicProfile());

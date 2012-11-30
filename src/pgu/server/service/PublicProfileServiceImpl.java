@@ -28,7 +28,7 @@ public class PublicProfileServiceImpl extends RemoteServiceServlet implements Pu
     public PublicProfile fetchPublicProfileByUrl(final String publicUrl) {
         final PublicProfile publicProfile = dao.ofy().query(PublicProfile.class).filter("url", publicUrl).get();
 
-        final UserAndLocations userAndLocations = dao.ofy().get(UserAndLocations.class, publicProfile.getUserId());
+        final UserAndLocations userAndLocations = dao.ofy().get(UserAndLocations.class, publicProfile.getProfileId());
         publicProfile.setUserAndLocations(userAndLocations);
 
         return publicProfile;
