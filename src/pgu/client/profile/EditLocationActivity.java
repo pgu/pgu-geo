@@ -107,7 +107,7 @@ public class EditLocationActivity {
                             @Override
                             public void onSuccess(final Void result) {
 
-                                LocationsUtils.replaceCachesByCopies();
+                                view.replaceCachesByCopies();
 
                                 view.getWaitingIndicator().setVisible(false);
                                 view.removeCreationFormAndShowClose();
@@ -144,7 +144,7 @@ public class EditLocationActivity {
                             @Override
                             public void onFailure(final Throwable caught) {
 
-                                LocationsUtils.deleteCopies();
+                                view.deleteCopies();
 
                                 view.getWaitingIndicator().setVisible(false);
                                 view.resetCreationForm();
@@ -223,7 +223,7 @@ public class EditLocationActivity {
                             @Override
                             public void onSuccess(final Void result) {
 
-                                LocationsUtils.replaceCachesByCopies();
+                                view.replaceCachesByCopies();
 
                                 view.getWaitingIndicator().setVisible(false);
                                 view.removeEditionFormAndShowClose();
@@ -247,7 +247,7 @@ public class EditLocationActivity {
                             @Override
                             public void onFailure(final Throwable caught) {
 
-                                LocationsUtils.deleteCopies();
+                                view.deleteCopies();
 
                                 view.getWaitingIndicator().setVisible(false);
                                 view.enableEditionForm();

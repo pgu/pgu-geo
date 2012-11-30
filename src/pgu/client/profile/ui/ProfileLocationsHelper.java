@@ -34,6 +34,16 @@ public class ProfileLocationsHelper {
         return $wnd.pgu_geo.copy_cache_referential;
     }-*/;
 
+    public native void replaceCachesByCopies() /*-{
+        $wnd.pgu_geo.cache_items = $wnd.pgu_geo.copy_cache_items;
+        $wnd.pgu_geo.cache_referential = $wnd.pgu_geo.copy_cache_referential;
+    }-*/;
+
+    public native void deleteCopies() /*-{
+        delete $wnd.pgu_geo.copy_cache_items;
+        delete $wnd.pgu_geo.copy_cache_referential;
+    }-*/;
+
     public native void removeLocationFromItem( //
             JavaScriptObject cache_items //
             , JavaScriptObject cache_referential //

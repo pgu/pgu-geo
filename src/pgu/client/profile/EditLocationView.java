@@ -59,4 +59,8 @@ public interface EditLocationView extends HasNotifications {
 
     String json_copyCacheReferential();
 
+    void replaceCachesByCopies();
+
+    void deleteCopies();
+
 }

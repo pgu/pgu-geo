@@ -240,7 +240,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         final boolean isDoublon = LocationsUtils.isDoublon(itemConfigId, locationName, lat, lng);
         if (isDoublon) {
 
-            LocationsUtils.deleteCopies();
+            view.deleteCopies();
             u.fire(eventBus, new HideWaitingIndicatorEvent());
             u.fire(eventBus, new NotificationEvent(Level.WARNING, //
                     "This location " + locationName + " is already associated to this item"));
@@ -261,7 +261,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
                         @Override
                         public void onSuccess(final Void result) {
 
-                            LocationsUtils.replaceCachesByCopies();
+                            view.replaceCachesByCopies();
 
                             u.fire(eventBus, new HideWaitingIndicatorEvent());
 
@@ -279,7 +279,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
                         @Override
                         public void onFailure(final Throwable caught) {
-                            LocationsUtils.deleteCopies();
+                            view.deleteCopies();
 
                             super.onFailure(caught);
                         }
@@ -368,11 +368,6 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         view.removeUnusedLocations();
         view.copyLocationCaches();
 
-        // TODO PGU
-        // TODO PGU
-        // TODO PGU
-        // TODO PGU
-        // TODO PGU
         profileService.saveLocations( //
                 //
                 ctx.getProfileId() //
@@ -383,12 +378,12 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
                     @Override
                     public void onSuccess(final Void result) {
-                        LocationsUtils.replaceCachesByCopies();
+                        view.replaceCachesByCopies();
                     }
 
                     @Override
                     public void onFailure(final Throwable caught) {
-                        LocationsUtils.deleteCopies();
+                        view.deleteCopies();
                     }
 
                 });

@@ -324,4 +324,14 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
         return locationsHelper.json_copyCacheReferential();
     }
 
+    @Override
+    public void replaceCachesByCopies() {
+        locationsHelper.replaceCachesByCopies();
+    }
+
+    @Override
+    public void deleteCopies() {
+        locationsHelper.deleteCopies();
+    }
+
 }
