@@ -14,6 +14,7 @@ import pgu.client.profile.event.SaveLocationEvent;
 import pgu.client.profile.event.SaveLocationsEvent;
 import pgu.client.profile.event.SaveMapPreferencesEvent;
 import pgu.client.profile.event.SaveMapPreferencesEvent.Handler;
+import pgu.client.profile.event.SavePublicPreferencesEvent;
 import pgu.client.profile.event.SavePublicProfileEvent;
 import pgu.shared.model.ProfileLocations;
 import pgu.shared.model.PublicPreferences;
@@ -200,14 +201,20 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     public void clickOnExpPublicState(final ClickEvent e) {
 
         updatePublicHeader(!isExpPublic, PublicProfileItemType.experiences);
-        presenter.updatePublicProfile(PublicProfileItemType.experiences);
+
+        fireEvent(new SavePublicPreferencesEvent(PublicProfileItemType.experiences));
     }
 
     @UiHandler("eduPublicState")
     public void clickOnEduPublicState(final ClickEvent e) {
 
         updatePublicHeader(!isEduPublic, PublicProfileItemType.educations);
-        presenter.updatePublicProfile(PublicProfileItemType.educations);
+        // TODO PGU
+        // TODO PGU
+        // TODO PGU
+        // TODO PGU
+        // TODO PGU
+        fireEvent(new SavePublicPreferencesEvent(PublicProfileItemType.educations));
     }
 
     public void updatePublicHeader(final boolean isPublic, final String publicProfileItem) {
@@ -448,6 +455,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     @Override
+    public HandlerRegistration addSavePublicPreferencesHandler(final SavePublicPreferencesEvent.Handler handler) {
+        return addHandler(handler, SavePublicPreferencesEvent.TYPE);
+    }
+
+    @Override
     public void hideSaveWidget() {
         locationSaveBtn.setVisible(false);
     }
@@ -487,10 +499,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         fireEvent(new FetchProfileLocationsEvent());
         fireEvent(new FetchPublicPreferencesEvent());
 
-        // TODO PGU
-        // TODO PGU
-        // TODO PGU
-        // TODO PGU
         fireEvent(new SavePublicProfileEvent());
     }
 
@@ -507,7 +515,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         viewLocations.updateLocationsCacheFromPositions();
         viewTables.updateTablesWithLocations(this);
 
-        new Timer() { // TODO HACK: fire an event when all locations are done
+        new Timer() { // HACK: fire an event when all locations are done
 
             @Override
             public void run() {
@@ -515,6 +523,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             }
 
         }.schedule(3000);
+
     }
 
     @Override
@@ -617,6 +626,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     @Override
     public void deleteCopies() {
         locationsHelper.deleteCopies();
+    }
+
+    @Override
+    public String getJsonPublicPreferences() {
+        return viewPublic.getJsonPublicPreferences();
     }
 
 }

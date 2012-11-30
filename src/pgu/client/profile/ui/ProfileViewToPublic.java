@@ -18,27 +18,12 @@ public class ProfileViewToPublic {
             ) /*-{
 
 //        $wnd.pgu_geo.base_public_profile = {};
-
-//        var
-//            p = $wnd.pgu_geo.profile
-//          , first_name = p.firstName || ''
-//          , last_name = p.lastName || ''
-//          , headline = p.headline || ''
-//          , current_location = p.location || {}
-//          , current_location_name = current_location.name || ''
-//          , specialties = p.specialties || ''
-//          , summary = p.summary || ''
-//          , languages = p.languages || {} //
-//          , language_values = languages.values || [] //
-//          , positions = p.positions || {}
-//          , educations = p.educations || {}
-//        ;
-
         var p = $wnd.pgu_geo.profile;
 
         var public_p = {};
         public_p.id = p.id;
-        public_p.publicProfileUrl = p.publicProfileUrl;
+        public_p.rawPublicProfileUrl = p.publicProfileUrl;
+        public_p.shortPublicProfileUrl = p.publicProfileUrl.substring('http://www.linkedin.com/'.length);
         public_p.firstName = p.firstName;
         public_p.lastName = p.lastName;
         public_p.headline = p.headline;
@@ -84,7 +69,7 @@ public class ProfileViewToPublic {
         // remember: item_configs do not contain locations
 
         return this.@pgu.client.profile.ui.ProfileViewToPublic::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)
-               (public_profile);
+                    (public_profile);
 
     }-*/;
 
@@ -118,10 +103,16 @@ public class ProfileViewToPublic {
             if (public_prefs.hasOwnProperty(key)) {
                 var is_public = public_prefs[key];
 
-                view.@pgu.client.profile.ui.ProfileViewImpl::updatePublicHeader(ZLjava/lang/String;)(is_public,key);
+                view.@pgu.client.profile.ui.ProfileViewImpl::updatePublicHeader(ZLjava/lang/String;)
+                     (is_public,key);
             }
         }
 
+    }-*/;
+
+    public native String getJsonPublicPreferences() /*-{
+        return this.@pgu.client.profile.ui.ProfileViewToPublic::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)
+                    ($wnd.pgu_geo.public_prefs);
     }-*/;
 
 

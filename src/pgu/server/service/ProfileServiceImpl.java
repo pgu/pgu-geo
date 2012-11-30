@@ -52,6 +52,16 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
     }
 
     @Override
+    public void savePublicPreferences(final String profileId, final String jsonPublicPreferences) {
+
+        final PublicPreferences publicPreferences = new PublicPreferences();
+        publicPreferences.setProfileId(profileId);
+        publicPreferences.setValues(jsonPublicPreferences);
+
+        dao.ofy().async().put(publicPreferences);
+    }
+
+    @Override
     public void saveLocations(final String profileId, final String items2locations, final String referentialLocations) {
         log.info(this, "(\nuser[%s]\n%s\n\n%s\n)", profileId, items2locations, referentialLocations);
 
@@ -70,6 +80,7 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
 
         final BasePublicProfile publicP = new BasePublicProfile();
         publicP.setProfileId(profileId);
+        publicP.setValue(jsonPublicProfile);
 
         dao.ofy().async().put(publicP);
     }

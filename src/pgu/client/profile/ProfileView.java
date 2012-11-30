@@ -6,6 +6,7 @@ import pgu.client.profile.event.FetchPublicPreferencesEvent;
 import pgu.client.profile.event.SaveLocationEvent;
 import pgu.client.profile.event.SaveLocationsEvent;
 import pgu.client.profile.event.SaveMapPreferencesEvent;
+import pgu.client.profile.event.SavePublicPreferencesEvent;
 import pgu.client.profile.event.SavePublicProfileEvent;
 import pgu.shared.model.ProfileLocations;
 import pgu.shared.model.PublicPreferences;
@@ -20,6 +21,7 @@ public interface ProfileView extends IsWidget //
 , SaveLocationsEvent.HasSaveLocationsHandlers //
 , FetchProfileLocationsEvent.HasFetchProfileLocationsHandlers //
 , SavePublicProfileEvent.HasSavePublicProfileHandlers //
+, SavePublicPreferencesEvent.HasSavePublicPreferencesHandlers //
 {
 
     void setPresenter(ProfilePresenter presenter);
@@ -65,5 +67,7 @@ public interface ProfileView extends IsWidget //
     void replaceCachesByCopies();
 
     void deleteCopies();
+
+    String getJsonPublicPreferences();
 
 }

@@ -23,13 +23,13 @@ import pgu.client.profile.event.FetchPublicPreferencesEvent;
 import pgu.client.profile.event.SaveLocationEvent;
 import pgu.client.profile.event.SaveLocationsEvent;
 import pgu.client.profile.event.SaveMapPreferencesEvent;
+import pgu.client.profile.event.SavePublicPreferencesEvent;
 import pgu.client.profile.event.SavePublicProfileEvent;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.client.service.ProfileServiceAsync;
 import pgu.client.service.PublicProfileServiceAsync;
 import pgu.shared.model.ProfileLocations;
 import pgu.shared.model.PublicPreferences;
-import pgu.shared.model.PublicProfile;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -50,6 +50,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 , SaveLocationsEvent.Handler //
 , FetchProfileLocationsEvent.Handler //
 , SavePublicProfileEvent.Handler //
+, SavePublicPreferencesEvent.Handler //
 {
 
     private final ClientFactory                  clientFactory;
@@ -59,12 +60,12 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     private final ProfileServiceAsync            profileService;
     private final AppContext                     ctx;
 
-    private final ClientUtils                    u               = new ClientUtils();
+    private final ClientUtils                    u     = new ClientUtils();
 
     private EventBus                             eventBus;
     private String                               itemConfigId;
 
-    private final ArrayList<HandlerRegistration> hRegs           = new ArrayList<HandlerRegistration>();
+    private final ArrayList<HandlerRegistration> hRegs = new ArrayList<HandlerRegistration>();
 
     public ProfileActivity(final ProfilePlace place, final ClientFactory clientFactory, final AppContext ctx) {
         this.clientFactory = clientFactory;
@@ -107,6 +108,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         hRegs.add(view.addSaveLocationsHandler(this));
 
         hRegs.add(view.addSavePublicProfileHandler(this));
+        hRegs.add(view.addSavePublicPreferencesHandler(this));
 
         hRegs.add(eventBus.addHandler(LocationsSuccessSaveEvent.TYPE, this));
         hRegs.add(eventBus.addHandler(LocationSuccessDeleteEvent.TYPE, this));
@@ -188,41 +190,10 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         view.refreshHtmlLocationsForItem(event.getItemConfigId());
     }
 
-    @Override
-    public void updatePublicProfile(final String publicProfileItem) {
-
-        final PublicProfile updated = getUpdatedPublicProfile();
-
-        publicProfileService.saveProfile( //
-                updated, //
-                new AsyncCallbackApp<Void>(eventBus) {
-
-                    @Override
-                    public void onSuccess(final Void result) {
-                        view.confirmChangeOnPublicProfile(publicProfileItem);
-                    }
-
-                });
-    }
-
-    @Deprecated
-    private PublicProfile getUpdatedPublicProfile() {
-
-        final PublicProfile updated = new PublicProfile();
-        updated.setProfileId(clientFactory.getAppState().getUserId());
-
-        updated.setPreferences(view.getPublicPreferences());
-        updated.setProfile(view.getPublicProfile());
-
-        // TODO PGU Sep 18, 2012 factorize this
-        final int length = "http://www.linkedin.com/".length();
-        final String linkedInSuffix = clientFactory.getAppState().getPublicProfileUrl().substring(length);
-
-        updated.setUrl(linkedInSuffix);
-
-        return updated;
-    }
-
+    // TODO PGU
+    // TODO PGU
+    // TODO PGU
+    // TODO PGU
     @Override
     public void onSaveLocation(final SaveLocationEvent event) {
         if (u.isVoid(itemConfigId)) {
@@ -285,17 +256,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
                         }
 
                     });
-
         }
-
-        // TODO PGU we should have [name, item_id, lat and lng]
-        // and call directly the service
-        // ProfileViewUtils.addNewLocation(this, itemConfigId, locationName);
-    }
-
-    @Deprecated
-    public void saveLocationService(final boolean isDoublon, final String locationName) {
-
     }
 
     public void showNotificationWarning(final String msg) {
@@ -304,6 +265,12 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     @Override
     public void onSaveMapPreferences(final SaveMapPreferencesEvent event) {
+
+        // TODO PGU
+        // TODO PGU
+        // TODO PGU
+        // TODO PGU
+
         publicProfileService.saveMapPreferences( //
                 clientFactory.getAppState().getUserId() //
                 , event.getMapPreferences() //
@@ -428,7 +395,30 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
                     }
 
                 });
+    }
 
+    @Override
+    public void onSavePublicPreferences(final SavePublicPreferencesEvent event) {
+
+        final String type = event.getType();
+        // TODO PGU
+        // TODO PGU
+        // TODO PGU
+        // TODO PGU
+        // TODO PGU
+        // TODO PGU
+        // TODO PGU
+        profileService.savePublicPreferences( //
+                ctx.getProfileId() //
+                , view.getJsonPublicPreferences() //
+                , new AsyncCallbackApp<Void>(eventBus) {
+
+                    @Override
+                    public void onSuccess(final Void result) {
+                        view.confirmChangeOnPublicProfile(type);
+                    }
+
+                });
     }
 
 }
