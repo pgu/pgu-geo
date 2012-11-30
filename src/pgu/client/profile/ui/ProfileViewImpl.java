@@ -12,9 +12,9 @@ import pgu.client.profile.ProfileView;
 import pgu.client.profile.event.FetchProfileLocationsEvent;
 import pgu.client.profile.event.FetchPublicPreferencesEvent;
 import pgu.client.profile.event.SaveLocationEvent;
+import pgu.client.profile.event.SaveLocationsEvent;
 import pgu.client.profile.event.SaveMapPreferencesEvent;
 import pgu.client.profile.event.SaveMapPreferencesEvent.Handler;
-import pgu.client.profile.event.SaveLocationsEvent;
 import pgu.client.profile.event.SavePublicProfileEvent;
 import pgu.shared.model.ProfileLocations;
 import pgu.shared.model.PublicPreferences;
@@ -486,7 +486,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     private void setProfileAfter() {
         fireEvent(new FetchProfileLocationsEvent());
         fireEvent(new FetchPublicPreferencesEvent());
-        fireEvent(new SaveLocationsEvent());
+
+        // TODO PGU
+        // TODO PGU
+        // TODO PGU
+        // TODO PGU
         fireEvent(new SavePublicProfileEvent());
     }
 
@@ -503,6 +507,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
         viewLocations.updateLocationsCacheFromPositions();
         viewTables.updateTablesWithLocations();
+
+        fireEvent(new SaveLocationsEvent());
     }
 
     @Override

@@ -18,11 +18,6 @@ public class GeocoderUtils {
             return;
         }
 
-        if (!isGeocoderAvailable()) {
-            searchGeopointWithDelay(locationName, callback, 1000);
-            return;
-        }
-
         searchAndAddToCache(locationName, callback);
     }
 
@@ -34,11 +29,6 @@ public class GeocoderUtils {
             var google = @pgu.client.app.utils.GoogleUtils::google()();
             callback(google.maps.GeocoderStatus.OK);
         }
-    }-*/;
-
-    // TODO PGU Nov 21, 2012 remove this
-    private static native boolean isGeocoderAvailable() /*-{
-        return typeof $wnd.pgu_geo.geocoder !== 'undefined';
     }-*/;
 
     public static void searchGeopointWithDelay( //

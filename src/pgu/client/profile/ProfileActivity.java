@@ -21,8 +21,8 @@ import pgu.client.app.utils.LocationsUtils;
 import pgu.client.profile.event.FetchProfileLocationsEvent;
 import pgu.client.profile.event.FetchPublicPreferencesEvent;
 import pgu.client.profile.event.SaveLocationEvent;
-import pgu.client.profile.event.SaveMapPreferencesEvent;
 import pgu.client.profile.event.SaveLocationsEvent;
+import pgu.client.profile.event.SaveMapPreferencesEvent;
 import pgu.client.profile.event.SavePublicProfileEvent;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.client.service.ProfileServiceAsync;
@@ -411,14 +411,6 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     @Override
     public void onSaveLocations(final SaveLocationsEvent event) {
-        // TODO PGU Nov 30, 2012
-        // TODO PGU Nov 30, 2012
-        // TODO PGU Nov 30, 2012
-        // TODO PGU Nov 30, 2012
-        // TODO PGU Nov 30, 2012
-
-        // if the user has no registered locations
-        // then save our current cache silently
         saveLocationsAsync();
     }
 
