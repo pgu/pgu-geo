@@ -499,8 +499,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     public void setProfileLocations(final ProfileLocations profileLocations) {
 
         viewLocations.initCaches(profileLocations.getItems2locations(), profileLocations.getReferentialLocations());
-        viewLocations.initGeocoderCounter();
-
         final String locationName = locContainer.getText();
 
         if (!u.isVoid(locationName)) {
@@ -508,9 +506,23 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         }
 
         viewLocations.updateLocationsCacheFromPositions();
-        viewTables.updateTablesWithLocations();
+        viewTables.updateTablesWithLocations(this);
 
-        fireEvent(new SaveLocationsEvent());
+        new Timer() { // TODO HACK: fire an event when all locations are done
+
+            @Override
+            public void run() {
+                fireEvent(new SaveLocationsEvent());
+            }
+
+        }.schedule(3000);
+    }
+
+    @Override
+    public void removeUnusedLocations() {
+        //        $wnd.pgu_geo.cache_items from view locations
+        //        $wnd.pgu_geo.item_configs from view tables
+        viewLocations.removeUnusedLocations();
     }
 
     @Override
@@ -520,7 +532,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     @Override
     public void refreshHtmlLocationsForItem(final String itemConfigId) {
-        viewTables.refreshHtmlLocationsForItem(itemConfigId);
+        viewTables.refreshHtmlLocationsForItem(itemConfigId, this);
     }
 
     @Override
@@ -571,4 +583,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     public JavaScriptObject profileMap() {
         return viewMap.profileMap();
     }
+
+    public JavaScriptObject cacheItems() {
+        return viewLocations.cacheItems();
+    }
+
 }

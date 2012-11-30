@@ -14,10 +14,6 @@ public class ProfileViewLocations {
         return google.google();
     }
 
-    public native void initGeocoderCounter() /*-{
-        $wnd.pgu_geo.geocode_counter = 0;
-    }-*/;
-
     public native void initCaches( //
             final String items2locations //
             , final String referential //
@@ -35,6 +31,10 @@ public class ProfileViewLocations {
             $wnd.pgu_geo.cache_referential = JSON.parse(referential);
         }
 
+    }-*/;
+
+    public native JavaScriptObject cacheItems() /*-{
+        return $wnd.pgu_geo.cache_items;
     }-*/;
 
     public native void addCurrentLocationToCache(String location_name, ProfileViewImpl view) /*-{

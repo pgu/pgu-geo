@@ -33,7 +33,6 @@ import pgu.shared.model.PublicProfile;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
@@ -162,53 +161,6 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     private String getJsonProfile() {
         return view.getJsonRawProfile();
     }
-
-    private void saveLocationsAsync() {
-        new Timer() {
-
-            @Override
-            public void run() {
-                initUserLocations(eventBus);
-            }
-
-            // TODO PGU Sep 21, 2012 temporary fix: fire an event when all locations are done
-        }.schedule(3000);
-    }
-
-    private void initUserLocations(final EventBus eventBus) {
-        // TODO PGU Sep 25, 2012 if userAndLocations != currentUserAndLocations
-        // TODO PGU Sep 25, 2012 clean locations when not used anymore
-        // if (profile.getUserAndLocations() == null) {
-        if (!userHasLocations()) {
-
-            LocationsUtils.copyLocationCaches();
-
-            profileService.saveLocations( //
-                    //
-                    ctx.getProfileId() //
-                    , LocationsUtils.json_copyCacheItems() //
-                    , LocationsUtils.json_copyCacheReferential() //
-                    //
-                    , new AsyncCallbackApp<Void>(eventBus) {
-
-                        @Override
-                        public void onSuccess(final Void result) {
-                            LocationsUtils.replaceCachesByCopies();
-                        }
-
-                        @Override
-                        public void onFailure(final Throwable caught) {
-                            LocationsUtils.deleteCopies();
-                        }
-
-                    });
-        }
-    }
-
-    private native boolean userHasLocations() /*-{
-		// TODO profile.getUserAndLocations() == null
-		return true;
-    }-*/;
 
     @Override
     public void addNewLocation(final String itemConfigId) {
@@ -411,7 +363,32 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     @Override
     public void onSaveLocations(final SaveLocationsEvent event) {
-        saveLocationsAsync();
+        // TODO PGU Sep 25, 2012 if userAndLocations != currentUserAndLocations
+        // TODO PGU Sep 25, 2012 clean locations when not used anymore
+
+        view.removeUnusedLocations();
+
+        LocationsUtils.copyLocationCaches();
+
+        profileService.saveLocations( //
+                //
+                ctx.getProfileId() //
+                , LocationsUtils.json_copyCacheItems() //
+                , LocationsUtils.json_copyCacheReferential() //
+                //
+                , new AsyncCallbackApp<Void>(eventBus) {
+
+                    @Override
+                    public void onSuccess(final Void result) {
+                        LocationsUtils.replaceCachesByCopies();
+                    }
+
+                    @Override
+                    public void onFailure(final Throwable caught) {
+                        LocationsUtils.deleteCopies();
+                    }
+
+                });
     }
 
     @Override

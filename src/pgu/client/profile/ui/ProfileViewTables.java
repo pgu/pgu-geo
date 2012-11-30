@@ -189,30 +189,33 @@ public class ProfileViewTables {
     }-*/;
 
 
-    public native void updateTablesWithLocations() /*-{
+    public native void updateTablesWithLocations(ProfileViewImpl view) /*-{
 
         var items = $wnd.pgu_geo.item_configs;
         for (var i = 0, len = items.length; i < len; i++) {
 
             var item = items[i];
-            this.@pgu.client.profile.ui.ProfileViewTables::refreshHtmlLocationsForItem(Ljava/lang/String;)
-                 (item.id);
+            this.@pgu.client.profile.ui.ProfileViewTables::refreshHtmlLocationsForItem(Ljava/lang/String;Lpgu/client/profile/ui/ProfileViewImpl;)
+                 (item.id, view);
         }
 
     }-*/;
 
-    public native void refreshHtmlLocationsForItem(final String item_config_id) /*-{
+    public native void refreshHtmlLocationsForItem(final String item_config_id, ProfileViewImpl view) /*-{
 
-        var html_locations = this.@pgu.client.profile.ui.ProfileViewTables::createListLocations(Ljava/lang/String;)
-                                  (item_config_id);
+        var html_locations = this.@pgu.client.profile.ui.ProfileViewTables::createListLocations(Ljava/lang/String;Lpgu/client/profile/ui/ProfileViewImpl;)
+                                  (item_config_id, view);
         $doc.getElementById('locations_' + item_config_id).innerHTML = html_locations;
 
     }-*/;
 
 
-    private native String createListLocations(String item_config_id) /*-{
+    private native String createListLocations(String item_config_id, ProfileViewImpl view) /*-{
 
-        var location_names = $wnd.pgu_geo.cache_items[item_config_id] || [];
+        var cache_items = view.@pgu.client.profile.ui.ProfileViewImpl::cacheItems()
+                               ();
+
+        var location_names = cache_items[item_config_id] || [];
 
         var
             list = []
