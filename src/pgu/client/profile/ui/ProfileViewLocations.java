@@ -1,14 +1,13 @@
 package pgu.client.profile.ui;
 
 import pgu.client.app.utils.GoogleHelper;
-import pgu.client.app.utils.LocationsHelper;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
 public class ProfileViewLocations {
 
     private final GoogleHelper google = new GoogleHelper();
-    private final LocationsHelper locations = new LocationsHelper();
+    private final ProfileLocationsHelper locations = new ProfileLocationsHelper();
 
     private JavaScriptObject google() {
         return google.google();
@@ -230,6 +229,30 @@ public class ProfileViewLocations {
             var unused_location = unused_locations[i];
             delete cache_referential[unused_location];
         }
+
+    }-*/;
+
+    public native void addGeopointToCache(final String location_name, final String lat, final String lng) /*-{
+        var cache = $wnd.pgu_geo.cache_referential;
+
+        this.@pgu.client.profile.ui.ProfileViewLocations::addGeopointInternal(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)
+             (cache, location_name, lat, lng);
+    }-*/;
+
+    public native void addGeopointToCopyCache(final String location_name, final String lat, final String lng) /*-{
+        var cache = $wnd.pgu_geo.copy_cache_referential;
+
+        this.@pgu.client.profile.ui.ProfileViewLocations::addGeopointInternal(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)
+             (cache, location_name, lat, lng);
+    }-*/;
+
+    private native void addGeopointInternal(JavaScriptObject cache, String location_name, String lat, String lng) /*-{
+
+        var location = {};
+        location.lat = lat;
+        location.lng = lng;
+
+        cache[location_name] = location;
 
     }-*/;
 

@@ -159,26 +159,6 @@ public class LocationsUtils {
         return true;
     }-*/;
 
-    public static native void addGeopointToCopyCache(String location_name, String lat, String lng) /*-{
-        var cache = $wnd.pgu_geo.copy_cache_referential;
-        @pgu.client.app.utils.LocationsUtils::addGeopointInternal(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(cache,location_name,lat,lng);
-    }-*/;
-
-    public static native void addGeopointToCache(String location_name, String lat, String lng) /*-{
-        var cache = $wnd.pgu_geo.cache_referential;
-        @pgu.client.app.utils.LocationsUtils::addGeopointInternal(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(cache,location_name,lat,lng);
-    }-*/;
-
-    public static native void addGeopointInternal(JavaScriptObject cache, String location_name, String lat, String lng) /*-{
-
-        var location = {};
-        location.lat = lat;
-        location.lng = lng;
-
-        cache[location_name] = location;
-
-    }-*/;
-
     public static native JavaScriptObject getGeopoint(String location_name) /*-{
         return $wnd.pgu_geo.cache_referential[location_name];
     }-*/;

@@ -246,7 +246,8 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
                     "This location " + locationName + " is already associated to this item"));
 
         } else {
-            LocationsUtils.addGeopointToCopyCache(locationName, lat, lng);
+
+            view.addGeopointToCopyCache(locationName, lat, lng);
             LocationsUtils.addLocation2ItemInCopyCache(itemConfigId, locationName);
 
             linkedinService.saveLocations( //
@@ -363,10 +364,14 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     @Override
     public void onSaveLocations(final SaveLocationsEvent event) {
-        // TODO PGU Sep 25, 2012 if userAndLocations != currentUserAndLocations
-        // TODO PGU Sep 25, 2012 clean locations when not used anymore
 
         view.removeUnusedLocations();
+
+        // TODO PGU
+        // TODO PGU
+        // TODO PGU
+        // TODO PGU
+        // TODO PGU
 
         LocationsUtils.copyLocationCaches();
 

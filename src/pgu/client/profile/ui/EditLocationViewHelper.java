@@ -1,12 +1,11 @@
 package pgu.client.profile.ui;
 
-import pgu.client.app.utils.LocationsHelper;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
 public class EditLocationViewHelper {
 
-    private final LocationsHelper locations = new LocationsHelper();
+    private final ProfileLocationsHelper locations = new ProfileLocationsHelper();
 
     public native boolean isLocationFromLinkedin(final String item_config_id, final String location_name) /*-{
 

@@ -1,8 +1,8 @@
-package pgu.client.app.utils;
+package pgu.client.profile.ui;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
-public class LocationsHelper {
+public class ProfileLocationsHelper {
 
     public native void removeLocationFromItem( //
             JavaScriptObject cache_items //

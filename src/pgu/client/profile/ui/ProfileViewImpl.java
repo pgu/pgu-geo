@@ -5,7 +5,6 @@ import java.util.HashMap;
 import pgu.client.app.event.LocationShowOnMapEvent;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.JsonHelper;
-import pgu.client.app.utils.LocationsHelper;
 import pgu.client.app.utils.MarkdownUtils;
 import pgu.client.profile.ProfilePresenter;
 import pgu.client.profile.ProfileView;
@@ -96,7 +95,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     private final ProfileViewGeocoder  viewGeocoder = new ProfileViewGeocoder();
     private final ProfileViewLanguages viewLanguages = new ProfileViewLanguages();
 
-    private final LocationsHelper      locationsHelper = new LocationsHelper();
+    private final ProfileLocationsHelper      locationsHelper = new ProfileLocationsHelper();
     private final JsonHelper           json = new JsonHelper();
 
     public ProfileViewImpl() {
@@ -567,7 +566,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     //    }-*/;
 
     public void searchGeopoint(final String location_name, final JavaScriptObject callback) {
-        viewGeocoder.searchGeopoint(location_name, callback);
+        viewGeocoder.searchGeopoint(location_name, callback, this);
     }
 
     public void createMarkerOnProfileMap(final String location_name) {
@@ -584,6 +583,15 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     public JavaScriptObject cacheItems() {
         return viewLocations.cacheItems();
+    }
+
+    public void addGeopointToCache(final String location_name, final String lat,final String lng) {
+        viewLocations.addGeopointToCache(location_name, lat, lng);
+    }
+
+    @Override
+    public void addGeopointToCopyCache(final String location_name, final String lat, final String lng) {
+        viewLocations.addGeopointToCopyCache(location_name, lat, lng);
     }
 
 }

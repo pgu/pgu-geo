@@ -20,14 +20,14 @@ public class ProfileViewGeocoder {
         return $wnd.pgu_geo.geocoder;
     }-*/;
 
-    public void searchGeopoint(final String location_name, final JavaScriptObject callback) {
+    public void searchGeopoint(final String location_name, final JavaScriptObject callback, final ProfileViewImpl view) {
 
         if (LocationsUtils.isLocationInReferential(location_name)) {
             executeCallback(callback);
             return;
         }
 
-        searchAndAddToCache(location_name, callback);
+        searchAndAddToCache(location_name, callback, view);
     }
 
     private native void executeCallback(JavaScriptObject callback) /*-{
@@ -41,7 +41,7 @@ public class ProfileViewGeocoder {
         }
     }-*/;
 
-    private native void searchAndAddToCache(String location_name, JavaScriptObject callback) /*-{
+    private native void searchAndAddToCache(String location_name, JavaScriptObject callback, ProfileViewImpl view) /*-{
         $wnd.console.log('searchAndAddToCache');
 
         var google = this.@pgu.client.profile.ui.ProfileViewGeocoder::google()
@@ -64,10 +64,8 @@ public class ProfileViewGeocoder {
                           , lng = '' + location.lng()
                         ;
 
-                        // TODO
-                        @pgu.client.app.utils.LocationsUtils::addGeopointToCache(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)
-                        (location_name, lat, lng);
-
+                        view.@pgu.client.profile.ui.ProfileViewImpl::addGeopointToCache(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)
+                             (location_name, lat, lng);
 
                     } else if (status == google.maps.GeocoderStatus.ZERO_RESULTS) {
                         var warn = {
@@ -78,8 +76,8 @@ public class ProfileViewGeocoder {
 
                     } else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
 
-                        this.@pgu.client.profile.ui.ProfileViewGeocoder::searchGeopointWithDelay(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;I)
-                        (location_name, callback, 1000);
+                        this.@pgu.client.profile.ui.ProfileViewGeocoder::searchGeopointWithDelay(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;ILpgu/client/profile/ui/ProfileViewImpl;)
+                             (location_name, callback, 1000, view);
 
                         var warn = {
                             name: 'Over query limit'
@@ -108,6 +106,7 @@ public class ProfileViewGeocoder {
             final String locationName //
             , final JavaScriptObject callback //
             , final int delayMillis //
+            , final ProfileViewImpl view //
             ) {
 
         new Timer() {
@@ -117,7 +116,7 @@ public class ProfileViewGeocoder {
                 Scheduler.get().scheduleDeferred(new Command() {
                     @Override
                     public void execute() {
-                        searchGeopoint(locationName, callback);
+                        searchGeopoint(locationName, callback, view);
                     }
                 });
             }
