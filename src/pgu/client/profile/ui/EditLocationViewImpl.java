@@ -298,4 +298,19 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
         deleteBtn.setEnabled(true);
     }
 
+    @Override
+    public void copyLocationCaches() {
+        viewHelper.copyLocationCaches();
+    }
+
+    @Override
+    public boolean isLocationFromLinkedin(final String item_config_id, final String location_name) {
+        return viewHelper.isLocationFromLinkedin(item_config_id, location_name);
+    }
+
+    @Override
+    public void removeLocationFromCopyCaches(final String item_config_id, final String location_name) {
+        viewHelper.removeLocationFromCopyCaches(item_config_id, location_name);
+    }
+
 }

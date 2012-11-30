@@ -231,7 +231,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
         u.fire(eventBus, new ShowWaitingIndicatorEvent());
 
-        LocationsUtils.copyLocationCaches();
+        view.copyLocationCaches();
 
         final String locationName = event.getLocationName();
         final String lat = event.getLat();
@@ -366,14 +366,13 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     public void onSaveLocations(final SaveLocationsEvent event) {
 
         view.removeUnusedLocations();
+        view.copyLocationCaches();
 
         // TODO PGU
         // TODO PGU
         // TODO PGU
         // TODO PGU
         // TODO PGU
-
-        LocationsUtils.copyLocationCaches();
 
         profileService.saveLocations( //
                 //

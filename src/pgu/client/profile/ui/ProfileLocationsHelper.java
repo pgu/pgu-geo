@@ -4,6 +4,16 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 public class ProfileLocationsHelper {
 
+    public native void copyLocationCaches() /*-{
+        $wnd.pgu_geo.copy_cache_items = JSON.parse(@pgu.client.app.utils.JsonUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
+        $wnd.pgu_geo.cache_items));
+
+
+        $wnd.pgu_geo.copy_cache_referential = JSON.parse(@pgu.client.app.utils.JsonUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
+        $wnd.pgu_geo.cache_referential));
+
+    }-*/;
+
     public native void removeLocationFromItem( //
             JavaScriptObject cache_items //
             , JavaScriptObject cache_referential //

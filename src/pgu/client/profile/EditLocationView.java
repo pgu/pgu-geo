@@ -49,4 +49,10 @@ public interface EditLocationView extends HasNotifications {
 
     void removeEditionFormAndShowClose();
 
+    void copyLocationCaches();
+
+    boolean isLocationFromLinkedin(String itemConfigId, String locName);
+
+    void removeLocationFromCopyCaches(String itemConfigId, String locationName);
+
 }

@@ -56,4 +56,6 @@ public interface ProfileView extends IsWidget //
 
     void addGeopointToCopyCache(String locationName, String lat, String lng);
 
+    void copyLocationCaches();
+
 }

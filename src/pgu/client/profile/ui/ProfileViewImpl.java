@@ -594,4 +594,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         viewLocations.addGeopointToCopyCache(location_name, lat, lng);
     }
 
+    @Override
+    public void copyLocationCaches() {
+        locationsHelper.copyLocationCaches();
+    }
+
 }

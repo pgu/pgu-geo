@@ -11,7 +11,6 @@ import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.LocationsUtils;
 import pgu.client.app.utils.Notification;
-import pgu.client.profile.ui.EditLocationViewHelper;
 import pgu.client.service.LinkedinServiceAsync;
 
 import com.github.gwtbootstrap.client.ui.event.HiddenEvent;
@@ -31,8 +30,6 @@ public class EditLocationActivity {
     private final LinkedinServiceAsync           linkedinService;
     private final ClientFactory                  clientFactory;
     private Timer                                timerCloseView = null;
-
-    private final EditLocationViewHelper             viewHelper = new EditLocationViewHelper();
 
     public EditLocationActivity(final ClientFactory clientFactory) {
         this.clientFactory = clientFactory;
@@ -94,7 +91,7 @@ public class EditLocationActivity {
                 view.getWaitingIndicator().setVisible(true);
                 view.disableCreationForm();
 
-                LocationsUtils.copyLocationCaches();
+                view.copyLocationCaches();
                 for (final String locationName: selectedLocations) {
                     LocationsUtils.addLocation2ItemInCopyCache(itemConfigId, locationName);
                 }
@@ -179,7 +176,7 @@ public class EditLocationActivity {
 
         } else {
 
-            final boolean isFromLinkedin = viewHelper.isLocationFromLinkedin(itemConfigId, locName);
+            final boolean isFromLinkedin = view.isLocationFromLinkedin(itemConfigId, locName);
 
             if (!isFromLinkedin) {
                 handlerRegs.add(addDeleteHandler(itemConfigId, locName));
@@ -212,8 +209,8 @@ public class EditLocationActivity {
                 view.getWaitingIndicator().setVisible(true);
                 view.disableEditionForm();
 
-                LocationsUtils.copyLocationCaches();
-                viewHelper.removeLocationFromCopyCaches(itemConfigId, locationName);
+                view.copyLocationCaches();
+                view.removeLocationFromCopyCaches(itemConfigId, locationName);
 
                 linkedinService.saveLocations( //
                         //

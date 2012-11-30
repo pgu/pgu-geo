@@ -37,16 +37,6 @@ public class LocationsUtils {
 
     }-*/;
 
-    public static native void copyLocationCaches() /*-{
-        $wnd.pgu_geo.copy_cache_items = JSON.parse(@pgu.client.app.utils.JsonUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
-        $wnd.pgu_geo.cache_items));
-
-
-        $wnd.pgu_geo.copy_cache_referential = JSON.parse(@pgu.client.app.utils.JsonUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
-        $wnd.pgu_geo.cache_referential));
-
-    }-*/;
-
     public static native JavaScriptObject getOtherLocationNames(String item_config_id) /*-{
 
         var
