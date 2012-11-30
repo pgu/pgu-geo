@@ -8,7 +8,6 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 public class ProfileViewTables {
 
-    // TODO PGU
     private final ProfileViewDates viewDates = new ProfileViewDates();
 
     private final ProfileItemsHelper profileItems = new ProfileItemsHelper();

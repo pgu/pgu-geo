@@ -94,6 +94,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     private final ProfileViewLocations viewLocations = new ProfileViewLocations();
     private final ProfileViewMarkers   viewMarkers = new ProfileViewMarkers();
     private final ProfileViewGeocoder  viewGeocoder = new ProfileViewGeocoder();
+    private final ProfileViewLanguages viewLanguages = new ProfileViewLanguages();
 
     private final LocationsHelper      locationsHelper = new LocationsHelper();
     private final JsonHelper           json = new JsonHelper();
@@ -295,8 +296,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     public void setLanguages(final JavaScriptObject language_values) {
 
-        final ProfileViewLanguages helper = new ProfileViewLanguages();
-        final String lgHtml = helper.createLanguagesHtml(language_values);
+        final String lgHtml = viewLanguages.createLanguagesHtml(language_values);
 
         lgContainer.clear();
         lgContainer.add(new HTML(lgHtml));
