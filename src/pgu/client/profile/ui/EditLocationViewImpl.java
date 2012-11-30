@@ -52,7 +52,7 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
     private final ArrayList<String>       otherItemLocations = new ArrayList<String>();
     private final ArrayList<String>       selecteds          = new ArrayList<String>();
     private final ClientUtils             u                  = new ClientUtils();
-    private final EditLocationViewHelper      locationHelper = new EditLocationViewHelper();
+    private final EditLocationViewHelper      viewHelper = new EditLocationViewHelper();
 
     public EditLocationViewImpl() {
         initWidget(uiBinder.createAndBindUi(this));
@@ -184,7 +184,7 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
     public void displayEditLocationWidget(final String locationName, final boolean isFromLinkedin) {
         container.setTitle(locationName);
 
-        locationHelper.showLatitudeAndLongitude(this, locationName);
+        viewHelper.showLatitudeAndLongitude(this, locationName);
 
         // ///////////////
         addPanel.setVisible(false);

@@ -32,7 +32,7 @@ public class EditLocationActivity {
     private final ClientFactory                  clientFactory;
     private Timer                                timerCloseView = null;
 
-    private final EditLocationViewHelper             locationHelper = new EditLocationViewHelper();
+    private final EditLocationViewHelper             viewHelper = new EditLocationViewHelper();
 
     public EditLocationActivity(final ClientFactory clientFactory) {
         this.clientFactory = clientFactory;
@@ -179,7 +179,7 @@ public class EditLocationActivity {
 
         } else {
 
-            final boolean isFromLinkedin = locationHelper.isLocationFromLinkedin(itemConfigId, locName);
+            final boolean isFromLinkedin = viewHelper.isLocationFromLinkedin(itemConfigId, locName);
 
             if (!isFromLinkedin) {
                 handlerRegs.add(addDeleteHandler(itemConfigId, locName));
@@ -213,7 +213,7 @@ public class EditLocationActivity {
                 view.disableEditionForm();
 
                 LocationsUtils.copyLocationCaches();
-                locationHelper.removeLocationFromCopyCaches(itemConfigId, locationName);
+                viewHelper.removeLocationFromCopyCaches(itemConfigId, locationName);
 
                 linkedinService.saveLocations( //
                         //
