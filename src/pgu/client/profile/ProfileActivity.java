@@ -253,8 +253,8 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
             linkedinService.saveLocations( //
                     //
                     clientFactory.getAppState().getUserId() //
-                    , LocationsUtils.json_copyCacheItems() //
-                    , LocationsUtils.json_copyCacheReferential() //
+                    , view.json_copyCacheItems() //
+                    , view.json_copyCacheReferential() //
                     //
                     , new AsyncCallbackApp<Void>(eventBus) {
 
@@ -373,12 +373,11 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         // TODO PGU
         // TODO PGU
         // TODO PGU
-
         profileService.saveLocations( //
                 //
                 ctx.getProfileId() //
-                , LocationsUtils.json_copyCacheItems() //
-                , LocationsUtils.json_copyCacheReferential() //
+                , view.json_copyCacheItems() //
+                , view.json_copyCacheReferential() //
                 //
                 , new AsyncCallbackApp<Void>(eventBus) {
 

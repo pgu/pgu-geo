@@ -55,4 +55,8 @@ public interface EditLocationView extends HasNotifications {
 
     void removeLocationFromCopyCaches(String itemConfigId, String locationName);
 
+    String json_copyCacheItems();
+
+    String json_copyCacheReferential();
+
 }

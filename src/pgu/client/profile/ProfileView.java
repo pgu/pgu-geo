@@ -58,4 +58,8 @@ public interface ProfileView extends IsWidget //
 
     void copyLocationCaches();
 
+    String json_copyCacheItems();
+
+    String json_copyCacheReferential();
+
 }

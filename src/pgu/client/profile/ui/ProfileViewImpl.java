@@ -599,4 +599,14 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         locationsHelper.copyLocationCaches();
     }
 
+    @Override
+    public String json_copyCacheItems() {
+        return locationsHelper.json_copyCacheItems();
+    }
+
+    @Override
+    public String json_copyCacheReferential() {
+        return locationsHelper.json_copyCacheReferential();
+    }
+
 }

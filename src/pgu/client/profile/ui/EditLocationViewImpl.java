@@ -53,6 +53,7 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
     private final ArrayList<String>       selecteds          = new ArrayList<String>();
     private final ClientUtils             u                  = new ClientUtils();
     private final EditLocationViewHelper      viewHelper = new EditLocationViewHelper();
+    private final ProfileLocationsHelper      locationsHelper = new ProfileLocationsHelper();
 
     public EditLocationViewImpl() {
         initWidget(uiBinder.createAndBindUi(this));
@@ -300,7 +301,7 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
 
     @Override
     public void copyLocationCaches() {
-        viewHelper.copyLocationCaches();
+        locationsHelper.copyLocationCaches();
     }
 
     @Override
@@ -311,6 +312,16 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
     @Override
     public void removeLocationFromCopyCaches(final String item_config_id, final String location_name) {
         viewHelper.removeLocationFromCopyCaches(item_config_id, location_name);
+    }
+
+    @Override
+    public String json_copyCacheItems() {
+        return locationsHelper.json_copyCacheItems();
+    }
+
+    @Override
+    public String json_copyCacheReferential() {
+        return locationsHelper.json_copyCacheReferential();
     }
 
 }

@@ -153,16 +153,6 @@ public class LocationsUtils {
         return $wnd.pgu_geo.cache_referential[location_name];
     }-*/;
 
-    public static native String json_copyCacheItems() /*-{
-        return @pgu.client.app.utils.JsonUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
-          $wnd.pgu_geo.copy_cache_items);
-    }-*/;
-
-    public static native String json_copyCacheReferential() /*-{
-        return @pgu.client.app.utils.JsonUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
-          $wnd.pgu_geo.copy_cache_referential);
-    }-*/;
-
     public static native void replaceCachesByCopies() /*-{
         $wnd.pgu_geo.cache_items = $wnd.pgu_geo.copy_cache_items;
         $wnd.pgu_geo.cache_referential = $wnd.pgu_geo.copy_cache_referential;

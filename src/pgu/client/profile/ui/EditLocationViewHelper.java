@@ -72,9 +72,4 @@ public class EditLocationViewHelper {
         locations.removeLocationFromItem(cache_items, cache_referential, item_config_id, location_name);
     }
 
-    public void copyLocationCaches() {
-        locations.copyLocationCaches();
-    }
-
-
 }

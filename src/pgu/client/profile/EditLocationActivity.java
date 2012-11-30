@@ -99,8 +99,8 @@ public class EditLocationActivity {
                 linkedinService.saveLocations( //
                         //
                         clientFactory.getAppState().getUserId() //
-                        , LocationsUtils.json_copyCacheItems() //
-                        , LocationsUtils.json_copyCacheReferential() //
+                        , view.json_copyCacheItems() //
+                        , view.json_copyCacheReferential() //
                         //
                         , new AsyncCallbackApp<Void>(eventBus) {
 
@@ -215,8 +215,8 @@ public class EditLocationActivity {
                 linkedinService.saveLocations( //
                         //
                         clientFactory.getAppState().getUserId() //
-                        , LocationsUtils.json_copyCacheItems() //
-                        , LocationsUtils.json_copyCacheReferential() //
+                        , view.json_copyCacheItems() //
+                        , view.json_copyCacheReferential() //
                         //
                         , new AsyncCallbackApp<Void>(eventBus) {
 
