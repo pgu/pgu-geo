@@ -9,11 +9,6 @@ import pgu.shared.model.ProfileLocations;
 import pgu.shared.model.PublicPreferences;
 import pgu.shared.model.UserAndLocations;
 
-import com.google.appengine.api.search.Document;
-import com.google.appengine.api.search.Field;
-import com.google.appengine.api.search.Index;
-import com.google.appengine.api.search.IndexSpec;
-import com.google.appengine.api.search.SearchServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings("serial")
@@ -23,8 +18,8 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
     private final AppLog        log             = new AppLog();
     private final DAO           dao             = new DAO();
 
-    private static final Index PROFILE_IDX = SearchServiceFactory.getSearchService()
-            .getIndex(IndexSpec.newBuilder().setName("profile_index"));
+    //    private static final Index PROFILE_IDX = SearchServiceFactory.getSearchService()
+    //            .getIndex(IndexSpec.newBuilder().setName("profile_index"));
 
     @Override
     public ProfileLocations fetchProfileLocations(final String profileId) {
@@ -67,7 +62,7 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
         userAndLocations.setReferentialLocations(referentialLocations);
         dao.ofy().async().put(userAndLocations);
 
-        // TODO PGU Sep 12, 2012 async: complete document profile with locations
+        // TODO PGU Sep 12, 2012 async: update each location with profile
     }
 
     @Override
@@ -82,13 +77,16 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
     @Override
     public void saveProfile(final String profileId, final String jsonProfile) {
 
-        final Document.Builder docBuilder = Document.newBuilder() //
-                .addField(Field.newBuilder().setName("profile_id").setText(profileId)) //
-                .addField(Field.newBuilder().setName("json").setText(jsonProfile)) //
-                ;
+        // TODO PGU save profile with ofy
+        // TODO PGU location_idx where each location <-> profile
 
-        final Document doc = docBuilder.build();
-        PROFILE_IDX.putAsync(doc);
+        //        final Document.Builder docBuilder = Document.newBuilder() //
+        //                .addField(Field.newBuilder().setName("profile_id").setText(profileId)) //
+        //                .addField(Field.newBuilder().setName("json").setText(jsonProfile)) //
+        //                ;
+        //
+        //        final Document doc = docBuilder.build();
+        //        PROFILE_IDX.putAsync(doc);
     }
 
 }
