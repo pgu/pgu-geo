@@ -5,14 +5,14 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
-public class SavePublicLocationsEvent extends GwtEvent<SavePublicLocationsEvent.Handler> {
+public class SaveLocationsEvent extends GwtEvent<SaveLocationsEvent.Handler> {
 
-    public interface HasSavePublicLocationsHandlers extends HasHandlers {
-        HandlerRegistration addSavePublicLocationsHandler(SavePublicLocationsEvent.Handler handler);
+    public interface HasSaveLocationsHandlers extends HasHandlers {
+        HandlerRegistration addSaveLocationsHandler(SaveLocationsEvent.Handler handler);
     }
 
     public interface Handler extends EventHandler {
-        void onSavePublicLocations(SavePublicLocationsEvent event);
+        void onSaveLocations(SaveLocationsEvent event);
     }
 
     public static final Type<Handler> TYPE = new Type<Handler>();
@@ -24,7 +24,7 @@ public class SavePublicLocationsEvent extends GwtEvent<SavePublicLocationsEvent.
 
     @Override
     protected void dispatch(final Handler handler) {
-        handler.onSavePublicLocations(this);
+        handler.onSaveLocations(this);
     }
 
 }

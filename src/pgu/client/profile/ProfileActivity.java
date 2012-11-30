@@ -22,7 +22,7 @@ import pgu.client.profile.event.FetchProfileLocationsEvent;
 import pgu.client.profile.event.FetchPublicPreferencesEvent;
 import pgu.client.profile.event.SaveLocationEvent;
 import pgu.client.profile.event.SaveMapPreferencesEvent;
-import pgu.client.profile.event.SavePublicLocationsEvent;
+import pgu.client.profile.event.SaveLocationsEvent;
 import pgu.client.profile.event.SavePublicProfileEvent;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.client.service.ProfileServiceAsync;
@@ -48,7 +48,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 , MapsApiLoadedEvent.Handler //
 , ProfileLoadedEvent.Handler //
 , FetchPublicPreferencesEvent.Handler //
-, SavePublicLocationsEvent.Handler //
+, SaveLocationsEvent.Handler //
 , FetchProfileLocationsEvent.Handler //
 , SavePublicProfileEvent.Handler //
 {
@@ -105,7 +105,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
         hRegs.add(view.addFetchProfileLocationsHandler(this));
         hRegs.add(view.addFetchPublicPreferencesHandler(this));
-        hRegs.add(view.addSavePublicLocationsHandler(this));
+        hRegs.add(view.addSaveLocationsHandler(this));
 
         hRegs.add(view.addSavePublicProfileHandler(this));
 
@@ -410,7 +410,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     }
 
     @Override
-    public void onSavePublicLocations(final SavePublicLocationsEvent event) {
+    public void onSaveLocations(final SaveLocationsEvent event) {
         // TODO PGU Nov 30, 2012
         // TODO PGU Nov 30, 2012
         // TODO PGU Nov 30, 2012
