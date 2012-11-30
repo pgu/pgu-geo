@@ -1,6 +1,5 @@
 package pgu.client.profile.ui;
 
-import pgu.client.app.utils.GeocoderHelper;
 import pgu.client.app.utils.GoogleHelper;
 import pgu.client.app.utils.LocationsHelper;
 
@@ -9,7 +8,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 public class ProfileViewLocations {
 
     private final ProfileViewMarkers viewMarkers = new ProfileViewMarkers();
-    private final GeocoderHelper geocoder = new GeocoderHelper();
+    private final ProfileViewGeocoder geocoder = new ProfileViewGeocoder();
     private final GoogleHelper google = new GoogleHelper();
     private final LocationsHelper locations = new LocationsHelper();
 

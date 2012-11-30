@@ -1,8 +1,10 @@
-package pgu.client.app.utils;
+package pgu.client.profile.ui;
+
+import pgu.client.app.utils.GeocoderUtils;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
-public class GeocoderHelper {
+public class ProfileViewGeocoder {
 
     public native JavaScriptObject geocoder() /*-{
         return $wnd.pgu_geo.geocoder;

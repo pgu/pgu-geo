@@ -1,6 +1,5 @@
 package pgu.client.profile.ui;
 
-import pgu.client.app.utils.GeocoderHelper;
 import pgu.client.app.utils.GoogleHelper;
 import pgu.client.app.utils.MarkersHelper;
 
@@ -10,7 +9,7 @@ public class ProfileViewMarkers {
 
     private final ProfileViewMap viewMap = new ProfileViewMap();
     private final MarkersHelper markers = new MarkersHelper();
-    private final GeocoderHelper geocoder = new GeocoderHelper();
+    private final ProfileViewGeocoder geocoder = new ProfileViewGeocoder();
     private final GoogleHelper google = new GoogleHelper();
 
     private JavaScriptObject geocoder() {
