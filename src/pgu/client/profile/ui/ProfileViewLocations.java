@@ -17,6 +17,10 @@ public class ProfileViewLocations {
         return google.google();
     }
 
+    public native void initGeocoderCounter() /*-{
+        $wnd.pgu_geo.geocode_counter = 0;
+    }-*/;
+
     public native void initCaches( //
             final String items2locations //
             , final String referential //

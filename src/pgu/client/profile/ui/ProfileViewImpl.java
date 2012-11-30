@@ -498,6 +498,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     public void setProfileLocations(final ProfileLocations profileLocations) {
 
         viewLocations.initCaches(profileLocations.getItems2locations(), profileLocations.getReferentialLocations());
+        viewLocations.initGeocoderCounter();
 
         final String locationName = locContainer.getText();
 

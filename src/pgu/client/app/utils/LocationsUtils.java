@@ -47,32 +47,6 @@ public class LocationsUtils {
 
     }-*/;
 
-    public static native void addExperienceLocationToCache(double experience_id, String location_name) /*-{
-        if (location_name) {
-            var
-                cache = $wnd.pgu_geo.cache_items
-              , key = 'experience_' + experience_id
-              , locations = cache[key] || []
-              , has_location = false
-            ;
-
-            for ( var i = 0, len = locations.length; i < len; i++) {
-                var location = locations[i];
-                if (location === location_name) {
-                    has_location = true;
-                    break;
-                }
-            }
-
-            if (!has_location) {
-                locations.push(location_name);
-                cache[key] = locations;
-            }
-
-            @pgu.client.app.utils.GeocoderUtils::searchGeopoint(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;)(location_name);
-        }
-    }-*/;
-
     public static native JavaScriptObject getOtherLocationNames(String item_config_id) /*-{
 
         var
