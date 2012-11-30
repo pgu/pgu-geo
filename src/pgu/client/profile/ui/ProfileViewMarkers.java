@@ -7,23 +7,11 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 public class ProfileViewMarkers {
 
-    // TODO PGU
-    private final ProfileViewMap viewMap = new ProfileViewMap();
-    private final ProfileViewGeocoder geocoder = new ProfileViewGeocoder();
-
     private final MarkersHelper markers = new MarkersHelper();
     private final GoogleHelper google = new GoogleHelper();
 
-    private JavaScriptObject geocoder() {
-        return geocoder.geocoder();
-    }
-
     private JavaScriptObject google() {
         return google.google();
-    }
-
-    private JavaScriptObject profileMap() {
-        return viewMap.profileMap();
     }
 
     private JavaScriptObject createMarker(final JavaScriptObject profile_map, final String location_name) {
@@ -43,9 +31,9 @@ public class ProfileViewMarkers {
         return $wnd.pgu_geo.search_markers;
     }-*/;
 
-    public native JavaScriptObject createMarkerOnProfileMap(String location_name) /*-{
+    public native JavaScriptObject createMarkerOnProfileMap(String location_name, ProfileViewImpl view) /*-{
 
-        var profile_map = this.@pgu.client.profile.ui.ProfileViewMarkers::profileMap()
+        var profile_map = view.@pgu.client.profile.ui.ProfileViewImpl::profileMap()
                                ();
 
         var marker = this.@pgu.client.profile.ui.ProfileViewMarkers::createMarker(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;)
@@ -59,9 +47,9 @@ public class ProfileViewMarkers {
         return marker;
     }-*/;
 
-    public native JavaScriptObject createMarkerOnProfileMap(String location_name, String lat, String lng) /*-{
+    public native JavaScriptObject createMarkerOnProfileMap(String location_name, String lat, String lng, ProfileViewImpl view) /*-{
 
-        var profile_map = this.@pgu.client.profile.ui.ProfileViewMarkers::profileMap()
+        var profile_map = view.@pgu.client.profile.ui.ProfileViewImpl::profileMap()
                                ();
 
         var marker = this.@pgu.client.profile.ui.ProfileViewMarkers::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)
@@ -85,13 +73,13 @@ public class ProfileViewMarkers {
 
         $wnd.console.log('search location: ' + location_name);
 
-        var geocoder = this.@pgu.client.profile.ui.ProfileViewMarkers::geocoder()
+        var geocoder = view.@pgu.client.profile.ui.ProfileViewImpl::geocoder()
                             ();
 
         var google = this.@pgu.client.profile.ui.ProfileViewMarkers::google()
                           ();
 
-        var map = this.@pgu.client.profile.ui.ProfileViewMarkers::profileMap()
+        var map = view.@pgu.client.profile.ui.ProfileViewImpl::profileMap()
                        ();
 
         geocoder
@@ -114,11 +102,11 @@ public class ProfileViewMarkers {
                               , lng = '' + loc.lng()
                             ;
 
-                            this.@pgu.client.profile.ui.ProfileViewMarkers::createMarkerOnProfileMap(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)
-                                 (location_name,lat,lng);
+                            this.@pgu.client.profile.ui.ProfileViewMarkers::createMarkerOnProfileMap(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lpgu/client/profile/ui/ProfileViewImpl;)
+                                 (location_name, lat, lng, view);
 
                             view.@pgu.client.profile.ui.ProfileViewImpl::cacheLastSearchedLocation(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)
-                                 (location_name,lat,lng);
+                                 (location_name, lat, lng);
                         });
     }-*/;
 

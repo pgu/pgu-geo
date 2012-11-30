@@ -164,7 +164,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     @Override
     public void showOnMap(final String locationName) {
         Window.scrollTo(0, 0);
-        viewMarkers.createMarkerOnProfileMap(locationName);
+        viewMarkers.createMarkerOnProfileMap(locationName, this);
     }
 
     private final HashMap<String, String> loc2lat = new HashMap<String, String>();
@@ -561,7 +561,14 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     public void createMarkerOnProfileMap(final String location_name) {
-        viewMarkers.createMarkerOnProfileMap(location_name);
+        viewMarkers.createMarkerOnProfileMap(location_name, this);
     }
 
+    public JavaScriptObject geocoder() {
+        return viewGeocoder.geocoder();
+    }
+
+    public JavaScriptObject profileMap() {
+        return viewMap.profileMap();
+    }
 }
