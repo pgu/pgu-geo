@@ -7,9 +7,11 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 public class ProfileViewMarkers {
 
+    // TODO PGU
     private final ProfileViewMap viewMap = new ProfileViewMap();
-    private final MarkersHelper markers = new MarkersHelper();
     private final ProfileViewGeocoder geocoder = new ProfileViewGeocoder();
+
+    private final MarkersHelper markers = new MarkersHelper();
     private final GoogleHelper google = new GoogleHelper();
 
     private JavaScriptObject geocoder() {

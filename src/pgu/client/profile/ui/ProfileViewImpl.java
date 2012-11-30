@@ -93,6 +93,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     private final ProfileViewToPublic  viewPublic = new ProfileViewToPublic();
     private final ProfileViewLocations viewLocations = new ProfileViewLocations();
     private final ProfileViewMarkers   viewMarkers = new ProfileViewMarkers();
+    private final ProfileViewGeocoder  viewGeocoder = new ProfileViewGeocoder();
 
     private final LocationsHelper      locationsHelper = new LocationsHelper();
     private final JsonHelper           json = new JsonHelper();
@@ -503,7 +504,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         final String locationName = locContainer.getText();
 
         if (!u.isVoid(locationName)) {
-            viewLocations.addCurrentLocationToCache(locationName);
+            viewLocations.addCurrentLocationToCache(locationName, this);
         }
 
         viewLocations.updateLocationsCacheFromPositions();
@@ -554,5 +555,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     //    return JSON.parse(@pgu.client.app.utils.JsonUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)
     //                      ($wnd.pgu_geo.profile));
     //    }-*/;
+
+    public void searchGeopoint(final String location_name, final JavaScriptObject callback) {
+        viewGeocoder.searchGeopoint(location_name, callback);
+    }
+
+    public void createMarkerOnProfileMap(final String location_name) {
+        viewMarkers.createMarkerOnProfileMap(location_name);
+    }
 
 }

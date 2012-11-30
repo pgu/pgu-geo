@@ -7,8 +7,6 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 public class ProfileViewLocations {
 
-    private final ProfileViewMarkers viewMarkers = new ProfileViewMarkers();
-    private final ProfileViewGeocoder geocoder = new ProfileViewGeocoder();
     private final GoogleHelper google = new GoogleHelper();
     private final LocationsHelper locations = new LocationsHelper();
 
@@ -39,7 +37,7 @@ public class ProfileViewLocations {
 
     }-*/;
 
-    public native void addCurrentLocationToCache(String location_name) /*-{
+    public native void addCurrentLocationToCache(String location_name, ProfileViewImpl view) /*-{
         if (location_name) {
             var
                 cache = $wnd.pgu_geo.cache_items
@@ -83,12 +81,12 @@ public class ProfileViewLocations {
 
                 if (status === google.maps.GeocoderStatus.OK) {
 
-                    this.@pgu.client.profile.ui.ProfileViewLocations::createMarkerOnProfileMap(Ljava/lang/String;)
+                    view.@pgu.client.profile.ui.ProfileViewImpl::createMarkerOnProfileMap(Ljava/lang/String;)
                          (location_name);
                 }
             };
 
-            this.@pgu.client.profile.ui.ProfileViewLocations::searchGeopoint(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;)
+            view.@pgu.client.profile.ui.ProfileViewImpl::searchGeopoint(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;)
                  (location_name, callback);
 
         }
@@ -103,14 +101,6 @@ public class ProfileViewLocations {
         this.@pgu.client.profile.ui.ProfileViewLocations::removeLocationFromItem(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;)
              (cache_items, cache_referential, item_config_id, location_name);
     }-*/;
-
-    private void createMarkerOnProfileMap(final String location_name) {
-        viewMarkers.createMarkerOnProfileMap(location_name);
-    }
-
-    private void searchGeopoint(final String location_name, final JavaScriptObject callback) {
-        geocoder.searchGeopoint(location_name, callback);
-    }
 
     private void removeLocationFromItem(final JavaScriptObject cache_items, final JavaScriptObject cache_referential, final String item_config_id, final String location_name) {
         locations.removeLocationFromItem(cache_items, cache_referential, item_config_id, location_name);
@@ -170,7 +160,7 @@ public class ProfileViewLocations {
                 cache[key] = locations;
             }
 
-            this.@pgu.client.profile.ui.ProfileViewLocations::searchGeopoint(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;)
+            view.@pgu.client.profile.ui.ProfileViewImpl::searchGeopoint(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;)
                  (location_name);
 
         }
@@ -192,7 +182,7 @@ public class ProfileViewLocations {
                 for ( var j = 0, len = locations.length; j < len; j++) {
 
                     var location = locations[j];
-                    this.@pgu.client.profile.ui.ProfileViewLocations::createMarkerOnProfileMap(Ljava/lang/String;)
+                    view.@pgu.client.profile.ui.ProfileViewImpl::createMarkerOnProfileMap(Ljava/lang/String;)
                          (location);
                 }
             }
