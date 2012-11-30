@@ -520,8 +520,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     @Override
     public void removeUnusedLocations() {
-        //        $wnd.pgu_geo.cache_items from view locations
-        //        $wnd.pgu_geo.item_configs from view tables
         viewLocations.removeUnusedLocations();
     }
 

@@ -190,4 +190,47 @@ public class ProfileViewLocations {
 
     }-*/;
 
+    public native void removeUnusedLocations() /*-{
+
+        var
+            cache_referential = $wnd.pgu_geo.cache_referential
+          , cache_items = $wnd.pgu_geo.cache_items
+        ;
+
+        var locations_from_items = [];
+
+        // for each item, avoir un array de location names
+        for (var key in cache_items) {
+            if ('__gwt_ObjectId' === key) {
+                continue;
+            }
+            if (cache_items.hasOwnProperty(key)) {
+
+                var locations = cache_items[key];
+                locations_from_items = locations_from_items.concat(locations);
+            }
+        }
+
+        // for each location of the referential, indexof location in array, if == -1, remove location from referential
+        var unused_locations = [];
+
+        for (var location_name in cache_referential) {
+            if ('__gwt_ObjectId' === location_name) {
+                continue;
+            }
+            if (cache_referential.hasOwnProperty(location_name)) {
+
+                if (location_from_items.indexOf(location_name) === -1) {
+                    unused_locations.push(location_name);
+                }
+            }
+        }
+
+        for (var i = 0; i < unused_locations.length; i++) {
+            var unused_location = unused_locations[i];
+            delete cache_referential[unused_location];
+        }
+
+    }-*/;
+
 }
