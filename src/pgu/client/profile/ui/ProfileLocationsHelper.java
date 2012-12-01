@@ -8,30 +8,32 @@ public class ProfileLocationsHelper {
 
     private final JsonHelper json = new JsonHelper();
 
+    private String stringify(final JavaScriptObject jso) {
+        return json.stringify(jso);
+    }
+
+    private JavaScriptObject copy(final JavaScriptObject jso) {
+        return json.copy(jso);
+    }
+
     public native void copyLocationCaches() /*-{
-        $wnd.pgu_geo.copy_cache_items = JSON.parse(@pgu.client.app.utils.JsonUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
-        $wnd.pgu_geo.cache_items));
+
+        $wnd.pgu_geo.copy_cache_items = this.@pgu.client.profile.ui.ProfileLocationsHelper::copy(Lcom/google/gwt/core/client/JavaScriptObject;)
+                                             ($wnd.pgu_geo.cache_items);
 
 
-        $wnd.pgu_geo.copy_cache_referential = JSON.parse(@pgu.client.app.utils.JsonUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
-        $wnd.pgu_geo.cache_referential));
-
+        $wnd.pgu_geo.copy_cache_referential = this.@pgu.client.profile.ui.ProfileLocationsHelper::copy(Lcom/google/gwt/core/client/JavaScriptObject;)
+                                                   ($wnd.pgu_geo.cache_referential);
     }-*/;
 
-    public String json_copyCacheItems() {
-        return json.stringify(copyCacheItems());
-    }
-
-    private native JavaScriptObject copyCacheItems() /*-{
-        return $wnd.pgu_geo.copy_cache_items;
+    public native String json_copyCacheItems() /*-{
+        return this.@pgu.client.profile.ui.ProfileLocationsHelper::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)
+                    ($wnd.pgu_geo.copy_cache_items);
     }-*/;
 
-    public String json_copyCacheReferential() {
-        return json.stringify(copyCacheReferential());
-    }
-
-    private native JavaScriptObject copyCacheReferential() /*-{
-        return $wnd.pgu_geo.copy_cache_referential;
+    public native String json_copyCacheReferential() /*-{
+        return this.@pgu.client.profile.ui.ProfileLocationsHelper::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)
+                    ($wnd.pgu_geo.copy_cache_referential);
     }-*/;
 
     public native void replaceCachesByCopies() /*-{

@@ -27,7 +27,6 @@ import pgu.client.profile.event.SavePublicPreferencesEvent;
 import pgu.client.profile.event.SavePublicProfileEvent;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.client.service.ProfileServiceAsync;
-import pgu.client.service.PublicProfileServiceAsync;
 import pgu.shared.model.ProfileLocations;
 import pgu.shared.model.PublicPreferences;
 
@@ -56,7 +55,6 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     private final ClientFactory                  clientFactory;
     private final ProfileView                    view;
     private final LinkedinServiceAsync           linkedinService;
-    private final PublicProfileServiceAsync      publicProfileService;
     private final ProfileServiceAsync            profileService;
     private final AppContext                     ctx;
 
@@ -75,7 +73,6 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
         // TODO PGU Nov 30, 2012 to remove
         linkedinService = clientFactory.getLinkedinService();
-        publicProfileService = clientFactory.getPublicProfileService();
     }
 
     @Override
