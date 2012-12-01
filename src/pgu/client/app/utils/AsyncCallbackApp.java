@@ -9,7 +9,7 @@ import com.google.web.bindery.event.shared.EventBus;
 public abstract class AsyncCallbackApp<T> implements AsyncCallback<T> {
 
     private final EventBus    eventBus;
-    private final ClientUtils u = new ClientUtils();
+    private final ClientHelper u = new ClientHelper();
 
     public AsyncCallbackApp(final EventBus eventBus) {
         this.eventBus = eventBus;

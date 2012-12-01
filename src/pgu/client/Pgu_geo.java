@@ -14,7 +14,7 @@ import pgu.client.app.mvp.AppPlaceHistoryMapper;
 import pgu.client.app.mvp.ClientFactoryImpl;
 import pgu.client.app.ui.AppViewImpl;
 import pgu.client.app.utils.AsyncCallbackApp;
-import pgu.client.app.utils.ClientUtils;
+import pgu.client.app.utils.ClientHelper;
 import pgu.client.menu.MenuActivity;
 import pgu.client.menu.MenuView;
 import pgu.client.profile.ProfilePlace;
@@ -49,7 +49,7 @@ public class Pgu_geo implements EntryPoint {
         $wnd.pgu_geo = {};
     }-*/;
 
-    private final ClientUtils u = new ClientUtils();
+    private final ClientHelper u = new ClientHelper();
     private final AppContext ctx = new AppContext();
     private final MVPContext mvp = new MVPContext();
 

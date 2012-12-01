@@ -1,6 +1,6 @@
 package pgu.client.pub.ui;
 
-import pgu.client.app.utils.ClientUtils;
+import pgu.client.app.utils.ClientHelper;
 import pgu.client.pub.PublicMenuView;
 
 import com.github.gwtbootstrap.client.ui.Brand;
@@ -20,7 +20,7 @@ public class PublicMenuViewImpl extends Composite implements PublicMenuView {
     @UiField
     Brand userName, headline;
 
-    private final ClientUtils u = new ClientUtils();
+    private final ClientHelper u = new ClientHelper();
 
     public PublicMenuViewImpl() {
         initWidget(uiBinder.createAndBindUi(this));

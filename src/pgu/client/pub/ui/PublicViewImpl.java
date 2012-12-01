@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
-import pgu.client.app.utils.ClientUtils;
+import pgu.client.app.utils.ClientHelper;
 import pgu.client.app.utils.GoogleUtils;
 import pgu.client.app.utils.LocationsUtils;
 import pgu.client.app.utils.MarkersUtils;
@@ -86,7 +86,7 @@ public class PublicViewImpl extends Composite implements PublicView {
     HTMLPanel fusionPanel;
 
     private PublicPresenter   presenter;
-    private final ClientUtils u = new ClientUtils();
+    private final ClientHelper u = new ClientHelper();
 
     private final HashMap<String, HTMLPanel> type2chart = new HashMap<String, HTMLPanel>();
 

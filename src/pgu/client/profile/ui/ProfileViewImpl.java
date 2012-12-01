@@ -3,9 +3,9 @@ package pgu.client.profile.ui;
 import java.util.HashMap;
 
 import pgu.client.app.event.LocationShowOnMapEvent;
-import pgu.client.app.utils.ClientUtils;
+import pgu.client.app.utils.ClientHelper;
 import pgu.client.app.utils.JsonHelper;
-import pgu.client.app.utils.MarkdownUtils;
+import pgu.client.app.utils.MarkdownHelper;
 import pgu.client.profile.ProfilePresenter;
 import pgu.client.profile.ProfileView;
 import pgu.client.profile.event.FetchMapPreferencesEvent;
@@ -84,7 +84,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     @UiField
     NavLink                                                 locContainer;
 
-    private final ClientUtils                               u               = new ClientUtils();
+    private final ClientHelper                               u               = new ClientHelper();
 
     private String              lastSearchItemLocation      = null;
     private boolean             isMapDisplayed = true;
@@ -97,8 +97,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     private final ProfileViewGeocoder  viewGeocoder = new ProfileViewGeocoder();
     private final ProfileViewLanguages viewLanguages = new ProfileViewLanguages();
 
-    private final ProfileLocationsHelper      locationsHelper = new ProfileLocationsHelper();
-    private final JsonHelper           json = new JsonHelper();
+    private final MarkdownHelper         markdown = new MarkdownHelper();
+    private final ProfileLocationsHelper locationsHelper = new ProfileLocationsHelper();
+    private final JsonHelper             json = new JsonHelper();
 
     public ProfileViewImpl() {
 
@@ -271,12 +272,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         fireEvent(new LocationShowOnMapEvent(locContainer.getText()));
     }
 
-    private ProfilePresenter presenter;
-
     @Override
     public void setPresenter(final ProfilePresenter presenter) {
         staticPresenter = presenter;
-        this.presenter = presenter;
     }
 
     private void setName(final String firstname, final String lastname) {
@@ -311,7 +309,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     private void setSummary(final String summary) {
-        final String htmlSummary = MarkdownUtils.markdown(summary);
+        final String htmlSummary = markdown.markdown(summary);
         summaryBasic.getElement().getFirstChildElement().setAttribute("data-content", htmlSummary);
     }
 

@@ -1,6 +1,6 @@
 package pgu.client.signin;
 
-import pgu.client.app.utils.ClientUtils;
+import pgu.client.app.utils.ClientHelper;
 
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.web.bindery.event.shared.EventBus;
@@ -10,7 +10,7 @@ public class SigninActivity {
     private final SigninView                     view;
     private EventBus                             eventBus;
 
-    private final ClientUtils                    u     = new ClientUtils();
+    private final ClientHelper                    u     = new ClientHelper();
 
     public SigninActivity(final SigninView view) {
         this.view = view;

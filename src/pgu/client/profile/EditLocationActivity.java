@@ -8,7 +8,7 @@ import pgu.client.app.event.LocationSuccessDeleteEvent;
 import pgu.client.app.event.LocationsSuccessSaveEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
-import pgu.client.app.utils.ClientUtils;
+import pgu.client.app.utils.ClientHelper;
 import pgu.client.app.utils.Notification;
 import pgu.client.service.LinkedinServiceAsync;
 
@@ -24,7 +24,7 @@ public class EditLocationActivity {
 
     private final EditLocationView               view;
     private final EventBus                       eventBus;
-    private final ClientUtils                    u              = new ClientUtils();
+    private final ClientHelper                    u              = new ClientHelper();
     private final ArrayList<HandlerRegistration> handlerRegs    = new ArrayList<HandlerRegistration>();
     private final LinkedinServiceAsync           linkedinService;
     private final ClientFactory                  clientFactory;

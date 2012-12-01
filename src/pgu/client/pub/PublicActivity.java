@@ -5,7 +5,7 @@ import pgu.client.app.event.ChartsApiLoadedEvent;
 import pgu.client.app.event.MapsApiLoadedEvent;
 import pgu.client.app.event.ShowdownLoadedEvent;
 import pgu.client.app.utils.AsyncCallbackApp;
-import pgu.client.app.utils.ClientUtils;
+import pgu.client.app.utils.ClientHelper;
 import pgu.client.pub.event.FetchPublicContactsEvent;
 import pgu.client.pub.event.UserHeadlineEvent;
 import pgu.client.pub.event.UserNameEvent;
@@ -30,7 +30,7 @@ public class PublicActivity implements PublicPresenter //
     private final PublicProfileServiceAsync publicProfileService = GWT.create(PublicProfileService.class);
     private final AppContext                ctx;
 
-    private final ClientUtils               u                    = new ClientUtils();
+    private final ClientHelper               u                    = new ClientHelper();
 
     private EventBus                        eventBus;
 

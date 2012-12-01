@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import pgu.client.app.utils.ClientUtils;
+import pgu.client.app.utils.ClientHelper;
 import pgu.client.app.utils.Notification;
 import pgu.client.app.utils.NotificationImpl;
 import pgu.client.profile.EditLocationView;
@@ -51,7 +51,7 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
     private final ArrayList<Notification> notifications      = new ArrayList<Notification>();
     private final ArrayList<String>       otherItemLocations = new ArrayList<String>();
     private final ArrayList<String>       selecteds          = new ArrayList<String>();
-    private final ClientUtils             u                  = new ClientUtils();
+    private final ClientHelper             u                  = new ClientHelper();
     private final EditLocationViewHelper      viewHelper = new EditLocationViewHelper();
     private final ProfileLocationsHelper      locationsHelper = new ProfileLocationsHelper();
 

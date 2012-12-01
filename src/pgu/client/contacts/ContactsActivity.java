@@ -9,7 +9,7 @@ import pgu.client.app.event.HideWaitingIndicatorEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
-import pgu.client.app.utils.ClientUtils;
+import pgu.client.app.utils.ClientHelper;
 import pgu.client.contacts.event.FetchContactsNamesEvent;
 import pgu.client.contacts.event.SaveChartsPreferencesEvent;
 import pgu.client.contacts.event.SaveContactsNumberByCountryEvent;
@@ -37,7 +37,7 @@ FetchContactsNamesEvent.Handler //
     private final LinkedinServiceAsync           linkedinService;
     private final AppContext                     ctx;
 
-    private final ClientUtils                    u     = new ClientUtils();
+    private final ClientHelper                    u     = new ClientHelper();
 
     private EventBus                             eventBus;
 

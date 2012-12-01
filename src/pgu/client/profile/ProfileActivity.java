@@ -15,7 +15,7 @@ import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.event.ShowdownLoadedEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
-import pgu.client.app.utils.ClientUtils;
+import pgu.client.app.utils.ClientHelper;
 import pgu.client.app.utils.Level;
 import pgu.client.profile.event.FetchMapPreferencesEvent;
 import pgu.client.profile.event.FetchProfileLocationsEvent;
@@ -58,7 +58,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     private final ProfileServiceAsync            profileService;
     private final AppContext                     ctx;
 
-    private final ClientUtils                    u     = new ClientUtils();
+    private final ClientHelper                    u     = new ClientHelper();
 
     private EventBus                             eventBus;
     private String                               itemConfigId;

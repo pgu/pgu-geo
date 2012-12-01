@@ -4,7 +4,7 @@ import pgu.client.app.event.HideWaitingIndicatorEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
-import pgu.client.app.utils.ClientUtils;
+import pgu.client.app.utils.ClientHelper;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.shared.dto.AccessToken;
 import pgu.shared.dto.OauthAuthorizationStart;
@@ -21,7 +21,7 @@ public class OAuthActivity extends AbstractActivity implements OAuthPresenter {
     private final Place                redirectPlace;
     private final ClientFactory        clientFactory;
     private final OAuthView            view;
-    private final ClientUtils          u = new ClientUtils();
+    private final ClientHelper          u = new ClientHelper();
     private final LinkedinServiceAsync linkedinService;
 
     private EventBus                   eventBus;

@@ -4,7 +4,7 @@ import pgu.client.app.event.HideWaitingIndicatorEvent;
 import pgu.client.app.event.NotificationEvent;
 import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.event.TechnicalErrorEvent;
-import pgu.client.app.utils.ClientUtils;
+import pgu.client.app.utils.ClientHelper;
 import pgu.client.app.utils.Level;
 import pgu.client.app.utils.Notification;
 
@@ -19,7 +19,7 @@ NotificationEvent.Handler //
 {
 
     private final AppView         view;
-    private final ClientUtils     u = new ClientUtils();
+    private final ClientHelper     u = new ClientHelper();
 
     public AppActivity(final AppView view) {
         this.view = view;
