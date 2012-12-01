@@ -67,7 +67,7 @@
                         </div>
                         <div class="span2">
                             <b:Button ui:field="showAllBtn" icon="MAP_MARKER" iconSize="LARGE" />
-                            <b:Button ui:field="mapPreferencesBtn" icon="SCREENSHOT" iconSize="LARGE" />
+                            <b:Button ui:field="mapPreferencesBtn" icon="CAMERA" iconSize="LARGE" />
                         </div>
                     </g:HTMLPanel>
                 </div>
