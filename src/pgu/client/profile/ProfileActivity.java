@@ -401,13 +401,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     public void onSavePublicPreferences(final SavePublicPreferencesEvent event) {
 
         final String type = event.getType();
-        // TODO PGU
-        // TODO PGU
-        // TODO PGU
-        // TODO PGU
-        // TODO PGU
-        // TODO PGU
-        // TODO PGU
+
         profileService.savePublicPreferences( //
                 ctx.getProfileId() //
                 , view.getJsonPublicPreferences() //
