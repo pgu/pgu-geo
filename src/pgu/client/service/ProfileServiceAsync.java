@@ -1,5 +1,6 @@
 package pgu.client.service;
 
+import pgu.shared.model.MapPreferences;
 import pgu.shared.model.ProfileLocations;
 import pgu.shared.model.PublicPreferences;
 
@@ -21,5 +22,7 @@ public interface ProfileServiceAsync {
     void savePublicPreferences(String profileId, String jsonPublicPreferences, AsyncCallback<Void> asyncCallbackApp);
 
     void saveMapPreferences(String profileId, String mapPreferences, AsyncCallback<Void> asyncCallbackApp);
+
+    void fetchMapPreferences(String profileId, AsyncCallback<MapPreferences> asyncCallbackApp);
 
 }

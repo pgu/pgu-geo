@@ -483,6 +483,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     private boolean isProfileSetInView = false;
 
     @Override
+    public boolean isProfileSetInView() {
+        return isProfileSetInView;
+    }
+
+    @Override
     public void showProfile() {
         if (isProfileSetInView) {
             return;
@@ -498,6 +503,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     private void setProfileAfter() {
+
         fireEvent(new FetchProfileLocationsEvent());
         fireEvent(new FetchPublicPreferencesEvent());
         fireEvent(new FetchMapPreferencesEvent());

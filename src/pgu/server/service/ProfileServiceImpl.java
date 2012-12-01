@@ -26,6 +26,7 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
     public ProfileLocations fetchProfileLocations(final String profileId) {
 
         final ProfileLocations profileLocations = dao.ofy().find(ProfileLocations.class, profileId);
+
         if (profileLocations == null) {
             return new ProfileLocations();
         }
@@ -109,6 +110,18 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
         mapPref.setValues(mapPreferences);
 
         dao.ofy().async().put(mapPref);
+    }
+
+    @Override
+    public MapPreferences fetchMapPreferences(final String profileId) {
+
+        final MapPreferences mapPref = dao.ofy().find(MapPreferences.class, profileId);
+
+        if (mapPref == null) {
+            return new MapPreferences();
+        }
+
+        return mapPref;
     }
 
 }

@@ -70,4 +70,6 @@ public interface ProfileView extends IsWidget //
 
     void addLocation2ItemInCopyCache(String itemConfigId, String locationName);
 
+    boolean isProfileSetInView();
+
 }

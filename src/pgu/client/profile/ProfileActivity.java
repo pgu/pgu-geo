@@ -26,6 +26,7 @@ import pgu.client.profile.event.SaveMapPreferencesEvent;
 import pgu.client.profile.event.SavePublicPreferencesEvent;
 import pgu.client.profile.event.SavePublicProfileEvent;
 import pgu.client.service.ProfileServiceAsync;
+import pgu.shared.model.MapPreferences;
 import pgu.shared.model.ProfileLocations;
 import pgu.shared.model.PublicPreferences;
 
@@ -92,25 +93,26 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         view.setPresenter(this);
 
         hRegs.clear();
-        hRegs.add(view.addSaveLocationHandler(this));
         hRegs.add(view.addLocationShowOnMapHandler(this));
+        hRegs.add(view.addSaveLocationHandler(this));
         hRegs.add(view.addSaveMapPreferencesHandler(this));
 
         hRegs.add(view.addFetchProfileLocationsHandler(this));
         hRegs.add(view.addFetchPublicPreferencesHandler(this));
-        hRegs.add(view.addSaveLocationsHandler(this));
+        hRegs.add(view.addFetchMapPreferencesHandler(this));
 
+        hRegs.add(view.addSaveLocationsHandler(this));
         hRegs.add(view.addSavePublicProfileHandler(this));
         hRegs.add(view.addSavePublicPreferencesHandler(this));
 
         hRegs.add(eventBus.addHandler(LocationsSuccessSaveEvent.TYPE, this));
         hRegs.add(eventBus.addHandler(LocationSuccessDeleteEvent.TYPE, this));
+
         hRegs.add(eventBus.addHandler(LocationAddNewEvent.TYPE, this));
         hRegs.add(eventBus.addHandler(LocationShowOnMapEvent.TYPE, this));
 
         hRegs.add(eventBus.addHandler(ShowdownLoadedEvent.TYPE, this));
         hRegs.add(eventBus.addHandler(MapsApiLoadedEvent.TYPE, this));
-
         hRegs.add(eventBus.addHandler(ProfileLoadedEvent.TYPE, this));
 
         panel.setWidget(view.asWidget());
@@ -124,9 +126,16 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     }
 
     private void showProfile() {
+
+        if (view.isProfileSetInView()) {
+            return;
+        }
+
         profileService.saveProfile( //
+                //
                 ctx.getProfileId() //
                 , getJsonProfile() //
+                //
                 , new AsyncCallbackApp<Void>(eventBus) {
 
                     @Override
@@ -195,9 +204,11 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
             view.addLocation2ItemInCopyCache(itemConfigId, locationName);
 
             profileService.saveLocations( //
+                    //
                     ctx.getProfileId() //
                     , view.json_copyCacheItems() //
                     , view.json_copyCacheReferential() //
+                    //
                     , new AsyncCallbackApp<Void>(eventBus) {
 
                         @Override
@@ -238,8 +249,10 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     public void onSaveMapPreferences(final SaveMapPreferencesEvent event) {
 
         profileService.saveMapPreferences( //
+                //
                 ctx.getProfileId() //
                 , event.getMapPreferences() //
+                //
                 , new AsyncCallbackApp<Void>(eventBus) {
 
                     @Override
@@ -352,9 +365,11 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         final String jsonPublicProfile = view.getJsonPublicProfile();
 
         profileService.savePublicProfile( //
-                ctx.getProfileId(), //
-                jsonPublicProfile, //
-                new AsyncCallbackApp<Void>(eventBus) {
+                //
+                ctx.getProfileId() //
+                , jsonPublicProfile //
+                //
+                , new AsyncCallbackApp<Void>(eventBus) {
 
                     @Override
                     public void onSuccess(final Void result) {
@@ -370,8 +385,10 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         final String type = event.getType();
 
         profileService.savePublicPreferences( //
+                //
                 ctx.getProfileId() //
                 , view.getJsonPublicPreferences() //
+                //
                 , new AsyncCallbackApp<Void>(eventBus) {
 
                     @Override
@@ -384,8 +401,13 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     @Override
     public void onFetchMapPreferences(final FetchMapPreferencesEvent event) {
-        // TODO Auto-generated method stub
+        profileService.fetchMapPreferences(ctx.getProfileId(), new AsyncCallbackApp<MapPreferences>(eventBus) {
 
+            @Override
+            public void onSuccess(final MapPreferences result) {
+                // TODO PGU Dec 1, 2012
+            }
+        });
     }
 
 }
