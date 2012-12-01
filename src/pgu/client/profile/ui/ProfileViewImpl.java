@@ -228,8 +228,19 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     public void setPublicHeader(final String public_preference, final boolean is_public) {
-        if (public_prefernce) {
 
+        if (PublicProfileItemType.educations.equals(public_preference)) {
+
+            eduPublicState.setIcon(is_public ? IconType.EYE_OPEN : IconType.EYE_CLOSE);
+            isEduPublic = is_public;
+
+        } else if (PublicProfileItemType.experiences.equals(public_preference)) {
+
+            expPublicState.setIcon(is_public ? IconType.EYE_OPEN : IconType.EYE_CLOSE);
+            isExpPublic = is_public;
+
+        } else {
+            throw new IllegalArgumentException("Unknownd public preference: " + public_preference);
         }
 
     }
