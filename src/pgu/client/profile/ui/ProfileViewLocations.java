@@ -256,4 +256,33 @@ public class ProfileViewLocations {
 
     }-*/;
 
+    public native boolean isDoublon(String item_config_id, String location_name, String lat, String lng) /*-{
+        var
+            cache_referential = $wnd.pgu_geo.cache_referential
+          , cache_items = $wnd.pgu_geo.cache_items
+          , locations = cache_items[item_config_id];
+        ;
+
+        if (locations) {
+
+            var is_doublon = false;
+
+            for ( var i = 0, len = locations.length; i < len; i++) {
+                var location = locations[i];
+
+                if (location === location_name) {
+                    return true;
+                }
+
+                var geopoint = cache_referential[location];
+
+                if (geopoint.lat === lat //
+                    && geopoint.lng === lng) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }-*/;
+
 }

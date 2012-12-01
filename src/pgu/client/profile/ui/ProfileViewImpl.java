@@ -635,4 +635,14 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         return viewPublic.getJsonPublicPreferences();
     }
 
+    @Override
+    public boolean isLocationDoublon(final String itemConfigId, final String locationName, final String lat, final String lng) {
+        return viewLocations.isDoublon(itemConfigId, locationName, lat, lng);
+    }
+
+    @Override
+    public void addLocation2ItemInCopyCache(final String itemConfigId, final String locationName) {
+        locationsHelper.addLocation2ItemInCopyCache(itemConfigId, locationName);
+    }
+
 }

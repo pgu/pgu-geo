@@ -17,7 +17,6 @@ import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.Level;
-import pgu.client.app.utils.LocationsUtils;
 import pgu.client.profile.event.FetchProfileLocationsEvent;
 import pgu.client.profile.event.FetchPublicPreferencesEvent;
 import pgu.client.profile.event.SaveLocationEvent;
@@ -25,7 +24,6 @@ import pgu.client.profile.event.SaveLocationsEvent;
 import pgu.client.profile.event.SaveMapPreferencesEvent;
 import pgu.client.profile.event.SavePublicPreferencesEvent;
 import pgu.client.profile.event.SavePublicProfileEvent;
-import pgu.client.service.LinkedinServiceAsync;
 import pgu.client.service.ProfileServiceAsync;
 import pgu.shared.model.ProfileLocations;
 import pgu.shared.model.PublicPreferences;
@@ -54,7 +52,6 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     private final ClientFactory                  clientFactory;
     private final ProfileView                    view;
-    private final LinkedinServiceAsync           linkedinService;
     private final ProfileServiceAsync            profileService;
     private final AppContext                     ctx;
 
@@ -70,9 +67,6 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         this.ctx = ctx;
         view = clientFactory.getProfileView();
         profileService = clientFactory.getProfileService();
-
-        // TODO PGU Nov 30, 2012 to remove
-        linkedinService = clientFactory.getLinkedinService();
     }
 
     @Override
@@ -141,20 +135,6 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
                 });
 
         view.showProfile();
-
-        // TODO PGU Nov 20, 2012 show waiting indicator while loading the app
-        // u.fire(eventBus, new ShowWaitingIndicatorEvent());
-        // linkedinService.fetchProfile( //
-        // clientFactory.getAppState().getAccessToken() //
-        // , new AsyncCallbackApp<Profile>(eventBus) {
-        //
-        // @Override
-        // public void onSuccess(final Profile profile) {
-        // // u.fire(eventBus, new HideWaitingIndicatorEvent());
-        // // view.setProfile(profile);
-        //
-        // }
-        // });
     }
 
     private String getJsonProfile() {
@@ -187,10 +167,6 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         view.refreshHtmlLocationsForItem(event.getItemConfigId());
     }
 
-    // TODO PGU
-    // TODO PGU
-    // TODO PGU
-    // TODO PGU
     @Override
     public void onSaveLocation(final SaveLocationEvent event) {
         if (u.isVoid(itemConfigId)) {
@@ -199,31 +175,27 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
         u.fire(eventBus, new ShowWaitingIndicatorEvent());
 
-        view.copyLocationCaches();
-
         final String locationName = event.getLocationName();
         final String lat = event.getLat();
         final String lng = event.getLng();
 
-        final boolean isDoublon = LocationsUtils.isDoublon(itemConfigId, locationName, lat, lng);
+        final boolean isDoublon = view.isLocationDoublon(itemConfigId, locationName, lat, lng);
         if (isDoublon) {
 
-            view.deleteCopies();
             u.fire(eventBus, new HideWaitingIndicatorEvent());
             u.fire(eventBus, new NotificationEvent(Level.WARNING, //
                     "This location " + locationName + " is already associated to this item"));
 
         } else {
 
+            view.copyLocationCaches();
             view.addGeopointToCopyCache(locationName, lat, lng);
-            LocationsUtils.addLocation2ItemInCopyCache(itemConfigId, locationName);
+            view.addLocation2ItemInCopyCache(itemConfigId, locationName);
 
-            linkedinService.saveLocations( //
-                    //
-                    clientFactory.getAppState().getUserId() //
+            profileService.saveLocations( //
+                    ctx.getProfileId() //
                     , view.json_copyCacheItems() //
                     , view.json_copyCacheReferential() //
-                    //
                     , new AsyncCallbackApp<Void>(eventBus) {
 
                         @Override

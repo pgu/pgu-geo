@@ -93,4 +93,34 @@ public class ProfileLocationsHelper {
 
     }-*/;
 
+    public native void addLocation2ItemInCopyCache(String item_config_id, String location_name) /*-{
+        var
+            cache_items = $wnd.pgu_geo.copy_cache_items
+          , locations = cache_items[item_config_id]
+        ;
+
+        if (locations) {
+
+            var is_doublon = false;
+            for ( var i = 0, len = locations.length; i < len; i++) {
+                var location = locations[i];
+
+                if (location === location_name) {
+                    is_doublon = true;
+                    break;
+                }
+            }
+
+            if (!is_doublon) {
+                locations.push(location_name);
+            }
+
+        } else {
+            locations = [];
+            locations.push(location_name);
+            cache_items[item_config_id] = locations;
+        }
+
+    }-*/;
+
 }

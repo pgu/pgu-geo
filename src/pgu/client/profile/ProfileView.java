@@ -67,4 +67,8 @@ public interface ProfileView extends IsWidget //
 
     String getJsonPublicPreferences();
 
+    boolean isLocationDoublon(String itemConfigId, String locationName, String lat, String lng);
+
+    void addLocation2ItemInCopyCache(String itemConfigId, String locationName);
+
 }

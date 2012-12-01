@@ -63,4 +63,6 @@ public interface EditLocationView extends HasNotifications {
 
     void deleteCopies();
 
+    void addLocation2ItemInCopyCache(String itemConfigId, String locationName);
+
 }

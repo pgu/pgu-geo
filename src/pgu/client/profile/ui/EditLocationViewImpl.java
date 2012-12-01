@@ -334,4 +334,9 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
         locationsHelper.deleteCopies();
     }
 
+    @Override
+    public void addLocation2ItemInCopyCache(final String itemConfigId, final String locationName) {
+        locationsHelper.addLocation2ItemInCopyCache(itemConfigId, locationName);
+    }
+
 }

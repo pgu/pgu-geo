@@ -9,7 +9,6 @@ import pgu.client.app.event.LocationsSuccessSaveEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
-import pgu.client.app.utils.LocationsUtils;
 import pgu.client.app.utils.Notification;
 import pgu.client.service.LinkedinServiceAsync;
 
@@ -93,7 +92,7 @@ public class EditLocationActivity {
 
                 view.copyLocationCaches();
                 for (final String locationName: selectedLocations) {
-                    LocationsUtils.addLocation2ItemInCopyCache(itemConfigId, locationName);
+                    view.addLocation2ItemInCopyCache(itemConfigId, locationName);
                 }
 
                 linkedinService.saveLocations( //
