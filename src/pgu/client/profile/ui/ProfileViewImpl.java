@@ -390,6 +390,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
         } else if (PublicProfileItemType.educations.equals(publicProfileItem)) {
             tooltip = eduPublicTooltip;
+
         } else {
             throw new IllegalArgumentException("item? " + publicProfileItem);
         }
