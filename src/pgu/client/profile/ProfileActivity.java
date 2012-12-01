@@ -17,6 +17,7 @@ import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientUtils;
 import pgu.client.app.utils.Level;
+import pgu.client.profile.event.FetchMapPreferencesEvent;
 import pgu.client.profile.event.FetchProfileLocationsEvent;
 import pgu.client.profile.event.FetchPublicPreferencesEvent;
 import pgu.client.profile.event.SaveLocationEvent;
@@ -48,6 +49,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 , FetchProfileLocationsEvent.Handler //
 , SavePublicProfileEvent.Handler //
 , SavePublicPreferencesEvent.Handler //
+, FetchMapPreferencesEvent.Handler //
 {
 
     private final ClientFactory                  clientFactory;
@@ -378,6 +380,12 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
                     }
 
                 });
+    }
+
+    @Override
+    public void onFetchMapPreferences(final FetchMapPreferencesEvent event) {
+        // TODO Auto-generated method stub
+
     }
 
 }

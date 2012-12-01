@@ -8,6 +8,7 @@ import pgu.client.app.utils.JsonHelper;
 import pgu.client.app.utils.MarkdownUtils;
 import pgu.client.profile.ProfilePresenter;
 import pgu.client.profile.ProfileView;
+import pgu.client.profile.event.FetchMapPreferencesEvent;
 import pgu.client.profile.event.FetchProfileLocationsEvent;
 import pgu.client.profile.event.FetchPublicPreferencesEvent;
 import pgu.client.profile.event.SaveLocationEvent;
@@ -389,12 +390,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         $doc.getElementById('pgu_geo.profile:edu_table').innerHTML = html;
     }-*/;
 
-    @Deprecated
-    @Override
-    public String getPublicProfile() {
-        return PublicProfileUtils.getPublicProfile();
-    }
-
     @Override
     public void confirmChangeOnPublicProfile(final String publicProfileItem) {
 
@@ -462,6 +457,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     @Override
+    public HandlerRegistration addFetchMapPreferencesHandler(final FetchMapPreferencesEvent.Handler handler) {
+        return addHandler(handler, FetchMapPreferencesEvent.TYPE);
+    }
+
+    @Override
     public void hideSaveWidget() {
         locationSaveBtn.setVisible(false);
     }
@@ -500,6 +500,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     private void setProfileAfter() {
         fireEvent(new FetchProfileLocationsEvent());
         fireEvent(new FetchPublicPreferencesEvent());
+        fireEvent(new FetchMapPreferencesEvent());
 
         fireEvent(new SavePublicProfileEvent());
     }

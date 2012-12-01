@@ -1,6 +1,7 @@
 package pgu.client.profile;
 
 import pgu.client.app.event.LocationShowOnMapEvent;
+import pgu.client.profile.event.FetchMapPreferencesEvent;
 import pgu.client.profile.event.FetchProfileLocationsEvent;
 import pgu.client.profile.event.FetchPublicPreferencesEvent;
 import pgu.client.profile.event.SaveLocationEvent;
@@ -18,6 +19,7 @@ public interface ProfileView extends IsWidget //
 , LocationShowOnMapEvent.HasLocationShowOnMapHandlers //
 , SaveMapPreferencesEvent.HasSaveMapPreferencesHandlers //
 , FetchPublicPreferencesEvent.HasFetchPublicPreferencesHandlers //
+, FetchMapPreferencesEvent.HasFetchMapPreferencesHandlers //
 , SaveLocationsEvent.HasSaveLocationsHandlers //
 , FetchProfileLocationsEvent.HasFetchProfileLocationsHandlers //
 , SavePublicProfileEvent.HasSavePublicProfileHandlers //
@@ -25,9 +27,6 @@ public interface ProfileView extends IsWidget //
 {
 
     void setPresenter(ProfilePresenter presenter);
-
-    @Deprecated
-    String getPublicProfile();
 
     void confirmChangeOnPublicProfile(String publicProfileItem);
 
