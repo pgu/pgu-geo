@@ -270,9 +270,14 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         // TODO PGU
         // TODO PGU
         // TODO PGU
+        // TODO PGU
+        // TODO PGU
+        // TODO PGU
+        // TODO PGU
+        // TODO PGU
 
         publicProfileService.saveMapPreferences( //
-                clientFactory.getAppState().getUserId() //
+                ctx.getProfileId() //
                 , event.getMapPreferences() //
                 , new AsyncCallbackApp<Void>(eventBus) {
 
