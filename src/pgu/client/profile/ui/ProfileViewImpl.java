@@ -194,41 +194,44 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         viewMarkers.deleteSearchMarkers();
     }
 
-    private static boolean isEduPublic = false;
-    private static boolean isExpPublic = false;
+    private boolean isEduPublic = false;
+    private boolean isExpPublic = false;
 
     @UiHandler("expPublicState")
     public void clickOnExpPublicState(final ClickEvent e) {
 
-        updatePublicHeader(!isExpPublic, PublicProfileItemType.experiences);
+        final boolean is_public = !isExpPublic; // toggle current state
+        isExpPublic = is_public; // refresh state
 
-        fireEvent(new SavePublicPreferencesEvent(PublicProfileItemType.experiences));
+        final String public_preference = PublicProfileItemType.experiences;
+
+        updatePublicHeader(public_preference, is_public, expPublicState);
     }
 
     @UiHandler("eduPublicState")
     public void clickOnEduPublicState(final ClickEvent e) {
 
-        updatePublicHeader(!isEduPublic, PublicProfileItemType.educations);
-        // TODO PGU
-        // TODO PGU
-        // TODO PGU
-        // TODO PGU
-        // TODO PGU
-        fireEvent(new SavePublicPreferencesEvent(PublicProfileItemType.educations));
+        final boolean is_public = !isEduPublic; // toggle current state
+        isEduPublic = is_public; // refresh state
+
+        final String public_preference = PublicProfileItemType.educations;
+
+        updatePublicHeader(public_preference, is_public, eduPublicState);
     }
 
-    public void updatePublicHeader(final boolean isPublic, final String publicProfileItem) {
-        GWT.log("update " + isPublic + ", " + publicProfileItem);
+    private void updatePublicHeader(final String public_preference, final boolean is_public, final Button btn) {
 
-        if (PublicProfileItemType.experiences.equals(publicProfileItem)) {
-            expPublicState.setIcon(isPublic ? IconType.EYE_OPEN : IconType.EYE_CLOSE);
-            isExpPublic = isPublic;
+        btn.setIcon(is_public ? IconType.EYE_OPEN : IconType.EYE_CLOSE);
+        viewPublic.updatePublicPreference(public_preference, is_public);
 
-        } else if (PublicProfileItemType.educations.equals(publicProfileItem)) {
-            eduPublicState.setIcon(isPublic ? IconType.EYE_OPEN : IconType.EYE_CLOSE);
-            isEduPublic = isPublic;
+        fireEvent(new SavePublicPreferencesEvent(public_preference));
+    }
+
+    public void setPublicHeader(final String public_preference, final boolean is_public) {
+        if (public_prefernce) {
 
         }
+
     }
 
     private static ProfilePresenter staticPresenter;
@@ -406,19 +409,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
         }.schedule(3000);
     }
-
-    @Deprecated
-    public static void updateCachePublicPreferences() {
-        PublicProfileUtils.updatePublicProfileItem(PublicProfileItemType.experiences, isExpPublic);
-        PublicProfileUtils.updatePublicProfileItem(PublicProfileItemType.educations, isEduPublic);
-    }
-
-    @Deprecated
-    @Override
-    public String getPublicPreferences() {
-        return PublicProfileUtils.json_publicPreferences();
-    }
-
 
     @Override
     public HandlerRegistration addSaveLocationHandler(final SaveLocationEvent.Handler handler) {

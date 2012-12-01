@@ -31,9 +31,6 @@ public interface ProfileView extends IsWidget //
 
     void confirmChangeOnPublicProfile(String publicProfileItem);
 
-    @Deprecated
-    String getPublicPreferences();
-
     void hideSaveWidget();
 
     void showSaveWidget();

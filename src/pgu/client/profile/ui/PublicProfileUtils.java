@@ -1,26 +1,15 @@
 package pgu.client.profile.ui;
 
-import com.google.gwt.core.client.JavaScriptObject;
 
 public class PublicProfileUtils {
-
-    @Deprecated
-    private static native JavaScriptObject basePublicProfile() /*-{
-        return $wnd.pgu_geo.base_public_profile;
-    }-*/;
-
-    @Deprecated
-    public static native void updatePublicProfileItem(String public_profile_item, boolean is_public) /*-{
-        $wnd.pgu_geo.public_prefs[public_profile_item] = is_public;
-    }-*/;
 
     @Deprecated
     public static native String getPublicProfile() /*-{
 
         // update $wnd.pgu_geo.public_prefs
-        @pgu.client.profile.ui.ProfileViewImpl::updateCachePublicPreferences()();
+//        @pgu.client.profile.ui.ProfileViewImpl::updateCachePublicPreferences()();
 
-        var base_public_profile = @pgu.client.profile.ui.PublicProfileUtils::basePublicProfile()();
+        var base_public_profile = $wnd.pgu_geo.base_public_profile;
         var copy_profile = JSON.parse(@pgu.client.app.utils.JsonUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
         base_public_profile));
 
@@ -51,16 +40,6 @@ public class PublicProfileUtils {
 
         return @pgu.client.app.utils.JsonUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
   		            copy_profile);
-    }-*/;
-
-    @Deprecated
-    public static native String json_publicPreferences() /*-{
-
-        // update $wnd.pgu_geo.public_prefs
-        @pgu.client.profile.ui.ProfileViewImpl::updateCachePublicPreferences()();
-
-        return @pgu.client.app.utils.JsonUtils::json_stringify(Lcom/google/gwt/core/client/JavaScriptObject;)( //
-        $wnd.pgu_geo.public_prefs);
     }-*/;
 
 }

@@ -103,8 +103,8 @@ public class ProfileViewToPublic {
             if (public_prefs.hasOwnProperty(key)) {
                 var is_public = public_prefs[key];
 
-                view.@pgu.client.profile.ui.ProfileViewImpl::updatePublicHeader(ZLjava/lang/String;)
-                     (is_public,key);
+                view.@pgu.client.profile.ui.ProfileViewImpl::setPublicHeader(Ljava/lang/String;Z)
+                     (key,is_public);
             }
         }
 
@@ -115,5 +115,8 @@ public class ProfileViewToPublic {
                     ($wnd.pgu_geo.public_prefs);
     }-*/;
 
+    public native void updatePublicPreference(String public_preference, boolean is_public) /*-{
+        $wnd.pgu_geo.public_prefs[public_preference] = is_public;
+    }-*/;
 
 }
