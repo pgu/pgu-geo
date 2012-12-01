@@ -652,4 +652,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         locationsHelper.addLocation2ItemInCopyCache(itemConfigId, locationName);
     }
 
+    @Override
+    public void setMapPreferences(final String values) {
+        viewMap.setPreferences(values);
+    }
+
 }

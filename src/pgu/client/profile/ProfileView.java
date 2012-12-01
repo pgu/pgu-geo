@@ -72,4 +72,6 @@ public interface ProfileView extends IsWidget //
 
     boolean isProfileSetInView();
 
+    void setMapPreferences(String values);
+
 }

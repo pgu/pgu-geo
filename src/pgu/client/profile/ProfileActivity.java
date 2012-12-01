@@ -405,7 +405,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
             @Override
             public void onSuccess(final MapPreferences result) {
-                // TODO PGU Dec 1, 2012
+                view.setMapPreferences(result.getValues());
             }
         });
     }

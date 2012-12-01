@@ -45,8 +45,7 @@ public class ProfileViewMap {
     }
 
     public native String getCurrentMapPreferences() /*-{
-        var profile_map = this.@pgu.client.profile.ui.ProfileViewMap::profileMap()
-                               ();
+        var profile_map = $wnd.pgu_geo.profile_map;
 
         var map_preferences = {};
         map_preferences.zoom = profile_map.zoom;
@@ -55,6 +54,22 @@ public class ProfileViewMap {
 
         return this.@pgu.client.profile.ui.ProfileViewMap::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)
                     (map_preferences);
+    }-*/;
+
+    public native void setPreferences(final String map_preferences) /*-{
+
+        var google = this.@pgu.client.profile.ui.ProfileViewMap::google()
+                          ();
+
+        var
+            profile_map = $wnd.pgu_geo.profile_map
+          , prefs = JSON.parse(map_preferences)
+          , center = new google.maps.LatLng(parseFloat(prefs.center_lat), parseFloat(prefs.center_lng))
+        ;
+
+        profile_map.setZoom(prefs.zoom);
+        profile_map.setCenter(center);
+
     }-*/;
 
 
