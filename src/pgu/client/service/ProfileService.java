@@ -21,4 +21,6 @@ public interface ProfileService extends RemoteService {
 
     void savePublicPreferences(String profileId, String jsonPublicPreferences);
 
+    void saveMapPreferences(String profileId, String mapPreferences);
+
 }

@@ -5,6 +5,7 @@ import pgu.server.access.DAO;
 import pgu.server.app.AppLog;
 import pgu.server.utils.AppUtils;
 import pgu.shared.model.BasePublicProfile;
+import pgu.shared.model.MapPreferences;
 import pgu.shared.model.ProfileLocations;
 import pgu.shared.model.PublicPreferences;
 import pgu.shared.model.UserAndLocations;
@@ -98,6 +99,16 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
         //
         //        final Document doc = docBuilder.build();
         //        PROFILE_IDX.putAsync(doc);
+    }
+
+    @Override
+    public void saveMapPreferences(final String profileId, final String mapPreferences) {
+
+        final MapPreferences mapPref = new MapPreferences();
+        mapPref.setProfileId(profileId);
+        mapPref.setValues(mapPreferences);
+
+        dao.ofy().async().put(mapPref);
     }
 
 }

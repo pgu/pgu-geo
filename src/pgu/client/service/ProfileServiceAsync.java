@@ -20,4 +20,6 @@ public interface ProfileServiceAsync {
 
     void savePublicPreferences(String profileId, String jsonPublicPreferences, AsyncCallback<Void> asyncCallbackApp);
 
+    void saveMapPreferences(String profileId, String mapPreferences, AsyncCallback<Void> asyncCallbackApp);
+
 }

@@ -266,17 +266,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     @Override
     public void onSaveMapPreferences(final SaveMapPreferencesEvent event) {
 
-        // TODO PGU
-        // TODO PGU
-        // TODO PGU
-        // TODO PGU
-        // TODO PGU
-        // TODO PGU
-        // TODO PGU
-        // TODO PGU
-        // TODO PGU
-
-        publicProfileService.saveMapPreferences( //
+        profileService.saveMapPreferences( //
                 ctx.getProfileId() //
                 , event.getMapPreferences() //
                 , new AsyncCallbackApp<Void>(eventBus) {
@@ -287,6 +277,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
                     }
 
                 });
+
     }
 
     @Override
