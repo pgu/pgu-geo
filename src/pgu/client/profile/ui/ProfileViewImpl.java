@@ -87,7 +87,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     private final ClientHelper                               u               = new ClientHelper();
 
     private String              lastSearchItemLocation      = null;
-    private boolean             isMapDisplayed = true;
 
     private final ProfileViewTables    viewTables = new ProfileViewTables();
     private final ProfileViewMap       viewMap    = new ProfileViewMap();
@@ -110,9 +109,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         initWidget(uiBinder.createAndBindUi(this));
         exportMethods();
 
-        isMapDisplayed = true;
         locationSaveBtn.setVisible(false);
-
     }
 
     @UiHandler("mapPreferencesBtn")
