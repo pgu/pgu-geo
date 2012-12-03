@@ -22,6 +22,12 @@ public class ProfileViewGeocoder {
 
     public void searchGeopoint(final String location_name, final JavaScriptObject callback, final ProfileViewImpl view) {
 
+        // TODO PGU Dec 3, 2012
+        // TODO PGU Dec 3, 2012
+        // TODO PGU Dec 3, 2012
+        // TODO PGU Dec 3, 2012
+        // TODO PGU Dec 3, 2012
+        // TODO PGU Dec 3, 2012
         if (LocationsUtils.isLocationInReferential(location_name)) {
             executeCallback(callback);
             return;
