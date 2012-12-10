@@ -16,6 +16,7 @@ import com.github.gwtbootstrap.client.ui.NavPills;
 import com.github.gwtbootstrap.client.ui.ProgressBar;
 import com.github.gwtbootstrap.client.ui.base.HasVisibleHandlers;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -142,15 +143,21 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
         getOtherItemLocationsFromCache(itemConfigId, this);
     }
 
-    public native void getOtherItemLocationsFromCache(String item_config_Id, EditLocationViewImpl view) /*-{
+    private JavaScriptObject getOtherLocationNames(final String itemConfigId) {
+        return viewHelper.getOtherLocationNames(itemConfigId);
+    }
 
-		var other_location_names = @pgu.client.app.utils.LocationsUtils::getOtherLocationNames(Ljava/lang/String;)(item_config_Id);
+    public native void getOtherItemLocationsFromCache(String item_config_id, EditLocationViewImpl view) /*-{
+
+		var other_location_names = this.@pgu.client.profile.ui.EditLocationViewImpl::getOtherLocationNames(Ljava/lang/String;)
+		                                (item_config_id);
 
         for ( var i = 0, len = other_location_names.length; i < len; i++) {
 
 			var other_location_name = other_location_names[i];
 
-			view.@pgu.client.profile.ui.EditLocationViewImpl::addOtherExistingItemLocation(Ljava/lang/String;)(other_location_name);
+			view.@pgu.client.profile.ui.EditLocationViewImpl::addOtherExistingItemLocation(Ljava/lang/String;)
+			     (other_location_name);
 		}
     }-*/;
 

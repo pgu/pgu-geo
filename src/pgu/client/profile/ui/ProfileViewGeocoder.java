@@ -1,7 +1,7 @@
 package pgu.client.profile.ui;
 
 import pgu.client.app.utils.GoogleHelper;
-import pgu.client.app.utils.LocationsUtils;
+import pgu.client.app.utils.LocationsHelper;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.Scheduler;
@@ -11,6 +11,7 @@ import com.google.gwt.user.client.Timer;
 public class ProfileViewGeocoder {
 
     private final GoogleHelper google = new GoogleHelper();
+    private final LocationsHelper locations = new LocationsHelper();
 
     private JavaScriptObject google() {
         return google.google();
@@ -22,13 +23,7 @@ public class ProfileViewGeocoder {
 
     public void searchGeopoint(final String location_name, final JavaScriptObject callback, final ProfileViewImpl view) {
 
-        // TODO PGU Dec 3, 2012
-        // TODO PGU Dec 3, 2012
-        // TODO PGU Dec 3, 2012
-        // TODO PGU Dec 3, 2012
-        // TODO PGU Dec 3, 2012
-        // TODO PGU Dec 3, 2012
-        if (LocationsUtils.isLocationInReferential(location_name)) {
+        if (locations.isLocationInReferential(location_name)) {
             executeCallback(callback);
             return;
         }

@@ -37,30 +37,6 @@ public class LocationsUtils {
 
     }-*/;
 
-    public static native JavaScriptObject getOtherLocationNames(String item_config_id) /*-{
-
-        var
-            cache_referential = $wnd.pgu_geo.cache_referential
-          , cache_items = $wnd.pgu_geo.cache_items
-          , item_locations = cache_items[item_config_id]
-          , other_location_names = []
-        ;
-
-        for (var key in cache_referential) {
-            if ('__gwt_ObjectId' === key) {
-                continue;
-            }
-            if (cache_referential.hasOwnProperty(key)) {
-
-                if ($wnd.$.inArray(key, item_locations) == -1) {
-                    other_location_names.push(key);
-                }
-            }
-        }
-
-        return other_location_names;
-    }-*/;
-
     public static native JavaScriptObject getLocationNames(String item_config_id) /*-{
         return $wnd.pgu_geo.cache_items[item_config_id] || [];
     }-*/;
