@@ -18,7 +18,7 @@ public class SigninActivity {
 
     public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
         this.eventBus = eventBus;
-        panel.setWidget(view);
+        panel.setWidget(view.asWidget());
 
         //        view.addSaveLocationHandler(this);
         //        eventBus.addHandler(LocationsSuccessSaveEvent.TYPE, this);
