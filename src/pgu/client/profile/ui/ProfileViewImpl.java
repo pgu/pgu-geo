@@ -100,6 +100,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     private final ProfileLocationsHelper locationsHelper = new ProfileLocationsHelper();
     private final JsonHelper             json = new JsonHelper();
 
+    private final ClientHelper           clientHelper = new ClientHelper();
+
     public ProfileViewImpl() {
 
         overviewSection = new Section("profile:overview");
@@ -471,7 +473,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     @Override
     public void showNotificationWarning(final String msg) {
-        GWT.log(msg);
+        clientHelper.console(msg);
         // TODO PGU textbox with the warning msg
     }
 

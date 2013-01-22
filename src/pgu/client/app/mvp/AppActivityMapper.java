@@ -23,7 +23,7 @@ public class AppActivityMapper implements ActivityMapper {
     @Override
     public Activity getActivity(final Place place) {
 
-        // TODO PGU Nov 18, 2012 is user is not logged in then window.location.replace("signinplace");
+        // TODO PGU Nov 18, 2012 if user is not logged in then window.location.replace("signinplace");
 
         if (place instanceof ProfilePlace) {
             return new ProfileActivity((ProfilePlace) place, clientFactory, ctx);
