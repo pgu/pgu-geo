@@ -81,7 +81,6 @@ public class ProfileViewLocations {
 
                 if (status === google.maps.GeocoderStatus.OK) {
 
-
                     view.@pgu.client.profile.ui.ProfileViewImpl::createMarkerOnProfileMap(Ljava/lang/String;)
                          (location_name);
                 }
@@ -89,7 +88,6 @@ public class ProfileViewLocations {
 
             view.@pgu.client.profile.ui.ProfileViewImpl::searchGeopoint(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;)
                  (location_name, callback);
-
         }
     }-*/;
 
@@ -107,7 +105,7 @@ public class ProfileViewLocations {
         locations.removeLocationFromItem(cache_items, cache_referential, item_config_id, location_name);
     }
 
-    public native void updateLocationsCacheFromPositions() /*-{
+    public native void updateLocationsCacheFromPositions(ProfileViewImpl view) /*-{
 
         var
             p = $wnd.pgu_geo.profile
@@ -131,15 +129,15 @@ public class ProfileViewLocations {
                       , location_name = raw_location.trim()
                     ;
 
-                    this.@pgu.client.profile.ui.ProfileViewLocations::addExperienceLocationToCache(DLjava/lang/String;)
-                         (experience_id, location_name);
+                    this.@pgu.client.profile.ui.ProfileViewLocations::addExperienceLocationToCache(DLjava/lang/String;Lpgu/client/profile/ui/ProfileViewImpl;)
+                         (experience_id, location_name, view);
                 }
             }
         }
 
     }-*/;
 
-    private native void addExperienceLocationToCache(double experience_id, String location_name) /*-{
+    private native void addExperienceLocationToCache(double experience_id, String location_name, ProfileViewImpl view) /*-{
         if (location_name) {
             var
                 cache = $wnd.pgu_geo.cache_items
@@ -167,7 +165,7 @@ public class ProfileViewLocations {
         }
     }-*/;
 
-    public native void showProfileItemsOnProfileMap() /*-{
+    public native void showProfileItemsOnProfileMap(ProfileViewImpl view) /*-{
         var
             cache_referential = $wnd.pgu_geo.cache_referential
           , cache_items = $wnd.pgu_geo.cache_items
@@ -221,7 +219,7 @@ public class ProfileViewLocations {
             }
             if (cache_referential.hasOwnProperty(location_name)) {
 
-                if (location_from_items.indexOf(location_name) === -1) {
+                if (locations_from_items.indexOf(location_name) === -1) {
                     unused_locations.push(location_name);
                 }
             }

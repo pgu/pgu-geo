@@ -126,7 +126,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         viewMarkers.deleteSearchMarkers();
 
         // show profile_item markers
-        viewLocations.showProfileItemsOnProfileMap();
+        viewLocations.showProfileItemsOnProfileMap(this);
     }
 
     @UiHandler("locationSearchBox")
@@ -516,7 +516,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             viewLocations.addCurrentLocationToCache(locationName, this);
         }
 
-        viewLocations.updateLocationsCacheFromPositions();
+        viewLocations.updateLocationsCacheFromPositions(this);
         viewTables.updateTablesWithLocations(this);
 
         new Timer() { // HACK: fire an event when all locations are done
