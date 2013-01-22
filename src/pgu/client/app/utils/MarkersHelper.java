@@ -4,12 +4,18 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 public class MarkersHelper {
 
+    private final LocationsHelper locations = new LocationsHelper();
+
+    private boolean isLocationInReferential(final String location_name) {
+        return locations.isLocationInReferential(location_name);
+    }
+
     // TODO PGU Nov 29, 2012 review static + throw
 
     public native JavaScriptObject createMarker(JavaScriptObject map, String location_name) /*-{
 
-        var geopoint_is_available = @pgu.client.app.utils.LocationsUtils::isLocationInReferential(Ljava/lang/String;)
-                                    (location_name);
+        var geopoint_is_available = this.@pgu.client.app.utils.MarkersHelper::isLocationInReferential(Ljava/lang/String;)
+                                         (location_name);
 
         if (geopoint_is_available) {
 

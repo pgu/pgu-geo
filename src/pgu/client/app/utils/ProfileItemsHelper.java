@@ -6,11 +6,13 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 public class ProfileItemsHelper {
 
+
     public boolean isEdu(final String itemType) {
         return ItemType.education.equals(itemType);
     }
 
     public boolean isXp(final String itemType) {
+        // TODO PGU Jan 22, 2013 ??? PublicProfileItemType ???
         return ItemType.experience.equals(itemType);
     }
 
