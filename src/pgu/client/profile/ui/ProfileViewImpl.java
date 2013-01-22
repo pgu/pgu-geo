@@ -202,7 +202,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         final boolean is_public = !isExpPublic; // toggle current state
         isExpPublic = is_public; // refresh state
 
-        final String public_preference = PublicProfileItemType.experiences;
+        final String public_preference = PublicProfileItemType.positions;
 
         updatePublicHeader(public_preference, is_public, expPublicState);
     }
@@ -233,13 +233,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             eduPublicState.setIcon(is_public ? IconType.EYE_OPEN : IconType.EYE_CLOSE);
             isEduPublic = is_public;
 
-        } else if (PublicProfileItemType.experiences.equals(public_preference)) {
+        } else if (PublicProfileItemType.positions.equals(public_preference)) {
 
             expPublicState.setIcon(is_public ? IconType.EYE_OPEN : IconType.EYE_CLOSE);
             isExpPublic = is_public;
 
         } else {
-            throw new IllegalArgumentException("Unknownd public preference: " + public_preference);
+            throw new IllegalArgumentException("Unknown public preference: " + public_preference);
         }
 
     }
@@ -389,7 +389,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     public void confirmChangeOnPublicProfile(final String publicProfileItem) {
 
         Tooltip tooltip;
-        if (PublicProfileItemType.experiences.equals(publicProfileItem)) {
+        if (PublicProfileItemType.positions.equals(publicProfileItem)) {
             tooltip = expPublicTooltip;
 
         } else if (PublicProfileItemType.educations.equals(publicProfileItem)) {

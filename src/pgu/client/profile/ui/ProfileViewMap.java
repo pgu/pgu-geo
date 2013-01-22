@@ -58,6 +58,11 @@ public class ProfileViewMap {
 
     public native void setPreferences(final String map_preferences) /*-{
 
+        if (!map_preferences) {
+            $wnd.console.log('no map_preferences');
+            return;
+        }
+
         var google = this.@pgu.client.profile.ui.ProfileViewMap::google()
                           ();
 

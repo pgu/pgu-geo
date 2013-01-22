@@ -8,6 +8,7 @@ public class PublicProfileItemType {
 
     public static final String summary     = "summary";
     public static final String experiences = "experiences";
+    public static final String positions   = "positions";
     public static final String educations  = "educations";
     public static final String wishes      = "wishes";
     public static final String contacts    = "contacts";

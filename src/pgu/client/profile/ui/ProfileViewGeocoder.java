@@ -51,6 +51,8 @@ public class ProfileViewGeocoder {
         var geocoder = this.@pgu.client.profile.ui.ProfileViewGeocoder::geocoder()
                             ();
 
+        var that = this;
+
         geocoder
             .geocode(
                 {
@@ -77,7 +79,7 @@ public class ProfileViewGeocoder {
 
                     } else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
 
-                        this.@pgu.client.profile.ui.ProfileViewGeocoder::searchGeopointWithDelay(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;ILpgu/client/profile/ui/ProfileViewImpl;)
+                        that.@pgu.client.profile.ui.ProfileViewGeocoder::searchGeopointWithDelay(Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;ILpgu/client/profile/ui/ProfileViewImpl;)
                              (location_name, callback, 1000, view);
 
                         var warn = {

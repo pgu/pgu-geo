@@ -82,6 +82,8 @@ public class ProfileViewMarkers {
         var map = view.@pgu.client.profile.ui.ProfileViewImpl::profileMap()
                        ();
 
+        var that = this;
+
         geocoder
                 .geocode(
                         {
@@ -102,7 +104,7 @@ public class ProfileViewMarkers {
                               , lng = '' + loc.lng()
                             ;
 
-                            this.@pgu.client.profile.ui.ProfileViewMarkers::createMarkerOnProfileMap(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lpgu/client/profile/ui/ProfileViewImpl;)
+                            that.@pgu.client.profile.ui.ProfileViewMarkers::createMarkerOnProfileMap(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lpgu/client/profile/ui/ProfileViewImpl;)
                                  (location_name, lat, lng, view);
 
                             view.@pgu.client.profile.ui.ProfileViewImpl::cacheLastSearchedLocation(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)

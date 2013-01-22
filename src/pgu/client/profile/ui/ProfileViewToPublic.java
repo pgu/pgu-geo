@@ -69,7 +69,7 @@ public class ProfileViewToPublic {
         // remember: item_configs do not contain locations
 
         return this.@pgu.client.profile.ui.ProfileViewToPublic::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)
-                    (public_profile);
+                    (public_p);
 
     }-*/;
 

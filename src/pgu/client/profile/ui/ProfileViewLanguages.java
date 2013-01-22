@@ -20,7 +20,7 @@ public class ProfileViewLanguages {
             ;
 
             if (cache_lg.hasOwnProperty(language_level)) {
-                cache_lg.get(language_level).push(language_name);
+                cache_lg[language_level].push(language_name);
 
             } else {
                 cache_lg[language_level] = [].concat(language_name);

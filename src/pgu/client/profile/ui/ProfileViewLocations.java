@@ -71,14 +71,16 @@ public class ProfileViewLocations {
                 }
             }
 
+            var that = this;
             var callback = function(status) {
 
                 $wnd.console.log('addCurrentLocationToCache');
 
-                var google = this.@pgu.client.profile.ui.ProfileViewLocations::google()
+                var google = that.@pgu.client.profile.ui.ProfileViewLocations::google()
                                   ();
 
                 if (status === google.maps.GeocoderStatus.OK) {
+
 
                     view.@pgu.client.profile.ui.ProfileViewImpl::createMarkerOnProfileMap(Ljava/lang/String;)
                          (location_name);
