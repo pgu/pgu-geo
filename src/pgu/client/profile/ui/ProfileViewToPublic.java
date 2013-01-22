@@ -91,7 +91,7 @@ public class ProfileViewToPublic {
 
     public native void showPublicPreferences(final ProfileViewImpl view, final String preferences) /*-{
 
-        // {"wishes":true,"positions":true,"educations":false,"contacts":true}, see PublicProfileItem
+        // {"wishes":true,"positions":true,"educations":false,"contacts":true}, see PublicProfileItemType
         $wnd.pgu_geo.public_prefs = JSON.parse(preferences);
 
         var public_prefs = $wnd.pgu_geo.public_prefs;

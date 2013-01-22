@@ -9,6 +9,7 @@ import pgu.shared.model.MapPreferences;
 import pgu.shared.model.ProfileLocations;
 import pgu.shared.model.PublicPreferences;
 import pgu.shared.model.UserAndLocations;
+import pgu.shared.utils.PublicProfileItemType;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -43,7 +44,9 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
             final PublicPreferences initialPublicPreferences = new PublicPreferences();
 
             initialPublicPreferences.setProfileId(profileId);
-            initialPublicPreferences.setValues("{\"positions\":false,\"educations\":false}");
+            initialPublicPreferences.setValues( //
+                    "{\"" + PublicProfileItemType.positions + "\":false" + //
+                    ",\"" + PublicProfileItemType.educations + "\":false}");
 
             dao.ofy().async().put(initialPublicPreferences);
 
