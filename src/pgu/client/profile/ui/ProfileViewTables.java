@@ -101,7 +101,7 @@ public class ProfileViewTables {
 
     }-*/;
 
-    private static native String createTableFoot() /*-{
+    private native String createTableFoot() /*-{
         return '' +
         '  </tbody>                                        ' +
         '</table>                                          ' +

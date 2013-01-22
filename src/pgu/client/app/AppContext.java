@@ -49,6 +49,6 @@ public class AppContext {
     }
 
     public native String getProfileId() /*-{
-        return pgu_geo.profile.id;
+        return $wnd.pgu_geo.profile.id;
     }-*/;
 }
