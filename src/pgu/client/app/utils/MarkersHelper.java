@@ -5,12 +5,19 @@ import com.google.gwt.core.client.JavaScriptObject;
 public class MarkersHelper {
 
     private final LocationsHelper locations = new LocationsHelper();
+    private final GoogleHelper google = new GoogleHelper();
+
+    private JavaScriptObject google() {
+        return google.google();
+    }
 
     private boolean isLocationInReferential(final String location_name) {
         return locations.isLocationInReferential(location_name);
     }
 
-    // TODO PGU Nov 29, 2012 review static + throw
+    private JavaScriptObject getGeopoint(final String location_name) {
+        return locations.getGeopoint(location_name);
+    }
 
     public native JavaScriptObject createMarker(JavaScriptObject map, String location_name) /*-{
 
@@ -20,14 +27,14 @@ public class MarkersHelper {
         if (geopoint_is_available) {
 
             var
-                geopoint = @pgu.client.app.utils.LocationsUtils::getGeopoint(Ljava/lang/String;)
-                           (location_name)
+                geopoint = this.@pgu.client.app.utils.MarkersHelper::getGeopoint(Ljava/lang/String;)
+                                (location_name)
               , lat = geopoint.lat
               , lng = geopoint.lng
             ;
 
-            return @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)
-                   (map,location_name,lat,lng);
+            return this.@pgu.client.app.utils.MarkersHelper::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)
+                        (map, location_name, lat, lng);
 
         } else {
             throw "No geopoint for " + location_name;
@@ -37,7 +44,8 @@ public class MarkersHelper {
     public native JavaScriptObject createMarkerWithGeopoint(JavaScriptObject map, String location_name, String lat, String lng) /*-{
 
         var
-            google = @pgu.client.app.utils.GoogleUtils::google()()
+            google = this.@pgu.client.app.utils.MarkersHelper::google()
+                          ()
         ;
 
         var latLng = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
