@@ -4,6 +4,7 @@ import javax.persistence.Id;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
+@Deprecated
 public class UserAndLocations implements IsSerializable {
 
     @Id

@@ -20,8 +20,6 @@ public class DAO extends DAOBase {
         ObjectifyService.register(UserAndLocations.class);
         ObjectifyService.register(PublicProfile.class);
 
-        ObjectifyService.register(BasePublicProfile.class);
-
         ObjectifyService.register(Country2ContactNames.class);
         ObjectifyService.register(Country2ContactNumber.class);
 
@@ -32,6 +30,7 @@ public class DAO extends DAOBase {
 
         ObjectifyService.register(ProfileLocations.class);
         ObjectifyService.register(PublicPreferences.class);
+        ObjectifyService.register(BasePublicProfile.class);
     }
 
 }

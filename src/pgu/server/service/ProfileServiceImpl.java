@@ -8,7 +8,6 @@ import pgu.shared.model.BasePublicProfile;
 import pgu.shared.model.MapPreferences;
 import pgu.shared.model.ProfileLocations;
 import pgu.shared.model.PublicPreferences;
-import pgu.shared.model.UserAndLocations;
 import pgu.shared.utils.PublicProfileItemType;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -70,12 +69,12 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
     public void saveLocations(final String profileId, final String items2locations, final String referentialLocations) {
         log.info(this, "(\nuser[%s]\n%s\n\n%s\n)", profileId, items2locations, referentialLocations);
 
-        final UserAndLocations userAndLocations = new UserAndLocations();
-        userAndLocations.setProfileId(profileId);
+        final ProfileLocations profileLocations = new ProfileLocations();
+        profileLocations.setProfileId(profileId);
+        profileLocations.setItems2locations(items2locations);
+        profileLocations.setReferentialLocations(referentialLocations);
 
-        userAndLocations.setItems2locations(items2locations);
-        userAndLocations.setReferentialLocations(referentialLocations);
-        dao.ofy().async().put(userAndLocations);
+        dao.ofy().async().put(profileLocations);
 
         // TODO PGU Sep 12, 2012 async: update each location with profile
     }
