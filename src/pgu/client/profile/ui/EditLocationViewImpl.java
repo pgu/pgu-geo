@@ -141,21 +141,14 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
             }
         }
 
-        presenter.onStop();
-
         if (timerCloseView != null) {
             timerCloseView.cancel();
         }
+
+        presenter.onStop();
     }
 
     private void hideViewWithDelay() {
-
-        if (timerCloseView != null) {
-            timerCloseView.run();
-            timerCloseView.cancel();
-            timerCloseView = null;
-        }
-
         timerCloseView = new Timer() {
 
             @Override
