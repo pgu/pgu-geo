@@ -1,7 +1,6 @@
 package pgu.client.profile;
 
-import java.util.ArrayList;
-
+import pgu.client.app.AppContext;
 import pgu.client.app.event.LocationAddNewEvent;
 import pgu.client.app.event.LocationShowOnMapEvent;
 import pgu.client.app.event.LocationSuccessDeleteEvent;
@@ -9,271 +8,123 @@ import pgu.client.app.event.LocationsSuccessSaveEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientHelper;
-import pgu.client.app.utils.Notification;
-import pgu.client.service.LinkedinServiceAsync;
+import pgu.client.service.ProfileServiceAsync;
 
-import com.github.gwtbootstrap.client.ui.event.HiddenEvent;
-import com.github.gwtbootstrap.client.ui.event.HiddenHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Timer;
-import com.google.web.bindery.event.shared.EventBus;
-import com.google.web.bindery.event.shared.HandlerRegistration;
+import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-public class EditLocationActivity {
+public class EditLocationActivity extends AbstractActivity {
 
     private final EditLocationView               view;
-    private final EventBus                       eventBus;
-    private final ClientHelper                    u              = new ClientHelper();
-    private final ArrayList<HandlerRegistration> handlerRegs    = new ArrayList<HandlerRegistration>();
-    private final LinkedinServiceAsync           linkedinService;
-    private final ClientFactory                  clientFactory;
-    private Timer                                timerCloseView = null;
+    private final AppContext                     ctx;
+    private final ClientHelper                   u     = new ClientHelper();
+    private EventBus                             eventBus;
 
-    public EditLocationActivity(final ClientFactory clientFactory) {
-        this.clientFactory = clientFactory;
-        eventBus = clientFactory.getEventBus();
+    private final ProfileServiceAsync            profileService;
+
+    private String                               itemConfigId;
+    private String                               locName;
+
+    public EditLocationActivity(final ClientFactory clientFactory, final String itemConfigId, final String locName,
+            final AppContext ctx) {
+
+        this.ctx = ctx;
+        this.itemConfigId = itemConfigId;
+        this.locName = locName;
+
         view = clientFactory.getEditLocationView();
-        linkedinService = clientFactory.getLinkedinService();
 
-        handlerRegs.add(addCloseHandler());
+        profileService = clientFactory.getProfileService();
     }
 
-    private HandlerRegistration addAddHandler(final String itemConfigId) {
-        return view.getAddHandler().addClickHandler(new ClickHandler() {
+    @Override
+    public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
 
-            @Override
-            public void onClick(final ClickEvent event) {
-                u.fire(eventBus, new LocationAddNewEvent(itemConfigId));
-            }
-        });
-    }
-
-    private HandlerRegistration addCloseHandler() {
-        return view.getCloseHandler().addHiddenHandler(new HiddenHandler() {
-
-            @Override
-            public void onHidden(final HiddenEvent hiddenEvent) {
-                view.getCloseWidget().setVisible(false);
-
-                for (final Notification notif : view.getNotifications()) {
-                    if (notif != null) {
-                        notif.removeFromParent();
-                    }
-                }
-
-                for (HandlerRegistration handlerReg : handlerRegs) {
-                    handlerReg.removeHandler();
-                    handlerReg = null;
-                }
-                handlerRegs.clear();
-
-                if (timerCloseView != null) {
-                    timerCloseView.cancel();
-                }
-            }
-
-        });
-    }
-
-    private HandlerRegistration addSaveHandler(final String itemConfigId) {
-        return view.getSaveWidget().addClickHandler(new ClickHandler() {
-
-            @Override
-            public void onClick(final ClickEvent event) {
-
-                final ArrayList<String> selectedLocations = view.getSelectedLocations();
-                if (selectedLocations.isEmpty()) {
-                    return;
-                }
-
-                view.getWaitingIndicator().setVisible(true);
-                view.disableCreationForm();
-
-                view.copyLocationCaches();
-                for (final String locationName: selectedLocations) {
-                    view.addLocation2ItemInCopyCache(itemConfigId, locationName);
-                }
-
-                linkedinService.saveLocations( //
-                        //
-                        clientFactory.getAppState().getUserId() //
-                        , view.json_copyCacheItems() //
-                        , view.json_copyCacheReferential() //
-                        //
-                        , new AsyncCallbackApp<Void>(eventBus) {
-
-                            @Override
-                            public void onSuccess(final Void result) {
-
-                                view.replaceCachesByCopies();
-
-                                view.getWaitingIndicator().setVisible(false);
-                                view.removeCreationFormAndShowClose();
-
-                                u.fire(eventBus, new LocationsSuccessSaveEvent(itemConfigId));
-
-                                final StringBuilder msg = getSuccessMessage(selectedLocations);
-                                u.showNotificationSuccess(msg, view);
-
-                                hideViewWithDelay();
-                            }
-
-                            private StringBuilder getSuccessMessage(final ArrayList<String> selectedLocations) {
-                                final StringBuilder msg = new StringBuilder();
-
-                                if (selectedLocations.size() == 1) {
-                                    msg.append("The location \"");
-                                    msg.append(selectedLocations.get(0));
-                                    msg.append("\" has been successfully added.");
-
-                                } else {
-                                    msg.append("The locations <ul>");
-                                    for (final String loc : selectedLocations) {
-                                        msg.append("<li>\"");
-                                        msg.append(loc);
-                                        msg.append("\"</li>");
-                                    }
-
-                                    msg.append("</ul>have been successfully added.");
-                                }
-                                return msg;
-                            }
-
-                            @Override
-                            public void onFailure(final Throwable caught) {
-
-                                view.deleteCopies();
-
-                                view.getWaitingIndicator().setVisible(false);
-                                view.resetCreationForm();
-
-                                u.showNotificationError(caught, view);
-
-                                super.onFailure(caught);
-
-                            }
-
-                        });
-            }
-
-        });
-    }
-
-    public void start(
-            final String itemConfigId
-            , final String locName
-            ) {
+        this.eventBus = eventBus;
+        view.setPresenter(this);
 
         final boolean isNew = u.isVoid(locName);
 
         if (isNew) {
-
-            handlerRegs.add(addSaveHandler(itemConfigId));
-            handlerRegs.add(addAddHandler(itemConfigId));
-            view.displayNewLocationWidget(itemConfigId);
+            view.displayNewLocationWidget();
 
         } else {
-
-            final boolean isFromLinkedin = view.isLocationFromLinkedin(itemConfigId, locName);
-
-            if (!isFromLinkedin) {
-                handlerRegs.add(addDeleteHandler(itemConfigId, locName));
-            }
-
-            handlerRegs.add(addShowOnMapHandler(locName));
-            view.displayEditLocationWidget(locName, isFromLinkedin);
+            view.displayEditLocationWidget();
         }
+
         view.show();
     }
 
-    private HandlerRegistration addShowOnMapHandler(final String locName) {
-        return view.getShowOnMapHandler().addClickHandler(new ClickHandler() {
-
-            @Override
-            public void onClick(final ClickEvent event) {
-                u.fire(eventBus, new LocationShowOnMapEvent(locName));
-                view.hide();
-            }
-
-        });
+    @Override
+    public void onStop() {
+        itemConfigId = null;
+        locName = null;
     }
 
-    private HandlerRegistration addDeleteHandler(final String itemConfigId, final String locationName) {
-        return view.getDeleteHandler().addClickHandler(new ClickHandler() {
-
-            @Override
-            public void onClick(final ClickEvent event) {
-
-                view.getWaitingIndicator().setVisible(true);
-                view.disableEditionForm();
-
-                view.copyLocationCaches();
-                view.removeLocationFromCopyCaches(itemConfigId, locationName);
-
-                linkedinService.saveLocations( //
-                        //
-                        clientFactory.getAppState().getUserId() //
-                        , view.json_copyCacheItems() //
-                        , view.json_copyCacheReferential() //
-                        //
-                        , new AsyncCallbackApp<Void>(eventBus) {
-
-                            @Override
-                            public void onSuccess(final Void result) {
-
-                                view.replaceCachesByCopies();
-
-                                view.getWaitingIndicator().setVisible(false);
-                                view.removeEditionFormAndShowClose();
-
-                                u.fire(eventBus, new LocationSuccessDeleteEvent(itemConfigId));
-
-                                final StringBuilder msg = getSuccessMessage(locationName);
-                                u.showNotificationSuccess(msg, view);
-
-                                hideViewWithDelay();
-                            }
-
-                            private StringBuilder getSuccessMessage(final String locationName) {
-                                final StringBuilder msg = new StringBuilder();
-                                msg.append("The location \"");
-                                msg.append(locationName);
-                                msg.append("\" has been successfully removed.");
-                                return msg;
-                            }
-
-                            @Override
-                            public void onFailure(final Throwable caught) {
-
-                                view.deleteCopies();
-
-                                view.getWaitingIndicator().setVisible(false);
-                                view.enableEditionForm();
-
-                                u.showNotificationError(caught, view);
-
-                                super.onFailure(caught);
-
-                            }
-
-                        });
-            }
-
-        });
+    public String getItemConfigId() {
+        return itemConfigId;
     }
 
-    private void hideViewWithDelay() {
-        timerCloseView = new Timer() {
+    public String getLocationName() {
+        return locName;
+    }
 
-            @Override
-            public void run() {
-                view.hide();
+    public void addExistingLocations(final String json_copyCacheItems, final String json_copyCacheReferential) {
+        profileService.saveLocations( //
+                ctx.getProfileId() //
+                , json_copyCacheItems //
+                , json_copyCacheReferential //
+                , //
+                new AsyncCallbackApp<Void>(eventBus) {
 
-            }
+                    @Override
+                    public void onSuccess(final Void result) {
+                        view.onAddExistingLocationsSuccess();
+                        u.fire(eventBus, new LocationsSuccessSaveEvent(itemConfigId));
+                    }
 
-        };
-        timerCloseView.schedule(3000);
+                    @Override
+                    public void onFailure(final Throwable caught) {
+                        view.onAddExistingLocationsFailure(caught);
+                        super.onFailure(caught);
+                    }
+
+                }
+                //
+                );
+    }
+
+    public void addNewLocation() {
+        u.fire(eventBus, new LocationAddNewEvent(itemConfigId));
+    }
+
+    public void deleteLocations(final String json_copyCacheItems, final String json_copyCacheReferential) {
+        profileService.saveLocations( //
+                //
+                ctx.getProfileId() //
+                , json_copyCacheItems //
+                , json_copyCacheReferential //
+                //
+                , new AsyncCallbackApp<Void>(eventBus) {
+
+                    @Override
+                    public void onSuccess(final Void result) {
+                        view.onDeleteLocationsSuccess();
+                        u.fire(eventBus, new LocationSuccessDeleteEvent(itemConfigId));
+                    }
+
+                    @Override
+                    public void onFailure(final Throwable caught) {
+                        view.onDeleteLocationsFailure(caught);
+                        super.onFailure(caught);
+                    }
+
+                });
+    }
+
+    public void displayOnMap() {
+        u.fire(eventBus, new LocationShowOnMapEvent(locName));
     }
 
 }

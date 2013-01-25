@@ -55,15 +55,15 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     private final ClientFactory                  clientFactory;
     private final ProfileView                    view;
-    private final ProfileServiceAsync            profileService;
     private final AppContext                     ctx;
-
     private final ClientHelper                    u     = new ClientHelper();
-
+    private final ArrayList<HandlerRegistration> hRegs = new ArrayList<HandlerRegistration>();
     private EventBus                             eventBus;
+
+    private final ProfileServiceAsync            profileService;
+
     private String                               itemConfigId;
 
-    private final ArrayList<HandlerRegistration> hRegs = new ArrayList<HandlerRegistration>();
 
     public ProfileActivity(final ProfilePlace place, final ClientFactory clientFactory, final AppContext ctx) {
         this.clientFactory = clientFactory;
@@ -156,16 +156,15 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     public void addNewLocation(final String itemConfigId) {
         // itemId for a position or an education
 
-        final EditLocationActivity editLocationActivity = new EditLocationActivity(clientFactory);
-        editLocationActivity.start(itemConfigId, "");
-
+        final EditLocationActivity editLocationActivity = new EditLocationActivity(clientFactory, itemConfigId, "", ctx);
+        editLocationActivity.start(null, eventBus);
     }
 
     @Override
     public void editLocation(final String itemConfigId, final String locName) {
 
-        final EditLocationActivity editLocationActivity = new EditLocationActivity(clientFactory);
-        editLocationActivity.start(itemConfigId, locName);
+        final EditLocationActivity editLocationActivity = new EditLocationActivity(clientFactory, itemConfigId, locName, ctx);
+        editLocationActivity.start(null, eventBus);
     }
 
     @Override

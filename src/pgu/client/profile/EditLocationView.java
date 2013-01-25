@@ -1,68 +1,23 @@
 package pgu.client.profile;
 
-import java.util.ArrayList;
-
 import pgu.client.app.utils.HasNotifications;
-import pgu.client.app.utils.Notification;
-
-import com.github.gwtbootstrap.client.ui.base.HasVisibleHandlers;
-import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.user.client.ui.HasVisibility;
 
 public interface EditLocationView extends HasNotifications {
 
-    HasVisibleHandlers getCloseHandler();
-
-    ArrayList<Notification> getNotifications();
-
-    HasClickHandlers getAddHandler();
-
-    HasClickHandlers getSaveWidget();
-
-    HasClickHandlers getShowOnMapHandler();
-
-    HasClickHandlers getDeleteHandler();
-
-    void displayEditLocationWidget(String locationName, boolean isFromLinkedin);
+    void setPresenter(EditLocationActivity editLocationActivity);
 
     void show();
 
-    void hide();
+    void displayNewLocationWidget();
 
-    HasVisibility getWaitingIndicator();
+    void displayEditLocationWidget();
 
-    void disableCreationForm();
+    void onAddExistingLocationsSuccess();
 
-    void resetCreationForm();
+    void onAddExistingLocationsFailure(Throwable caught);
 
-    ArrayList<String> getSelectedLocations();
+    void onDeleteLocationsSuccess();
 
-    void removeCreationFormAndShowClose();
-
-    void displayNewLocationWidget(String itemConfigId);
-
-    HasVisibility getCloseWidget();
-
-    void disableEditionForm();
-
-    void enableEditionForm();
-
-    void removeEditionFormAndShowClose();
-
-    void copyLocationCaches();
-
-    boolean isLocationFromLinkedin(String itemConfigId, String locName);
-
-    void removeLocationFromCopyCaches(String itemConfigId, String locationName);
-
-    String json_copyCacheItems();
-
-    String json_copyCacheReferential();
-
-    void replaceCachesByCopies();
-
-    void deleteCopies();
-
-    void addLocation2ItemInCopyCache(String itemConfigId, String locationName);
+    void onDeleteLocationsFailure(Throwable caught);
 
 }

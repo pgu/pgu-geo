@@ -7,6 +7,7 @@ import java.util.Comparator;
 import pgu.client.app.utils.ClientHelper;
 import pgu.client.app.utils.Notification;
 import pgu.client.app.utils.NotificationImpl;
+import pgu.client.profile.EditLocationActivity;
 import pgu.client.profile.EditLocationView;
 
 import com.github.gwtbootstrap.client.ui.Button;
@@ -14,19 +15,18 @@ import com.github.gwtbootstrap.client.ui.Modal;
 import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.NavPills;
 import com.github.gwtbootstrap.client.ui.ProgressBar;
-import com.github.gwtbootstrap.client.ui.base.HasVisibleHandlers;
+import com.github.gwtbootstrap.client.ui.event.HiddenEvent;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.HasVisibility;
 import com.google.gwt.user.client.ui.Widget;
 
 public class EditLocationViewImpl extends Composite implements EditLocationView {
@@ -56,35 +56,130 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
     private final EditLocationViewHelper      viewHelper = new EditLocationViewHelper();
     private final ProfileLocationsHelper      locationsHelper = new ProfileLocationsHelper();
 
+    private EditLocationActivity presenter;
+
+    private Timer                                timerCloseView = null;
+
     public EditLocationViewImpl() {
         initWidget(uiBinder.createAndBindUi(this));
         closeBtn.setVisible(false);
         progressBar.setVisible(false);
     }
 
+    @UiHandler("addBtn")
+    public void onClickAdd(final ClickEvent event) {
+        presenter.addNewLocation();
+    }
+
+
+    @UiHandler("saveBtn")
+    public void onClickSave(final ClickEvent event) {
+        if (selecteds.isEmpty()) {
+            return;
+        }
+
+        showWaitingIndicator();
+        setEnableOnCreationForm(false);
+
+        locationsHelper.copyLocationCaches();
+        final String itemConfigId = presenter.getItemConfigId();
+
+        for (final String locationName: selecteds) {
+            locationsHelper.addLocation2ItemInCopyCache(itemConfigId, locationName);
+        }
+
+        presenter.addExistingLocations( //
+                locationsHelper.json_copyCacheItems() //
+                , locationsHelper.json_copyCacheReferential() //
+                );
+    }
+
+    @UiHandler("deleteBtn")
+    public void onClickDelete(final ClickEvent event) {
+
+        final String item_config_id = presenter.getItemConfigId();
+        final String location_name = presenter.getLocationName();
+
+        if (viewHelper.isLocationFromLinkedin(item_config_id, location_name)) {
+            return;
+        }
+
+        showWaitingIndicator();
+
+        disableEditionForm();
+        locationsHelper.copyLocationCaches();
+
+        viewHelper.removeLocationFromCopyCaches(item_config_id, location_name);
+
+        presenter.deleteLocations( //
+                locationsHelper.json_copyCacheItems() //
+                , locationsHelper.json_copyCacheReferential() //
+                );
+    }
+
+    @UiHandler("displayOnMapBtn")
+    public void onClickDisplayOnMap(final ClickEvent event) {
+        hidePopup();
+        presenter.displayOnMap();
+    }
+
+    private void showWaitingIndicator() {
+        progressBar.setVisible(true);
+    }
+
+    private void hideWaitingIndicator() {
+        progressBar.setVisible(false);
+    }
+
+    @UiHandler("container")
+    public void onHiddenContainer(final HiddenEvent event) {
+        closeBtn.setVisible(false);
+
+        for (final Notification notif : notifications) {
+            if (notif != null) {
+                notif.removeFromParent();
+            }
+        }
+
+        presenter.onStop();
+
+        if (timerCloseView != null) {
+            timerCloseView.cancel();
+        }
+    }
+
+    private void hideViewWithDelay() {
+
+        if (timerCloseView != null) {
+            timerCloseView.run();
+            timerCloseView.cancel();
+            timerCloseView = null;
+        }
+
+        timerCloseView = new Timer() {
+
+            @Override
+            public void run() {
+                hidePopup();
+            }
+
+
+        };
+        timerCloseView.schedule(3000);
+    }
+
+    private void hidePopup() {
+        container.hide();
+    }
+
     @UiHandler("closeBtn")
     public void clickClose(final ClickEvent e) {
-        container.hide();
+        hidePopup();
     }
 
     @UiHandler("addBtn")
     public void clickAdd(final ClickEvent e) {
-        container.hide();
-    }
-
-    @Override
-    public HasVisibleHandlers getCloseHandler() {
-        return container;
-    }
-
-    @Override
-    public ArrayList<Notification> getNotifications() {
-        return notifications;
-    }
-
-    @Override
-    public HasClickHandlers getAddHandler() {
-        return addBtn;
+        hidePopup();
     }
 
     @Override
@@ -147,7 +242,7 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
         return viewHelper.getOtherLocationNames(itemConfigId);
     }
 
-    public native void getOtherItemLocationsFromCache(String item_config_id, EditLocationViewImpl view) /*-{
+    private native void getOtherItemLocationsFromCache(String item_config_id, EditLocationViewImpl view) /*-{
 
 		var other_location_names = this.@pgu.client.profile.ui.EditLocationViewImpl::getOtherLocationNames(Ljava/lang/String;)
 		                                (item_config_id);
@@ -161,21 +256,16 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
 		}
     }-*/;
 
-    public void addOtherExistingItemLocation(final String locationName) {
+    private void addOtherExistingItemLocation(final String locationName) {
         otherItemLocations.add(locationName);
     }
 
     @Override
-    public HasClickHandlers getSaveWidget() {
-        return saveBtn;
-    }
-
-    @Override
-    public void displayNewLocationWidget(final String itemConfigId) {
+    public void displayNewLocationWidget() {
 
         container.setTitle("Add locations");
 
-        showOtherExistingItemLocations(itemConfigId);
+        showOtherExistingItemLocations(presenter.getItemConfigId());
 
         // ///////////////
         addPanel.setVisible(true);
@@ -189,7 +279,13 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
 
     // click on a location: popup with: information: name, lat, lng; actions: show on the map, delete it
     @Override
-    public void displayEditLocationWidget(final String locationName, final boolean isFromLinkedin) {
+    public void displayEditLocationWidget() {
+
+        final String item_config_id = presenter.getItemConfigId();
+        final String locationName = presenter.getLocationName();
+
+        final boolean isFromLinkedin = viewHelper.isLocationFromLinkedin(item_config_id, locationName);
+
         container.setTitle(locationName);
 
         viewHelper.showLatitudeAndLongitude(this, locationName);
@@ -204,19 +300,9 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
         deleteBtn.setVisible(!isFromLinkedin);
     }
 
-    public void showLatitudeAndLongitude(final String latitude, final String longitude) {
+    private void showLatitudeAndLongitude(final String latitude, final String longitude) {
         locationLatUI.setText(latitude);
         locationLngUI.setText(longitude);
-    }
-
-    @Override
-    public void hide() {
-        container.hide();
-    }
-
-    @Override
-    public HasVisibility getWaitingIndicator() {
-        return progressBar;
     }
 
     @Override
@@ -226,13 +312,7 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
         return notif;
     }
 
-    @Override
-    public void disableCreationForm() {
-        setEnableOnCreationForm(false);
-    }
-
-    @Override
-    public void resetCreationForm() {
+    private void resetCreationForm() {
         setEnableOnCreationForm(true);
         for (int i = 0; i < otherLocationsContainer.getWidgetCount(); i++) {
             ((NavLink) otherLocationsContainer.getWidget(i)).setActive(false);
@@ -249,13 +329,7 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
         }
     }
 
-    @Override
-    public ArrayList<String> getSelectedLocations() {
-        return selecteds;
-    }
-
-    @Override
-    public void removeCreationFormAndShowClose() {
+    private void removeCreationFormAndShowClose() {
 
         addPanel.setVisible(false);
         saveBtn.setVisible(false);
@@ -268,35 +342,17 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
         otherLocationsContainer.clear();
     }
 
-    @Override
-    public HasVisibility getCloseWidget() {
-        return closeBtn;
-    }
-
-    @Override
-    public HasClickHandlers getShowOnMapHandler() {
-        return displayOnMapBtn;
-    }
-
-    @Override
-    public HasClickHandlers getDeleteHandler() {
-        return deleteBtn;
-    }
-
-    @Override
-    public void disableEditionForm() {
+    private void disableEditionForm() {
         displayOnMapBtn.setEnabled(false);
         deleteBtn.setEnabled(false);
     }
 
-    @Override
-    public void enableEditionForm() {
+    private void enableEditionForm() {
         displayOnMapBtn.setEnabled(true);
         deleteBtn.setEnabled(true);
     }
 
-    @Override
-    public void removeEditionFormAndShowClose() {
+    private void removeEditionFormAndShowClose() {
         editPanel.setVisible(false);
         displayOnMapBtn.setVisible(false);
         deleteBtn.setVisible(false);
@@ -307,43 +363,84 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
     }
 
     @Override
-    public void copyLocationCaches() {
-        locationsHelper.copyLocationCaches();
+    public void setPresenter(final EditLocationActivity presenter) {
+        this.presenter = presenter;
     }
 
     @Override
-    public boolean isLocationFromLinkedin(final String item_config_id, final String location_name) {
-        return viewHelper.isLocationFromLinkedin(item_config_id, location_name);
-    }
-
-    @Override
-    public void removeLocationFromCopyCaches(final String item_config_id, final String location_name) {
-        viewHelper.removeLocationFromCopyCaches(item_config_id, location_name);
-    }
-
-    @Override
-    public String json_copyCacheItems() {
-        return locationsHelper.json_copyCacheItems();
-    }
-
-    @Override
-    public String json_copyCacheReferential() {
-        return locationsHelper.json_copyCacheReferential();
-    }
-
-    @Override
-    public void replaceCachesByCopies() {
+    public void onAddExistingLocationsSuccess() {
         locationsHelper.replaceCachesByCopies();
+
+        hideWaitingIndicator();
+        removeCreationFormAndShowClose();
+
+        final StringBuilder msg = getSuccessMessage(selecteds);
+        u.showNotificationSuccess(msg, this);
+
+        hideViewWithDelay();
+    }
+
+    private StringBuilder getSuccessMessage(final ArrayList<String> selectedLocations) {
+        final StringBuilder msg = new StringBuilder();
+
+        if (selectedLocations.size() == 1) {
+            msg.append("The location \"");
+            msg.append(selectedLocations.get(0));
+            msg.append("\" has been successfully added.");
+
+        } else {
+            msg.append("The locations <ul>");
+            for (final String loc : selectedLocations) {
+                msg.append("<li>\"");
+                msg.append(loc);
+                msg.append("\"</li>");
+            }
+
+            msg.append("</ul>have been successfully added.");
+        }
+        return msg;
     }
 
     @Override
-    public void deleteCopies() {
+    public void onAddExistingLocationsFailure(final Throwable caught) {
         locationsHelper.deleteCopies();
+
+        hideWaitingIndicator();
+        resetCreationForm();
+
+        u.showNotificationError(caught, this);
     }
 
     @Override
-    public void addLocation2ItemInCopyCache(final String itemConfigId, final String locationName) {
-        locationsHelper.addLocation2ItemInCopyCache(itemConfigId, locationName);
+    public void onDeleteLocationsSuccess() {
+        locationsHelper.replaceCachesByCopies();
+
+        hideWaitingIndicator();
+        removeEditionFormAndShowClose();
+
+        final StringBuilder msg = getSuccessMessage(presenter.getLocationName());
+        u.showNotificationSuccess(msg, this);
+
+        hideViewWithDelay();
     }
+
+    private StringBuilder getSuccessMessage(final String locationName) {
+        final StringBuilder msg = new StringBuilder();
+        msg.append("The location \"");
+        msg.append(locationName);
+        msg.append("\" has been successfully removed.");
+        return msg;
+    }
+
+    @Override
+    public void onDeleteLocationsFailure(final Throwable caught) {
+        locationsHelper.deleteCopies();
+
+        hideWaitingIndicator();
+        enableEditionForm();
+
+        u.showNotificationError(caught, this);
+    }
+
 
 }
