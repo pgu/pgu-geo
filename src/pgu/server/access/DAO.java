@@ -7,6 +7,7 @@ import pgu.shared.model.ContactsNumberByCountry;
 import pgu.shared.model.Country2ContactNames;
 import pgu.shared.model.Country2ContactNumber;
 import pgu.shared.model.FusionUrls;
+import pgu.shared.model.MapPreferences;
 import pgu.shared.model.ProfileLocations;
 import pgu.shared.model.PublicPreferences;
 import pgu.shared.model.PublicProfile;
@@ -34,6 +35,8 @@ public class DAO extends DAOBase {
 
         ObjectifyService.register(BasePublicProfile.class);
         ObjectifyService.register(BaseProfile.class);
+
+        ObjectifyService.register(MapPreferences.class);
     }
 
 }
