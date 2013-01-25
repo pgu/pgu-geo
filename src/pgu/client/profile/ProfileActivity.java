@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import pgu.client.app.AppContext;
 import pgu.client.app.event.HideWaitingIndicatorEvent;
 import pgu.client.app.event.LocationAddNewEvent;
-import pgu.client.app.event.LocationShowOnMapEvent;
 import pgu.client.app.event.LocationSuccessDeleteEvent;
 import pgu.client.app.event.LocationsSuccessSaveEvent;
 import pgu.client.app.event.MapsApiLoadedEvent;
@@ -17,14 +16,6 @@ import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientHelper;
 import pgu.client.app.utils.Level;
-import pgu.client.profile.event.FetchMapPreferencesEvent;
-import pgu.client.profile.event.FetchProfileLocationsEvent;
-import pgu.client.profile.event.FetchPublicPreferencesEvent;
-import pgu.client.profile.event.SaveLocationEvent;
-import pgu.client.profile.event.SaveLocationsEvent;
-import pgu.client.profile.event.SaveMapPreferencesEvent;
-import pgu.client.profile.event.SavePublicPreferencesEvent;
-import pgu.client.profile.event.SavePublicProfileEvent;
 import pgu.client.service.ProfileServiceAsync;
 import pgu.shared.model.MapPreferences;
 import pgu.shared.model.ProfileLocations;
@@ -35,22 +26,13 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
-public class ProfileActivity extends AbstractActivity implements ProfilePresenter //
-, LocationsSuccessSaveEvent.Handler //
+public class ProfileActivity extends AbstractActivity implements //
+LocationsSuccessSaveEvent.Handler //
 , LocationSuccessDeleteEvent.Handler //
 , LocationAddNewEvent.Handler //
-, LocationShowOnMapEvent.Handler //
-, SaveLocationEvent.Handler //
-, SaveMapPreferencesEvent.Handler //
 , ShowdownLoadedEvent.Handler //
 , MapsApiLoadedEvent.Handler //
 , ProfileLoadedEvent.Handler //
-, FetchPublicPreferencesEvent.Handler //
-, SaveLocationsEvent.Handler //
-, FetchProfileLocationsEvent.Handler //
-, SavePublicProfileEvent.Handler //
-, SavePublicPreferencesEvent.Handler //
-, FetchMapPreferencesEvent.Handler //
 {
 
     private final ClientFactory                  clientFactory;
@@ -62,7 +44,6 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     private final ProfileServiceAsync            profileService;
 
-    private String                               itemConfigId;
     private boolean                              hasToShowProfile = false;
 
     public ProfileActivity(final ProfilePlace place, final ClientFactory clientFactory, final AppContext ctx) {
@@ -73,17 +54,11 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     }
 
     @Override
-    public void onLocationShowOnMap(final LocationShowOnMapEvent event) {
-        view.showOnMap(event.getLocName());
-    }
-
-    @Override
     public void onLocationAddNew(final LocationAddNewEvent event) {
-        itemConfigId = event.getItemConfigId();
+        final String itemConfigId = event.getItemConfigId();
 
-        view.showSaveWidget();
+        view.showSaveWidget(itemConfigId);
     }
-
 
     @Override
     public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
@@ -92,23 +67,11 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         view.setPresenter(this);
 
         hRegs.clear();
-        hRegs.add(view.addLocationShowOnMapHandler(this));
-        hRegs.add(view.addSaveLocationHandler(this));
-        hRegs.add(view.addSaveMapPreferencesHandler(this));
-
-        hRegs.add(view.addFetchProfileLocationsHandler(this));
-        hRegs.add(view.addFetchPublicPreferencesHandler(this));
-        hRegs.add(view.addFetchMapPreferencesHandler(this));
-
-        hRegs.add(view.addSaveLocationsHandler(this));
-        hRegs.add(view.addSavePublicProfileHandler(this));
-        hRegs.add(view.addSavePublicPreferencesHandler(this));
 
         hRegs.add(eventBus.addHandler(LocationsSuccessSaveEvent.TYPE, this));
         hRegs.add(eventBus.addHandler(LocationSuccessDeleteEvent.TYPE, this));
 
         hRegs.add(eventBus.addHandler(LocationAddNewEvent.TYPE, this));
-        hRegs.add(eventBus.addHandler(LocationShowOnMapEvent.TYPE, this));
 
         hRegs.add(eventBus.addHandler(ShowdownLoadedEvent.TYPE, this));
         hRegs.add(eventBus.addHandler(MapsApiLoadedEvent.TYPE, this));
@@ -151,7 +114,6 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         return view.getJsonRawProfile();
     }
 
-    @Override
     public void addNewLocation(final String itemConfigId) {
         // itemId for a position or an education
 
@@ -159,7 +121,6 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         editLocationActivity.start(null, eventBus);
     }
 
-    @Override
     public void editLocation(final String itemConfigId, final String locName) {
 
         final EditLocationActivity editLocationActivity = new EditLocationActivity(clientFactory, itemConfigId, locName, ctx);
@@ -168,98 +129,16 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
 
     @Override
     public void onLocationsSuccessSave(final LocationsSuccessSaveEvent event) {
-        view.refreshHtmlLocationsForItem(event.getItemConfigId());
+        view.onLocationsSuccessSave(event.getItemConfigId());
     }
 
     @Override
     public void onLocationSuccessDelete(final LocationSuccessDeleteEvent event) {
-        view.refreshHtmlLocationsForItem(event.getItemConfigId());
-    }
-
-    @Override
-    public void onSaveLocation(final SaveLocationEvent event) {
-        if (u.isVoid(itemConfigId)) {
-            return;
-        }
-
-        u.fire(eventBus, new ShowWaitingIndicatorEvent());
-
-        final String locationName = event.getLocationName();
-        final String lat = event.getLat();
-        final String lng = event.getLng();
-
-        final boolean isDoublon = view.isLocationDoublon(itemConfigId, locationName, lat, lng);
-        if (isDoublon) {
-
-            u.fire(eventBus, new HideWaitingIndicatorEvent());
-            u.fire(eventBus, new NotificationEvent(Level.WARNING, //
-                    "This location " + locationName + " is already associated to this item"));
-
-        } else {
-
-            view.copyLocationCaches();
-            view.addGeopointToCopyCache(locationName, lat, lng);
-            view.addLocation2ItemInCopyCache(itemConfigId, locationName);
-
-            profileService.saveLocations( //
-                    //
-                    ctx.getProfileId() //
-                    , view.json_copyCacheItems() //
-                    , view.json_copyCacheReferential() //
-                    //
-                    , new AsyncCallbackApp<Void>(eventBus) {
-
-                        @Override
-                        public void onSuccess(final Void result) {
-
-                            view.replaceCachesByCopies();
-
-                            u.fire(eventBus, new HideWaitingIndicatorEvent());
-
-                            view.hideSaveWidget();
-
-                            u.fire(eventBus, new LocationsSuccessSaveEvent(itemConfigId));
-
-                            final StringBuilder msg = new StringBuilder();
-                            msg.append("The location \"");
-                            msg.append(locationName);
-                            msg.append("\" has been successfully added.");
-
-                            u.fire(eventBus, new NotificationEvent(Level.SUCCESS, msg.toString()));
-                        }
-
-                        @Override
-                        public void onFailure(final Throwable caught) {
-                            view.deleteCopies();
-
-                            super.onFailure(caught);
-                        }
-
-                    });
-        }
+        view.onLocationSuccessDelete(event.getItemConfigId());
     }
 
     public void showNotificationWarning(final String msg) {
         view.showNotificationWarning(msg);
-    }
-
-    @Override
-    public void onSaveMapPreferences(final SaveMapPreferencesEvent event) {
-
-        profileService.saveMapPreferences( //
-                //
-                ctx.getProfileId() //
-                , event.getMapPreferences() //
-                //
-                , new AsyncCallbackApp<Void>(eventBus) {
-
-                    @Override
-                    public void onSuccess(final Void result) {
-                        // no-op
-                    }
-
-                });
-
     }
 
     @Override
@@ -307,61 +186,105 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         return ctx.isProfileLoaded() && areExternalApisLoaded(ctx);
     }
 
-    @Override
-    public void onSaveLocations(final SaveLocationsEvent event) {
-
-        view.removeUnusedLocations();
-        view.copyLocationCaches();
-
-        profileService.saveLocations( //
+    public void saveMapPreferences(final String mapPreferences) {
+        profileService.saveMapPreferences( //
                 //
                 ctx.getProfileId() //
-                , view.json_copyCacheItems() //
-                , view.json_copyCacheReferential() //
+                , mapPreferences //
                 //
                 , new AsyncCallbackApp<Void>(eventBus) {
 
                     @Override
                     public void onSuccess(final Void result) {
-                        view.replaceCachesByCopies();
-                    }
-
-                    @Override
-                    public void onFailure(final Throwable caught) {
-                        view.deleteCopies();
+                        // no-op
                     }
 
                 });
     }
 
-    @Override
-    public void onFetchPublicPreferences(final FetchPublicPreferencesEvent event) {
-        profileService.fetchPublicPreferences(ctx.getProfileId(), new AsyncCallbackApp<PublicPreferences>(eventBus) {
+    public void saveLastSearchLocation(final String locationName, final String lat, final String lng //
+            , final String jsonCopyCacheItems, final String jsonCopyCacheReferential //
+            , final String itemConfigIdToSave) {
 
-            @Override
-            public void onSuccess(final PublicPreferences result) {
-                view.setPublicPreferencesInfo(result);
-            }
+        u.fire(eventBus, new ShowWaitingIndicatorEvent());
 
-        });
+        profileService.saveLocations( //
+                //
+                ctx.getProfileId() //
+                , jsonCopyCacheItems //
+                , jsonCopyCacheReferential //
+                //
+                , new AsyncCallbackApp<Void>(eventBus) {
+
+                    @Override
+                    public void onSuccess(final Void result) {
+                        u.fire(eventBus, new HideWaitingIndicatorEvent());
+                        view.onSaveLastSearchLocationSuccess(locationName, itemConfigIdToSave);
+                    }
+
+                    @Override
+                    public void onFailure(final Throwable caught) {
+                        view.onSaveLastSearchLocationFailure(caught);
+                        super.onFailure(caught);
+                    }
+
+                });
+
     }
 
-    @Override
-    public void onFetchProfileLocations(final FetchProfileLocationsEvent event) {
-        profileService.fetchProfileLocations(ctx.getProfileId(), new AsyncCallbackApp<ProfileLocations>(eventBus) {
-
-            @Override
-            public void onSuccess(final ProfileLocations profileLocations) {
-                view.setProfileLocations(profileLocations);
-            }
-
-        });
+    public void sendNotif(final Level level, final String msg) {
+        u.fire(eventBus, new NotificationEvent(level, msg));
     }
 
-    @Override
-    public void onSavePublicProfile(final SavePublicProfileEvent event) {
-        final String jsonPublicProfile = view.getJsonPublicProfile();
+    public void fetchPublicPreferences() {
+        profileService.fetchPublicPreferences( //
+                ctx.getProfileId() //
+                , new AsyncCallbackApp<PublicPreferences>(eventBus) {
 
+                    @Override
+                    public void onSuccess(final PublicPreferences result) {
+                        view.onFetchPublicPreferencesSuccess(result);
+                    }
+
+                });
+    }
+
+    public void updateLocationsSilently(final String json_copyCacheItems, final String json_copyCacheReferential) {
+        profileService.saveLocations( //
+                //
+                ctx.getProfileId() //
+                , json_copyCacheItems //
+                , json_copyCacheReferential //
+                //
+                , new AsyncCallbackApp<Void>(eventBus) {
+
+                    @Override
+                    public void onSuccess(final Void result) {
+                        view.onUpdateLocationsSilentlySuccess();
+                    }
+
+                    @Override
+                    public void onFailure(final Throwable caught) {
+                        view.onUpdateLocationsSilentlyFailure(caught);
+                    }
+
+                });
+    }
+
+    public void fetchProfileLocations() {
+        profileService.fetchProfileLocations( //
+                ctx.getProfileId() //
+                , new AsyncCallbackApp<ProfileLocations>(eventBus) {
+
+                    @Override
+                    public void onSuccess(final ProfileLocations profileLocations) {
+                        view.onFetchProfileLocationsSuccess(profileLocations);
+                    }
+
+                });
+    }
+
+    public void updatePublicProfileSilently(final String jsonPublicProfile) {
         profileService.savePublicProfile( //
                 //
                 ctx.getProfileId() //
@@ -377,35 +300,32 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
                 });
     }
 
-    @Override
-    public void onSavePublicPreferences(final SavePublicPreferencesEvent event) {
-
-        final String type = event.getType();
-
+    public void savePublicPreferences(final String public_preference, final String jsonPublicPreferences) {
         profileService.savePublicPreferences( //
                 //
                 ctx.getProfileId() //
-                , view.getJsonPublicPreferences() //
+                , jsonPublicPreferences //
                 //
                 , new AsyncCallbackApp<Void>(eventBus) {
 
                     @Override
                     public void onSuccess(final Void result) {
-                        view.confirmChangeOnPublicProfile(type);
+                        view.confirmChangeOnPublicProfile(public_preference);
                     }
 
                 });
     }
 
-    @Override
-    public void onFetchMapPreferences(final FetchMapPreferencesEvent event) {
-        profileService.fetchMapPreferences(ctx.getProfileId(), new AsyncCallbackApp<MapPreferences>(eventBus) {
+    public void fetchMapPreferences() {
+        profileService.fetchMapPreferences( //
+                ctx.getProfileId() //
+                , new AsyncCallbackApp<MapPreferences>(eventBus) {
 
-            @Override
-            public void onSuccess(final MapPreferences result) {
-                view.setMapPreferences(result.getValues());
-            }
-        });
+                    @Override
+                    public void onSuccess(final MapPreferences result) {
+                        view.onFetchMapPreferencesSuccess(result.getValues());
+                    }
+                });
     }
 
 }

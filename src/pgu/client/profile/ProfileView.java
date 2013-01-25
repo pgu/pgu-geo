@@ -1,77 +1,42 @@
 package pgu.client.profile;
 
-import pgu.client.app.event.LocationShowOnMapEvent;
-import pgu.client.profile.event.FetchMapPreferencesEvent;
-import pgu.client.profile.event.FetchProfileLocationsEvent;
-import pgu.client.profile.event.FetchPublicPreferencesEvent;
-import pgu.client.profile.event.SaveLocationEvent;
-import pgu.client.profile.event.SaveLocationsEvent;
-import pgu.client.profile.event.SaveMapPreferencesEvent;
-import pgu.client.profile.event.SavePublicPreferencesEvent;
-import pgu.client.profile.event.SavePublicProfileEvent;
 import pgu.shared.model.ProfileLocations;
 import pgu.shared.model.PublicPreferences;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface ProfileView extends IsWidget //
-, SaveLocationEvent.HasSaveLocationHandlers //
-, LocationShowOnMapEvent.HasLocationShowOnMapHandlers //
-, SaveMapPreferencesEvent.HasSaveMapPreferencesHandlers //
-, FetchPublicPreferencesEvent.HasFetchPublicPreferencesHandlers //
-, FetchMapPreferencesEvent.HasFetchMapPreferencesHandlers //
-, SaveLocationsEvent.HasSaveLocationsHandlers //
-, FetchProfileLocationsEvent.HasFetchProfileLocationsHandlers //
-, SavePublicProfileEvent.HasSavePublicProfileHandlers //
-, SavePublicPreferencesEvent.HasSavePublicPreferencesHandlers //
-{
+public interface ProfileView extends IsWidget {
 
-    void setPresenter(ProfilePresenter presenter);
+    void setPresenter(ProfileActivity presenter);
 
     void confirmChangeOnPublicProfile(String publicProfileItem);
 
-    void hideSaveWidget();
-
-    void showSaveWidget();
-
-    void showOnMap(String locName);
+    void showSaveWidget(String itemConfigId);
 
     void showNotificationWarning(String msg);
 
     void showProfile();
 
-    void setProfileLocations(ProfileLocations profileLocations);
-
-    void setPublicPreferencesInfo(PublicPreferences result);
-
-    void refreshHtmlLocationsForItem(String itemConfigId);
-
-    String getJsonPublicProfile();
+    void onFetchProfileLocationsSuccess(ProfileLocations profileLocations);
 
     String getJsonRawProfile();
 
-    void removeUnusedLocations();
-
-    void addGeopointToCopyCache(String locationName, String lat, String lng);
-
-    void copyLocationCaches();
-
-    String json_copyCacheItems();
-
-    String json_copyCacheReferential();
-
-    void replaceCachesByCopies();
-
-    void deleteCopies();
-
-    String getJsonPublicPreferences();
-
-    boolean isLocationDoublon(String itemConfigId, String locationName, String lat, String lng);
-
-    void addLocation2ItemInCopyCache(String itemConfigId, String locationName);
-
     boolean isProfileSetInView();
 
-    void setMapPreferences(String values);
+    void onFetchMapPreferencesSuccess(String values);
+
+    void onSaveLastSearchLocationSuccess(String locationName, String itemConfigIdToSave);
+
+    void onSaveLastSearchLocationFailure(Throwable caught);
+
+    void onUpdateLocationsSilentlySuccess();
+
+    void onUpdateLocationsSilentlyFailure(Throwable caught);
+
+    void onFetchPublicPreferencesSuccess(PublicPreferences result);
+
+    void onLocationsSuccessSave(String itemConfigId);
+
+    void onLocationSuccessDelete(String itemConfigId);
 
 }

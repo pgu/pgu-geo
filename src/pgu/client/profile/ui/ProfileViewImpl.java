@@ -2,21 +2,12 @@ package pgu.client.profile.ui;
 
 import java.util.HashMap;
 
-import pgu.client.app.event.LocationShowOnMapEvent;
 import pgu.client.app.utils.ClientHelper;
 import pgu.client.app.utils.JsonHelper;
+import pgu.client.app.utils.Level;
 import pgu.client.app.utils.MarkdownHelper;
-import pgu.client.profile.ProfilePresenter;
+import pgu.client.profile.ProfileActivity;
 import pgu.client.profile.ProfileView;
-import pgu.client.profile.event.FetchMapPreferencesEvent;
-import pgu.client.profile.event.FetchProfileLocationsEvent;
-import pgu.client.profile.event.FetchPublicPreferencesEvent;
-import pgu.client.profile.event.SaveLocationEvent;
-import pgu.client.profile.event.SaveLocationsEvent;
-import pgu.client.profile.event.SaveMapPreferencesEvent;
-import pgu.client.profile.event.SaveMapPreferencesEvent.Handler;
-import pgu.client.profile.event.SavePublicPreferencesEvent;
-import pgu.client.profile.event.SavePublicProfileEvent;
 import pgu.shared.model.ProfileLocations;
 import pgu.shared.model.PublicPreferences;
 import pgu.shared.utils.PublicProfileItemType;
@@ -44,7 +35,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.web.bindery.event.shared.HandlerRegistration;
 
 public class ProfileViewImpl extends Composite implements ProfileView {
 
@@ -87,6 +77,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     private final ClientHelper                               u               = new ClientHelper();
 
     private String              lastSearchItemLocation      = null;
+    private String              itemConfigIdToSave      = null;
 
     private final ProfileViewTables    viewTables = new ProfileViewTables();
     private final ProfileViewMap       viewMap    = new ProfileViewMap();
@@ -116,10 +107,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     @UiHandler("mapPreferencesBtn")
     public void clickOnMapPreferences(final ClickEvent e) {
-
         final String mapPreferences = viewMap.getCurrentMapPreferences();
-
-        fireEvent(new SaveMapPreferencesEvent(mapPreferences));
+        presenter.saveMapPreferences(mapPreferences);
     }
 
     @UiHandler("showAllBtn")
@@ -157,16 +146,31 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             return;
         }
 
-        final String lat = loc2lat.get(lastSearchItemLocation);
-        final String lng = loc2lng.get(lastSearchItemLocation);
+        final String locationName = lastSearchItemLocation;
 
-        fireEvent(new SaveLocationEvent(lastSearchItemLocation, lat, lng));
-    }
+        final String lat = loc2lat.get(locationName);
+        final String lng = loc2lng.get(locationName);
 
-    @Override
-    public void showOnMap(final String locationName) {
-        Window.scrollTo(0, 0);
-        viewMarkers.createMarkerOnProfileMap(locationName, this);
+        if (u.isVoid(itemConfigIdToSave)) {
+            return;
+        }
+
+        final boolean isDoublon = viewLocations.isDoublon(itemConfigIdToSave, locationName, lat, lng);
+        if (isDoublon) {
+            presenter.sendNotif(Level.WARNING, //
+                    "This location " + locationName + " is already associated to this item");
+        } else {
+
+            locationsHelper.copyLocationCaches();
+            viewLocations.addGeopointToCopyCache(locationName, lat, lng);
+            locationsHelper.addLocation2ItemInCopyCache(itemConfigIdToSave, locationName);
+
+            presenter.saveLastSearchLocation(locationName, lat, lng, //
+                    locationsHelper.json_copyCacheItems(), locationsHelper.json_copyCacheReferential(), //
+                    itemConfigIdToSave);
+
+            itemConfigIdToSave = null;
+        }
     }
 
     private final HashMap<String, String> loc2lat = new HashMap<String, String>();
@@ -188,7 +192,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
         viewMarkers.searchLocationAndAddMarker(this, locationText);
     }
-
 
     @UiHandler("clearSearchMarkersBtn")
     public void clickOnClearMarkersBtn(final ClickEvent e) {
@@ -225,7 +228,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         btn.setIcon(is_public ? IconType.EYE_OPEN : IconType.EYE_CLOSE);
         viewPublic.updatePublicPreference(public_preference, is_public);
 
-        fireEvent(new SavePublicPreferencesEvent(public_preference));
+        final String jsonPublicPreferences = viewPublic.getJsonPublicPreferences();
+        presenter.savePublicPreferences(public_preference, jsonPublicPreferences);
     }
 
     public void setPublicHeader(final String public_preference, final boolean is_public) {
@@ -246,7 +250,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     }
 
-    private static ProfilePresenter staticPresenter;
+    private static ProfileActivity staticPresenter;
+    private ProfileActivity presenter;
 
     public native void exportMethods() /*-{
       $wnd.pgu_geo.add_new_location = $entry(@pgu.client.profile.ui.ProfileViewImpl::addNewLocation(Ljava/lang/String;));
@@ -268,11 +273,17 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     @UiHandler("locContainer")
     public void clickLocContainer(final ClickEvent e) {
-        fireEvent(new LocationShowOnMapEvent(locContainer.getText()));
+        final String locationName = locContainer.getText();
+
+        // TODO PGU Jan 25, 2013 LocationShowOnMapEvent
+
+        Window.scrollTo(0, 0);
+        viewMarkers.createMarkerOnProfileMap(locationName, this);
     }
 
     @Override
-    public void setPresenter(final ProfilePresenter presenter) {
+    public void setPresenter(final ProfileActivity presenter) {
+        this.presenter = presenter;
         staticPresenter = presenter;
     }
 
@@ -413,58 +424,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         }.schedule(3000);
     }
 
-    @Override
-    public HandlerRegistration addSaveLocationHandler(final SaveLocationEvent.Handler handler) {
-        return addHandler(handler, SaveLocationEvent.TYPE);
-    }
-
-    @Override
-    public HandlerRegistration addLocationShowOnMapHandler(final LocationShowOnMapEvent.Handler handler) {
-        return addHandler(handler, LocationShowOnMapEvent.TYPE);
-    }
-
-    @Override
-    public HandlerRegistration addSaveMapPreferencesHandler(final Handler handler) {
-        return addHandler(handler, SaveMapPreferencesEvent.TYPE);
-    }
-
-    @Override
-    public HandlerRegistration addFetchPublicPreferencesHandler(final FetchPublicPreferencesEvent.Handler handler) {
-        return addHandler(handler, FetchPublicPreferencesEvent.TYPE);
-    }
-
-    @Override
-    public HandlerRegistration addSaveLocationsHandler(final SaveLocationsEvent.Handler handler) {
-        return addHandler(handler, SaveLocationsEvent.TYPE);
-    }
-
-    @Override
-    public HandlerRegistration addFetchProfileLocationsHandler(final FetchProfileLocationsEvent.Handler handler) {
-        return addHandler(handler, FetchProfileLocationsEvent.TYPE);
-    }
-
-    @Override
-    public HandlerRegistration addSavePublicProfileHandler(final SavePublicProfileEvent.Handler handler) {
-        return addHandler(handler, SavePublicProfileEvent.TYPE);
-    }
-
-    @Override
-    public HandlerRegistration addSavePublicPreferencesHandler(final SavePublicPreferencesEvent.Handler handler) {
-        return addHandler(handler, SavePublicPreferencesEvent.TYPE);
-    }
-
-    @Override
-    public HandlerRegistration addFetchMapPreferencesHandler(final FetchMapPreferencesEvent.Handler handler) {
-        return addHandler(handler, FetchMapPreferencesEvent.TYPE);
-    }
-
-    @Override
-    public void hideSaveWidget() {
+    private void hideSaveWidget() {
         locationSaveBtn.setVisible(false);
     }
 
     @Override
-    public void showSaveWidget() {
+    public void showSaveWidget(final String itemConfigId) {
+        itemConfigIdToSave = itemConfigId;
         locationSaveBtn.setVisible(true);
 
         Window.scrollTo(0, 0);
@@ -501,15 +467,15 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     private void setProfileAfter() {
 
-        fireEvent(new FetchProfileLocationsEvent());
-        fireEvent(new FetchPublicPreferencesEvent());
-        fireEvent(new FetchMapPreferencesEvent());
+        presenter.fetchPublicPreferences();
+        presenter.fetchMapPreferences();
+        presenter.fetchProfileLocations();
 
-        fireEvent(new SavePublicProfileEvent());
+        presenter.updatePublicProfileSilently(getJsonPublicProfile());
     }
 
     @Override
-    public void setProfileLocations(final ProfileLocations profileLocations) {
+    public void onFetchProfileLocationsSuccess(final ProfileLocations profileLocations) {
 
         viewLocations.initCaches(profileLocations.getItems2locations(), profileLocations.getReferentialLocations());
         final String locationName = locContainer.getText();
@@ -525,30 +491,17 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
             @Override
             public void run() {
-                fireEvent(new SaveLocationsEvent());
+                viewLocations.removeUnusedLocations();
+                locationsHelper.copyLocationCaches();
+
+                presenter.updateLocationsSilently(locationsHelper.json_copyCacheItems(), locationsHelper.json_copyCacheReferential());
             }
 
         }.schedule(3000);
 
     }
 
-    @Override
-    public void removeUnusedLocations() {
-        viewLocations.removeUnusedLocations();
-    }
-
-    @Override
-    public void setPublicPreferencesInfo(final PublicPreferences result) {
-        viewPublic.showPublicPreferences(this, result.getValues());
-    }
-
-    @Override
-    public void refreshHtmlLocationsForItem(final String itemConfigId) {
-        viewTables.refreshHtmlLocationsForItem(itemConfigId, this);
-    }
-
-    @Override
-    public String getJsonPublicProfile() {
+    private String getJsonPublicProfile() {
 
         final String specialtiesHtml = spContainer.getElement().getInnerHTML();
         final String locationName = locContainer.getText();
@@ -605,53 +558,53 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     @Override
-    public void addGeopointToCopyCache(final String location_name, final String lat, final String lng) {
-        viewLocations.addGeopointToCopyCache(location_name, lat, lng);
+    public void onFetchMapPreferencesSuccess(final String values) {
+        viewMap.setPreferences(values);
     }
 
     @Override
-    public void copyLocationCaches() {
-        locationsHelper.copyLocationCaches();
-    }
-
-    @Override
-    public String json_copyCacheItems() {
-        return locationsHelper.json_copyCacheItems();
-    }
-
-    @Override
-    public String json_copyCacheReferential() {
-        return locationsHelper.json_copyCacheReferential();
-    }
-
-    @Override
-    public void replaceCachesByCopies() {
+    public void onSaveLastSearchLocationSuccess(final String locationName, final String itemConfigId) {
         locationsHelper.replaceCachesByCopies();
+        hideSaveWidget();
+
+        viewTables.refreshHtmlLocationsForItem(itemConfigId, this);
+
+        final StringBuilder msg = new StringBuilder();
+        msg.append("The location \"");
+        msg.append(locationName);
+        msg.append("\" has been successfully added.");
+
+        presenter.sendNotif(Level.SUCCESS, msg.toString());
     }
 
     @Override
-    public void deleteCopies() {
+    public void onSaveLastSearchLocationFailure(final Throwable caught) {
         locationsHelper.deleteCopies();
     }
 
     @Override
-    public String getJsonPublicPreferences() {
-        return viewPublic.getJsonPublicPreferences();
+    public void onUpdateLocationsSilentlySuccess() {
+        locationsHelper.replaceCachesByCopies();
     }
 
     @Override
-    public boolean isLocationDoublon(final String itemConfigId, final String locationName, final String lat, final String lng) {
-        return viewLocations.isDoublon(itemConfigId, locationName, lat, lng);
+    public void onUpdateLocationsSilentlyFailure(final Throwable caught) {
+        locationsHelper.deleteCopies();
     }
 
     @Override
-    public void addLocation2ItemInCopyCache(final String itemConfigId, final String locationName) {
-        locationsHelper.addLocation2ItemInCopyCache(itemConfigId, locationName);
+    public void onFetchPublicPreferencesSuccess(final PublicPreferences result) {
+        viewPublic.showPublicPreferences(this, result.getValues());
     }
 
     @Override
-    public void setMapPreferences(final String values) {
-        viewMap.setPreferences(values);
+    public void onLocationsSuccessSave(final String itemConfigId) {
+        viewTables.refreshHtmlLocationsForItem(itemConfigId, this);
+    }
+
+    @Override
+    public void onLocationSuccessDelete(final String itemConfigId) {
+        viewTables.refreshHtmlLocationsForItem(itemConfigId, this);
     }
 
 }
