@@ -273,10 +273,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     @UiHandler("locContainer")
     public void clickLocContainer(final ClickEvent e) {
+
         final String locationName = locContainer.getText();
+        showLocationOnMap(locationName);
+    }
 
-        // TODO PGU Jan 25, 2013 LocationShowOnMapEvent
-
+    private void showLocationOnMap(final String locationName) {
         Window.scrollTo(0, 0);
         viewMarkers.createMarkerOnProfileMap(locationName, this);
     }
@@ -605,6 +607,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     @Override
     public void onLocationSuccessDelete(final String itemConfigId) {
         viewTables.refreshHtmlLocationsForItem(itemConfigId, this);
+    }
+
+    @Override
+    public void onLocationShowOnMap(final String locationName) {
+        showLocationOnMap(locationName);
     }
 
 }

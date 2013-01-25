@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import pgu.client.app.AppContext;
 import pgu.client.app.event.HideWaitingIndicatorEvent;
 import pgu.client.app.event.LocationAddNewEvent;
+import pgu.client.app.event.LocationShowOnMapEvent;
 import pgu.client.app.event.LocationSuccessDeleteEvent;
 import pgu.client.app.event.LocationsSuccessSaveEvent;
 import pgu.client.app.event.MapsApiLoadedEvent;
@@ -30,6 +31,7 @@ public class ProfileActivity extends AbstractActivity implements //
 LocationsSuccessSaveEvent.Handler //
 , LocationSuccessDeleteEvent.Handler //
 , LocationAddNewEvent.Handler //
+, LocationShowOnMapEvent.Handler //
 , ShowdownLoadedEvent.Handler //
 , MapsApiLoadedEvent.Handler //
 , ProfileLoadedEvent.Handler //
@@ -71,6 +73,7 @@ LocationsSuccessSaveEvent.Handler //
         hRegs.add(eventBus.addHandler(LocationsSuccessSaveEvent.TYPE, this));
         hRegs.add(eventBus.addHandler(LocationSuccessDeleteEvent.TYPE, this));
 
+        hRegs.add(eventBus.addHandler(LocationShowOnMapEvent.TYPE, this));
         hRegs.add(eventBus.addHandler(LocationAddNewEvent.TYPE, this));
 
         hRegs.add(eventBus.addHandler(ShowdownLoadedEvent.TYPE, this));
@@ -326,6 +329,11 @@ LocationsSuccessSaveEvent.Handler //
                         view.onFetchMapPreferencesSuccess(result.getValues());
                     }
                 });
+    }
+
+    @Override
+    public void onLocationShowOnMap(final LocationShowOnMapEvent event) {
+        view.onLocationShowOnMap(event.getLocName());
     }
 
 }

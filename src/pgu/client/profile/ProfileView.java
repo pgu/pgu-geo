@@ -39,4 +39,6 @@ public interface ProfileView extends IsWidget {
 
     void onLocationSuccessDelete(String itemConfigId);
 
+    void onLocationShowOnMap(String locName);
+
 }
