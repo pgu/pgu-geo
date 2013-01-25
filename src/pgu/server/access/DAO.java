@@ -1,5 +1,6 @@
 package pgu.server.access;
 
+import pgu.shared.model.BaseProfile;
 import pgu.shared.model.BasePublicProfile;
 import pgu.shared.model.ChartsPreferences;
 import pgu.shared.model.ContactsNumberByCountry;
@@ -30,7 +31,9 @@ public class DAO extends DAOBase {
 
         ObjectifyService.register(ProfileLocations.class);
         ObjectifyService.register(PublicPreferences.class);
+
         ObjectifyService.register(BasePublicProfile.class);
+        ObjectifyService.register(BaseProfile.class);
     }
 
 }

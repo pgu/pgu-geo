@@ -4,6 +4,7 @@ import pgu.client.service.ProfileService;
 import pgu.server.access.DAO;
 import pgu.server.app.AppLog;
 import pgu.server.utils.AppUtils;
+import pgu.shared.model.BaseProfile;
 import pgu.shared.model.BasePublicProfile;
 import pgu.shared.model.MapPreferences;
 import pgu.shared.model.ProfileLocations;
@@ -92,7 +93,13 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
     @Override
     public void saveProfile(final String profileId, final String jsonProfile) {
 
-        // TODO PGU save profile with ofy
+        final BaseProfile baseP = new BaseProfile();
+        baseP.setProfileId(profileId);
+        baseP.setValue(jsonProfile);
+
+        dao.ofy().async().put(baseP);
+
+        // TODO PGU Jan 25, 2013 jobs to update positions, educations, wishes, ... documents with geopoints
         // TODO PGU location_idx where each location <-> profile
 
         //        final Document.Builder docBuilder = Document.newBuilder() //
