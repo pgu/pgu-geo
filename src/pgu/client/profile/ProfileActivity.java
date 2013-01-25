@@ -63,7 +63,7 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
     private final ProfileServiceAsync            profileService;
 
     private String                               itemConfigId;
-
+    private boolean                              hasToShowProfile = false;
 
     public ProfileActivity(final ProfilePlace place, final ClientFactory clientFactory, final AppContext ctx) {
         this.clientFactory = clientFactory;
@@ -84,7 +84,6 @@ public class ProfileActivity extends AbstractActivity implements ProfilePresente
         view.showSaveWidget();
     }
 
-    private boolean hasToShowProfile = false;
 
     @Override
     public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
