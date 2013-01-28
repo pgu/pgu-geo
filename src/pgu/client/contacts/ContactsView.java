@@ -17,4 +17,6 @@ public interface ContactsView extends IsWidget {
 
     void setPresenter(ContactsActivity contactsActivity);
 
+    boolean areContactsSetInView();
+
 }

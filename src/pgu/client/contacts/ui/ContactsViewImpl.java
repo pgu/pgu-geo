@@ -650,6 +650,8 @@ public class ContactsViewImpl extends Composite implements ContactsView {
 
     @Override
     public void showLoadingPanel() {
+        presenter.showWaitingIndicator();
+
         chartsPanel.setVisible(false);
         loadingPanel.setVisible(true);
     }
@@ -701,6 +703,13 @@ public class ContactsViewImpl extends Composite implements ContactsView {
     @Override
     public void setPresenter(final ContactsActivity presenter) {
         this.presenter = presenter;
+    }
+
+    private final boolean areContactsSetInView = false;
+
+    @Override
+    public boolean areContactsSetInView() {
+        return areContactsSetInView;
     }
 
 }

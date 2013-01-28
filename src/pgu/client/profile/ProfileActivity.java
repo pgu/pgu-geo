@@ -206,11 +206,21 @@ LocationsSuccessSaveEvent.Handler //
                 });
     }
 
+    public void showWaitingIndicator() {
+        u.fire(eventBus, new ShowWaitingIndicatorEvent());
+    }
+
+    public void hideWaitingIndicator() {
+        u.fire(eventBus, new HideWaitingIndicatorEvent());
+    }
+
+    public void sendNotif(final Level level, final String msg) {
+        u.fire(eventBus, new NotificationEvent(level, msg));
+    }
+
     public void saveLastSearchLocation(final String locationName, final String lat, final String lng //
             , final String jsonCopyCacheItems, final String jsonCopyCacheReferential //
             , final String itemConfigIdToSave) {
-
-        u.fire(eventBus, new ShowWaitingIndicatorEvent());
 
         profileService.saveLocations( //
                 //
@@ -222,7 +232,6 @@ LocationsSuccessSaveEvent.Handler //
 
                     @Override
                     public void onSuccess(final Void result) {
-                        u.fire(eventBus, new HideWaitingIndicatorEvent());
                         view.onSaveLastSearchLocationSuccess(locationName, itemConfigIdToSave);
                     }
 
@@ -234,10 +243,6 @@ LocationsSuccessSaveEvent.Handler //
 
                 });
 
-    }
-
-    public void sendNotif(final Level level, final String msg) {
-        u.fire(eventBus, new NotificationEvent(level, msg));
     }
 
     public void fetchPublicPreferences() {

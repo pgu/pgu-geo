@@ -161,6 +161,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                     "This location " + locationName + " is already associated to this item");
         } else {
 
+            presenter.showWaitingIndicator();
+
             locationsHelper.copyLocationCaches();
             viewLocations.addGeopointToCopyCache(locationName, lat, lng);
             locationsHelper.addLocation2ItemInCopyCache(itemConfigIdToSave, locationName);
@@ -566,6 +568,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     @Override
     public void onSaveLastSearchLocationSuccess(final String locationName, final String itemConfigId) {
+        presenter.hideWaitingIndicator();
+
         locationsHelper.replaceCachesByCopies();
         hideSaveWidget();
 
@@ -581,6 +585,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     @Override
     public void onSaveLastSearchLocationFailure(final Throwable caught) {
+        presenter.hideWaitingIndicator();
         locationsHelper.deleteCopies();
     }
 

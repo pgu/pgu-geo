@@ -34,6 +34,8 @@ ChartsApiLoadedEvent.Handler //
     private final LinkedinServiceAsync           linkedinService;
     private final ContactsServiceAsync           contactsService;
 
+    private boolean hasToSetContacts = false;
+
     public ContactsActivity(final ContactsPlace place, final ClientFactory clientFactory, final AppContext ctx) {
         this.clientFactory = clientFactory;
         this.ctx = ctx;
@@ -43,8 +45,6 @@ ChartsApiLoadedEvent.Handler //
         linkedinService = clientFactory.getLinkedinService();
     }
 
-    private boolean hasToSetContacts = false;
-
     @Override
     public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
 
@@ -52,13 +52,14 @@ ChartsApiLoadedEvent.Handler //
         view.setPresenter(this);
 
         hRegs.clear();
+
         hRegs.add(eventBus.addHandler(ChartsApiLoadedEvent.TYPE, this));
         hRegs.add(eventBus.addHandler(ContactsLoadedEvent.TYPE, this));
 
         panel.setWidget(view.asWidget());
 
         if (isAppReady(ctx)) {
-            setContacts();
+            showContacts();
 
         } else {
             hasToSetContacts = true;
@@ -66,9 +67,30 @@ ChartsApiLoadedEvent.Handler //
 
     }
 
-    private void setContacts() {
+    public void showWaitingIndicator() {
         u.fire(eventBus, new ShowWaitingIndicatorEvent());
+    }
+
+    public void hideWaitingIndicator() {
+        u.fire(eventBus, new HideWaitingIndicatorEvent());
+    }
+
+    private void showContacts() {
+
+        if (view.areContactsSetInView()) {
+            return;
+        }
+
         view.showLoadingPanel();
+
+        // TODO PGU Jan 28, 2013
+        // TODO PGU Jan 28, 2013 contactsService.saveContacts
+        // TODO PGU Jan 28, 2013
+        // TODO PGU Jan 28, 2013
+        // TODO PGU Jan 28, 2013
+
+
+
 
         // TODO PGU Nov 10, 2012 get the profile id if not set
         if (clientFactory.getAppState().getUserId() == null) {
@@ -118,7 +140,7 @@ ChartsApiLoadedEvent.Handler //
     private void setContactsAsync() {
         if (hasToSetContacts && isAppReady(ctx)) {
             hasToSetContacts = false;
-            setContacts();
+            showContacts();
         }
     }
 
