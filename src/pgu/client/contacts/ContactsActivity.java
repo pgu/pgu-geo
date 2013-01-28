@@ -130,6 +130,10 @@ ChartsApiLoadedEvent.Handler //
     }
 
     private boolean isAppReady(final AppContext ctx) {
+        // TODO PGU Jan 28, 2013 isProfileLoaded
+        // TODO PGU Jan 28, 2013 isProfileLoaded
+        // TODO PGU Jan 28, 2013 isProfileLoaded
+        // TODO PGU Jan 28, 2013 isProfileLoaded
         return ctx.areContactsLoaded() && areExternalApisLoaded(ctx);
     }
 

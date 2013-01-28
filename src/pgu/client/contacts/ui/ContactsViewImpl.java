@@ -335,8 +335,7 @@ public class ContactsViewImpl extends Composite implements ContactsView {
     private static final HashMap<String, Integer> country2contactNumber = new HashMap<String, Integer>();
     private final HashMap<String, String> country2locationNames = new HashMap<String, String>();
 
-    @Override
-    public void showCharts(final ContactsForCharts contactsForCharts) {
+    private void showCharts(final ContactsForCharts contactsForCharts) {
 
         final Country2ContactNumber country2contact = contactsForCharts.getCountry2ContactNumber();
 
@@ -726,22 +725,75 @@ public class ContactsViewImpl extends Composite implements ContactsView {
 
         presenter.showWaitingIndicator();
         showLoadingPanel();
+        showChartsPanel();
+
         // TODO PGU Jan 28, 2013
         // TODO PGU Jan 28, 2013
         // TODO PGU Nov 20, 2012 use pgu_geo.contacts
         // TODO PGU Jan 28, 2013 dispatch contacts by locations
         // TODO PGU Jan 28, 2013
         // TODO PGU Jan 28, 2013
-
-        showChartsPanel();
-        // TODO PGU Jan 28, 2013
-        showCharts(null);
+        showCharts();
 
         presenter.hideWaitingIndicator();
 
         presenter.fetchChartsPreferences();
         presenter.fetchFusionUrls();
     }
+
+    private native void showCharts() /*-{
+
+        var contacts_obj = $wnd.pgu_geo.contacts || {"_total":0};
+        var contacts = contacts_obj.values;
+
+        // country2locationNames
+        // country2contactCount
+
+        var country2location_names = {};
+        var country2contact_count = {};
+
+        for (var i = 0; i < contacts_obj._total; i++) {
+
+            var contact = contacts[i];
+
+// contact.firstName
+// contact.lastName
+
+            var location = contact.location || {};
+            var location_name = location.name || "";
+
+            var country = location.country || {};
+            var country_code = country.code || "";
+
+            if ("" === country_code) {
+                continue;
+            }
+
+            if (country2location_names.hasOwnProperty(country_code)) {
+                var location_names = country2location_names[country_code];
+
+                if (location_names.indexOf(location_name) === -1) {
+                    location_names.push(location_name);
+                }
+
+            } else {
+                country2location_names[country_code] = [].concat(location_name);
+            }
+
+            if (country2contact_count.hasOwnProperty(country_code)) {
+                country2contact_count[country_code] = country2contact_count[country_code] + 1;
+
+            } else {
+                country2contact_count[country_code] = 1;
+            }
+        }
+
+        // TODO
+        // TODO
+        // TODO
+        // TODO
+
+    }-*/;
 
     @Override
     public void onFetchChartsPreferencesSuccess(final String jsonChartsPreferences) {
