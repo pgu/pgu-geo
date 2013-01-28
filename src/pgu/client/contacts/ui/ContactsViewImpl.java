@@ -6,10 +6,8 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import pgu.client.app.utils.JsonUtils;
+import pgu.client.contacts.ContactsActivity;
 import pgu.client.contacts.ContactsView;
-import pgu.client.contacts.event.FetchContactsNamesEvent;
-import pgu.client.contacts.event.FetchContactsNamesEvent.Handler;
-import pgu.client.contacts.event.SaveChartsPreferencesEvent;
 import pgu.client.contacts.event.SaveContactsNumberByCountryEvent;
 import pgu.client.contacts.event.SaveFusionUrlsEvent;
 import pgu.client.resources.ResourcesApp;
@@ -82,6 +80,8 @@ public class ContactsViewImpl extends Composite implements ContactsView {
     private final HashMap<String, CheckBox> type2chartBox = new HashMap<String, CheckBox>();
 
     private final ArrayList<String> fusionUrls = new ArrayList<String>();
+
+    private ContactsActivity presenter;
 
     public ContactsViewImpl(final EventBus eventBus) {
         initWidget(uiBinder.createAndBindUi(this));
@@ -371,7 +371,7 @@ public class ContactsViewImpl extends Composite implements ContactsView {
 
         buildCharts();
 
-        fireEvent(new FetchContactsNamesEvent());
+        presenter.fetchContactsNames();
 
         // add the fusion panels
         fusionPanel.clear();
@@ -454,7 +454,7 @@ public class ContactsViewImpl extends Composite implements ContactsView {
         }
 
         final String jsonChartTypes = JsonUtils.json_stringify(chartTypes);
-        fireEvent(new SaveChartsPreferencesEvent(jsonChartTypes));
+        presenter.saveChartsPreferences(jsonChartTypes);
     }
 
     private native void parseLocationNames(final ContactsViewImpl view, final String json) /*-{
@@ -663,11 +663,6 @@ public class ContactsViewImpl extends Composite implements ContactsView {
         chartsPanel.setVisible(true);
     }
 
-    @Override
-    public HandlerRegistration addFetchContactsNamesHandler(final Handler handler) {
-        return addHandler(handler, FetchContactsNamesEvent.TYPE);
-    }
-
     private final HashMap<String, String> country2contactNames = new HashMap<String, String>();
 
     @Override
@@ -707,11 +702,6 @@ public class ContactsViewImpl extends Composite implements ContactsView {
     }
 
     @Override
-    public HandlerRegistration addSaveChartsPreferencesHandler(final SaveChartsPreferencesEvent.Handler handler) {
-        return addHandler(handler, SaveChartsPreferencesEvent.TYPE);
-    }
-
-    @Override
     public HandlerRegistration addSaveFusionUrlsHandler(final SaveFusionUrlsEvent.Handler handler) {
         return addHandler(handler, SaveFusionUrlsEvent.TYPE);
     }
@@ -719,6 +709,11 @@ public class ContactsViewImpl extends Composite implements ContactsView {
     @Override
     public HandlerRegistration addSaveContactsNumberByCountryHandler(final SaveContactsNumberByCountryEvent.Handler handler) {
         return addHandler(handler, SaveContactsNumberByCountryEvent.TYPE);
+    }
+
+    @Override
+    public void setPresenter(final ContactsActivity presenter) {
+        this.presenter = presenter;
     }
 
 }

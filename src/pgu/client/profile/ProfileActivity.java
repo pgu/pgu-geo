@@ -40,8 +40,8 @@ LocationsSuccessSaveEvent.Handler //
     private final ClientFactory                  clientFactory;
     private final ProfileView                    view;
     private final AppContext                     ctx;
-    private final ClientHelper                    u     = new ClientHelper();
-    private final ArrayList<HandlerRegistration> hRegs = new ArrayList<HandlerRegistration>();
+    private final ClientHelper                   u                = new ClientHelper();
+    private final ArrayList<HandlerRegistration> hRegs            = new ArrayList<HandlerRegistration>();
     private EventBus                             eventBus;
 
     private final ProfileServiceAsync            profileService;
@@ -53,13 +53,6 @@ LocationsSuccessSaveEvent.Handler //
         this.ctx = ctx;
         view = clientFactory.getProfileView();
         profileService = clientFactory.getProfileService();
-    }
-
-    @Override
-    public void onLocationAddNew(final LocationAddNewEvent event) {
-        final String itemConfigId = event.getItemConfigId();
-
-        view.showSaveWidget(itemConfigId);
     }
 
     @Override
@@ -126,7 +119,8 @@ LocationsSuccessSaveEvent.Handler //
 
     public void editLocation(final String itemConfigId, final String locName) {
 
-        final EditLocationActivity editLocationActivity = new EditLocationActivity(clientFactory, itemConfigId, locName, ctx);
+        final EditLocationActivity editLocationActivity = new EditLocationActivity(clientFactory, itemConfigId,
+                locName, ctx);
         editLocationActivity.start(null, eventBus);
     }
 
@@ -155,6 +149,13 @@ LocationsSuccessSaveEvent.Handler //
         hRegs.clear();
 
         super.onStop();
+    }
+
+    @Override
+    public void onLocationAddNew(final LocationAddNewEvent event) {
+        final String itemConfigId = event.getItemConfigId();
+
+        view.showSaveWidget(itemConfigId);
     }
 
     @Override

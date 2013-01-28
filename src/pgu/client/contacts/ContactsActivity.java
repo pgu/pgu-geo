@@ -10,13 +10,11 @@ import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientHelper;
-import pgu.client.contacts.event.FetchContactsNamesEvent;
-import pgu.client.contacts.event.SaveChartsPreferencesEvent;
 import pgu.client.contacts.event.SaveContactsNumberByCountryEvent;
 import pgu.client.contacts.event.SaveFusionUrlsEvent;
+import pgu.client.service.ContactsServiceAsync;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.shared.dto.ContactsForCharts;
-import pgu.shared.model.Country2ContactNames;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -24,9 +22,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
 public class ContactsActivity extends AbstractActivity implements //
-FetchContactsNamesEvent.Handler //
-, SaveChartsPreferencesEvent.Handler //
-, SaveFusionUrlsEvent.Handler //
+SaveFusionUrlsEvent.Handler //
 , SaveContactsNumberByCountryEvent.Handler //
 , ChartsApiLoadedEvent.Handler //
 , ContactsLoadedEvent.Handler //
@@ -34,19 +30,20 @@ FetchContactsNamesEvent.Handler //
 
     private final ClientFactory                  clientFactory;
     private final ContactsView                   view;
-    private final LinkedinServiceAsync           linkedinService;
     private final AppContext                     ctx;
-
     private final ClientHelper                    u     = new ClientHelper();
-
+    private final ArrayList<HandlerRegistration> hRegs = new ArrayList<HandlerRegistration>();
     private EventBus                             eventBus;
 
-    private final ArrayList<HandlerRegistration> hRegs = new ArrayList<HandlerRegistration>();
+    private final LinkedinServiceAsync           linkedinService;
+    private final ContactsServiceAsync           contactsService;
 
     public ContactsActivity(final ContactsPlace place, final ClientFactory clientFactory, final AppContext ctx) {
         this.clientFactory = clientFactory;
         this.ctx = ctx;
         view = clientFactory.getContactsView();
+        contactsService = clientFactory.getContactsService();
+
         linkedinService = clientFactory.getLinkedinService();
     }
 
@@ -54,11 +51,11 @@ FetchContactsNamesEvent.Handler //
 
     @Override
     public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
+
         this.eventBus = eventBus;
+        view.setPresenter(this);
 
         hRegs.clear();
-        hRegs.add(view.addFetchContactsNamesHandler(this));
-        hRegs.add(view.addSaveChartsPreferencesHandler(this));
         hRegs.add(view.addSaveFusionUrlsHandler(this));
         hRegs.add(view.addSaveContactsNumberByCountryHandler(this));
 
@@ -104,20 +101,6 @@ FetchContactsNamesEvent.Handler //
     }
 
     @Override
-    public void onFetchContactsNames(final FetchContactsNamesEvent event) {
-        linkedinService.fetchContactsNames( //
-                clientFactory.getAppState().getUserId(), //
-                new AsyncCallbackApp<Country2ContactNames>(eventBus) {
-
-                    @Override
-                    public void onSuccess(final Country2ContactNames result) {
-                        view.setContactNames(result);
-                    }
-
-                });
-    }
-
-    @Override
     public void onStop() {
 
         for (HandlerRegistration hReg : hRegs) {
@@ -128,21 +111,6 @@ FetchContactsNamesEvent.Handler //
         hRegs.clear();
 
         super.onStop();
-    }
-
-    @Override
-    public void onSaveChartsPreferences(final SaveChartsPreferencesEvent event) {
-        linkedinService.saveChartsPreferences( //
-                clientFactory.getAppState().getUserId() //
-                , event.getChartTypes() //
-                , new AsyncCallbackApp<Void>(eventBus) {
-
-                    @Override
-                    public void onSuccess(final Void result) {
-                        // no-op
-                    }
-
-                });
     }
 
     @Override
@@ -198,6 +166,36 @@ FetchContactsNamesEvent.Handler //
 
     private boolean isAppReady(final AppContext ctx) {
         return ctx.areContactsLoaded() && areExternalApisLoaded(ctx);
+    }
+
+    public void fetchContactsNames() {
+        // TODO PGU Jan 28, 2013
+        // TODO PGU Jan 28, 2013 obsolete: move the computation of the contacts repartition
+        // TODO PGU Jan 28, 2013
+        //        linkedinService.fetchContactsNames( //
+        //                clientFactory.getAppState().getUserId(), //
+        //                new AsyncCallbackApp<Country2ContactNames>(eventBus) {
+        //
+        //                    @Override
+        //                    public void onSuccess(final Country2ContactNames result) {
+        //                        view.setContactNames(result);
+        //                    }
+        //
+        //                });
+    }
+
+    public void saveChartsPreferences(final String jsonChartTypes) {
+        contactsService.saveChartsPreferences( //
+                ctx.getProfileId() //
+                , jsonChartTypes //
+                , new AsyncCallbackApp<Void>(eventBus) {
+
+                    @Override
+                    public void onSuccess(final Void result) {
+                        // no-op
+                    }
+
+                });
     }
 
 }

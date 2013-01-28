@@ -6,6 +6,7 @@ import pgu.client.menu.MenuView;
 import pgu.client.oauth.OAuthView;
 import pgu.client.profile.EditLocationView;
 import pgu.client.profile.ProfileView;
+import pgu.client.service.ContactsServiceAsync;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.client.service.LoginServiceAsync;
 import pgu.client.service.ProfileServiceAsync;
@@ -32,5 +33,7 @@ public interface ClientFactory extends BaseClientFactory {
     PublicProfileServiceAsync getPublicProfileService();
 
     ProfileServiceAsync getProfileService();
+
+    ContactsServiceAsync getContactsService();
 
 }

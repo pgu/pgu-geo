@@ -13,6 +13,8 @@ import pgu.client.profile.EditLocationView;
 import pgu.client.profile.ProfileView;
 import pgu.client.profile.ui.EditLocationViewImpl;
 import pgu.client.profile.ui.ProfileViewImpl;
+import pgu.client.service.ContactsService;
+import pgu.client.service.ContactsServiceAsync;
 import pgu.client.service.LinkedinService;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.client.service.LoginService;
@@ -42,11 +44,12 @@ public class ClientFactoryImpl implements ClientFactory {
     // TODO PGU Nov 22, 2012 remove it
     private static PublicProfileServiceAsync publicProfileService = GWT.create(PublicProfileService.class);
     private static LinkedinServiceAsync      linkedinService      = GWT.create(LinkedinService.class);
+    private static AppState                  appState             = new AppState();
 
     private static LoginServiceAsync         loginService         = GWT.create(LoginService.class);
     private static ProfileServiceAsync       profileService       = GWT.create(ProfileService.class);
+    private static ContactsServiceAsync      contactsService      = GWT.create(ContactsService.class);
 
-    private static AppState                  appState             = new AppState();
 
     @Override
     public EventBus getEventBus() {
@@ -111,6 +114,11 @@ public class ClientFactoryImpl implements ClientFactory {
     @Override
     public ProfileServiceAsync getProfileService() {
         return profileService;
+    }
+
+    @Override
+    public ContactsServiceAsync getContactsService() {
+        return contactsService;
     }
 
 }

@@ -661,14 +661,6 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
     }
 
     @Override
-    public void saveChartsPreferences(final String userId, final String jsonChartTypes) {
-        final ChartsPreferences chartsPreferences = new ChartsPreferences();
-        chartsPreferences.setProfileId(userId);
-        chartsPreferences.setValues(jsonChartTypes);
-        dao.ofy().async().put(chartsPreferences);
-    }
-
-    @Override
     public void saveFusionUrls(final String userId, final String jsonFusionUrls) {
 
         if (u.isVoid(jsonFusionUrls) //
