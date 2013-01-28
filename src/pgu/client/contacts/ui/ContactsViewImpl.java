@@ -338,10 +338,6 @@ public class ContactsViewImpl extends Composite implements ContactsView {
     @Override
     public void showCharts(final ContactsForCharts contactsForCharts) {
 
-        // prepare the charts visibility
-        hideAllCharts();
-        parseChartsPreferences(this, contactsForCharts.getChartsPreferences());
-
         final Country2ContactNumber country2contact = contactsForCharts.getCountry2ContactNumber();
 
         // prepare the charts data
@@ -372,14 +368,9 @@ public class ContactsViewImpl extends Composite implements ContactsView {
         buildCharts();
 
         presenter.fetchContactsNames();
-
-        // add the fusion panels
-        fusionPanel.clear();
-        fusionUrls.clear();
-        parseFusionUrls(this, contactsForCharts.getFusionUrls());
     }
 
-    private native void parseFusionUrls(final ContactsViewImpl view, final String json) /*-{
+    private native void parseFusionUrls(final String json) /*-{
         // [url1, url2]
 
         if (!json) {
@@ -390,9 +381,8 @@ public class ContactsViewImpl extends Composite implements ContactsView {
         for ( var i = 0, len = fusion_urls.length; i < len; i++) {
 
             var fusion_url = fusion_urls[i];
-            view.@pgu.client.contacts.ui.ContactsViewImpl::addFusionPanel(Ljava/lang/String;)( //
-            fusion_url);
-
+            this.@pgu.client.contacts.ui.ContactsViewImpl::addFusionPanel(Ljava/lang/String;)
+                 (fusion_url);
         }
 
     }-*/;
@@ -407,7 +397,7 @@ public class ContactsViewImpl extends Composite implements ContactsView {
         }
     }
 
-    private native void parseChartsPreferences(final ContactsViewImpl view, final String json) /*-{
+    private native void parseChartsPreferences(final String json) /*-{
         // ['world','americas']
         var chart_types = [];
         var hasToSaveConfig = false;
@@ -425,12 +415,13 @@ public class ContactsViewImpl extends Composite implements ContactsView {
 
         for ( var i = 0, len = chart_types.length; i < len; i++) {
             var chart_type = chart_types[i];
-            view.@pgu.client.contacts.ui.ContactsViewImpl::displayChartType(Ljava/lang/String;)( //
-            chart_type);
+            this.@pgu.client.contacts.ui.ContactsViewImpl::displayChartType(Ljava/lang/String;)
+                 (chart_type);
         }
 
         if (hasToSaveConfig) {
-            view.@pgu.client.contacts.ui.ContactsViewImpl::saveChartsPreferences()();
+            this.@pgu.client.contacts.ui.ContactsViewImpl::saveChartsPreferences()
+                 ();
         }
 
     }-*/;
@@ -729,11 +720,24 @@ public class ContactsViewImpl extends Composite implements ContactsView {
 
 
     @Override
-    public void showContacts(final ContactsForCharts country2contactNumber) {
+    public void showContacts(final ContactsForCharts contactsForCharts) {
         presenter.hideWaitingIndicator();
 
         showChartsPanel();
-        showCharts(country2contactNumber);
+        showCharts(contactsForCharts);
+    }
+
+    @Override
+    public void setChartsPreferences(final String jsonChartsPreferences) {
+        hideAllCharts(); // prepare the charts visibility
+        parseChartsPreferences(jsonChartsPreferences);
+    }
+
+    @Override
+    public void setFusionUrls(final String jsonFusionUrls) {
+        fusionPanel.clear();
+        fusionUrls.clear();
+        parseFusionUrls(jsonFusionUrls);
     }
 
 }

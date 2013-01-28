@@ -1,5 +1,8 @@
 package pgu.client.service;
 
+import pgu.shared.model.ChartsPreferences;
+import pgu.shared.model.FusionUrls;
+
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -13,5 +16,9 @@ public interface ContactsService extends RemoteService {
     void saveContactsNumberByCountry(String profileId, String jsonContactsNumberByCountry);
 
     void saveContacts(String profileId, String jsonContacts);
+
+    FusionUrls fetchFusionUrls(String profileId);
+
+    ChartsPreferences fetchChartsPreferences(String profileId);
 
 }

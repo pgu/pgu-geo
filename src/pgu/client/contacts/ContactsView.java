@@ -23,4 +23,8 @@ public interface ContactsView extends IsWidget {
 
     void showContacts(ContactsForCharts country2contactNumber);
 
+    void setChartsPreferences(String jsonChartsPreferences);
+
+    void setFusionUrls(String jsonFusionUrls);
+
 }

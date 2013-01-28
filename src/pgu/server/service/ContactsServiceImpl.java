@@ -70,4 +70,26 @@ public class ContactsServiceImpl extends RemoteServiceServlet implements Contact
         // TODO PGU Jan 28, 2013 jobs to update the contacts
     }
 
+    @Override
+    public FusionUrls fetchFusionUrls(final String profileId) {
+        final FusionUrls fusionUrls = dao.ofy().find(FusionUrls.class, profileId);
+
+        if (fusionUrls == null) {
+            return new FusionUrls();
+        }
+
+        return fusionUrls;
+    }
+
+    @Override
+    public ChartsPreferences fetchChartsPreferences(final String profileId) {
+        final ChartsPreferences chartsPreferences = dao.ofy().find(ChartsPreferences.class, profileId);
+
+        if (chartsPreferences == null) {
+            return new ChartsPreferences();
+        }
+
+        return chartsPreferences;
+    }
+
 }
