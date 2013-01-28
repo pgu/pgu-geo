@@ -712,4 +712,17 @@ public class ContactsViewImpl extends Composite implements ContactsView {
         return areContactsSetInView;
     }
 
+    @Override
+    public String getJsonRawContacts() {
+        return null;
+    }
+
+    @Override
+    public void showContacts(final ContactsForCharts country2contactNumber) {
+        presenter.hideWaitingIndicator();
+
+        showChartsPanel();
+        showCharts(country2contactNumber);
+    }
+
 }

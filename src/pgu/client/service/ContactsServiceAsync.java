@@ -10,4 +10,6 @@ public interface ContactsServiceAsync {
 
     void saveContactsNumberByCountry(String profileId, String jsonContactsNumberByCountry, AsyncCallback<Void> callback);
 
+    void saveContacts(String profileId, String jsonContacts, AsyncCallback<Void> asyncCallbackApp);
+
 }

@@ -15,6 +15,7 @@ public interface LinkedinServiceAsync {
 
     void getLinkedinUrlAuthorization(AsyncCallback<OauthAuthorizationStart> asyncCallback);
 
+    @Deprecated
     void fetchConnections(AccessToken accessToken, String userId, AsyncCallback<ContactsForCharts> asyncCallback);
 
     void fetchProfile(AccessToken accessToken, AsyncCallback<Profile> asyncCallbackApp);

@@ -19,4 +19,8 @@ public interface ContactsView extends IsWidget {
 
     boolean areContactsSetInView();
 
+    String getJsonRawContacts();
+
+    void showContacts(ContactsForCharts country2contactNumber);
+
 }

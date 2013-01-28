@@ -34,7 +34,7 @@ ChartsApiLoadedEvent.Handler //
     private final LinkedinServiceAsync           linkedinService;
     private final ContactsServiceAsync           contactsService;
 
-    private boolean hasToSetContacts = false;
+    private boolean hasToShowContacts = false;
 
     public ContactsActivity(final ContactsPlace place, final ClientFactory clientFactory, final AppContext ctx) {
         this.clientFactory = clientFactory;
@@ -62,7 +62,7 @@ ChartsApiLoadedEvent.Handler //
             showContacts();
 
         } else {
-            hasToSetContacts = true;
+            hasToShowContacts = true;
         }
 
     }
@@ -84,34 +84,46 @@ ChartsApiLoadedEvent.Handler //
         view.showLoadingPanel();
 
         // TODO PGU Jan 28, 2013
-        // TODO PGU Jan 28, 2013 contactsService.saveContacts
         // TODO PGU Jan 28, 2013
-        // TODO PGU Jan 28, 2013
-        // TODO PGU Jan 28, 2013
-
-
-
-
-        // TODO PGU Nov 10, 2012 get the profile id if not set
-        if (clientFactory.getAppState().getUserId() == null) {
-            clientFactory.getAppState().setUserId("Qjrp4c3fc3");
-        }
-
         // TODO PGU Nov 20, 2012 use pgu_geo.contacts
-        linkedinService.fetchConnections( //
-                clientFactory.getAppState().getAccessToken() //
-                , clientFactory.getAppState().getUserId() //
-                , new AsyncCallbackApp<ContactsForCharts>(eventBus) {
+        // TODO PGU Jan 28, 2013 dispatch contacts by locations
+        final ContactsForCharts country2contactNumber = new ContactsForCharts();
+        // TODO PGU Jan 28, 2013
+        // TODO PGU Jan 28, 2013
+
+        view.showContacts(country2contactNumber);
+
+        contactsService.saveContacts( //
+                //
+                ctx.getProfileId() //
+                , getJsonContacts() //
+                //
+                , new AsyncCallbackApp<Void>(eventBus) {
 
                     @Override
-                    public void onSuccess(final ContactsForCharts country2contactNumber) {
-                        u.fire(eventBus, new HideWaitingIndicatorEvent());
-                        view.showChartsPanel();
-
-                        view.showCharts(country2contactNumber);
+                    public void onSuccess(final Void result) {
+                        // do nothing
                     }
-
                 });
+
+        //        linkedinService.fetchConnections( //
+        //                clientFactory.getAppState().getAccessToken() //
+        //                , clientFactory.getAppState().getUserId() //
+        //                , new AsyncCallbackApp<ContactsForCharts>(eventBus) {
+        //
+        //                    @Override
+        //                    public void onSuccess(final ContactsForCharts country2contactNumber) {
+        //                        u.fire(eventBus, new HideWaitingIndicatorEvent());
+        //                        view.showChartsPanel();
+        //
+        //                        view.showCharts(country2contactNumber);
+        //                    }
+        //
+        //                });
+    }
+
+    private String getJsonContacts() {
+        return view.getJsonRawContacts();
     }
 
     @Override
@@ -129,17 +141,17 @@ ChartsApiLoadedEvent.Handler //
 
     @Override
     public void onChartsApiLoaded(final ChartsApiLoadedEvent event) {
-        setContactsAsync();
+        showContactsAsync();
     }
 
     @Override
     public void onContactsLoaded(final ContactsLoadedEvent event) {
-        setContactsAsync();
+        showContactsAsync();
     }
 
-    private void setContactsAsync() {
-        if (hasToSetContacts && isAppReady(ctx)) {
-            hasToSetContacts = false;
+    private void showContactsAsync() {
+        if (hasToShowContacts && isAppReady(ctx)) {
+            hasToShowContacts = false;
             showContacts();
         }
     }

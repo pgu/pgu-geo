@@ -4,6 +4,7 @@ import pgu.client.service.ContactsService;
 import pgu.server.access.DAO;
 import pgu.server.app.AppLog;
 import pgu.server.utils.AppUtils;
+import pgu.shared.model.BaseContacts;
 import pgu.shared.model.ChartsPreferences;
 import pgu.shared.model.ContactsNumberByCountry;
 import pgu.shared.model.FusionUrls;
@@ -55,6 +56,18 @@ public class ContactsServiceImpl extends RemoteServiceServlet implements Contact
         contactsNumberByCountry.setProfileId(profileId);
         contactsNumberByCountry.setValues(jsonContactsNumberByCountry);
         dao.ofy().async().put(contactsNumberByCountry);
+    }
+
+    @Override
+    public void saveContacts(final String profileId, final String jsonContacts) {
+
+        final BaseContacts baseContacts = new BaseContacts();
+        baseContacts.setProfileId(profileId);
+        baseContacts.setValue(jsonContacts);
+
+        dao.ofy().async().put(baseContacts);
+
+        // TODO PGU Jan 28, 2013 jobs to update the contacts
     }
 
 }

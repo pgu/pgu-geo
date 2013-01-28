@@ -89,6 +89,8 @@ LocationsSuccessSaveEvent.Handler //
             return;
         }
 
+        view.showProfile();
+
         profileService.saveProfile( //
                 //
                 ctx.getProfileId() //
@@ -102,8 +104,6 @@ LocationsSuccessSaveEvent.Handler //
                     }
 
                 });
-
-        view.showProfile();
     }
 
     private String getJsonProfile() {

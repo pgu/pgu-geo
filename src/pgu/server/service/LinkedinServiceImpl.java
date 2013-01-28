@@ -312,6 +312,7 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
     // [done] fusion_urls: [url1,url2,...]
     //
 
+    @Deprecated
     @Override
     public ContactsForCharts fetchConnections(final AccessToken accessToken, final String userId) {
 

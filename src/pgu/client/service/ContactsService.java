@@ -12,4 +12,6 @@ public interface ContactsService extends RemoteService {
 
     void saveContactsNumberByCountry(String profileId, String jsonContactsNumberByCountry);
 
+    void saveContacts(String profileId, String jsonContacts);
+
 }
