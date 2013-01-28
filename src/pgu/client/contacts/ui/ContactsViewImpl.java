@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import pgu.client.app.utils.JsonHelper;
 import pgu.client.app.utils.JsonUtils;
 import pgu.client.contacts.ContactsActivity;
 import pgu.client.contacts.ContactsView;
@@ -78,6 +79,8 @@ public class ContactsViewImpl extends Composite implements ContactsView {
 
     private final ArrayList<String> fusionUrls = new ArrayList<String>();
 
+    private final JsonHelper             json = new JsonHelper();
+
     private ContactsActivity presenter;
 
     public ContactsViewImpl(final EventBus eventBus) {
@@ -117,7 +120,7 @@ public class ContactsViewImpl extends Composite implements ContactsView {
         type2chartBox.put(ChartType.PIE, pieChartBtn);
         type2chartBox.put(ChartType.WORLD, worldBtn);
 
-        showLoadingPanel();
+        //        showLoadingPanel();
         hideAllCharts();
 
         infoPop.setHeading("Charts");
@@ -712,10 +715,18 @@ public class ContactsViewImpl extends Composite implements ContactsView {
         return areContactsSetInView;
     }
 
-    @Override
-    public String getJsonRawContacts() {
-        return null;
+    private String stringify(final JavaScriptObject jso) {
+        return json.stringify(jso);
     }
+
+    @Override
+    public native String getJsonRawContacts() /*-{
+        var contacts = $wnd.pgu_geo.contacts;
+
+        return this.@pgu.client.contacts.ui.ContactsViewImpl::stringify(Lcom/google/gwt/core/client/JavaScriptObject;)
+                    (contacts);
+    }-*/;
+
 
     @Override
     public void showContacts(final ContactsForCharts country2contactNumber) {

@@ -11,7 +11,6 @@ import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientHelper;
 import pgu.client.service.ContactsServiceAsync;
-import pgu.client.service.LinkedinServiceAsync;
 import pgu.shared.dto.ContactsForCharts;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -24,25 +23,20 @@ ChartsApiLoadedEvent.Handler //
 , ContactsLoadedEvent.Handler //
 {
 
-    private final ClientFactory                  clientFactory;
     private final ContactsView                   view;
     private final AppContext                     ctx;
     private final ClientHelper                    u     = new ClientHelper();
     private final ArrayList<HandlerRegistration> hRegs = new ArrayList<HandlerRegistration>();
     private EventBus                             eventBus;
 
-    private final LinkedinServiceAsync           linkedinService;
     private final ContactsServiceAsync           contactsService;
 
     private boolean hasToShowContacts = false;
 
     public ContactsActivity(final ContactsPlace place, final ClientFactory clientFactory, final AppContext ctx) {
-        this.clientFactory = clientFactory;
         this.ctx = ctx;
         view = clientFactory.getContactsView();
         contactsService = clientFactory.getContactsService();
-
-        linkedinService = clientFactory.getLinkedinService();
     }
 
     @Override
@@ -64,7 +58,6 @@ ChartsApiLoadedEvent.Handler //
         } else {
             hasToShowContacts = true;
         }
-
     }
 
     public void showWaitingIndicator() {
