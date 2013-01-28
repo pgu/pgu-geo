@@ -642,10 +642,7 @@ public class ContactsViewImpl extends Composite implements ContactsView {
         GWT.log(sb.toString());
     }
 
-    @Override
-    public void showLoadingPanel() {
-        presenter.showWaitingIndicator();
-
+    private void showLoadingPanel() {
         chartsPanel.setVisible(false);
         loadingPanel.setVisible(true);
     }
@@ -699,7 +696,7 @@ public class ContactsViewImpl extends Composite implements ContactsView {
         this.presenter = presenter;
     }
 
-    private final boolean areContactsSetInView = false;
+    private boolean areContactsSetInView = false;
 
     @Override
     public boolean areContactsSetInView() {
@@ -718,23 +715,42 @@ public class ContactsViewImpl extends Composite implements ContactsView {
                     (contacts);
     }-*/;
 
-
     @Override
-    public void showContacts(final ContactsForCharts contactsForCharts) {
-        presenter.hideWaitingIndicator();
+    public void showContacts() {
+
+        if (areContactsSetInView) {
+            return;
+        }
+
+        areContactsSetInView = true;
+
+        presenter.showWaitingIndicator();
+        showLoadingPanel();
+        // TODO PGU Jan 28, 2013
+        // TODO PGU Jan 28, 2013
+        // TODO PGU Nov 20, 2012 use pgu_geo.contacts
+        // TODO PGU Jan 28, 2013 dispatch contacts by locations
+        // TODO PGU Jan 28, 2013
+        // TODO PGU Jan 28, 2013
 
         showChartsPanel();
-        showCharts(contactsForCharts);
+        // TODO PGU Jan 28, 2013
+        showCharts(null);
+
+        presenter.hideWaitingIndicator();
+
+        presenter.fetchChartsPreferences();
+        presenter.fetchFusionUrls();
     }
 
     @Override
-    public void setChartsPreferences(final String jsonChartsPreferences) {
+    public void onFetchChartsPreferencesSuccess(final String jsonChartsPreferences) {
         hideAllCharts(); // prepare the charts visibility
         parseChartsPreferences(jsonChartsPreferences);
     }
 
     @Override
-    public void setFusionUrls(final String jsonFusionUrls) {
+    public void onFetchFusionUrlsSuccess(final String jsonFusionUrls) {
         fusionPanel.clear();
         fusionUrls.clear();
         parseFusionUrls(jsonFusionUrls);

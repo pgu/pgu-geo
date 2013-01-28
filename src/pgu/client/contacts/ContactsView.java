@@ -9,8 +9,6 @@ public interface ContactsView extends IsWidget {
 
     void showCharts(ContactsForCharts contactsForCharts);
 
-    void showLoadingPanel();
-
     void showChartsPanel();
 
     void setContactNames(Country2ContactNames names);
@@ -21,10 +19,10 @@ public interface ContactsView extends IsWidget {
 
     String getJsonRawContacts();
 
-    void showContacts(ContactsForCharts country2contactNumber);
+    void showContacts();
 
-    void setChartsPreferences(String jsonChartsPreferences);
+    void onFetchChartsPreferencesSuccess(String jsonChartsPreferences);
 
-    void setFusionUrls(String jsonFusionUrls);
+    void onFetchFusionUrlsSuccess(String jsonFusionUrls);
 
 }

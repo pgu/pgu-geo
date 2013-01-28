@@ -319,7 +319,7 @@ LocationsSuccessSaveEvent.Handler //
 
                     @Override
                     public void onSuccess(final Void result) {
-                        view.confirmChangeOnPublicProfile(public_preference);
+                        view.onSavePublicPreferencesSuccess(public_preference);
                     }
 
                 });

@@ -11,7 +11,6 @@ import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientHelper;
 import pgu.client.service.ContactsServiceAsync;
-import pgu.shared.dto.ContactsForCharts;
 import pgu.shared.model.ChartsPreferences;
 import pgu.shared.model.FusionUrls;
 
@@ -76,39 +75,7 @@ ChartsApiLoadedEvent.Handler //
             return;
         }
 
-        view.showLoadingPanel();
-
-        // TODO PGU Jan 28, 2013
-        // TODO PGU Jan 28, 2013
-        // TODO PGU Nov 20, 2012 use pgu_geo.contacts
-        // TODO PGU Jan 28, 2013 dispatch contacts by locations
-        final ContactsForCharts contactsForCharts = new ContactsForCharts();
-        // TODO PGU Jan 28, 2013
-        // TODO PGU Jan 28, 2013
-
-        //        HERE contactsForCharts.getCountry2ContactNumber()
-
-        view.showContacts(contactsForCharts);
-
-        contactsService.fetchChartsPreferences( //
-                ctx.getProfileId() //
-                , new AsyncCallbackApp<ChartsPreferences>(eventBus) {
-
-                    @Override
-                    public void onSuccess(final ChartsPreferences result) {
-                        view.setChartsPreferences(result.getValues());
-                    }
-                });
-
-        contactsService.fetchFusionUrls( //
-                ctx.getProfileId() //
-                , new AsyncCallbackApp<FusionUrls>(eventBus) {
-
-                    @Override
-                    public void onSuccess(final FusionUrls result) {
-                        view.setFusionUrls(result.getValues());
-                    }
-                });
+        view.showContacts();
 
         contactsService.saveContacts( //
                 //
@@ -166,6 +133,7 @@ ChartsApiLoadedEvent.Handler //
         return ctx.areContactsLoaded() && areExternalApisLoaded(ctx);
     }
 
+    @Deprecated
     public void fetchContactsNames() {
         // TODO PGU Jan 28, 2013
         // TODO PGU Jan 28, 2013 obsolete: move the computation of the contacts repartition
@@ -221,6 +189,30 @@ ChartsApiLoadedEvent.Handler //
                         // no-op
                     }
 
+                });
+    }
+
+    public void fetchChartsPreferences() {
+        contactsService.fetchChartsPreferences( //
+                ctx.getProfileId() //
+                , new AsyncCallbackApp<ChartsPreferences>(eventBus) {
+
+                    @Override
+                    public void onSuccess(final ChartsPreferences result) {
+                        view.onFetchChartsPreferencesSuccess(result.getValues());
+                    }
+                });
+    }
+
+    public void fetchFusionUrls() {
+        contactsService.fetchFusionUrls( //
+                ctx.getProfileId() //
+                , new AsyncCallbackApp<FusionUrls>(eventBus) {
+
+                    @Override
+                    public void onSuccess(final FusionUrls result) {
+                        view.onFetchFusionUrlsSuccess(result.getValues());
+                    }
                 });
     }
 

@@ -403,7 +403,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }-*/;
 
     @Override
-    public void confirmChangeOnPublicProfile(final String publicProfileItem) {
+    public void onSavePublicPreferencesSuccess(final String publicProfileItem) {
 
         Tooltip tooltip;
         if (PublicProfileItemType.positions.equals(publicProfileItem)) {

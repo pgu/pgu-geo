@@ -9,7 +9,7 @@ public interface ProfileView extends IsWidget {
 
     void setPresenter(ProfileActivity presenter);
 
-    void confirmChangeOnPublicProfile(String publicProfileItem);
+    void onSavePublicPreferencesSuccess(String publicProfileItem);
 
     void showSaveWidget(String itemConfigId);
 
