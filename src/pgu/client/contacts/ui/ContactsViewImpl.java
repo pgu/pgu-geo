@@ -8,8 +8,6 @@ import java.util.TreeMap;
 import pgu.client.app.utils.JsonUtils;
 import pgu.client.contacts.ContactsActivity;
 import pgu.client.contacts.ContactsView;
-import pgu.client.contacts.event.SaveContactsNumberByCountryEvent;
-import pgu.client.contacts.event.SaveFusionUrlsEvent;
 import pgu.client.resources.ResourcesApp;
 import pgu.client.resources.ResourcesApp.CssResourceApp;
 import pgu.shared.dto.ContactsForCharts;
@@ -40,7 +38,6 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.event.shared.EventBus;
-import com.google.web.bindery.event.shared.HandlerRegistration;
 
 public class ContactsViewImpl extends Composite implements ContactsView {
 
@@ -281,7 +278,7 @@ public class ContactsViewImpl extends Composite implements ContactsView {
         }
 
         final String jsonFusionUrls = JsonUtils.json_stringify(jsFusionUrls);
-        fireEvent(new SaveFusionUrlsEvent(jsonFusionUrls));
+        presenter.saveFusionUrls(jsonFusionUrls);
     }
 
     @UiHandler("worldBtn")
@@ -522,7 +519,7 @@ public class ContactsViewImpl extends Composite implements ContactsView {
         buildChartsUI(this);
 
         final String jsonContactsNumberByCountry = JsonUtils.json_stringify(getContactsTable());
-        fireEvent(new SaveContactsNumberByCountryEvent(jsonContactsNumberByCountry));
+        presenter.saveContactsNumberByCountry(jsonContactsNumberByCountry);
     }
 
     private native JavaScriptObject getContactsTable() /*-{
@@ -699,16 +696,6 @@ public class ContactsViewImpl extends Composite implements ContactsView {
 
     public void addContactsNames(final String country, final String htmlNames) {
         country2contactNames.put(country, htmlNames);
-    }
-
-    @Override
-    public HandlerRegistration addSaveFusionUrlsHandler(final SaveFusionUrlsEvent.Handler handler) {
-        return addHandler(handler, SaveFusionUrlsEvent.TYPE);
-    }
-
-    @Override
-    public HandlerRegistration addSaveContactsNumberByCountryHandler(final SaveContactsNumberByCountryEvent.Handler handler) {
-        return addHandler(handler, SaveContactsNumberByCountryEvent.TYPE);
     }
 
     @Override

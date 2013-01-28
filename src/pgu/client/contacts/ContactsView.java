@@ -1,16 +1,11 @@
 package pgu.client.contacts;
 
-import pgu.client.contacts.event.SaveContactsNumberByCountryEvent;
-import pgu.client.contacts.event.SaveFusionUrlsEvent;
 import pgu.shared.dto.ContactsForCharts;
 import pgu.shared.model.Country2ContactNames;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface ContactsView extends IsWidget //
-, SaveFusionUrlsEvent.HasSaveFusionUrlsHandlers //
-, SaveContactsNumberByCountryEvent.HasSaveContactsNumberByCountryHandlers //
-{
+public interface ContactsView extends IsWidget {
 
     void showCharts(ContactsForCharts contactsForCharts);
 

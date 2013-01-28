@@ -27,8 +27,4 @@ public interface LinkedinService extends RemoteService {
 
     Country2ContactNames fetchContactsNames(String userId);
 
-    void saveFusionUrls(String userId, String fusionUrls);
-
-    void saveContactsNumberByCountry(String userId, String contactsNumberByCountry);
-
 }

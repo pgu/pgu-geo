@@ -26,9 +26,4 @@ public interface LinkedinServiceAsync {
 
     void fetchContactsNames(String userId, AsyncCallback<Country2ContactNames> asyncCallbackApp);
 
-    void saveFusionUrls(String userId, String fusionUrls, AsyncCallback<Void> asyncCallbackApp);
-
-    void saveContactsNumberByCountry(String userId, String contactsNumberByCountry,
-            AsyncCallback<Void> asyncCallbackApp);
-
 }

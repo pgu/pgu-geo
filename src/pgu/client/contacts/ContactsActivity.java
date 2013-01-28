@@ -10,8 +10,6 @@ import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.mvp.ClientFactory;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientHelper;
-import pgu.client.contacts.event.SaveContactsNumberByCountryEvent;
-import pgu.client.contacts.event.SaveFusionUrlsEvent;
 import pgu.client.service.ContactsServiceAsync;
 import pgu.client.service.LinkedinServiceAsync;
 import pgu.shared.dto.ContactsForCharts;
@@ -22,9 +20,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
 public class ContactsActivity extends AbstractActivity implements //
-SaveFusionUrlsEvent.Handler //
-, SaveContactsNumberByCountryEvent.Handler //
-, ChartsApiLoadedEvent.Handler //
+ChartsApiLoadedEvent.Handler //
 , ContactsLoadedEvent.Handler //
 {
 
@@ -56,11 +52,7 @@ SaveFusionUrlsEvent.Handler //
         view.setPresenter(this);
 
         hRegs.clear();
-        hRegs.add(view.addSaveFusionUrlsHandler(this));
-        hRegs.add(view.addSaveContactsNumberByCountryHandler(this));
-
         hRegs.add(eventBus.addHandler(ChartsApiLoadedEvent.TYPE, this));
-
         hRegs.add(eventBus.addHandler(ContactsLoadedEvent.TYPE, this));
 
         panel.setWidget(view.asWidget());
@@ -114,36 +106,6 @@ SaveFusionUrlsEvent.Handler //
     }
 
     @Override
-    public void onSaveFusionUrls(final SaveFusionUrlsEvent event) {
-        linkedinService.saveFusionUrls( //
-                clientFactory.getAppState().getUserId() //
-                , event.getFusionUrls() //
-                , new AsyncCallbackApp<Void>(eventBus) {
-
-                    @Override
-                    public void onSuccess(final Void result) {
-                        // no-op
-                    }
-
-                });
-    }
-
-    @Override
-    public void onSaveContactsNumberByCountry(final SaveContactsNumberByCountryEvent event) {
-        linkedinService.saveContactsNumberByCountry( //
-                clientFactory.getAppState().getUserId() //
-                , event.getContactsNumberByCountry() //
-                , new AsyncCallbackApp<Void>(eventBus) {
-
-                    @Override
-                    public void onSuccess(final Void result) {
-                        // no-op
-                    }
-
-                });
-    }
-
-    @Override
     public void onChartsApiLoaded(final ChartsApiLoadedEvent event) {
         setContactsAsync();
     }
@@ -188,6 +150,34 @@ SaveFusionUrlsEvent.Handler //
         contactsService.saveChartsPreferences( //
                 ctx.getProfileId() //
                 , jsonChartTypes //
+                , new AsyncCallbackApp<Void>(eventBus) {
+
+                    @Override
+                    public void onSuccess(final Void result) {
+                        // no-op
+                    }
+
+                });
+    }
+
+    public void saveFusionUrls(final String jsonFusionUrls) {
+        contactsService.saveFusionUrls( //
+                ctx.getProfileId() //
+                , jsonFusionUrls //
+                , new AsyncCallbackApp<Void>(eventBus) {
+
+                    @Override
+                    public void onSuccess(final Void result) {
+                        // no-op
+                    }
+
+                });
+    }
+
+    public void saveContactsNumberByCountry(final String jsonContactsNumberByCountry) {
+        contactsService.saveContactsNumberByCountry( //
+                ctx.getProfileId() //
+                , jsonContactsNumberByCountry //
                 , new AsyncCallbackApp<Void>(eventBus) {
 
                     @Override

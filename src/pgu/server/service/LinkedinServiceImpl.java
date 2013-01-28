@@ -40,7 +40,6 @@ import pgu.shared.dto.Person;
 import pgu.shared.dto.Profile;
 import pgu.shared.dto.RequestToken;
 import pgu.shared.model.ChartsPreferences;
-import pgu.shared.model.ContactsNumberByCountry;
 import pgu.shared.model.Country2ContactNames;
 import pgu.shared.model.Country2ContactNumber;
 import pgu.shared.model.FusionUrls;
@@ -658,38 +657,6 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
         final Country2ContactNames emptyNames = new Country2ContactNames();
         emptyNames.setProfileId(userId);
         return emptyNames;
-    }
-
-    @Override
-    public void saveFusionUrls(final String userId, final String jsonFusionUrls) {
-
-        if (u.isVoid(jsonFusionUrls) //
-                || "[]".equals(jsonFusionUrls)) {
-
-            dao.ofy().async().delete(FusionUrls.class, userId);
-            return;
-        }
-
-        final FusionUrls fusionUrls = new FusionUrls();
-        fusionUrls.setProfileId(userId);
-        fusionUrls.setValues(jsonFusionUrls);
-        dao.ofy().async().put(fusionUrls);
-    }
-
-    @Override
-    public void saveContactsNumberByCountry(final String profileId, final String jsonContactsNumberByCountry) {
-
-        if (u.isVoid(jsonContactsNumberByCountry) //
-                || "[]".equals(jsonContactsNumberByCountry)) {
-
-            dao.ofy().async().delete(ContactsNumberByCountry.class, profileId);
-            return;
-        }
-
-        final ContactsNumberByCountry contactsNumberByCountry = new ContactsNumberByCountry();
-        contactsNumberByCountry.setProfileId(profileId);
-        contactsNumberByCountry.setValues(jsonContactsNumberByCountry);
-        dao.ofy().async().put(contactsNumberByCountry);
     }
 
 }
