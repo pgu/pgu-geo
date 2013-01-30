@@ -11,9 +11,6 @@ import pgu.client.contacts.ContactsActivity;
 import pgu.client.contacts.ContactsView;
 import pgu.client.resources.ResourcesApp;
 import pgu.client.resources.ResourcesApp.CssResourceApp;
-import pgu.shared.dto.ContactsForCharts;
-import pgu.shared.model.Country2ContactNames;
-import pgu.shared.model.Country2ContactNumber;
 import pgu.shared.utils.ChartType;
 
 import com.github.gwtbootstrap.client.ui.Button;
@@ -335,40 +332,6 @@ public class ContactsViewImpl extends Composite implements ContactsView {
     private static final HashMap<String, Integer> country2contactNumber = new HashMap<String, Integer>();
     private final HashMap<String, String> country2locationNames = new HashMap<String, String>();
 
-    private void showCharts(final ContactsForCharts contactsForCharts) {
-
-        final Country2ContactNumber country2contact = contactsForCharts.getCountry2ContactNumber();
-
-        // prepare the charts data
-        country2contactNumber.clear();
-        parseContactNumber(this, country2contact.getCode2contactNumber());
-
-        // prepare the labels for the charts' legends
-        // TODO PGU Nov 6, 2012 use the country's label
-        country2locationNames.clear();
-        parseLocationNames(this, country2contact.getCode2locationNames());
-
-        weight2codes.clear();
-        for (final Entry<String, Integer> e : country2contactNumber.entrySet()) {
-
-            final String countryCode = e.getKey();
-            final Integer weight = e.getValue();
-
-            if (weight2codes.containsKey(weight)) {
-                weight2codes.get(weight).add(countryCode);
-
-            } else {
-                final ArrayList<String> countryCodes = new ArrayList<String>();
-                countryCodes.add(countryCode);
-                weight2codes.put(weight, countryCodes);
-            }
-        }
-
-        buildCharts();
-
-        presenter.fetchContactsNames();
-    }
-
     private native void parseFusionUrls(final String json) /*-{
         // [url1, url2]
 
@@ -447,58 +410,15 @@ public class ContactsViewImpl extends Composite implements ContactsView {
         presenter.saveChartsPreferences(jsonChartTypes);
     }
 
-    private native void parseLocationNames(final ContactsViewImpl view, final String json) /*-{
-        // {"ca":["Canada Area"],"it":["Italy"],"us":["Ohio","California"]}
-
-        var country2locations = JSON.parse(json);
-
-        for ( var country in country2locations) {
-            if ('__gwt_ObjectId' === country) {
-                continue;
-            }
-
-            if (country2locations.hasOwnProperty(country)) {
-                var locations = country2locations[country];
-                var html_locations = locations.join(', ');
-
-                view.@pgu.client.contacts.ui.ContactsViewImpl::addLocationsNames(Ljava/lang/String;Ljava/lang/String;)( //
-                country, html_locations);
-            }
-        }
-
-    }-*/;
-
     public void addLocationsNames(final String country, final String htmlLocations) {
         country2locationNames.put(country, htmlLocations);
     }
-
-    private native void parseContactNumber(final ContactsViewImpl view, final String json) /*-{
-        // {"ca":3,"it":1,"cz":2,"us":3,"td":1,"gb":4,"au":1,"de":3,"fr":38,"ru":1,"ch":13,"es":9,"be":1}
-
-        var country2number = JSON.parse(json);
-
-        for ( var country in country2number) {
-            if ('__gwt_ObjectId' === country) {
-                continue;
-            }
-
-            if (country2number.hasOwnProperty(country)) {
-                var number = country2number[country];
-
-                view.@pgu.client.contacts.ui.ContactsViewImpl::addContactsNumber(Ljava/lang/String;I)( //
-                country, number);
-            }
-        }
-
-    }-*/;
 
     public void addContactsNumber(final String country, final int number) {
         country2contactNumber.put(country, number);
     }
 
-    private final TreeMap<Integer, ArrayList<String>> weight2codes = new TreeMap<Integer, ArrayList<String>>();
-
-    private void buildCharts() {
+    private void buildCharts(final TreeMap<Integer, ArrayList<String>> weight2codes) {
 
         initDataTable();
         for (final Entry<Integer, ArrayList<String>> e : weight2codes.entrySet()) {
@@ -509,7 +429,7 @@ public class ContactsViewImpl extends Composite implements ContactsView {
                 addDataRow(countryCode, weight);
             }
         }
-        buildChartsUI(this);
+        buildChartsUI();
 
         final String jsonContactsNumberByCountry = JsonUtils.json_stringify(getContactsTable());
         presenter.saveContactsNumberByCountry(jsonContactsNumberByCountry);
@@ -519,7 +439,7 @@ public class ContactsViewImpl extends Composite implements ContactsView {
         return $wnd.pgu_geo.contacts_table;
     }-*/;
 
-    private native void buildChartsUI(ContactsViewImpl view) /*-{
+    private native void buildChartsUI() /*-{
         $wnd.console.log('build geo chart');
 
         var
@@ -540,8 +460,10 @@ public class ContactsViewImpl extends Composite implements ContactsView {
            ,{id:'pgu_geo_contacts_map_africa', options: {region:'002'}}
         ];
 
+        var that = this;
+
         var click_region_handler = function(e) {
-            view.@pgu.client.contacts.ui.ContactsViewImpl::openAndShowContactNames(Ljava/lang/String;)(e.region.toLowerCase());
+            that.@pgu.client.contacts.ui.ContactsViewImpl::openAndShowContactNames(Ljava/lang/String;)(e.region.toLowerCase());
         };
 
         for (var i = 0, len = maps.length; i < len; i++) {
@@ -571,7 +493,7 @@ public class ContactsViewImpl extends Composite implements ContactsView {
               , region = data_table.getFormattedValue(item.row, 0) // item.column
             ;
 
-            view.@pgu.client.contacts.ui.ContactsViewImpl::openAndShowContactNames(Ljava/lang/String;)(region.toLowerCase());
+            that.@pgu.client.contacts.ui.ContactsViewImpl::openAndShowContactNames(Ljava/lang/String;)(region.toLowerCase());
         };
 
         //
@@ -654,38 +576,6 @@ public class ContactsViewImpl extends Composite implements ContactsView {
 
     private final HashMap<String, String> country2contactNames = new HashMap<String, String>();
 
-    @Override
-    public void setContactNames(final Country2ContactNames names) {
-        country2contactNames.clear();
-
-        parseContactNames(this, names.getValues());
-
-        // TODO PGU Nov 10, 2012 montrer les unknown country as well :-)
-    }
-
-    private native void parseContactNames(ContactsViewImpl view, String json) /*-{
-
-        // {"it":["Rea Turohan"],"ca":["Quang-Khai Pham","Maxime Terrettaz","Orchidée Vaussard"]}
-
-        var country2contacts = JSON.parse(json);
-
-        for ( var country in country2contacts) {
-            if ('__gwt_ObjectId' === country) {
-                continue;
-            }
-
-            if (country2contacts.hasOwnProperty(country)) {
-                var contacts = country2contacts[country];
-                var html_names = contacts.join(', ');
-
-                view.@pgu.client.contacts.ui.ContactsViewImpl::addContactsNames(Ljava/lang/String;Ljava/lang/String;)( //
-                country, html_names);
-            }
-        }
-
-
-    }-*/;
-
     public void addContactsNames(final String country, final String htmlNames) {
         country2contactNames.put(country, htmlNames);
     }
@@ -725,15 +615,19 @@ public class ContactsViewImpl extends Composite implements ContactsView {
 
         presenter.showWaitingIndicator();
         showLoadingPanel();
-        showChartsPanel();
 
         // TODO PGU Jan 28, 2013
         // TODO PGU Jan 28, 2013
-        // TODO PGU Nov 20, 2012 use pgu_geo.contacts
-        // TODO PGU Jan 28, 2013 dispatch contacts by locations
         // TODO PGU Jan 28, 2013
         // TODO PGU Jan 28, 2013
-        showCharts();
+        country2contactNumber.clear();
+        country2locationNames.clear();
+        country2contactNames.clear();
+
+        // TODO PGU Nov 6, 2012 use the country's label: country2locationNames
+        parseContacts();
+        prepareDataForCharts();
+        showChartsPanel();
 
         presenter.hideWaitingIndicator();
 
@@ -741,23 +635,18 @@ public class ContactsViewImpl extends Composite implements ContactsView {
         presenter.fetchFusionUrls();
     }
 
-    private native void showCharts() /*-{
+    private native void parseContacts() /*-{
 
         var contacts_obj = $wnd.pgu_geo.contacts || {"_total":0};
         var contacts = contacts_obj.values;
 
-        // country2locationNames
-        // country2contactCount
-
         var country2location_names = {};
         var country2contact_count = {};
+        var country2contact_names = {};
 
         for (var i = 0; i < contacts_obj._total; i++) {
 
             var contact = contacts[i];
-
-// contact.firstName
-// contact.lastName
 
             var location = contact.location || {};
             var location_name = location.name || "";
@@ -786,14 +675,87 @@ public class ContactsViewImpl extends Composite implements ContactsView {
             } else {
                 country2contact_count[country_code] = 1;
             }
+
+            var contact_name = contact.lastName + ' ' + contact.firstName;
+            if (country2contact_names.hasOwnProperty(country_code)) {
+                country2contact_names[country_code].push(contact_name);
+
+            } else {
+                country2contact_names[country_code] = [].concat(contact_name);
+            }
         }
 
-        // TODO
-        // TODO
-        // TODO
-        // TODO
+        // fill up the maps
+        for (var country in country2location_names) {
+            if ('__gwt_ObjectId' === country) {
+                continue;
+            }
+            if (country2location_names.hasOwnProperty(country)) {
+                var location_names = country2location_names[country];
+                location_names.sort();
+
+                var fmt_location_names = location_names.join(', ');
+
+                this.@pgu.client.contacts.ui.ContactsViewImpl::addLocationsNames(Ljava/lang/String;Ljava/lang/String;)
+                     (country, fmt_location_names);
+            }
+        }
+
+        for (var country in country2contact_names) {
+            if ('__gwt_ObjectId' === country) {
+                continue;
+            }
+            if (country2contact_names.hasOwnProperty(country)) {
+                var contact_names = country2contact_names[country];
+                contact_names.sort();
+
+                var fmt_contact_names = contact_names.join(', ');
+                this.@pgu.client.contacts.ui.ContactsViewImpl::addContactsNames(Ljava/lang/String;Ljava/lang/String;)
+                (country, fmt_contact_names);
+            }
+        }
+
+        for (var country in country2contact_count) {
+            if ('__gwt_ObjectId' === country) {
+                continue;
+            }
+
+        console.log(country);
+            if (country2contact_count.hasOwnProperty(country)) {
+                var contact_count = country2contact_count[country];
+        console.log(contact_count);
+
+                this.@pgu.client.contacts.ui.ContactsViewImpl::addContactsNumber(Ljava/lang/String;I)
+                     (country, contact_count);
+            }
+        }
+
+        console.log(country2location_names);
+        console.log(country2contact_count);
+        console.log(country2contact_names);
 
     }-*/;
+
+    private void prepareDataForCharts() {
+
+        final TreeMap<Integer, ArrayList<String>> weight2codes = new TreeMap<Integer, ArrayList<String>>();
+        for (final Entry<String, Integer> e : country2contactNumber.entrySet()) {
+
+            final String countryCode = e.getKey();
+            final Integer weight = e.getValue();
+
+            if (weight2codes.containsKey(weight)) {
+                weight2codes.get(weight).add(countryCode);
+
+            } else {
+                final ArrayList<String> countryCodes = new ArrayList<String>();
+                countryCodes.add(countryCode);
+                weight2codes.put(weight, countryCodes);
+            }
+        }
+
+        buildCharts(weight2codes);
+    }
 
     @Override
     public void onFetchChartsPreferencesSuccess(final String jsonChartsPreferences) {

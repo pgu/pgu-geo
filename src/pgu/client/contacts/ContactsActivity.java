@@ -130,28 +130,7 @@ ChartsApiLoadedEvent.Handler //
     }
 
     private boolean isAppReady(final AppContext ctx) {
-        // TODO PGU Jan 28, 2013 isProfileLoaded
-        // TODO PGU Jan 28, 2013 isProfileLoaded
-        // TODO PGU Jan 28, 2013 isProfileLoaded
-        // TODO PGU Jan 28, 2013 isProfileLoaded
         return ctx.areContactsLoaded() && areExternalApisLoaded(ctx);
-    }
-
-    @Deprecated
-    public void fetchContactsNames() {
-        // TODO PGU Jan 28, 2013
-        // TODO PGU Jan 28, 2013 obsolete: move the computation of the contacts repartition
-        // TODO PGU Jan 28, 2013
-        //        linkedinService.fetchContactsNames( //
-        //                clientFactory.getAppState().getUserId(), //
-        //                new AsyncCallbackApp<Country2ContactNames>(eventBus) {
-        //
-        //                    @Override
-        //                    public void onSuccess(final Country2ContactNames result) {
-        //                        view.setContactNames(result);
-        //                    }
-        //
-        //                });
     }
 
     public void saveChartsPreferences(final String jsonChartTypes) {

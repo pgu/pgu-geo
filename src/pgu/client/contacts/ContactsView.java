@@ -1,14 +1,10 @@
 package pgu.client.contacts;
 
-import pgu.shared.model.Country2ContactNames;
-
 import com.google.gwt.user.client.ui.IsWidget;
 
 public interface ContactsView extends IsWidget {
 
     void showChartsPanel();
-
-    void setContactNames(Country2ContactNames names);
 
     void setPresenter(ContactsActivity contactsActivity);
 
