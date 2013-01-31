@@ -6,7 +6,6 @@ import pgu.client.app.event.MapsApiLoadedEvent;
 import pgu.client.app.event.ShowdownLoadedEvent;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientHelper;
-import pgu.client.pub.event.FetchPublicContactsEvent;
 import pgu.client.pub.event.UserHeadlineEvent;
 import pgu.client.pub.event.UserNameEvent;
 import pgu.client.service.PublicProfileService;
@@ -20,7 +19,6 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.web.bindery.event.shared.EventBus;
 
 public class PublicActivity implements PublicPresenter //
-, FetchPublicContactsEvent.Handler //
 , ShowdownLoadedEvent.Handler //
 , MapsApiLoadedEvent.Handler //
 , ChartsApiLoadedEvent.Handler //
@@ -39,14 +37,12 @@ public class PublicActivity implements PublicPresenter //
         this.ctx = ctx;
     }
 
-    private boolean hasToSetPublic = false;
+    private boolean hasToShowPublic = false;
 
     public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
         this.eventBus = eventBus;
 
         view.setPresenter(this);
-
-        view.addFetchPublicContactsHandler(this);
 
         eventBus.addHandler(ShowdownLoadedEvent.TYPE, this);
         eventBus.addHandler(MapsApiLoadedEvent.TYPE, this);
@@ -58,7 +54,7 @@ public class PublicActivity implements PublicPresenter //
             setPublic();
 
         } else {
-            hasToSetPublic = true;
+            hasToShowPublic = true;
         }
 
     }
@@ -90,20 +86,6 @@ public class PublicActivity implements PublicPresenter //
     }
 
     @Override
-    public void onFetchPublicContacts(final FetchPublicContactsEvent event) {
-        publicProfileService.fetchPublicContacts( //
-                event.getUserId(), //
-                new AsyncCallbackApp<PublicContacts>(eventBus) {
-
-                    @Override
-                    public void onSuccess(final PublicContacts result) {
-                        view.setContacts(result);
-                    }
-
-                });
-    }
-
-    @Override
     public void onChartsApiLoaded(final ChartsApiLoadedEvent event) {
         setPublicAsync();
     }
@@ -119,8 +101,8 @@ public class PublicActivity implements PublicPresenter //
     }
 
     private void setPublicAsync() {
-        if (hasToSetPublic && isAppReady(ctx)) {
-            hasToSetPublic = false;
+        if (hasToShowPublic && isAppReady(ctx)) {
+            hasToShowPublic = false;
             setPublic();
         }
     }
@@ -135,6 +117,20 @@ public class PublicActivity implements PublicPresenter //
     private boolean isAppReady(final AppContext ctx) {
         // TODO PGU Nov 21, 2012 profile and contacts loaded from service
         return areExternalApisLoaded(ctx);
+    }
+
+    @Override
+    public void fetchPublicContacts(final String profileId) {
+        publicProfileService.fetchPublicContacts( //
+                profileId, //
+                new AsyncCallbackApp<PublicContacts>(eventBus) {
+
+                    @Override
+                    public void onSuccess(final PublicContacts result) {
+                        view.onFetchPublicContactsSuccess(result);
+                    }
+
+                });
     }
 
 }

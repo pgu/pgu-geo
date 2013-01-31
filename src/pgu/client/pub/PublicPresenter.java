@@ -6,4 +6,6 @@ public interface PublicPresenter {
 
     void setProfileHeadline(String headline);
 
+    void fetchPublicContacts(String profileId);
+
 }

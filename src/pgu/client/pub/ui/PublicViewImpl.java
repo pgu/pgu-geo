@@ -21,8 +21,6 @@ import pgu.client.components.playtoolbar.event.StartPlayingEvent;
 import pgu.client.components.playtoolbar.event.StopEvent;
 import pgu.client.pub.PublicPresenter;
 import pgu.client.pub.PublicView;
-import pgu.client.pub.event.FetchPublicContactsEvent;
-import pgu.client.pub.event.FetchPublicContactsEvent.Handler;
 import pgu.client.resources.ResourcesApp;
 import pgu.client.resources.ResourcesApp.CssResourceApp;
 import pgu.shared.dto.PublicContacts;
@@ -50,7 +48,6 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.event.shared.EventBus;
-import com.google.web.bindery.event.shared.HandlerRegistration;
 
 public class PublicViewImpl extends Composite implements PublicView {
 
@@ -396,7 +393,7 @@ public class PublicViewImpl extends Composite implements PublicView {
 
         setProfile(this, profile.getProfile());
 
-        fireEvent(new FetchPublicContactsEvent(profile.getProfileId()));
+        presenter.fetchPublicContacts(profile.getProfileId());
     }
 
     private native void setProfile(PublicViewImpl view, String profile) /*-{
@@ -474,16 +471,11 @@ public class PublicViewImpl extends Composite implements PublicView {
         id2itemContent.put(id, content);
     }
 
-    @Override
-    public HandlerRegistration addFetchPublicContactsHandler(final Handler handler) {
-        return addHandler(handler, FetchPublicContactsEvent.TYPE);
-    }
-
     private boolean hasAtLeastOneChart = false;
     private PublicContacts publicContacts;
 
     @Override
-    public void setContacts(final PublicContacts publicContacts) {
+    public void onFetchPublicContactsSuccess(final PublicContacts publicContacts) {
         this.publicContacts = publicContacts;
         setContactsInternal();
     }
