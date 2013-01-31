@@ -330,7 +330,7 @@ public class ProfileItemsUtils {
     }-*/;
 
     public static native void displayProfileMarkers(final String selectedItemType) /*-{
-        var public_map = @pgu.client.pub.ui.PublicUtils::publicProfileMap()();
+        var public_map = @pgu.client.pub.ui.PublicViewMap::publicProfileMap()();
 
         @pgu.client.app.utils.ProfileItemsUtils::setMapOnProfileMarkers(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;)( //
         public_map, selectedItemType);

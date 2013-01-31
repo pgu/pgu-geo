@@ -13,6 +13,4 @@ public interface PublicView extends IsWidget {
 
     void onFetchPublicContactsSuccess(PublicContacts result);
 
-    void initPublicMapIfNeeded();
-
 }

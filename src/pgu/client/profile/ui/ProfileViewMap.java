@@ -15,11 +15,9 @@ public class ProfileViewMap {
     }
 
     public native void initProfileMap() /*-{
-
-        var div = $wnd.document.getElementById('pgu_geo_profile_map');
-
         $wnd.console.log('initProfileMap');
 
+        var div = $wnd.document.getElementById('pgu_geo_profile_map');
         var google = this.@pgu.client.profile.ui.ProfileViewMap::google()
                           ();
 

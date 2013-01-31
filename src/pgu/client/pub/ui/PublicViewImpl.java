@@ -89,6 +89,8 @@ public class PublicViewImpl extends Composite implements PublicView {
 
     private final CssResourceApp css;
 
+    private final PublicViewMap viewMap = new PublicViewMap();
+
     public PublicViewImpl(final EventBus eventBus) {
 
         profileSection = new Section("public:profile");
@@ -245,7 +247,7 @@ public class PublicViewImpl extends Composite implements PublicView {
 
         fillProfileItemContent(token);
 
-        ProfileItemsUtils.showMovieProfileItemLocations(token, PublicUtils.publicProfileMap());
+        ProfileItemsUtils.showMovieProfileItemLocations(token, PublicViewMap.publicProfileMap());
     }
 
     private void fillProfileItemContent(final int token) {
@@ -323,7 +325,7 @@ public class PublicViewImpl extends Composite implements PublicView {
         }
 
         final JavaScriptObject google = GoogleUtils.google();
-        final JavaScriptObject publicMap = PublicUtils.publicProfileMap();
+        final JavaScriptObject publicMap = PublicViewMap.publicProfileMap();
 
         if (google == null || publicMap == null) {
 
@@ -348,7 +350,7 @@ public class PublicViewImpl extends Composite implements PublicView {
     }
 
     private native void showCurrentLocation(JavaScriptObject marker) /*-{
-        var map = @pgu.client.pub.ui.PublicUtils::publicProfileMap()();
+        var map = @pgu.client.pub.ui.PublicViewMap::publicProfileMap()();
         marker.setMap(map);
     }-*/;
 
@@ -384,9 +386,16 @@ public class PublicViewImpl extends Composite implements PublicView {
     @Override
     public void setProfile(final PublicProfile profile) {
 
+        // TODO PGU Jan 31, 2013
+        // TODO PGU Jan 31, 2013
+        // TODO PGU Jan 31, 2013
+        // TODO PGU Jan 31, 2013
+        // TODO PGU Jan 31, 2013
+        viewMap.initPublicProfileMap();
+
         final String mapPreferences = profile.getMapPreferences();
         if (!u.isVoid(mapPreferences)) {
-            PublicUtils.updateMapVisu(mapPreferences);
+            PublicViewMap.updateMapVisu(mapPreferences);
         }
 
         LocationsUtils.initCaches(profile.getUserAndLocations());
@@ -663,17 +672,6 @@ public class PublicViewImpl extends Composite implements PublicView {
     private void hideAllCharts() {
         for (final HTMLPanel chart : type2chart.values()) {
             chart.setVisible(false);
-        }
-    }
-
-
-    private boolean isPublicMapInitialized = false;
-
-    @Override
-    public void initPublicMapIfNeeded() {
-        if (!isPublicMapInitialized) {
-            isPublicMapInitialized = true;
-            PublicUtils.initPublicProfileMap();
         }
     }
 

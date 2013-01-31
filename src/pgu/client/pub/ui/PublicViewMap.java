@@ -2,23 +2,20 @@ package pgu.client.pub.ui;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
-public class PublicUtils {
+// TODO PGU Jan 31, 2013
+// TODO PGU Jan 31, 2013
+// TODO PGU Jan 31, 2013
+// TODO PGU Jan 31, 2013
+public class PublicViewMap {
 
-    public static native void initPublicProfileMap() /*-{
+    public native void initPublicProfileMap() /*-{
+        $wnd.console.log('initPublicProfileMap');
+
+        if ($wnd.pgu_geo.public_profile_map) {
+            return; // already initialized
+        }
 
         var div = $wnd.document.getElementById("pgu_geo_public_profile_map");
-
-//        if (div === null) {
-//            $wnd.setTimeout(
-//                function() {
-//                    @pgu.client.pub.ui.PublicUtils::initPublicProfileMap()();
-//                }
-//                , 1000
-//            );
-//            return;
-//        }
-//
-        $wnd.console.log('initPublicMap');
 
         var
             google = @pgu.client.app.utils.GoogleUtils::google()()
@@ -42,7 +39,7 @@ public class PublicUtils {
     public static native void updateMapVisu(String mapPreferences) /*-{
 
         var
-            public_map = @pgu.client.pub.ui.PublicUtils::publicProfileMap()()
+            public_map = @pgu.client.pub.ui.PublicViewMap::publicProfileMap()()
           , google = @pgu.client.app.utils.GoogleUtils::google()()
           , prefs = JSON.parse(mapPreferences)
           , center = new google.maps.LatLng(parseFloat(prefs.center_lat), parseFloat(prefs.center_lng))

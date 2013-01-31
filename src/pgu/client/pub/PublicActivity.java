@@ -1,8 +1,12 @@
 package pgu.client.pub;
 
+import java.util.Date;
+
 import pgu.client.app.AppContext;
 import pgu.client.app.event.ChartsApiLoadedEvent;
+import pgu.client.app.event.HideWaitingIndicatorEvent;
 import pgu.client.app.event.MapsApiLoadedEvent;
+import pgu.client.app.event.ShowWaitingIndicatorEvent;
 import pgu.client.app.event.ShowdownLoadedEvent;
 import pgu.client.app.utils.AsyncCallbackApp;
 import pgu.client.app.utils.ClientHelper;
@@ -40,6 +44,9 @@ public class PublicActivity implements PublicPresenter //
     private boolean hasToShowPublic = false;
 
     public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
+
+        GWT.log(" !! public activity start !! " + new Date().getTime());
+
         this.eventBus = eventBus;
 
         view.setPresenter(this);
@@ -51,17 +58,15 @@ public class PublicActivity implements PublicPresenter //
         panel.setWidget(view.asWidget());
 
         if (isAppReady(ctx)) {
-            setPublic();
+            showPublic();
 
         } else {
             hasToShowPublic = true;
         }
-
     }
 
-    public void setPublic() {
-
-        view.initPublicMapIfNeeded();
+    private void showPublic() {
+        u.fire(eventBus, new ShowWaitingIndicatorEvent());
 
         publicProfileService.fetchPublicProfileByUrl( //
                 Window.Location.getHash(), // // TODO PGU Nov 18, 2012 review this url
@@ -69,6 +74,8 @@ public class PublicActivity implements PublicPresenter //
 
                     @Override
                     public void onSuccess(final PublicProfile profile) {
+                        u.fire(eventBus, new HideWaitingIndicatorEvent());
+
                         view.setProfile(profile);
                     }
 
@@ -103,7 +110,7 @@ public class PublicActivity implements PublicPresenter //
     private void setPublicAsync() {
         if (hasToShowPublic && isAppReady(ctx)) {
             hasToShowPublic = false;
-            setPublic();
+            showPublic();
         }
     }
 
