@@ -1,6 +1,7 @@
 package pgu.client.contacts.ui;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.TreeMap;
@@ -765,6 +766,10 @@ public class ContactsViewImpl extends Composite implements ContactsView {
                 countryCodes.add(countryCode);
                 weight2codes.put(weight, countryCodes);
             }
+        }
+
+        for (final ArrayList<String> countryCodes : weight2codes.values()) {
+            Collections.sort(countryCodes);
         }
 
         buildCharts(weight2codes);
