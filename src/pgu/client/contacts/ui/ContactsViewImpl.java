@@ -711,7 +711,7 @@ public class ContactsViewImpl extends Composite implements ContactsView {
 
                 var fmt_contact_names = contact_names.join(', ');
                 this.@pgu.client.contacts.ui.ContactsViewImpl::addContactsNames(Ljava/lang/String;Ljava/lang/String;)
-                (country, fmt_contact_names);
+                     (country, fmt_contact_names);
             }
         }
 
@@ -720,10 +720,8 @@ public class ContactsViewImpl extends Composite implements ContactsView {
                 continue;
             }
 
-        console.log(country);
             if (country2contact_count.hasOwnProperty(country)) {
                 var contact_count = country2contact_count[country];
-        console.log(contact_count);
 
                 this.@pgu.client.contacts.ui.ContactsViewImpl::addContactsNumber(Ljava/lang/String;I)
                      (country, contact_count);
