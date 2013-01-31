@@ -68,6 +68,8 @@ public class ContactsViewImpl extends Composite implements ContactsView {
     Popover infoPop, fusionInfoPop;
     @UiField
     Button infoPopBtn, fusionInfoPopBtn;
+    @UiField
+    HTML titleContactsCount;
 
     private final CssResourceApp css;
 
@@ -119,6 +121,8 @@ public class ContactsViewImpl extends Composite implements ContactsView {
 
         //        showLoadingPanel();
         hideAllCharts();
+
+        updateTitleContactsCount(0);
 
         infoPop.setHeading("Charts");
         infoPop.setText("<p>Clicking on the regions of the geocharts will display your contacts' names.</p>" + //
@@ -500,7 +504,7 @@ public class ContactsViewImpl extends Composite implements ContactsView {
         // pie chart
         var
             pie_options = {
-                title:'83 Contacts by countries'
+                title: $wnd.pgu_geo.contacts._total + ' Contacts by countries'
                 , is3D: true
                 , width : 556
                 , height : 347
@@ -520,7 +524,7 @@ public class ContactsViewImpl extends Composite implements ContactsView {
         // bar chart
         var
             bar_options = {
-                  title: '83 Contacts by countries'
+                  title: $wnd.pgu_geo.contacts._total + ' Contacts by countries'
                 , vAxis: {title: 'Country'}
                 , width : 556
                 , height : 347
@@ -635,6 +639,14 @@ public class ContactsViewImpl extends Composite implements ContactsView {
         presenter.fetchFusionUrls();
     }
 
+    private void updateContactsCount(final int contactsCount) {
+        updateTitleContactsCount(contactsCount);
+    }
+
+    private void updateTitleContactsCount(final int contactsCount) {
+        titleContactsCount.setHTML("<h2>" + contactsCount + " Contacts</h2>");
+    }
+
     private native void parseContacts() /*-{
 
         var contacts_obj = $wnd.pgu_geo.contacts || {"_total":0};
@@ -643,6 +655,9 @@ public class ContactsViewImpl extends Composite implements ContactsView {
         var country2location_names = {};
         var country2contact_count = {};
         var country2contact_names = {};
+
+        this.@pgu.client.contacts.ui.ContactsViewImpl::updateContactsCount(I)
+             (contacts_obj._total);
 
         for (var i = 0; i < contacts_obj._total; i++) {
 

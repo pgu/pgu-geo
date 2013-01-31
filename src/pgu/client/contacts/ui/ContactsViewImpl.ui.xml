@@ -17,7 +17,7 @@
                     <b:Popover ui:field="infoPop" trigger="MANUAL" animation="true" placement="LEFT">
                         <b:Button ui:field="infoPopBtn" icon="INFO_SIGN" type="INFO" iconSize="LARGE" addStyleNames="pull-right" />
                     </b:Popover>
-                    <h2>83 Contacts</h2>
+                    <g:HTML ui:field="titleContactsCount"></g:HTML>
                     <!-- TODO rendre dynamic le h2 -->
                     <h4>Choose the charts to show on your public profile</h4>
                     <p></p>
