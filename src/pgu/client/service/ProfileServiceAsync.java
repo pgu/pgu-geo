@@ -15,7 +15,7 @@ public interface ProfileServiceAsync {
     void saveLocations(String profileId, String json_copyCacheItems, String json_copyCacheReferential,
             AsyncCallback<Void> asyncCallbackApp);
 
-    void savePublicProfile(String profileId, String jsonPublicProfile, AsyncCallback<Void> asyncCallbackApp);
+    void savePublicProfile(String profileId, String profilePublicUrl, String jsonPublicProfile, AsyncCallback<Void> asyncCallbackApp);
 
     void saveProfile(String profileId, String jsonProfile, AsyncCallback<Void> asyncCallbackApp);
 

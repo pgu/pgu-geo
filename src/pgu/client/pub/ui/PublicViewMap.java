@@ -1,12 +1,16 @@
 package pgu.client.pub.ui;
 
+import pgu.client.app.utils.GoogleHelper;
+
 import com.google.gwt.core.client.JavaScriptObject;
 
-// TODO PGU Jan 31, 2013
-// TODO PGU Jan 31, 2013
-// TODO PGU Jan 31, 2013
-// TODO PGU Jan 31, 2013
 public class PublicViewMap {
+
+    private final GoogleHelper google = new GoogleHelper();
+
+    private JavaScriptObject google() {
+        return google.google();
+    }
 
     public native void initPublicProfileMap() /*-{
         $wnd.console.log('initPublicProfileMap');
@@ -32,15 +36,18 @@ public class PublicViewMap {
 
     }-*/;
 
+    // TODO PGU Jan 31, 2013 remove static
     public static native JavaScriptObject publicProfileMap() /*-{
         return $wnd.pgu_geo.public_profile_map;
     }-*/;
 
-    public static native void updateMapVisu(String mapPreferences) /*-{
+    public native void updateMapVisu(String mapPreferences) /*-{
+
+        var google = this.@pgu.client.pub.ui.PublicViewMap::google()
+                          ();
 
         var
-            public_map = @pgu.client.pub.ui.PublicViewMap::publicProfileMap()()
-          , google = @pgu.client.app.utils.GoogleUtils::google()()
+            public_map = $wnd.pgu_geo.public_profile_map
           , prefs = JSON.parse(mapPreferences)
           , center = new google.maps.LatLng(parseFloat(prefs.center_lat), parseFloat(prefs.center_lng))
         ;

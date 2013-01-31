@@ -17,7 +17,8 @@ public class ProfileViewToPublic {
             , String languagesHtml
             ) /*-{
 
-//        $wnd.pgu_geo.base_public_profile = {};
+//        $wnd.pgu_geo.base_public_profile = public_p;
+
         var p = $wnd.pgu_geo.profile;
 
         var public_p = {};
@@ -117,6 +118,10 @@ public class ProfileViewToPublic {
 
     public native void updatePublicPreference(String public_preference, boolean is_public) /*-{
         $wnd.pgu_geo.public_prefs[public_preference] = is_public;
+    }-*/;
+
+    public native String getPublicProfileUrl() /*-{
+        return $wnd.pgu_geo.profile.publicProfileUrl;
     }-*/;
 
 }

@@ -84,6 +84,7 @@ public class PublicProfile implements IsSerializable {
         this.profile = profile;
     }
 
+    @Deprecated
     public UserAndLocations getUserAndLocations() {
         return userAndLocations;
     }

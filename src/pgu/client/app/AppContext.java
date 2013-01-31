@@ -51,4 +51,5 @@ public class AppContext {
     public native String getProfileId() /*-{
         return $wnd.IN.User.getMemberId();
     }-*/;
+
 }

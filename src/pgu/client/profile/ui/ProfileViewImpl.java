@@ -475,7 +475,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         presenter.fetchMapPreferences();
         presenter.fetchProfileLocations();
 
-        presenter.updatePublicProfileSilently(getJsonPublicProfile());
+        presenter.updatePublicProfileSilently(getJsonPublicProfile(), viewPublic.getPublicProfileUrl());
     }
 
     @Override

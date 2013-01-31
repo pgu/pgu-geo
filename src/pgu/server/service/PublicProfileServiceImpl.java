@@ -4,6 +4,7 @@ import pgu.client.service.PublicProfileService;
 import pgu.server.access.DAO;
 import pgu.server.utils.AppUtils;
 import pgu.shared.dto.PublicContacts;
+import pgu.shared.model.BasePublicProfile;
 import pgu.shared.model.ChartsPreferences;
 import pgu.shared.model.ContactsNumberByCountry;
 import pgu.shared.model.FusionUrls;
@@ -20,30 +21,16 @@ public class PublicProfileServiceImpl extends RemoteServiceServlet implements Pu
     private final AppUtils      u               = new AppUtils();
 
     @Override
-    public void saveProfile(final PublicProfile publicProfile) {
-        dao.ofy().async().put(publicProfile);
-    }
-
-    @Override
     public PublicProfile fetchPublicProfileByUrl(final String publicUrl) {
         final PublicProfile publicProfile = dao.ofy().query(PublicProfile.class).filter("url", publicUrl).get();
 
         final UserAndLocations userAndLocations = dao.ofy().get(UserAndLocations.class, publicProfile.getProfileId());
         publicProfile.setUserAndLocations(userAndLocations);
 
+        final BasePublicProfile basePublicProfile = dao.ofy().query(BasePublicProfile.class).filter("url", publicUrl).get();
+        // TODO PGU Jan 31, 2013
+
         return publicProfile;
-    }
-
-    @Override
-    public void saveMapPreferences(final String userId, final String mapPreferences) {
-
-        final PublicProfile publicProfile = dao.ofy().find(PublicProfile.class, userId);
-        if(publicProfile == null) {
-            return ;
-        }
-
-        publicProfile.setMapPreferences(mapPreferences);
-        dao.ofy().async().put(publicProfile);
     }
 
     @Override

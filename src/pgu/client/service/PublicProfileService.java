@@ -11,10 +11,6 @@ public interface PublicProfileService extends RemoteService {
 
     PublicProfile fetchPublicProfileByUrl(String publicUrl);
 
-    void saveProfile(PublicProfile publicProfile);
-
-    void saveMapPreferences(String userId, String mapPreferences);
-
     PublicContacts fetchPublicContacts(String userId);
 
 

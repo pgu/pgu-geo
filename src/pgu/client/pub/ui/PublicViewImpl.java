@@ -6,7 +6,6 @@ import java.util.Map.Entry;
 
 import pgu.client.app.utils.ClientHelper;
 import pgu.client.app.utils.GoogleUtils;
-import pgu.client.app.utils.LocationsUtils;
 import pgu.client.app.utils.MarkersUtils;
 import pgu.client.app.utils.ProfileItemsUtils;
 import pgu.client.components.playtoolbar.PlayToolbar;
@@ -89,7 +88,8 @@ public class PublicViewImpl extends Composite implements PublicView {
 
     private final CssResourceApp css;
 
-    private final PublicViewMap viewMap = new PublicViewMap();
+    private final PublicViewMap       viewMap = new PublicViewMap();
+    private final PublicViewLocations viewLocations = new PublicViewLocations();
 
     public PublicViewImpl(final EventBus eventBus) {
 
@@ -386,19 +386,21 @@ public class PublicViewImpl extends Composite implements PublicView {
     @Override
     public void setProfile(final PublicProfile profile) {
 
-        // TODO PGU Jan 31, 2013
-        // TODO PGU Jan 31, 2013
-        // TODO PGU Jan 31, 2013
-        // TODO PGU Jan 31, 2013
-        // TODO PGU Jan 31, 2013
         viewMap.initPublicProfileMap();
 
+        // TODO PGU Jan 31, 2013 a separer du profile?
         final String mapPreferences = profile.getMapPreferences();
         if (!u.isVoid(mapPreferences)) {
-            PublicViewMap.updateMapVisu(mapPreferences);
+            viewMap.updateMapVisu(mapPreferences);
         }
 
-        LocationsUtils.initCaches(profile.getUserAndLocations());
+        // TODO PGU Jan 31, 2013
+        // TODO PGU Jan 31, 2013
+        // TODO PGU Jan 31, 2013
+        // TODO PGU Jan 31, 2013
+        // TODO PGU Jan 31, 2013
+        // TODO PGU Jan 31, 2013 a separer du profile?
+        viewLocations.initCaches(profile.getUserAndLocations());
 
         setProfile(this, profile.getProfile());
 
