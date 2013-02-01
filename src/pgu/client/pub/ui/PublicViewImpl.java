@@ -23,6 +23,7 @@ import pgu.client.pub.PublicView;
 import pgu.client.resources.ResourcesApp;
 import pgu.client.resources.ResourcesApp.CssResourceApp;
 import pgu.shared.dto.PublicContacts;
+import pgu.shared.model.BasePublicProfile;
 import pgu.shared.model.PublicProfile;
 import pgu.shared.utils.ChartType;
 
@@ -384,7 +385,20 @@ public class PublicViewImpl extends Composite implements PublicView {
     }
 
     @Override
-    public void setProfile(final PublicProfile profile) {
+    public void setProfile(final BasePublicProfile profile) {
+        // TODO PGU Jan 31, 2013
+        // TODO PGU Jan 31, 2013
+        // TODO PGU Jan 31, 2013
+        // TODO PGU Jan 31, 2013
+        // TODO PGU Jan 31, 2013
+        u.console("set profile");
+
+        if (profile == null) {
+            u.console("profile not found");
+        }
+    }
+
+    private void setProfile(final PublicProfile profile) {
 
         viewMap.initPublicProfileMap();
 

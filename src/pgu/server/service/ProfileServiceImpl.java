@@ -81,19 +81,12 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
     }
 
     @Override
-    public void savePublicProfile(final String profileId, final String publicProfileUrl, final String jsonPublicProfile) {
+    public void savePublicProfile(final String publicProfileUrl, final String jsonPublicProfile) {
 
-        final BasePublicProfile publicP = new BasePublicProfile();
-        publicP.setProfileId(profileId);
-        publicP.setValue(jsonPublicProfile);
-        // TODO PGU Jan 31, 2013
-        // TODO PGU Jan 31, 2013
-        // TODO PGU Jan 31, 2013
-        // TODO PGU Jan 31, 2013
-        // TODO PGU Jan 31, 2013
-        //        publicP.setValue(publicProfileUrl);
-
-        dao.ofy().async().put(publicP);
+        final BasePublicProfile basePublicP = new BasePublicProfile();
+        basePublicP.setProfileUrl(publicProfileUrl);
+        basePublicP.setValue(jsonPublicProfile);
+        dao.ofy().async().put(basePublicP);
     }
 
     @Override

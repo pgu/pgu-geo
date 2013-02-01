@@ -15,7 +15,7 @@ import pgu.client.pub.event.UserNameEvent;
 import pgu.client.service.PublicProfileService;
 import pgu.client.service.PublicProfileServiceAsync;
 import pgu.shared.dto.PublicContacts;
-import pgu.shared.model.PublicProfile;
+import pgu.shared.model.BasePublicProfile;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
@@ -68,12 +68,17 @@ public class PublicActivity implements PublicPresenter //
     private void showPublic() {
         u.fire(eventBus, new ShowWaitingIndicatorEvent());
 
+        final String hash = Window.Location.getHash();
+        final String publicUrl = hash.substring("!public:".length() + 1);
+
+        u.console("public url: " + publicUrl);
+
         publicProfileService.fetchPublicProfileByUrl( //
-                Window.Location.getHash(), // // TODO PGU Nov 18, 2012 review this url
-                new AsyncCallbackApp<PublicProfile>(eventBus) {
+                publicUrl, // // TODO PGU Nov 18, 2012 review this url
+                new AsyncCallbackApp<BasePublicProfile>(eventBus) {
 
                     @Override
-                    public void onSuccess(final PublicProfile profile) {
+                    public void onSuccess(final BasePublicProfile profile) {
                         u.fire(eventBus, new HideWaitingIndicatorEvent());
 
                         view.setProfile(profile);

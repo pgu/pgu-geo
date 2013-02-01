@@ -7,7 +7,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class BasePublicProfile implements IsSerializable {
 
     @Id
-    private String profileId;
+    private String profileUrl;
 
     private String value;
 
@@ -15,7 +15,7 @@ public class BasePublicProfile implements IsSerializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (profileId == null ? 0 : profileId.hashCode());
+        result = prime * result + (profileUrl == null ? 0 : profileUrl.hashCode());
         return result;
     }
 
@@ -31,11 +31,11 @@ public class BasePublicProfile implements IsSerializable {
             return false;
         }
         final BasePublicProfile other = (BasePublicProfile) obj;
-        if (profileId == null) {
-            if (other.profileId != null) {
+        if (profileUrl == null) {
+            if (other.profileUrl != null) {
                 return false;
             }
-        } else if (!profileId.equals(other.profileId)) {
+        } else if (!profileUrl.equals(other.profileUrl)) {
             return false;
         }
         return true;
@@ -43,15 +43,15 @@ public class BasePublicProfile implements IsSerializable {
 
     @Override
     public String toString() {
-        return "BasePublicProfile [userId=" + profileId + ", value=" + value + "]";
+        return "BasePublicProfile [profileUrl=" + profileUrl + ", value=" + value + "]";
     }
 
-    public String getProfileId() {
-        return profileId;
+    public String getProfileUrl() {
+        return profileUrl;
     }
 
-    public void setProfileId(final String profileId) {
-        this.profileId = profileId;
+    public void setProfileUrl(final String profileUrl) {
+        this.profileUrl = profileUrl;
     }
 
     public String getValue() {

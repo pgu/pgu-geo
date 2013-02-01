@@ -22,7 +22,7 @@ public class ProfileViewToPublic {
         var p = $wnd.pgu_geo.profile;
 
         var public_p = {};
-        public_p.id = p.id;
+//        public_p.id = p.id; do not expose the profile id
         public_p.rawPublicProfileUrl = p.publicProfileUrl;
         public_p.shortPublicProfileUrl = p.publicProfileUrl.substring('http://www.linkedin.com/'.length);
         public_p.firstName = p.firstName;
@@ -121,7 +121,7 @@ public class ProfileViewToPublic {
     }-*/;
 
     public native String getPublicProfileUrl() /*-{
-        return $wnd.pgu_geo.profile.publicProfileUrl;
+        return $wnd.pgu_geo.profile.publicProfileUrl.substring('http://www.linkedin.com/'.length);
     }-*/;
 
 }

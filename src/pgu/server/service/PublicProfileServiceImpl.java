@@ -8,8 +8,6 @@ import pgu.shared.model.BasePublicProfile;
 import pgu.shared.model.ChartsPreferences;
 import pgu.shared.model.ContactsNumberByCountry;
 import pgu.shared.model.FusionUrls;
-import pgu.shared.model.PublicProfile;
-import pgu.shared.model.UserAndLocations;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.googlecode.objectify.Result;
@@ -21,16 +19,16 @@ public class PublicProfileServiceImpl extends RemoteServiceServlet implements Pu
     private final AppUtils      u               = new AppUtils();
 
     @Override
-    public PublicProfile fetchPublicProfileByUrl(final String publicUrl) {
-        final PublicProfile publicProfile = dao.ofy().query(PublicProfile.class).filter("url", publicUrl).get();
+    public BasePublicProfile fetchPublicProfileByUrl(final String publicUrl) {
 
-        final UserAndLocations userAndLocations = dao.ofy().get(UserAndLocations.class, publicProfile.getProfileId());
-        publicProfile.setUserAndLocations(userAndLocations);
+        //        final PublicProfile publicProfile = dao.ofy().query(PublicProfile.class).filter("url", publicUrl).get();
+        //
+        //        final UserAndLocations userAndLocations = dao.ofy().get(UserAndLocations.class, publicProfile.getProfileId());
+        //        publicProfile.setUserAndLocations(userAndLocations);
 
-        final BasePublicProfile basePublicProfile = dao.ofy().query(BasePublicProfile.class).filter("url", publicUrl).get();
-        // TODO PGU Jan 31, 2013
+        final BasePublicProfile basePublicProfile = dao.ofy().find(BasePublicProfile.class, publicUrl);
 
-        return publicProfile;
+        return basePublicProfile;
     }
 
     @Override

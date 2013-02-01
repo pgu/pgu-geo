@@ -295,9 +295,7 @@ LocationsSuccessSaveEvent.Handler //
 
     public void updatePublicProfileSilently(final String jsonPublicProfile, final String publicProfileUrl) {
         profileService.savePublicProfile( //
-                //
-                ctx.getProfileId() //
-                , publicProfileUrl //
+                publicProfileUrl //
                 , jsonPublicProfile //
                 //
                 , new AsyncCallbackApp<Void>(eventBus) {
