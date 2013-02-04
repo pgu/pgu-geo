@@ -8,6 +8,7 @@ public class PublicContacts implements IsSerializable {
     private String contactsNumberByCountry;
     private String fusionUrls;
     private String chartsPreferences;
+    private String profileUrl = "TODO";
 
     @Override
     public String toString() {
@@ -37,6 +38,14 @@ public class PublicContacts implements IsSerializable {
 
     public void setChartsPreferences(final String chartsPreferences) {
         this.chartsPreferences = chartsPreferences;
+    }
+
+    public String getProfileUrl() {
+        return profileUrl;
+    }
+
+    public void setProfileUrl(final String profileUrl) {
+        this.profileUrl = profileUrl;
     }
 
 }

@@ -691,4 +691,10 @@ public class PublicViewImpl extends Composite implements PublicView {
         }
     }
 
+    @Override
+    public void showProfileNotFound() {
+        // TODO Auto-generated method stub
+
+    }
+
 }

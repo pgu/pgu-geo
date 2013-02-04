@@ -34,10 +34,13 @@ import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.web.bindery.event.shared.EventBus;
@@ -179,14 +182,28 @@ public class Pgu_geo implements EntryPoint {
                 final PublicMenuActivity pMenuActivity = new PublicMenuActivity(pMenuView);
                 pMenuActivity.start(appView.getHeader(), eventBus);
 
+                final String hash = Window.Location.getHash();
+                final String publicUrl = hash.substring("!public:".length() + 1);
+                u.console("public url: " + publicUrl);
+
                 final PublicView pView = new PublicViewImpl(eventBus);
-                final PublicActivity pActivity = new PublicActivity(pView, ctx);
+                final PublicActivity pActivity = new PublicActivity(pView, ctx, publicUrl);
                 pActivity.start(appView.getBody(), eventBus);
 
-                mvp.eventBus = eventBus;
+                History.addValueChangeHandler(new ValueChangeHandler<String>() {
 
-                // TODO PGU Nov 18, 2012 see how to deal with navigation between several public profiles
-                // TODO PGU Nov 20, 2012 extract the code in separate classes
+                    @Override
+                    public void onValueChange(final ValueChangeEvent<String> event) {
+                        final String historyToken = event.getValue();
+                        u.console("history token [" + historyToken + "]");
+
+                        final String profileUrl = hash.substring("!public:".length() + 1);
+                        pActivity.changeProfile(profileUrl);
+                    }
+
+                });
+
+                mvp.eventBus = eventBus;
 
                 //
                 // fire the load of other apis

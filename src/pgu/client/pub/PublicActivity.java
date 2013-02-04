@@ -18,7 +18,6 @@ import pgu.shared.dto.PublicContacts;
 import pgu.shared.model.BasePublicProfile;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.web.bindery.event.shared.EventBus;
 
@@ -32,13 +31,15 @@ public class PublicActivity implements PublicPresenter //
     private final PublicProfileServiceAsync publicProfileService = GWT.create(PublicProfileService.class);
     private final AppContext                ctx;
 
-    private final ClientHelper               u                    = new ClientHelper();
+    private final ClientHelper              u                    = new ClientHelper();
 
     private EventBus                        eventBus;
+    private String                          profileUrl;
 
-    public PublicActivity(final PublicView view, final AppContext ctx) {
+    public PublicActivity(final PublicView view, final AppContext ctx, final String profileUrl) {
         this.view = view;
         this.ctx = ctx;
+        this.profileUrl = profileUrl;
     }
 
     private boolean hasToShowPublic = false;
@@ -68,18 +69,22 @@ public class PublicActivity implements PublicPresenter //
     private void showPublic() {
         u.fire(eventBus, new ShowWaitingIndicatorEvent());
 
-        final String hash = Window.Location.getHash();
-        final String publicUrl = hash.substring("!public:".length() + 1);
-
-        u.console("public url: " + publicUrl);
-
         publicProfileService.fetchPublicProfileByUrl( //
-                publicUrl, // // TODO PGU Nov 18, 2012 review this url
+                profileUrl, //
                 new AsyncCallbackApp<BasePublicProfile>(eventBus) {
 
                     @Override
                     public void onSuccess(final BasePublicProfile profile) {
                         u.fire(eventBus, new HideWaitingIndicatorEvent());
+
+                        if (profile == null) {
+                            view.showProfileNotFound();
+                            return;
+                        }
+
+                        if (!profile.getProfileUrl().equals(profileUrl)) {
+                            return; // obsolete response
+                        }
 
                         view.setProfile(profile);
                     }
@@ -127,7 +132,6 @@ public class PublicActivity implements PublicPresenter //
     }
 
     private boolean isAppReady(final AppContext ctx) {
-        // TODO PGU Nov 21, 2012 profile and contacts loaded from service
         return areExternalApisLoaded(ctx);
     }
 
@@ -139,10 +143,21 @@ public class PublicActivity implements PublicPresenter //
 
                     @Override
                     public void onSuccess(final PublicContacts result) {
+
+                        if (!result.getProfileUrl().equals(profileUrl)) {
+                            return; // obsolete
+                        }
+
                         view.onFetchPublicContactsSuccess(result);
                     }
 
                 });
+    }
+
+    public void changeProfile(final String profileUrl) {
+        this.profileUrl = profileUrl;
+        // TODO PGU Feb 4, 2013 clear profile data
+        // TODO PGU Feb 4, 2013 clear contacts
     }
 
 }

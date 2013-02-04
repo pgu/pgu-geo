@@ -19,14 +19,14 @@ public class PublicProfileServiceImpl extends RemoteServiceServlet implements Pu
     private final AppUtils      u               = new AppUtils();
 
     @Override
-    public BasePublicProfile fetchPublicProfileByUrl(final String publicUrl) {
+    public BasePublicProfile fetchPublicProfileByUrl(final String profileUrl) {
 
         //        final PublicProfile publicProfile = dao.ofy().query(PublicProfile.class).filter("url", publicUrl).get();
         //
         //        final UserAndLocations userAndLocations = dao.ofy().get(UserAndLocations.class, publicProfile.getProfileId());
         //        publicProfile.setUserAndLocations(userAndLocations);
 
-        final BasePublicProfile basePublicProfile = dao.ofy().find(BasePublicProfile.class, publicUrl);
+        final BasePublicProfile basePublicProfile = dao.ofy().find(BasePublicProfile.class, profileUrl);
 
         return basePublicProfile;
     }
