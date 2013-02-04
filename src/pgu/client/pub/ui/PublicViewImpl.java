@@ -393,21 +393,17 @@ public class PublicViewImpl extends Composite implements PublicView {
         // TODO PGU Jan 31, 2013
         u.console("set profile");
 
-        if (profile == null) {
-            u.console("profile not found");
-        }
+        viewMap.initPublicProfileMap();
+
+        // TODO PGU Feb 4, 2013 afterSetProfile -> fetch map preferences
+        setProfileAfter();
+    }
+
+    private void setProfileAfter() {
+        presenter.fetchMapPreferences();
     }
 
     private void setProfile(final PublicProfile profile) {
-
-        viewMap.initPublicProfileMap();
-
-        // TODO PGU Jan 31, 2013 a separer du profile?
-        final String mapPreferences = profile.getMapPreferences();
-        if (!u.isVoid(mapPreferences)) {
-            viewMap.updateMapVisu(mapPreferences);
-        }
-
         // TODO PGU Jan 31, 2013
         // TODO PGU Jan 31, 2013
         // TODO PGU Jan 31, 2013
@@ -694,7 +690,13 @@ public class PublicViewImpl extends Composite implements PublicView {
     @Override
     public void showProfileNotFound() {
         // TODO Auto-generated method stub
+        // TODO Auto-generated method stub
+        // TODO Auto-generated method stub
+    }
 
+    @Override
+    public void onFetchMapPreferencesSuccess(final String values) {
+        viewMap.setPreferences(values);
     }
 
 }

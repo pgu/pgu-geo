@@ -8,6 +8,7 @@ import pgu.shared.model.BasePublicProfile;
 import pgu.shared.model.ChartsPreferences;
 import pgu.shared.model.ContactsNumberByCountry;
 import pgu.shared.model.FusionUrls;
+import pgu.shared.model.PublicMapPreferences;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.googlecode.objectify.Result;
@@ -62,6 +63,17 @@ public class PublicProfileServiceImpl extends RemoteServiceServlet implements Pu
         publicContacts.setContactsNumberByCountry(contactsNumberByCountryValues);
         publicContacts.setChartsPreferences(chartsPreferenceValues);
         return publicContacts;
+    }
+
+    @Override
+    public PublicMapPreferences fetchMapPreferences(final String profileUrl) {
+        final PublicMapPreferences publicMapPref = dao.ofy().find(PublicMapPreferences.class, profileUrl);
+
+        if (publicMapPref == null) {
+            return new PublicMapPreferences();
+        }
+
+        return publicMapPref;
     }
 
 }

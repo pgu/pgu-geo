@@ -1,7 +1,5 @@
 package pgu.client.pub;
 
-import java.util.Date;
-
 import pgu.client.app.AppContext;
 import pgu.client.app.event.ChartsApiLoadedEvent;
 import pgu.client.app.event.HideWaitingIndicatorEvent;
@@ -16,6 +14,7 @@ import pgu.client.service.PublicProfileService;
 import pgu.client.service.PublicProfileServiceAsync;
 import pgu.shared.dto.PublicContacts;
 import pgu.shared.model.BasePublicProfile;
+import pgu.shared.model.PublicMapPreferences;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -46,10 +45,7 @@ public class PublicActivity implements PublicPresenter //
 
     public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
 
-        GWT.log(" !! public activity start !! " + new Date().getTime());
-
         this.eventBus = eventBus;
-
         view.setPresenter(this);
 
         eventBus.addHandler(ShowdownLoadedEvent.TYPE, this);
@@ -159,6 +155,20 @@ public class PublicActivity implements PublicPresenter //
         u.console("> profile_url " + profileUrl);
         // TODO PGU Feb 4, 2013 clear profile data
         // TODO PGU Feb 4, 2013 clear contacts
+    }
+
+    @Override
+    public void fetchMapPreferences() {
+        publicProfileService.fetchMapPreferences( //
+                profileUrl //
+                , new AsyncCallbackApp<PublicMapPreferences>(eventBus) {
+
+                    @Override
+                    public void onSuccess(final PublicMapPreferences result) {
+                        view.onFetchMapPreferencesSuccess(result.getValues());
+                    }
+                });
+
     }
 
 }

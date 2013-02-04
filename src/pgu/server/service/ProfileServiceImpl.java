@@ -8,6 +8,7 @@ import pgu.shared.model.BaseProfile;
 import pgu.shared.model.BasePublicProfile;
 import pgu.shared.model.MapPreferences;
 import pgu.shared.model.ProfileLocations;
+import pgu.shared.model.PublicMapPreferences;
 import pgu.shared.model.PublicPreferences;
 import pgu.shared.utils.PublicProfileItemType;
 
@@ -118,6 +119,16 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
         mapPref.setValues(mapPreferences);
 
         dao.ofy().async().put(mapPref);
+    }
+
+    @Override
+    public void savePublicMapPreferences(final String profileUrl, final String mapPreferences) {
+
+        final PublicMapPreferences publicMapPref = new PublicMapPreferences();
+        publicMapPref.setProfileUrl(profileUrl);
+        publicMapPref.setValues(mapPreferences);
+
+        dao.ofy().async().put(publicMapPref);
     }
 
     @Override

@@ -8,4 +8,6 @@ public interface PublicPresenter {
 
     void fetchPublicContacts(String profileId);
 
+    void fetchMapPreferences();
+
 }

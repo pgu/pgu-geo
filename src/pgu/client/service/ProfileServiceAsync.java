@@ -25,4 +25,6 @@ public interface ProfileServiceAsync {
 
     void fetchMapPreferences(String profileId, AsyncCallback<MapPreferences> asyncCallbackApp);
 
+    void savePublicMapPreferences(String profileUrl, String mapPreferences, AsyncCallback<Void> asyncCallbackApp);
+
 }

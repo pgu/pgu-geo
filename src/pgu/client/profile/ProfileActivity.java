@@ -190,10 +190,24 @@ LocationsSuccessSaveEvent.Handler //
         return ctx.isProfileLoaded() && areExternalApisLoaded(ctx);
     }
 
-    public void saveMapPreferences(final String mapPreferences) {
+    public void saveMapPreferences(final String mapPreferences, final String profileUrl) {
         profileService.saveMapPreferences( //
                 //
                 ctx.getProfileId() //
+                , mapPreferences //
+                //
+                , new AsyncCallbackApp<Void>(eventBus) {
+
+                    @Override
+                    public void onSuccess(final Void result) {
+                        // no-op
+                    }
+
+                });
+
+        profileService.savePublicMapPreferences( //
+                //
+                profileUrl //
                 , mapPreferences //
                 //
                 , new AsyncCallbackApp<Void>(eventBus) {

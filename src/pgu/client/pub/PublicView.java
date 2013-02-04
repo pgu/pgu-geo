@@ -15,4 +15,6 @@ public interface PublicView extends IsWidget {
 
     void showProfileNotFound();
 
+    void onFetchMapPreferencesSuccess(String values);
+
 }
