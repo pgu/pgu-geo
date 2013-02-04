@@ -183,8 +183,7 @@ public class Pgu_geo implements EntryPoint {
                 pMenuActivity.start(appView.getHeader(), eventBus);
 
                 final String hash = Window.Location.getHash();
-                final String publicUrl = hash.substring("!public:".length() + 1);
-                u.console("public url: " + publicUrl);
+                final String publicUrl = hash.substring("#!public:".length());
 
                 final PublicView pView = new PublicViewImpl(eventBus);
                 final PublicActivity pActivity = new PublicActivity(pView, ctx, publicUrl);
@@ -194,10 +193,10 @@ public class Pgu_geo implements EntryPoint {
 
                     @Override
                     public void onValueChange(final ValueChangeEvent<String> event) {
-                        final String historyToken = event.getValue();
-                        u.console("history token [" + historyToken + "]");
 
-                        final String profileUrl = hash.substring("!public:".length() + 1);
+                        final String historyToken = event.getValue();
+                        final String profileUrl = historyToken.substring("!public:".length());
+
                         pActivity.changeProfile(profileUrl);
                     }
 
