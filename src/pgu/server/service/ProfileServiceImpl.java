@@ -91,6 +91,7 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
         // item2locations/cache_items: {"education,1":["Paris","Nantes"],"experience,1":["Madrid"]}
         //    referential/cache_referential: {"Paris":{"lat":1.2323,"lng":4.5555},"Nantes":{"lat":9.99,"lng":2.22}}
         //      {"wishes":true,"positions":true,"educations":false,"contacts":true}, see PublicProfileItemType
+        //        final HashMap<String, String> a = new Gson().fromJson("{\"edu1\":\"rostock\",\"edu2\":\"madrid\"}", HashMap.class);
 
         final PublicPreferences preferences = dao.ofy().find(PublicPreferences.class, profileId);
         preferences.getValues();
