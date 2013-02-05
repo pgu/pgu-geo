@@ -57,8 +57,6 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
     private final EditLocationViewHelper      viewHelper = new EditLocationViewHelper();
     private final ProfileLocationsHelper      locationsHelper = new ProfileLocationsHelper();
 
-    private final ProfileViewToPublic  viewPublic = new ProfileViewToPublic();
-
     private EditLocationActivity presenter;
 
     private Timer                                timerCloseView = null;
@@ -374,15 +372,6 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
         u.showNotificationSuccess(msg, this);
 
         hideViewWithDelay();
-
-        // ProfileViewLocations $wnd.pgu_geo.cache_items = JSON.parse(items2locations);
-        // ProfileViewLocations $wnd.pgu_geo.cache_referential = JSON.parse(referential);
-
-        final String profileUrl = viewPublic.getPublicProfileUrl();
-        final String items2locations = viewHelper.getItems2locationsForPublicProfile(); // TODO PGU Feb 5, 2013
-        final String referentialLocations = viewHelper.getReferentialLocationsForPublicProfile(); // TODO PGU Feb 5, 2013
-
-        presenter.savePublicLocations(profileUrl, items2locations, referentialLocations);
     }
 
     private StringBuilder getSuccessMessage(final ArrayList<String> selectedLocations) {

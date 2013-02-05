@@ -110,15 +110,4 @@ public class EditLocationViewHelper {
         return other_location_names;
     }-*/;
 
-    public native String getItems2locationsForPublicProfile() /*-{
-        // TODO Auto-generated method stub
-        return null;
-    }-*/;
-
-    public native String getReferentialLocationsForPublicProfile() /*-{
-        // TODO Auto-generated method stub
-        return null;
-    }-*/;
-
-
 }

@@ -16,7 +16,7 @@ public interface ProfileService extends RemoteService {
 
     void saveLocations(String profileId, String json_copyCacheItems, String json_copyCacheReferential);
 
-    void savePublicProfile(String profilePublicUrl, String jsonPublicProfile);
+    void savePublicProfile(String profilePublicUrl, String profileId, String jsonPublicProfile);
 
     void saveProfile(String profileId, String jsonProfile);
 
@@ -25,9 +25,5 @@ public interface ProfileService extends RemoteService {
     void saveMapPreferences(String profileId, String mapPreferences);
 
     MapPreferences fetchMapPreferences(String profileId);
-
-    void savePublicMapPreferences(String profileUrl, String mapPreferences);
-
-    void savePublicLocations(String profileUrl, String items2locations, String referentialLocations);
 
 }

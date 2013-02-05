@@ -8,6 +8,7 @@ import pgu.shared.model.BaseProfile;
 import pgu.shared.model.BasePublicProfile;
 import pgu.shared.model.MapPreferences;
 import pgu.shared.model.ProfileLocations;
+import pgu.shared.model.ProfileUrl;
 import pgu.shared.model.PublicLocations;
 import pgu.shared.model.PublicMapPreferences;
 import pgu.shared.model.PublicPreferences;
@@ -80,21 +81,56 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
         dao.ofy().async().put(profileLocations);
 
         // TODO PGU Sep 12, 2012 async: update each location with profile
-    }
 
-    @Override
-    public void savePublicLocations(final String profileUrl, final String items2locations, final String referentialLocations) {
+        // TODO PGU Feb 5, 2013
+        // TODO PGU Feb 5, 2013
+        // TODO PGU Feb 5, 2013
+        // TODO PGU Feb 5, 2013
+        // TODO PGU Feb 5, 2013 remove the non public data
+
+        // item2locations/cache_items: {"education,1":["Paris","Nantes"],"experience,1":["Madrid"]}
+        //    referential/cache_referential: {"Paris":{"lat":1.2323,"lng":4.5555},"Nantes":{"lat":9.99,"lng":2.22}}
+        //      {"wishes":true,"positions":true,"educations":false,"contacts":true}, see PublicProfileItemType
+
+        final PublicPreferences preferences = dao.ofy().find(PublicPreferences.class, profileId);
+        preferences.getValues();
+
+        final ProfileUrl profileUrl = dao.ofy().find(ProfileUrl.class, profileId);
 
         final PublicLocations publicLocations = new PublicLocations();
-        publicLocations.setProfileUrl(profileUrl);
+        publicLocations.setProfileUrl(profileUrl.getValue());
         publicLocations.setItems2locations(items2locations);
         publicLocations.setReferentialLocations(referentialLocations);
 
         dao.ofy().async().put(publicLocations);
+
     }
 
     @Override
-    public void savePublicProfile(final String publicProfileUrl, final String jsonPublicProfile) {
+    public void saveMapPreferences(final String profileId, final String mapPreferences) {
+
+        final MapPreferences mapPref = new MapPreferences();
+        mapPref.setProfileId(profileId);
+        mapPref.setValues(mapPreferences);
+
+        dao.ofy().async().put(mapPref);
+
+        final ProfileUrl profileUrl = dao.ofy().find(ProfileUrl.class, profileId);
+
+        final PublicMapPreferences publicMapPref = new PublicMapPreferences();
+        publicMapPref.setProfileUrl(profileUrl.getValue());
+        publicMapPref.setValues(mapPreferences);
+
+        dao.ofy().async().put(publicMapPref);
+    }
+
+    @Override
+    public void savePublicProfile(final String publicProfileUrl, final String profileId, final String jsonPublicProfile) {
+
+        final ProfileUrl profileUrl = new ProfileUrl();
+        profileUrl.setProfileId(profileId);
+        profileUrl.setValue(publicProfileUrl);
+        dao.ofy().async().put(profileUrl);
 
         final BasePublicProfile basePublicP = new BasePublicProfile();
         basePublicP.setProfileUrl(publicProfileUrl);
@@ -121,26 +157,6 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
         //
         //        final Document doc = docBuilder.build();
         //        PROFILE_IDX.putAsync(doc);
-    }
-
-    @Override
-    public void saveMapPreferences(final String profileId, final String mapPreferences) {
-
-        final MapPreferences mapPref = new MapPreferences();
-        mapPref.setProfileId(profileId);
-        mapPref.setValues(mapPreferences);
-
-        dao.ofy().async().put(mapPref);
-    }
-
-    @Override
-    public void savePublicMapPreferences(final String profileUrl, final String mapPreferences) {
-
-        final PublicMapPreferences publicMapPref = new PublicMapPreferences();
-        publicMapPref.setProfileUrl(profileUrl);
-        publicMapPref.setValues(mapPreferences);
-
-        dao.ofy().async().put(publicMapPref);
     }
 
     @Override

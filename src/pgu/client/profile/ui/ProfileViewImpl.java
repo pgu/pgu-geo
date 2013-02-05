@@ -108,7 +108,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     @UiHandler("mapPreferencesBtn")
     public void clickOnMapPreferences(final ClickEvent e) {
         final String mapPreferences = viewMap.getCurrentMapPreferences();
-        presenter.saveMapPreferences(mapPreferences, viewPublic.getPublicProfileUrl());
+        presenter.saveMapPreferences(mapPreferences);
     }
 
     @UiHandler("showAllBtn")

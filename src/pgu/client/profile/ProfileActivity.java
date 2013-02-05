@@ -190,24 +190,10 @@ LocationsSuccessSaveEvent.Handler //
         return ctx.isProfileLoaded() && areExternalApisLoaded(ctx);
     }
 
-    public void saveMapPreferences(final String mapPreferences, final String profileUrl) {
+    public void saveMapPreferences(final String mapPreferences) {
         profileService.saveMapPreferences( //
                 //
                 ctx.getProfileId() //
-                , mapPreferences //
-                //
-                , new AsyncCallbackApp<Void>(eventBus) {
-
-                    @Override
-                    public void onSuccess(final Void result) {
-                        // no-op
-                    }
-
-                });
-
-        profileService.savePublicMapPreferences( //
-                //
-                profileUrl //
                 , mapPreferences //
                 //
                 , new AsyncCallbackApp<Void>(eventBus) {
@@ -310,6 +296,7 @@ LocationsSuccessSaveEvent.Handler //
     public void updatePublicProfileSilently(final String jsonPublicProfile, final String publicProfileUrl) {
         profileService.savePublicProfile( //
                 publicProfileUrl //
+                , ctx.getProfileId() //
                 , jsonPublicProfile //
                 //
                 , new AsyncCallbackApp<Void>(eventBus) {

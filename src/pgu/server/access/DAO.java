@@ -14,6 +14,7 @@ import pgu.shared.model.PublicLocations;
 import pgu.shared.model.PublicMapPreferences;
 import pgu.shared.model.PublicPreferences;
 import pgu.shared.model.PublicProfile;
+import pgu.shared.model.ProfileUrl;
 import pgu.shared.model.UserAndLocations;
 
 import com.googlecode.objectify.ObjectifyService;
@@ -23,7 +24,9 @@ public class DAO extends DAOBase {
 
     static {
         ObjectifyService.register(UserAndLocations.class);
+
         ObjectifyService.register(PublicProfile.class);
+        ObjectifyService.register(ProfileUrl.class);
 
         ObjectifyService.register(Country2ContactNames.class);
         ObjectifyService.register(Country2ContactNumber.class);
