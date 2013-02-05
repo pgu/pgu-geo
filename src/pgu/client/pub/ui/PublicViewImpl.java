@@ -25,6 +25,7 @@ import pgu.client.resources.ResourcesApp.CssResourceApp;
 import pgu.shared.dto.FullPublicProfile;
 import pgu.shared.dto.PublicContacts;
 import pgu.shared.model.BasePublicProfile;
+import pgu.shared.model.PublicLocations;
 import pgu.shared.model.PublicProfile;
 import pgu.shared.utils.ChartType;
 
@@ -387,27 +388,20 @@ public class PublicViewImpl extends Composite implements PublicView {
 
     @Override
     public void setProfile(final FullPublicProfile fullProfile) {
-        // TODO PGU Jan 31, 2013
-        // TODO PGU Jan 31, 2013
-        // TODO PGU Jan 31, 2013
-        // TODO PGU Jan 31, 2013
-        // TODO PGU Jan 31, 2013
-        u.console("set profile");
 
         viewMap.initPublicProfileMap();
-
-        final BasePublicProfile publicProfile = fullProfile.getBasePublicProfile();
-
         final String mapPreferences = fullProfile.getPublicMapPreferences().getValues();
         viewMap.setPreferences(mapPreferences);
 
-        // TODO PGU Feb 5, 2013
-        // TODO PGU Feb 5, 2013
-        // TODO PGU Feb 5, 2013
-        // TODO PGU Feb 5, 2013
-        // TODO PGU Feb 5, 2013
+        final PublicLocations publicLocations = fullProfile.getPublicLocations();
+        viewLocations.initCaches(publicLocations.getItems2locations(), publicLocations.getReferentialLocations());
 
-        //        viewLocations.initCaches(profile.getUserAndLocations());
+        // TODO PGU Feb 5, 2013
+        // TODO PGU Feb 5, 2013
+        // TODO PGU Feb 5, 2013
+        // TODO PGU Feb 5, 2013
+        // TODO PGU Feb 5, 2013
+        final BasePublicProfile publicProfile = fullProfile.getBasePublicProfile();
 
         //        setProfileAfter();
     }

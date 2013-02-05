@@ -1,13 +1,7 @@
 package pgu.client.pub.ui;
 
-import pgu.shared.model.UserAndLocations;
 
 public class PublicViewLocations {
-
-    public void initCaches(final UserAndLocations userAndLocations) {
-        // TODO Auto-generated method stub
-
-    }
 
     public native void initCaches( //
             final String items2locations //
