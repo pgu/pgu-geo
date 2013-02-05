@@ -371,6 +371,11 @@ public class EditLocationViewImpl extends Composite implements EditLocationView 
         u.showNotificationSuccess(msg, this);
 
         hideViewWithDelay();
+
+        final String profileUrl = null; // TODO PGU Feb 5, 2013
+        final String items2locations = null; // TODO PGU Feb 5, 2013
+        final String referentialLocations = null; // TODO PGU Feb 5, 2013
+        presenter.savePublicLocations(profileUrl, items2locations, referentialLocations);
     }
 
     private StringBuilder getSuccessMessage(final ArrayList<String> selectedLocations) {

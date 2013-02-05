@@ -12,9 +12,8 @@ import pgu.client.pub.event.UserHeadlineEvent;
 import pgu.client.pub.event.UserNameEvent;
 import pgu.client.service.PublicProfileService;
 import pgu.client.service.PublicProfileServiceAsync;
+import pgu.shared.dto.FullPublicProfile;
 import pgu.shared.dto.PublicContacts;
-import pgu.shared.model.BasePublicProfile;
-import pgu.shared.model.PublicMapPreferences;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -67,18 +66,18 @@ public class PublicActivity implements PublicPresenter //
 
         publicProfileService.fetchPublicProfileByUrl( //
                 profileUrl, //
-                new AsyncCallbackApp<BasePublicProfile>(eventBus) {
+                new AsyncCallbackApp<FullPublicProfile>(eventBus) {
 
                     @Override
-                    public void onSuccess(final BasePublicProfile profile) {
+                    public void onSuccess(final FullPublicProfile profile) {
                         u.fire(eventBus, new HideWaitingIndicatorEvent());
 
-                        if (profile != null && //
-                                !profile.getProfileUrl().equals(profileUrl)) {
+                        if (profile.getBasePublicProfile() != null && //
+                                !profile.getBasePublicProfile().getProfileUrl().equals(profileUrl)) {
                             return; // obsolete response
                         }
 
-                        if (profile == null) {
+                        if (profile.getBasePublicProfile() == null) {
                             view.showProfileNotFound();
                             return;
                         }
@@ -156,20 +155,6 @@ public class PublicActivity implements PublicPresenter //
         u.console("> profile_url " + profileUrl);
         // TODO PGU Feb 4, 2013 clear profile data
         // TODO PGU Feb 4, 2013 clear contacts
-    }
-
-    @Override
-    public void fetchMapPreferences() {
-        publicProfileService.fetchMapPreferences( //
-                profileUrl //
-                , new AsyncCallbackApp<PublicMapPreferences>(eventBus) {
-
-                    @Override
-                    public void onSuccess(final PublicMapPreferences result) {
-                        view.onFetchMapPreferencesSuccess(result.getValues());
-                    }
-                });
-
     }
 
 }

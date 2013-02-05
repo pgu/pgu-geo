@@ -127,4 +127,19 @@ public class EditLocationActivity extends AbstractActivity {
         u.fire(eventBus, new LocationShowOnMapEvent(locName));
     }
 
+    public void savePublicLocations(final String profileUrl, final String items2locations, final String referentialLocations) {
+        profileService.savePublicLocations( //
+                profileUrl //
+                , items2locations //
+                , referentialLocations //
+                , new AsyncCallbackApp<Void>(eventBus) {
+
+                    @Override
+                    public void onSuccess(final Void result) {
+                        // no-op
+                    }
+
+                });
+    }
+
 }

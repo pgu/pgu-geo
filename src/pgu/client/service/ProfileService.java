@@ -28,4 +28,6 @@ public interface ProfileService extends RemoteService {
 
     void savePublicMapPreferences(String profileUrl, String mapPreferences);
 
+    void savePublicLocations(String profileUrl, String items2locations, String referentialLocations);
+
 }

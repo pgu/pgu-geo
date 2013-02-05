@@ -8,6 +8,7 @@ import pgu.shared.model.BaseProfile;
 import pgu.shared.model.BasePublicProfile;
 import pgu.shared.model.MapPreferences;
 import pgu.shared.model.ProfileLocations;
+import pgu.shared.model.PublicLocations;
 import pgu.shared.model.PublicMapPreferences;
 import pgu.shared.model.PublicPreferences;
 import pgu.shared.utils.PublicProfileItemType;
@@ -79,6 +80,17 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
         dao.ofy().async().put(profileLocations);
 
         // TODO PGU Sep 12, 2012 async: update each location with profile
+    }
+
+    @Override
+    public void savePublicLocations(final String profileUrl, final String items2locations, final String referentialLocations) {
+
+        final PublicLocations publicLocations = new PublicLocations();
+        publicLocations.setProfileUrl(profileUrl);
+        publicLocations.setItems2locations(items2locations);
+        publicLocations.setReferentialLocations(referentialLocations);
+
+        dao.ofy().async().put(publicLocations);
     }
 
     @Override

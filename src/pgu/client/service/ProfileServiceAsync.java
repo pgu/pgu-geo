@@ -27,4 +27,7 @@ public interface ProfileServiceAsync {
 
     void savePublicMapPreferences(String profileUrl, String mapPreferences, AsyncCallback<Void> asyncCallbackApp);
 
+    void savePublicLocations(String profileUrl, String items2locations, String referentialLocations,
+            AsyncCallback<Void> asyncCallbackApp);
+
 }

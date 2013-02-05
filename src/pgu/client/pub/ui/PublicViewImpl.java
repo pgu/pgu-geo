@@ -22,6 +22,7 @@ import pgu.client.pub.PublicPresenter;
 import pgu.client.pub.PublicView;
 import pgu.client.resources.ResourcesApp;
 import pgu.client.resources.ResourcesApp.CssResourceApp;
+import pgu.shared.dto.FullPublicProfile;
 import pgu.shared.dto.PublicContacts;
 import pgu.shared.model.BasePublicProfile;
 import pgu.shared.model.PublicProfile;
@@ -385,7 +386,7 @@ public class PublicViewImpl extends Composite implements PublicView {
     }
 
     @Override
-    public void setProfile(final BasePublicProfile profile) {
+    public void setProfile(final FullPublicProfile fullProfile) {
         // TODO PGU Jan 31, 2013
         // TODO PGU Jan 31, 2013
         // TODO PGU Jan 31, 2013
@@ -395,12 +396,20 @@ public class PublicViewImpl extends Composite implements PublicView {
 
         viewMap.initPublicProfileMap();
 
-        // TODO PGU Feb 4, 2013 afterSetProfile -> fetch map preferences
-        setProfileAfter();
-    }
+        final BasePublicProfile publicProfile = fullProfile.getBasePublicProfile();
 
-    private void setProfileAfter() {
-        presenter.fetchMapPreferences();
+        final String mapPreferences = fullProfile.getPublicMapPreferences().getValues();
+        viewMap.setPreferences(mapPreferences);
+
+        // TODO PGU Feb 5, 2013
+        // TODO PGU Feb 5, 2013
+        // TODO PGU Feb 5, 2013
+        // TODO PGU Feb 5, 2013
+        // TODO PGU Feb 5, 2013
+
+        //        viewLocations.initCaches(profile.getUserAndLocations());
+
+        //        setProfileAfter();
     }
 
     private void setProfile(final PublicProfile profile) {
@@ -410,7 +419,7 @@ public class PublicViewImpl extends Composite implements PublicView {
         // TODO PGU Jan 31, 2013
         // TODO PGU Jan 31, 2013
         // TODO PGU Jan 31, 2013 a separer du profile?
-        viewLocations.initCaches(profile.getUserAndLocations());
+
 
         setProfile(this, profile.getProfile());
 
@@ -692,11 +701,6 @@ public class PublicViewImpl extends Composite implements PublicView {
         // TODO Auto-generated method stub
         // TODO Auto-generated method stub
         // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void onFetchMapPreferencesSuccess(final String values) {
-        viewMap.setPreferences(values);
     }
 
 }

@@ -3,11 +3,13 @@ package pgu.server.service;
 import pgu.client.service.PublicProfileService;
 import pgu.server.access.DAO;
 import pgu.server.utils.AppUtils;
+import pgu.shared.dto.FullPublicProfile;
 import pgu.shared.dto.PublicContacts;
 import pgu.shared.model.BasePublicProfile;
 import pgu.shared.model.ChartsPreferences;
 import pgu.shared.model.ContactsNumberByCountry;
 import pgu.shared.model.FusionUrls;
+import pgu.shared.model.PublicLocations;
 import pgu.shared.model.PublicMapPreferences;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -20,7 +22,7 @@ public class PublicProfileServiceImpl extends RemoteServiceServlet implements Pu
     private final AppUtils      u               = new AppUtils();
 
     @Override
-    public BasePublicProfile fetchPublicProfileByUrl(final String profileUrl) {
+    public FullPublicProfile fetchPublicProfileByUrl(final String profileUrl) {
 
         //        final PublicProfile publicProfile = dao.ofy().query(PublicProfile.class).filter("url", publicUrl).get();
         //
@@ -29,7 +31,22 @@ public class PublicProfileServiceImpl extends RemoteServiceServlet implements Pu
 
         final BasePublicProfile basePublicProfile = dao.ofy().find(BasePublicProfile.class, profileUrl);
 
-        return basePublicProfile;
+        PublicLocations publicLocations = dao.ofy().find(PublicLocations.class, profileUrl);
+        if (publicLocations == null) {
+            publicLocations = new PublicLocations();
+        }
+
+        PublicMapPreferences publicMapPreferences = dao.ofy().find(PublicMapPreferences.class, profileUrl);
+        if (publicMapPreferences == null) {
+            publicMapPreferences = new PublicMapPreferences();
+        }
+
+        final FullPublicProfile fullPublic = new FullPublicProfile();
+        fullPublic.setBasePublicProfile(basePublicProfile);
+        fullPublic.setPublicLocations(publicLocations);
+        fullPublic.setPublicMapPreferences(publicMapPreferences);
+
+        return fullPublic;
     }
 
     @Override
@@ -63,17 +80,6 @@ public class PublicProfileServiceImpl extends RemoteServiceServlet implements Pu
         publicContacts.setContactsNumberByCountry(contactsNumberByCountryValues);
         publicContacts.setChartsPreferences(chartsPreferenceValues);
         return publicContacts;
-    }
-
-    @Override
-    public PublicMapPreferences fetchMapPreferences(final String profileUrl) {
-        final PublicMapPreferences publicMapPref = dao.ofy().find(PublicMapPreferences.class, profileUrl);
-
-        if (publicMapPref == null) {
-            return new PublicMapPreferences();
-        }
-
-        return publicMapPref;
     }
 
 }
