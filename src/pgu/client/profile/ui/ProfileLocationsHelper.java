@@ -4,6 +4,10 @@ import pgu.client.app.utils.JsonHelper;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
+/**
+ * Common helper between the profile view and the edit view
+ *
+ */
 public class ProfileLocationsHelper {
 
     private final JsonHelper json = new JsonHelper();

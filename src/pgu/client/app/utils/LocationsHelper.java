@@ -2,6 +2,9 @@ package pgu.client.app.utils;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
+/**
+ * Common helper between the profile app and the public app
+ */
 public class LocationsHelper {
 
     public native boolean isLocationInReferential(String location_name) /*-{
