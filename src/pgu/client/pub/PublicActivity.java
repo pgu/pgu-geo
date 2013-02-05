@@ -73,13 +73,14 @@ public class PublicActivity implements PublicPresenter //
                     public void onSuccess(final BasePublicProfile profile) {
                         u.fire(eventBus, new HideWaitingIndicatorEvent());
 
+                        if (profile != null && //
+                                !profile.getProfileUrl().equals(profileUrl)) {
+                            return; // obsolete response
+                        }
+
                         if (profile == null) {
                             view.showProfileNotFound();
                             return;
-                        }
-
-                        if (!profile.getProfileUrl().equals(profileUrl)) {
-                            return; // obsolete response
                         }
 
                         view.setProfile(profile);
