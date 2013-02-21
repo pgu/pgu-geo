@@ -1,5 +1,10 @@
 package pgu.server.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map.Entry;
+
 import pgu.client.service.ProfileService;
 import pgu.server.access.DAO;
 import pgu.server.app.AppLog;
@@ -14,6 +19,7 @@ import pgu.shared.model.PublicMapPreferences;
 import pgu.shared.model.PublicPreferences;
 import pgu.shared.utils.PublicProfileItemType;
 
+import com.google.gson.Gson;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings("serial")
@@ -82,26 +88,68 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
 
         // TODO PGU Sep 12, 2012 async: update each location with profile
 
-        // TODO PGU Feb 5, 2013
-        // TODO PGU Feb 5, 2013
-        // TODO PGU Feb 5, 2013
-        // TODO PGU Feb 5, 2013
-        // TODO PGU Feb 5, 2013 remove the non public data
-
-        // item2locations/cache_items: {"education,1":["Paris","Nantes"],"experience,1":["Madrid"]}
-        //    referential/cache_referential: {"Paris":{"lat":1.2323,"lng":4.5555},"Nantes":{"lat":9.99,"lng":2.22}}
-        //      {"wishes":true,"positions":true,"educations":false,"contacts":true}, see PublicProfileItemType
-        //        final HashMap<String, String> a = new Gson().fromJson("{\"edu1\":\"rostock\",\"edu2\":\"madrid\"}", HashMap.class);
-
+        //
+        // public preferences
+        // {"wishes":true,"positions":true,"educations":false,"contacts":true}, see PublicProfileItemType
+        //
         final PublicPreferences preferences = dao.ofy().find(PublicPreferences.class, profileId);
-        preferences.getValues();
+        if (preferences == null) {
+            return;
+        }
 
+        final HashMap<String, String> type2isPublic = new Gson().fromJson(preferences.getValues(), HashMap.class);
+
+        //
+        // item2locations/cache_items: {"education,1":["Paris","Nantes"],"experience,1":["Madrid"]}
+        //
+        final HashMap<String, ArrayList<String>> __items2locations = new Gson().fromJson(items2locations, HashMap.class);
+
+        final HashMap<String, ArrayList<String>> publicItems2locations = new HashMap<String, ArrayList<String>>();
+
+        final Boolean educationsArePublic = Boolean.valueOf(type2isPublic.get(PublicProfileItemType.educations));
+        if (educationsArePublic) {
+            for (final Entry<String, ArrayList<String>> e : __items2locations.entrySet()) {
+                final String item = e.getKey();
+                if (item.startsWith("education")) {
+                    publicItems2locations.put(item, e.getValue());
+                }
+            }
+        }
+
+        final Boolean positionsArePublic = Boolean.valueOf(type2isPublic.get(PublicProfileItemType.positions));
+        if (positionsArePublic) {
+            for (final Entry<String, ArrayList<String>> e : __items2locations.entrySet()) {
+                final String item = e.getKey();
+                if (item.startsWith("experience")) {
+                    publicItems2locations.put(item, e.getValue());
+                }
+            }
+        }
+
+        final HashSet<String> _publicLocations = new HashSet<String>();
+        for (final ArrayList<String> _pLocations : publicItems2locations.values()) {
+            _publicLocations.addAll(_pLocations);
+        }
+
+        //
+        // referential/cache_referential: {"Paris":{"lat":1.2323,"lng":4.5555},"Nantes":{"lat":9.99,"lng":2.22}}
+        //
+        final HashMap<String, String> publicReferentialLocations = new HashMap<String, String>();
+
+        final HashMap<String, String> __referentialLocations = new Gson().fromJson(referentialLocations, HashMap.class);
+        for (final Entry<String, String> e : __referentialLocations.entrySet()) {
+            if (_publicLocations.contains(e.getKey())) {
+                publicReferentialLocations.put(e.getKey(), e.getValue());
+            }
+        }
+
+        ///////////////
         final ProfileUrl profileUrl = dao.ofy().find(ProfileUrl.class, profileId);
 
         final PublicLocations publicLocations = new PublicLocations();
         publicLocations.setProfileUrl(profileUrl.getValue());
-        publicLocations.setItems2locations(items2locations);
-        publicLocations.setReferentialLocations(referentialLocations);
+        publicLocations.setItems2locations(new Gson().toJson(publicItems2locations));
+        publicLocations.setReferentialLocations(new Gson().toJson(publicReferentialLocations));
 
         dao.ofy().async().put(publicLocations);
 
@@ -128,8 +176,14 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
     @Override
     public void savePublicProfile(final String publicProfileUrl, final String profileId, final String jsonPublicProfile) {
 
-        final ProfileUrl profileUrl = new ProfileUrl();
-        profileUrl.setProfileId(profileId);
+        ProfileUrl profileUrl = dao.ofy().find(ProfileUrl.class, profileId);
+
+        final boolean mustUpdateUrl = profileUrl == null || !publicProfileUrl.equals(profileUrl.getValue());
+
+        if (mustUpdateUrl) {
+            profileUrl = new ProfileUrl();
+            profileUrl.setProfileId(profileId);
+        }
         profileUrl.setValue(publicProfileUrl);
         dao.ofy().async().put(profileUrl);
 
@@ -137,6 +191,18 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
         basePublicP.setProfileUrl(publicProfileUrl);
         basePublicP.setValue(jsonPublicProfile);
         dao.ofy().async().put(basePublicP);
+
+        if (mustUpdateUrl) {
+
+            final PublicLocations locations = dao.ofy().find(PublicLocations.class, publicProfileUrl);
+            if (locations != null) {
+                locations.setProfileUrl(publicProfileUrl);
+                dao.ofy().async().put(locations);
+            }
+
+            // TODO PGU update others entities with the publicProfileUrl
+        }
+
     }
 
     @Override
