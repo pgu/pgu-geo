@@ -4,7 +4,7 @@ import javax.persistence.Id;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class BasePublicProfile implements IsSerializable {
+public class BasePublicProfile implements IsSerializable, HasProfileUrlAsKey {
 
     @Id
     private String profileUrl;
@@ -46,10 +46,12 @@ public class BasePublicProfile implements IsSerializable {
         return "BasePublicProfile [profileUrl=" + profileUrl + ", value=" + value + "]";
     }
 
+    @Override
     public String getProfileUrl() {
         return profileUrl;
     }
 
+    @Override
     public void setProfileUrl(final String profileUrl) {
         this.profileUrl = profileUrl;
     }

@@ -73,6 +73,11 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
         publicPreferences.setValues(jsonPublicPreferences);
 
         dao.ofy().async().put(publicPreferences);
+
+        // TODO PGU Feb 25, 2013 build and save public locations
+        // TODO PGU Feb 25, 2013 build and save public locations
+        // TODO PGU Feb 25, 2013 build and save public locations
+        // TODO PGU Feb 25, 2013 build and save public locations
     }
 
     @Override
@@ -97,7 +102,7 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
             return;
         }
 
-        final HashMap<String, String> type2isPublic = new Gson().fromJson(preferences.getValues(), HashMap.class);
+        final HashMap<String, Boolean> type2isPublic = new Gson().fromJson(preferences.getValues(), HashMap.class);
 
         //
         // item2locations/cache_items: {"education,1":["Paris","Nantes"],"experience,1":["Madrid"]}
@@ -106,7 +111,7 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
 
         final HashMap<String, ArrayList<String>> publicItems2locations = new HashMap<String, ArrayList<String>>();
 
-        final Boolean educationsArePublic = Boolean.valueOf(type2isPublic.get(PublicProfileItemType.educations));
+        final Boolean educationsArePublic = type2isPublic.get(PublicProfileItemType.educations);
         if (educationsArePublic) {
             for (final Entry<String, ArrayList<String>> e : __items2locations.entrySet()) {
                 final String item = e.getKey();
@@ -116,7 +121,7 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
             }
         }
 
-        final Boolean positionsArePublic = Boolean.valueOf(type2isPublic.get(PublicProfileItemType.positions));
+        final Boolean positionsArePublic = type2isPublic.get(PublicProfileItemType.positions);
         if (positionsArePublic) {
             for (final Entry<String, ArrayList<String>> e : __items2locations.entrySet()) {
                 final String item = e.getKey();
@@ -198,6 +203,12 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
             if (locations != null) {
                 locations.setProfileUrl(publicProfileUrl);
                 dao.ofy().async().put(locations);
+            }
+
+            final PublicMapPreferences mapPreferences = dao.ofy().find(PublicMapPreferences.class, publicProfileUrl);
+            if (mapPreferences != null) {
+                mapPreferences.setProfileUrl(publicProfileUrl);
+                dao.ofy().async().put(mapPreferences);
             }
 
             // TODO PGU update others entities with the publicProfileUrl

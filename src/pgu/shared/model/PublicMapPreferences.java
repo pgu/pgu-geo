@@ -4,7 +4,7 @@ import javax.persistence.Id;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class PublicMapPreferences implements IsSerializable {
+public class PublicMapPreferences implements IsSerializable, HasProfileUrlAsKey {
 
     @Id
     private String profileUrl;
@@ -47,10 +47,12 @@ public class PublicMapPreferences implements IsSerializable {
         return "MapPreferences [profileUrl=" + profileUrl + ", values=" + values + "]";
     }
 
+    @Override
     public String getProfileUrl() {
         return profileUrl;
     }
 
+    @Override
     public void setProfileUrl(final String profileUrl) {
         this.profileUrl = profileUrl;
     }
