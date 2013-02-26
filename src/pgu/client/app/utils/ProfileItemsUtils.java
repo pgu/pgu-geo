@@ -18,7 +18,9 @@ public class ProfileItemsUtils {
         return $wnd.pgu_geo.selected_profile_items;
     }-*/;
 
-    public static native void setProfileItems(final JavaScriptObject profile) /*-{
+    public static native void setProfileItems() /*-{
+// TODO move to public helper
+        var profile = $wnd.pgu_geo.public_profile;
 
         $wnd.pgu_geo.type_2_profile_items = {};
 

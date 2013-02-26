@@ -27,7 +27,6 @@ import pgu.shared.dto.PublicContacts;
 import pgu.shared.model.BasePublicProfile;
 import pgu.shared.model.PublicLocations;
 import pgu.shared.model.PublicMapPreferences;
-import pgu.shared.model.PublicProfile;
 import pgu.shared.utils.ChartType;
 
 import com.github.gwtbootstrap.client.ui.NavLink;
@@ -35,6 +34,7 @@ import com.github.gwtbootstrap.client.ui.Section;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -376,7 +376,7 @@ public class PublicViewImpl extends Composite implements PublicView {
 
     private final Image linkedinPicture = new Image();
 
-    private void setProfilePublicUrl(final String url) {
+    private void setProfileLinkedinUrl(final String url) {
         // TODO PGU Sep 25, 2012 linkedin picture
         linkedinPicture.addClickHandler(new ClickHandler() {
 
@@ -404,48 +404,75 @@ public class PublicViewImpl extends Composite implements PublicView {
             viewLocations.initCaches(publicLocations.getItems2locations(), publicLocations.getReferentialLocations());
         }
 
-        // TODO PGU Feb 5, 2013
-        // TODO PGU Feb 5, 2013
-        // TODO PGU Feb 5, 2013
-        // TODO PGU Feb 5, 2013
-        // TODO PGU Feb 5, 2013
         final BasePublicProfile publicProfile = fullProfile.getBasePublicProfile();
+        setProfile(this, publicProfile.getValue());
 
-        //        setProfileAfter();
+        // TODO PGU Feb 26, 2013
+        // TODO PGU Feb 26, 2013
+        // TODO PGU Feb 26, 2013
+        // TODO PGU Feb 26, 2013 create public contacts with the profile url
+        // TODO PGU Feb 26, 2013 review the service implementation with the profile url
+        presenter.fetchPublicContacts(publicProfile.getProfileUrl());
     }
 
-    private void setProfile(final PublicProfile profile) {
-        // TODO PGU Jan 31, 2013
-        // TODO PGU Jan 31, 2013
-        // TODO PGU Jan 31, 2013
-        // TODO PGU Jan 31, 2013
-        // TODO PGU Jan 31, 2013
-        // TODO PGU Jan 31, 2013 a separer du profile?
+    private native void setProfile(PublicViewImpl view, String public_profile) /*-{
 
+		var pub = JSON.parse(public_profile);
+		$wnd.pgu_geo.public_profile = pub;
 
-        setProfile(this, profile.getProfile());
+		var
+		    first_name = pub.firstName || ''
+          , last_name = pub.lastName || ''
+          , headline = pub.headline || ''
+          , current_location_name = pub.location || ''
+          , specialties = pub.specialties || ''
+          , summary = pub.summary || ''
+          , linkedin_url = pub.rawPublicProfileUrl || ''
+          , languages = pub.languages || ''
+        ;
 
-        presenter.fetchPublicContacts(profile.getProfileId());
-    }
+        this.@pgu.client.pub.ui.PublicViewImpl::setProfileName(Ljava/lang/String;Ljava/lang/String;)
+             (first_name, last_name);
 
-    private native void setProfile(PublicViewImpl view, String profile) /*-{
+        this.@pgu.client.pub.ui.PublicViewImpl::setProfileHeadline(Ljava/lang/String;)
+             (headline);
 
-		var j_profile = JSON.parse(profile);
+        this.@pgu.client.pub.ui.PublicViewImpl::setProfileLocation(Ljava/lang/String;)
+             (current_location_name);
 
-		@pgu.client.pub.ui.PublicViewUtils::setProfileName(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
-		@pgu.client.pub.ui.PublicViewUtils::setProfileHeadline(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
-		@pgu.client.pub.ui.PublicViewUtils::setProfileLocation(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
-		@pgu.client.pub.ui.PublicViewUtils::setProfileSpecialties(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
+        this.@pgu.client.pub.ui.PublicViewImpl::setProfileSpecialties(Ljava/lang/String;)
+             (specialties);
 
-		@pgu.client.pub.ui.PublicViewUtils::setProfileLanguages(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
+        this.@pgu.client.pub.ui.PublicViewImpl::setProfileSummary(Ljava/lang/String;)
+             (summary);
 
-		@pgu.client.pub.ui.PublicViewUtils::setProfileSummary(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
+        this.@pgu.client.pub.ui.PublicViewImpl::setProfileLinkedinUrl(Ljava/lang/String;)
+             (linkedin_url);
 
-		@pgu.client.pub.ui.PublicViewUtils::setProfilePublicUrl(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
+        this.@pgu.client.pub.ui.PublicViewImpl::setProfileLanguages(Ljava/lang/String;)
+             (languages);
 
-		@pgu.client.pub.ui.PublicViewUtils::setProfileItems(Lpgu/client/pub/ui/PublicViewImpl;Lcom/google/gwt/core/client/JavaScriptObject;)(view,j_profile);
+        this.@pgu.client.pub.ui.PublicViewImpl::setProfileItems()
+             ();
 
     }-*/;
+
+    private void setProfileItems() {
+        // TODO PGU public view helper
+        // TODO PGU public view helper
+        // TODO PGU public view helper
+        // TODO PGU public view helper
+
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+
+            @Override
+            public void execute() {
+                ProfileItemsUtils.setProfileItems();
+                addProfileItemsToPlayToolbar();
+                ProfileItemsUtils.initCachesLocation2MarkerAndItems(PublicViewImpl.this);
+            }
+        });
+    }
 
     public void addProfileItemsToPlayToolbar() {
         playToolbar.addProfileItems();
