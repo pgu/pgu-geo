@@ -30,16 +30,8 @@ public class PublicProfileServiceImpl extends RemoteServiceServlet implements Pu
         //        publicProfile.setUserAndLocations(userAndLocations);
 
         final BasePublicProfile basePublicProfile = dao.ofy().find(BasePublicProfile.class, profileUrl);
-
-        PublicLocations publicLocations = dao.ofy().find(PublicLocations.class, profileUrl);
-        if (publicLocations == null) {
-            publicLocations = new PublicLocations();
-        }
-
-        PublicMapPreferences publicMapPreferences = dao.ofy().find(PublicMapPreferences.class, profileUrl);
-        if (publicMapPreferences == null) {
-            publicMapPreferences = new PublicMapPreferences();
-        }
+        final PublicLocations publicLocations = dao.ofy().find(PublicLocations.class, profileUrl);
+        final PublicMapPreferences publicMapPreferences = dao.ofy().find(PublicMapPreferences.class, profileUrl);
 
         final FullPublicProfile fullPublic = new FullPublicProfile();
         fullPublic.setBasePublicProfile(basePublicProfile);

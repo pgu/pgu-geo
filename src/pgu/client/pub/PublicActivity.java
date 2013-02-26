@@ -153,8 +153,7 @@ public class PublicActivity implements PublicPresenter //
     public void changeProfile(final String profileUrl) {
         this.profileUrl = profileUrl;
         u.console("> profile_url " + profileUrl);
-        // TODO PGU Feb 4, 2013 clear profile data
-        // TODO PGU Feb 4, 2013 clear contacts
+        // TODO PGU Feb 4, 2013 reset the whole dom
     }
 
 }

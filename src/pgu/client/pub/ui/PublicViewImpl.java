@@ -26,6 +26,7 @@ import pgu.shared.dto.FullPublicProfile;
 import pgu.shared.dto.PublicContacts;
 import pgu.shared.model.BasePublicProfile;
 import pgu.shared.model.PublicLocations;
+import pgu.shared.model.PublicMapPreferences;
 import pgu.shared.model.PublicProfile;
 import pgu.shared.utils.ChartType;
 
@@ -390,11 +391,18 @@ public class PublicViewImpl extends Composite implements PublicView {
     public void setProfile(final FullPublicProfile fullProfile) {
 
         viewMap.initPublicProfileMap();
-        final String mapPreferences = fullProfile.getPublicMapPreferences().getValues();
-        viewMap.setPreferences(mapPreferences);
+
+        final PublicMapPreferences publicMapPreferences = fullProfile.getPublicMapPreferences();
+        final String jsonMapPreferences = publicMapPreferences == null ? null : publicMapPreferences.getValues();
+        viewMap.setPreferences(jsonMapPreferences);
 
         final PublicLocations publicLocations = fullProfile.getPublicLocations();
-        viewLocations.initCaches(publicLocations.getItems2locations(), publicLocations.getReferentialLocations());
+        if (publicLocations == null) {
+            viewLocations.initCaches(null, null);
+
+        } else {
+            viewLocations.initCaches(publicLocations.getItems2locations(), publicLocations.getReferentialLocations());
+        }
 
         // TODO PGU Feb 5, 2013
         // TODO PGU Feb 5, 2013
