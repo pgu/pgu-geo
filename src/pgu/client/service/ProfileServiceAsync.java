@@ -12,6 +12,8 @@ public interface ProfileServiceAsync {
 
     void fetchPublicPreferences(String profileId, AsyncCallback<PublicPreferences> asyncCallbackApp);
 
+    void fetchMapPreferences(String profileId, AsyncCallback<MapPreferences> asyncCallbackApp);
+
     void saveLocations(String profileId, String json_copyCacheItems, String json_copyCacheReferential,
             AsyncCallback<Void> asyncCallbackApp);
 
@@ -22,7 +24,5 @@ public interface ProfileServiceAsync {
     void savePublicPreferences(String profileId, String jsonPublicPreferences, AsyncCallback<Void> asyncCallbackApp);
 
     void saveMapPreferences(String profileId, String mapPreferences, AsyncCallback<Void> asyncCallbackApp);
-
-    void fetchMapPreferences(String profileId, AsyncCallback<MapPreferences> asyncCallbackApp);
 
 }

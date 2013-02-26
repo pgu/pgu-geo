@@ -1,5 +1,6 @@
 package pgu.client.profile;
 
+import pgu.shared.model.MapPreferences;
 import pgu.shared.model.ProfileLocations;
 import pgu.shared.model.PublicPreferences;
 
@@ -23,7 +24,7 @@ public interface ProfileView extends IsWidget {
 
     boolean isProfileSetInView();
 
-    void onFetchMapPreferencesSuccess(String values);
+    void onFetchMapPreferencesSuccess(MapPreferences mapPreferences);
 
     void onSaveLastSearchLocationSuccess(String locationName, String itemConfigIdToSave);
 

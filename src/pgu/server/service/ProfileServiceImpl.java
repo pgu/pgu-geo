@@ -34,47 +34,17 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
 
     @Override
     public ProfileLocations fetchProfileLocations(final String profileId) {
-
-        final ProfileLocations profileLocations = dao.ofy().find(ProfileLocations.class, profileId);
-
-        if (profileLocations == null) {
-            return new ProfileLocations();
-        }
-
-        return profileLocations;
+        return dao.ofy().find(ProfileLocations.class, profileId);
     }
 
     @Override
     public PublicPreferences fetchPublicPreferences(final String profileId) {
-
-        final PublicPreferences publicPreferences = dao.ofy().find(PublicPreferences.class, profileId);
-
-        if (publicPreferences == null) {
-            final PublicPreferences initialPublicPreferences = new PublicPreferences();
-
-            initialPublicPreferences.setProfileId(profileId);
-            initialPublicPreferences.setValues( //
-                    "{\"" + PublicProfileItemType.positions + "\":false" + //
-                    ",\"" + PublicProfileItemType.educations + "\":false}");
-
-            dao.ofy().async().put(initialPublicPreferences);
-
-            return initialPublicPreferences;
-        }
-
-        return publicPreferences;
+        return dao.ofy().find(PublicPreferences.class, profileId);
     }
 
     @Override
     public MapPreferences fetchMapPreferences(final String profileId) {
-
-        final MapPreferences mapPref = dao.ofy().find(MapPreferences.class, profileId);
-
-        if (mapPref == null) {
-            return new MapPreferences();
-        }
-
-        return mapPref;
+        return dao.ofy().find(MapPreferences.class, profileId);
     }
 
     @Override
@@ -85,7 +55,6 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
         publicPreferences.setValues(jsonPublicPreferences);
 
         dao.ofy().async().put(publicPreferences);
-
 
         final ProfileLocations profileLocations = dao.ofy().find(ProfileLocations.class, profileId);
         updatePublicLocations(profileLocations, publicPreferences);

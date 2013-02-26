@@ -8,6 +8,7 @@ import pgu.client.app.utils.Level;
 import pgu.client.app.utils.MarkdownHelper;
 import pgu.client.profile.ProfileActivity;
 import pgu.client.profile.ProfileView;
+import pgu.shared.model.MapPreferences;
 import pgu.shared.model.ProfileLocations;
 import pgu.shared.model.PublicPreferences;
 import pgu.shared.utils.PublicProfileItemType;
@@ -481,7 +482,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     @Override
     public void onFetchProfileLocationsSuccess(final ProfileLocations profileLocations) {
 
-        viewLocations.initCaches(profileLocations.getItems2locations(), profileLocations.getReferentialLocations());
+        if (profileLocations == null) {
+            viewLocations.initCaches(null, null);
+
+        } else {
+            viewLocations.initCaches(profileLocations.getItems2locations(), profileLocations.getReferentialLocations());
+        }
+
         final String locationName = locContainer.getText();
 
         if (!u.isVoid(locationName)) {
@@ -562,8 +569,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     @Override
-    public void onFetchMapPreferencesSuccess(final String values) {
-        viewMap.setPreferences(values);
+    public void onFetchMapPreferencesSuccess(final MapPreferences mapPreferences) {
+        if (mapPreferences == null) {
+            return;
+        }
+
+        viewMap.setPreferences(mapPreferences.getValues());
     }
 
     @Override

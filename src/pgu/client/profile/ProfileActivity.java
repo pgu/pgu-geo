@@ -21,6 +21,7 @@ import pgu.client.service.ProfileServiceAsync;
 import pgu.shared.model.MapPreferences;
 import pgu.shared.model.ProfileLocations;
 import pgu.shared.model.PublicPreferences;
+import pgu.shared.utils.PublicProfileItemType;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -252,7 +253,28 @@ LocationsSuccessSaveEvent.Handler //
 
                     @Override
                     public void onSuccess(final PublicPreferences result) {
-                        view.onFetchPublicPreferencesSuccess(result);
+                        if (result == null) {
+
+                            final PublicPreferences initialPublicPreferences = new PublicPreferences();
+                            initialPublicPreferences.setProfileId(ctx.getProfileId());
+                            initialPublicPreferences.setValues( //
+                                    "{\"" + PublicProfileItemType.positions + "\":false" + //
+                                    ",\"" + PublicProfileItemType.educations + "\":false}");
+
+                            view.onFetchPublicPreferencesSuccess(initialPublicPreferences);
+
+                            // save the initial values
+                            profileService.savePublicPreferences( //
+                                    ctx.getProfileId() //
+                                    , initialPublicPreferences.getValues() //
+                                    , new AsyncCallbackApp<Void>(eventBus) {
+                                        @Override
+                                        public void onSuccess(final Void result) {/*no-op*/}
+                                    });
+
+                        } else {
+                            view.onFetchPublicPreferencesSuccess(result);
+                        }
                     }
 
                 });
@@ -332,7 +354,7 @@ LocationsSuccessSaveEvent.Handler //
 
                     @Override
                     public void onSuccess(final MapPreferences result) {
-                        view.onFetchMapPreferencesSuccess(result.getValues());
+                        view.onFetchMapPreferencesSuccess(result);
                     }
                 });
     }
