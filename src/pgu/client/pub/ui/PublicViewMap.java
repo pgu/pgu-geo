@@ -42,8 +42,7 @@ public class PublicViewMap {
 
     }-*/;
 
-    // TODO PGU Jan 31, 2013 remove static
-    public static native JavaScriptObject publicProfileMap() /*-{
+    public native JavaScriptObject getPublicMap() /*-{
         return $wnd.pgu_geo.public_profile_map;
     }-*/;
 

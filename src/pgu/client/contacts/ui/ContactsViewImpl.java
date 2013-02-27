@@ -7,7 +7,6 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import pgu.client.app.utils.JsonHelper;
-import pgu.client.app.utils.JsonUtils;
 import pgu.client.contacts.ContactsActivity;
 import pgu.client.contacts.ContactsView;
 import pgu.client.resources.ResourcesApp;
@@ -282,7 +281,7 @@ public class ContactsViewImpl extends Composite implements ContactsView {
             jsFusionUrls.push(fusionUrl);
         }
 
-        final String jsonFusionUrls = JsonUtils.json_stringify(jsFusionUrls);
+        final String jsonFusionUrls = json.stringify(jsFusionUrls);
         presenter.saveFusionUrls(jsonFusionUrls);
     }
 
@@ -411,7 +410,7 @@ public class ContactsViewImpl extends Composite implements ContactsView {
             }
         }
 
-        final String jsonChartTypes = JsonUtils.json_stringify(chartTypes);
+        final String jsonChartTypes = json.stringify(chartTypes);
         presenter.saveChartsPreferences(jsonChartTypes);
     }
 
@@ -436,7 +435,7 @@ public class ContactsViewImpl extends Composite implements ContactsView {
         }
         buildChartsUI();
 
-        final String jsonContactsNumberByCountry = JsonUtils.json_stringify(getContactsTable());
+        final String jsonContactsNumberByCountry = json.stringify(getContactsTable());
         presenter.saveContactsNumberByCountry(jsonContactsNumberByCountry);
     }
 

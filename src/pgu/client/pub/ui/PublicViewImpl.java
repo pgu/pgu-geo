@@ -5,9 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 import pgu.client.app.utils.ClientHelper;
-import pgu.client.app.utils.GoogleUtils;
-import pgu.client.app.utils.MarkersUtils;
-import pgu.client.app.utils.ProfileItemsUtils;
+import pgu.client.app.utils.MarkersHelper;
 import pgu.client.components.playtoolbar.PlayToolbar;
 import pgu.client.components.playtoolbar.event.BwdEvent;
 import pgu.client.components.playtoolbar.event.FwdEvent;
@@ -39,9 +37,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Frame;
@@ -95,6 +91,8 @@ public class PublicViewImpl extends Composite implements PublicView {
     private final PublicViewMap          viewMap = new PublicViewMap();
     private final PublicViewLocations    viewLocations = new PublicViewLocations();
     private final PublicViewProfileItems viewProfileItems = new PublicViewProfileItems();
+    private final PublicViewMarkers      viewMarkers = new PublicViewMarkers();
+    private final MarkersHelper          markersHelper = new MarkersHelper();
 
     public PublicViewImpl(final EventBus eventBus) {
 
@@ -184,7 +182,7 @@ public class PublicViewImpl extends Composite implements PublicView {
                 hideProfileCurrentLocation();
 
                 final String selectedItemType = event.getSelectedItemType();
-                ProfileItemsUtils.displayProfileMarkers(selectedItemType);
+                viewProfileItems.displayProfileMarkers(selectedItemType);
             }
 
         });
@@ -225,8 +223,7 @@ public class PublicViewImpl extends Composite implements PublicView {
 
     private void hideProfileItem() {
         hideProfileItemArea();
-
-        MarkersUtils.deleteMovieMarkers();
+        viewMarkers.deleteMovieMarkers();
     }
 
     private void hideProfileMarkers(final HasSelectedItemType event) {
@@ -236,7 +233,7 @@ public class PublicViewImpl extends Composite implements PublicView {
         singlePanel.setVisible(true);
 
         final String selectedItemType = event.getSelectedItemType();
-        ProfileItemsUtils.hideProfileMarkers(selectedItemType);
+        viewProfileItems.hideProfileMarkers(selectedItemType);
     }
 
     private native void collapseShow(String id) /*-{
@@ -252,12 +249,12 @@ public class PublicViewImpl extends Composite implements PublicView {
 
         fillProfileItemContent(token);
 
-        ProfileItemsUtils.showMovieProfileItemLocations(token, PublicViewMap.publicProfileMap());
+        viewProfileItems.showMovieProfileItemLocations(token, viewMap.getPublicMap());
     }
 
     private void fillProfileItemContent(final int token) {
 
-        final String description = ProfileItemsUtils.getSelectedProfileItemDescription(token);
+        final String description = viewProfileItems.getSelectedProfileItemDescription(token);
         profileItemDescription.setHTML(description);
     }
 
@@ -329,33 +326,17 @@ public class PublicViewImpl extends Composite implements PublicView {
             return;
         }
 
-        final JavaScriptObject google = GoogleUtils.google();
-        final JavaScriptObject publicMap = PublicViewMap.publicProfileMap();
+        final JavaScriptObject publicMap = viewMap.getPublicMap();
+        currentLocationMarker = markersHelper.createMarker(publicMap, locationName);
+    }
 
-        if (google == null || publicMap == null) {
-
-            new Timer() {
-
-                @Override
-                public void run() {
-                    Scheduler.get().scheduleDeferred(new Command() {
-                        @Override
-                        public void execute() {
-                            displayCurrentLocationMarkerOnPublicMap(locationName);
-                        }
-                    });
-                }
-
-            }.schedule(1000);
-
-        } else {
-
-            currentLocationMarker = MarkersUtils.createMarker(publicMap, locationName);
-        }
+    private JavaScriptObject getPublicMap() {
+        return viewMap.getPublicMap();
     }
 
     private native void showCurrentLocation(JavaScriptObject marker) /*-{
-        var map = @pgu.client.pub.ui.PublicViewMap::publicProfileMap()();
+        var map = this.@pgu.client.pub.ui.PublicViewImpl::getPublicMap()
+                       ();
         marker.setMap(map);
     }-*/;
 
@@ -483,7 +464,7 @@ public class PublicViewImpl extends Composite implements PublicView {
         id2itemTitle.clear();
         id2itemContent.clear();
 
-        ProfileItemsUtils.fillViewWithProfileItems(this, locationName);
+        viewProfileItems.fillViewWithProfileItems(this, locationName);
 
         final StringBuilder sb = new StringBuilder();
         final boolean isOpen = id2itemTitle.size() == 1;

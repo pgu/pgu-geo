@@ -66,8 +66,17 @@ public class ProfileViewMarkers {
 
     public void deleteSearchMarkers() {
         final JavaScriptObject searchMarkers = searchMarkers();
-        markers.deleteMarkers(searchMarkers);
+        deleteMarkers(searchMarkers);
     }
+
+    // Deletes all markers in the array by removing references to them
+    private native void deleteMarkers(JavaScriptObject markers) /*-{
+
+        for (var i = 0; i < markers.length; i++) {
+              markers[i].setMap(null);
+        }
+        markers.length = 0;
+    }-*/;
 
     public native void searchLocationAndAddMarker(ProfileViewImpl view, String location_name) /*-{
 
