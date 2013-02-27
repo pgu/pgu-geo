@@ -132,13 +132,17 @@ public class PublicActivity implements PublicPresenter //
     }
 
     @Override
-    public void fetchPublicContacts(final String profileId) {
+    public void fetchPublicContacts(final String profileUrl) {
         publicProfileService.fetchPublicContacts( //
-                profileId, //
+                profileUrl, //
                 new AsyncCallbackApp<PublicContacts>(eventBus) {
 
                     @Override
                     public void onSuccess(final PublicContacts result) {
+
+                        if (result == null) {
+                            return;
+                        }
 
                         if (!result.getProfileUrl().equals(profileUrl)) {
                             return; // obsolete

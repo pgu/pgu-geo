@@ -9,6 +9,6 @@ public interface PublicProfileServiceAsync {
 
     void fetchPublicProfileByUrl(String publicUrl, AsyncCallback<FullPublicProfile> asyncCallbackApp);
 
-    void fetchPublicContacts(String userId, AsyncCallback<PublicContacts> asyncCallbackApp);
+    void fetchPublicContacts(String publicUrl, AsyncCallback<PublicContacts> asyncCallbackApp);
 
 }

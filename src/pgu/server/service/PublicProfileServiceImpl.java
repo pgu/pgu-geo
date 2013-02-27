@@ -9,6 +9,7 @@ import pgu.shared.model.BasePublicProfile;
 import pgu.shared.model.ChartsPreferences;
 import pgu.shared.model.ContactsNumberByCountry;
 import pgu.shared.model.FusionUrls;
+import pgu.shared.model.ProfileUrl;
 import pgu.shared.model.PublicLocations;
 import pgu.shared.model.PublicMapPreferences;
 
@@ -29,6 +30,10 @@ public class PublicProfileServiceImpl extends RemoteServiceServlet implements Pu
         //        final UserAndLocations userAndLocations = dao.ofy().get(UserAndLocations.class, publicProfile.getProfileId());
         //        publicProfile.setUserAndLocations(userAndLocations);
 
+        // TODO PGU Feb 27, 2013
+        // TODO PGU Feb 27, 2013  move the dto to a domain object, and save it when editing the profile
+        // TODO PGU Feb 27, 2013
+
         final BasePublicProfile basePublicProfile = dao.ofy().find(BasePublicProfile.class, profileUrl);
         final PublicLocations publicLocations = dao.ofy().find(PublicLocations.class, profileUrl);
         final PublicMapPreferences publicMapPreferences = dao.ofy().find(PublicMapPreferences.class, profileUrl);
@@ -42,10 +47,22 @@ public class PublicProfileServiceImpl extends RemoteServiceServlet implements Pu
     }
 
     @Override
-    public PublicContacts fetchPublicContacts(final String userId) {
+    public PublicContacts fetchPublicContacts(final String publicUrl) {
 
-        final Result<ChartsPreferences> rChartsPreferences = dao.ofy().async().find(ChartsPreferences.class, userId);
-        final Result<FusionUrls> rFusionUrls = dao.ofy().async().find(FusionUrls.class, userId);
+        // TODO PGU Feb 27, 2013
+        // TODO PGU Feb 27, 2013  move this stuff in edition of contacts
+        // TODO PGU Feb 27, 2013  move the dto to a domain object, and save it when editing the profile
+        // TODO PGU Feb 27, 2013
+
+        final ProfileUrl profileUrl = dao.ofy().query(ProfileUrl.class).filter("value", publicUrl).get();
+        if (profileUrl == null) {
+            return null;
+        }
+
+        final String profileId = profileUrl.getProfileId();
+
+        final Result<ChartsPreferences> rChartsPreferences = dao.ofy().async().find(ChartsPreferences.class, profileId);
+        final Result<FusionUrls> rFusionUrls = dao.ofy().async().find(FusionUrls.class, profileId);
 
         final ChartsPreferences chartsPreferences = rChartsPreferences.get();
         final String chartsPreferenceValues = chartsPreferences == null ? null : chartsPreferences.getValues();
@@ -59,7 +76,7 @@ public class PublicProfileServiceImpl extends RemoteServiceServlet implements Pu
 
         } else {
 
-            final Result<ContactsNumberByCountry> rContactsNumberByCountry = dao.ofy().async().find(ContactsNumberByCountry.class, userId);
+            final Result<ContactsNumberByCountry> rContactsNumberByCountry = dao.ofy().async().find(ContactsNumberByCountry.class, profileId);
             final ContactsNumberByCountry contactsNumberByCountry = rContactsNumberByCountry.get();
             contactsNumberByCountryValues = contactsNumberByCountry == null ? null : contactsNumberByCountry.getValues();
         }

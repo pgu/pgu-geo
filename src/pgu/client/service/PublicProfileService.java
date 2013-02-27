@@ -11,6 +11,6 @@ public interface PublicProfileService extends RemoteService {
 
     FullPublicProfile fetchPublicProfileByUrl(String publicUrl);
 
-    PublicContacts fetchPublicContacts(String userId);
+    PublicContacts fetchPublicContacts(String publicUrl);
 
 }
