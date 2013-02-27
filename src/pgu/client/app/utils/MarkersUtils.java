@@ -74,23 +74,4 @@ public class MarkersUtils {
         }
     }-*/;
 
-    private static native JavaScriptObject createMarkerWithGeopoint(JavaScriptObject map, String location_name, String lat, String lng) /*-{
-
-        var
-            google = @pgu.client.app.utils.GoogleUtils::google()()
-        ;
-
-        var latLng = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
-
-        var marker = new google.maps.Marker({
-            map : map,
-            position : latLng,
-            animation : google.maps.Animation.DROP,
-            title : location_name
-        });
-
-        return marker;
-    }-*/;
-
-
 }

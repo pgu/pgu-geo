@@ -4,9 +4,6 @@ import pgu.client.pub.ui.PublicViewImpl;
 import pgu.shared.utils.ItemType;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Timer;
 
 public class ProfileItemsUtils {
 
@@ -18,78 +15,6 @@ public class ProfileItemsUtils {
         return $wnd.pgu_geo.selected_profile_items;
     }-*/;
 
-    public static native void setProfileItems() /*-{
-// TODO move to public helper
-        var profile = $wnd.pgu_geo.public_profile;
-
-        $wnd.pgu_geo.type_2_profile_items = {};
-
-        var
-            type_2_profile_items = $wnd.pgu_geo.type_2_profile_items
-          , experience = @pgu.shared.utils.ItemType::experience
-          , education = @pgu.shared.utils.ItemType::education
-        ;
-
-        if (profile.positions) {
-            type_2_profile_items[experience] = profile.positions;
-        }
-
-        if (profile.educations) {
-            type_2_profile_items[education] = profile.educations;
-        }
-
-        // check if profile has several sections
-        var nb_sections = 0;
-        for (var type in type_2_profile_items) {
-
-            if ('__gwt_ObjectId' === type) {
-                continue;
-            }
-
-            if (type_2_profile_items.hasOwnProperty(type)) {
-                nb_sections++;
-            }
-
-            if (nb_sections == 2) {
-                break;
-            }
-        }
-
-        if (nb_sections == 2) {
-
-            var all_items = [];
-            for (var type in type_2_profile_items) {
-
-                if ('__gwt_ObjectId' === type) {
-                    continue;
-                }
-
-                if (type_2_profile_items.hasOwnProperty(type)) {
-                    all_items = all_items.concat(type_2_profile_items[type]);
-                }
-            }
-
-            for (var i = 0, len = all_items.length; i < len; i++) {
-                var item = all_items[i];
-                item.startD = new Date(item.startD);
-            }
-
-            type_2_profile_items['all'] = all_items; // we sort 'all' items only as the others already have an order from linkedin
-            @pgu.client.app.utils.ProfileItemsUtils::sortProfileItemsByDateFromOldToNew(Lcom/google/gwt/core/client/JavaScriptObject;)(all_items);
-        }
-
-    }-*/;
-
-    private static native void sortProfileItemsByDateFromOldToNew(JavaScriptObject profile_items) /*-{
-
-        profile_items.sort(function(a,b) { return a.startD.getTime() - b.startD.getTime() } );
-    }-*/;
-
-    private static native void sortProfileItemsByDateFromNewToOld(JavaScriptObject profile_items) /*-{
-
-        profile_items.sort(function(a,b) { return b.startD.getTime() - a.startD.getTime() } );
-    }-*/;
-
     private static boolean isEdu(final String itemType) {
         return ItemType.education.equals(itemType);
     }
@@ -97,36 +22,6 @@ public class ProfileItemsUtils {
     private static boolean isXp(final String itemType) {
         return ItemType.experience.equals(itemType);
     }
-
-    public static native boolean hasAllOption() /*-{
-        var type_2_profile_items = @pgu.client.app.utils.ProfileItemsUtils::type2profileItems()();
-        return type_2_profile_items.hasOwnProperty('all');
-    }-*/;
-
-    public static native boolean hasExperienceOption() /*-{
-        var type_2_profile_items = @pgu.client.app.utils.ProfileItemsUtils::type2profileItems()();
-        return type_2_profile_items.hasOwnProperty(@pgu.shared.utils.ItemType::experience);
-    }-*/;
-
-    public static native boolean hasEducationOption() /*-{
-        var type_2_profile_items = @pgu.client.app.utils.ProfileItemsUtils::type2profileItems()();
-        return type_2_profile_items.hasOwnProperty(@pgu.shared.utils.ItemType::education);
-    }-*/;
-
-    public static native void setSelectedProfileItems(final String selectedItemType) /*-{
-        var type_2_profile_items = @pgu.client.app.utils.ProfileItemsUtils::type2profileItems()();
-        $wnd.pgu_geo.selected_profile_items = type_2_profile_items[selectedItemType];
-    }-*/;
-
-    public static native int nbSelectedItems() /*-{
-        var selected_profile_items = @pgu.client.app.utils.ProfileItemsUtils::selectedProfileItems()();
-
-        if (selected_profile_items) {
-            return selected_profile_items.length;
-        }
-
-        return 0;
-    }-*/;
 
     public static native void showMovieProfileItemLocations(final int token, final JavaScriptObject map) /*-{
 
@@ -200,135 +95,6 @@ public class ProfileItemsUtils {
         ;
 
         return profile_item.long_content;
-    }-*/;
-
-    public static void initCachesLocation2MarkerAndItems(final PublicViewImpl view) {
-
-        new Timer() {
-
-            @Override
-            public void run() {
-                Scheduler.get().scheduleDeferred(new Command() {
-                    @Override
-                    public void execute() {
-                        initCachesLocation2MarkerAndItemsInternal(view);
-                    }
-                });
-            }
-
-        }.schedule(1000);
-
-    }
-
-    private static native void initCachesLocation2MarkerAndItemsInternal(PublicViewImpl view) /*-{
-
-        var google = @pgu.client.app.utils.GoogleUtils::google()();
-        if (!google) {
-            @pgu.client.app.utils.ProfileItemsUtils::initCachesLocation2MarkerAndItems(Lpgu/client/pub/ui/PublicViewImpl;)(view);
-            return;
-        }
-
-        $wnd.pgu_geo.type_2_locations = {};
-        $wnd.pgu_geo.location_2_marker = {};
-        $wnd.pgu_geo.location_2_items = {};
-
-        var
-            cache_type = $wnd.pgu_geo.type_2_locations
-          , cache_marker = $wnd.pgu_geo.location_2_marker
-          , cache_items = $wnd.pgu_geo.location_2_items
-        ;
-
-        var type_2_profile_items = @pgu.client.app.utils.ProfileItemsUtils::type2profileItems()();
-
-        for (var type in type_2_profile_items) {
-
-            if ('__gwt_ObjectId' === type) {
-                continue;
-            }
-
-            if ('all' === type) {
-                continue;
-            }
-
-            if (type_2_profile_items.hasOwnProperty(type)) {
-
-                if (!cache_type.hasOwnProperty(type)) {
-                    cache_type[type] = [];
-                }
-
-                var
-                    profile_items = type_2_profile_items[type]
-                ;
-
-                for (var k = 0; k < profile_items.length; k++) {
-
-                    var
-                        profile_item = profile_items[k]
-                      , location_names = @pgu.client.app.utils.LocationsUtils::getLocationNames(Ljava/lang/String;)(profile_item.id)
-                    ;
-
-                    for (var i = 0; i < location_names.length; i++) {
-
-                        var
-                            location_name = location_names[i]
-                          , geopoint_is_available = @pgu.client.app.utils.LocationsUtils::isLocationInReferential(Ljava/lang/String;)(location_name);
-                        ;
-
-                        if (geopoint_is_available) {
-
-                            if (!cache_marker.hasOwnProperty(location_name)) {
-
-                                var
-                                    geopoint = @pgu.client.app.utils.LocationsUtils::getGeopoint(Ljava/lang/String;)(location_name)
-                                  , lat = geopoint.lat
-                                  , lng = geopoint.lng
-                                ;
-
-                                var marker = @pgu.client.app.utils.MarkersUtils::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(null,location_name,lat,lng);
-                                google.maps.event.addListener(marker, 'click', //
-                                    @pgu.client.app.utils.ProfileItemsUtils::clickOnMarker(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Lpgu/client/pub/ui/PublicViewImpl;)(marker, location_name, view)
-                                );
-
-                                // TODO PGU counter on how many items are associated to this marker and
-                                // then overrides the marker's title? marker.setTitle(location_name + ': <b>3</b>');
-
-                                cache_marker[location_name] = marker;
-                            }
-
-                            if (cache_type[type].indexOf(location_name) == -1) {
-                                cache_type[type].push(location_name);
-                            }
-
-                            if (!cache_items.hasOwnProperty(location_name)) {
-                                cache_items[location_name] = [].concat(profile_item);
-
-                            } else {
-                                cache_items[location_name].push(profile_item);
-                            }
-
-                        }
-                    }
-                }
-
-            }
-        }
-
-        for (var location_name in cache_items) {
-
-            if ('__gwt_ObjectId' === location_name) {
-                continue;
-            }
-
-            var items = cache_items[location_name];
-            @pgu.client.app.utils.ProfileItemsUtils::sortProfileItemsByDateFromNewToOld(Lcom/google/gwt/core/client/JavaScriptObject;)(items);
-        }
-
-    }-*/;
-
-    private static native JavaScriptObject clickOnMarker(JavaScriptObject marker, String location_name, PublicViewImpl view) /*-{
-        return function() {
-                    view.@pgu.client.pub.ui.PublicViewImpl::showItemsForLocation(Ljava/lang/String;)(location_name);
-                }
     }-*/;
 
     public static native void displayProfileMarkers(final String selectedItemType) /*-{

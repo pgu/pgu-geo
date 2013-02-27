@@ -92,8 +92,9 @@ public class PublicViewImpl extends Composite implements PublicView {
 
     private final CssResourceApp css;
 
-    private final PublicViewMap       viewMap = new PublicViewMap();
-    private final PublicViewLocations viewLocations = new PublicViewLocations();
+    private final PublicViewMap          viewMap = new PublicViewMap();
+    private final PublicViewLocations    viewLocations = new PublicViewLocations();
+    private final PublicViewProfileItems viewProfileItems = new PublicViewProfileItems();
 
     public PublicViewImpl(final EventBus eventBus) {
 
@@ -458,18 +459,13 @@ public class PublicViewImpl extends Composite implements PublicView {
     }-*/;
 
     private void setProfileItems() {
-        // TODO PGU public view helper
-        // TODO PGU public view helper
-        // TODO PGU public view helper
-        // TODO PGU public view helper
-
         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 
             @Override
             public void execute() {
-                ProfileItemsUtils.setProfileItems();
+                viewProfileItems.setProfileItems();
                 addProfileItemsToPlayToolbar();
-                ProfileItemsUtils.initCachesLocation2MarkerAndItems(PublicViewImpl.this);
+                viewProfileItems.initCachesLocation2MarkerAndItems(PublicViewImpl.this);
             }
         });
     }

@@ -36,4 +36,8 @@ public class LocationsHelper {
         return $wnd.pgu_geo.cache_referential[location_name];
     }-*/;
 
+    public native JavaScriptObject getLocationNames(String item_config_id) /*-{
+        return $wnd.pgu_geo.cache_items[item_config_id] || [];
+    }-*/;
+
 }

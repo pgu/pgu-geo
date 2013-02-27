@@ -3,7 +3,6 @@ package pgu.client.components.playtoolbar;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import pgu.client.app.utils.ProfileItemsUtils;
 import pgu.client.components.playtoolbar.event.BwdEvent;
 import pgu.client.components.playtoolbar.event.FwdEvent;
 import pgu.client.components.playtoolbar.event.HideAllEvent;
@@ -12,6 +11,7 @@ import pgu.client.components.playtoolbar.event.PlayEvent;
 import pgu.client.components.playtoolbar.event.ShowAllEvent;
 import pgu.client.components.playtoolbar.event.StartPlayingEvent;
 import pgu.client.components.playtoolbar.event.StopEvent;
+import pgu.client.pub.ui.PublicViewProfileItems;
 import pgu.shared.utils.ItemType;
 
 import com.github.gwtbootstrap.client.ui.Button;
@@ -70,6 +70,8 @@ BwdEvent.HasBwdHandlers //
     private boolean isToggled = false;
 
     private final ArrayList<Button> allControls = new ArrayList<Button>();
+
+    private final PublicViewProfileItems viewProfileItems = new PublicViewProfileItems();
 
     public PlayToolbar() {
         initWidget(uiBinder.createAndBindUi(this));
@@ -131,7 +133,7 @@ BwdEvent.HasBwdHandlers //
     }
 
     private int nbItems() {
-        return ProfileItemsUtils.nbSelectedItems();
+        return viewProfileItems.nbSelectedItems();
     }
 
     private void initToken() {
@@ -441,13 +443,13 @@ BwdEvent.HasBwdHandlers //
 
     public void addProfileItems() {
 
-        if (ProfileItemsUtils.hasAllOption()) {
+        if (viewProfileItems.hasAllOption()) {
             itemsBox.addItem("All", "all");
         }
-        if (ProfileItemsUtils.hasExperienceOption()) {
+        if (viewProfileItems.hasExperienceOption()) {
             itemsBox.addItem("Experience", ItemType.experience);
         }
-        if (ProfileItemsUtils.hasEducationOption()) {
+        if (viewProfileItems.hasEducationOption()) {
             itemsBox.addItem("Education", ItemType.education);
         }
 
@@ -460,7 +462,7 @@ BwdEvent.HasBwdHandlers //
     }
 
     private void setSelectedProfileItems(final String selectedItemType) {
-        ProfileItemsUtils.setSelectedProfileItems(selectedItemType);
+        viewProfileItems.setSelectedProfileItems(selectedItemType);
     }
 
     public boolean hasItemsToDisplay() {

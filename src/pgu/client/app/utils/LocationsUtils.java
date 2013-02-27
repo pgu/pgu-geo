@@ -37,6 +37,7 @@ public class LocationsUtils {
 
     }-*/;
 
+    @Deprecated
     public static native JavaScriptObject getLocationNames(String item_config_id) /*-{
         return $wnd.pgu_geo.cache_items[item_config_id] || [];
     }-*/;
