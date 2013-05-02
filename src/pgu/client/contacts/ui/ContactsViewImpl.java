@@ -456,12 +456,12 @@ public class ContactsViewImpl extends Composite implements ContactsView {
         // geo charts
         // see options @ https://google-developers.appspot.com/chart/interactive/docs/gallery/geochart
         var maps = [
-            {id:'pgu_geo_contacts_map_world', options: {height:347}} // default width: 556px
-           ,{id:'pgu_geo_contacts_map_americas', options: {region:'019'}}
-           ,{id:'pgu_geo_contacts_map_europe', options: {region:150}}
-           ,{id:'pgu_geo_contacts_map_asia', options: {region:142}}
-           ,{id:'pgu_geo_contacts_map_oceania', options: {region:'009'}}
-           ,{id:'pgu_geo_contacts_map_africa', options: {region:'002'}}
+            {id:'pgu_geo_contacts_map_world', options: {height:347, width: 556}} // default width: 556px
+           ,{id:'pgu_geo_contacts_map_americas', options: {region:'019', height:347, width: 556}}
+           ,{id:'pgu_geo_contacts_map_europe', options: {region:150, height:347, width: 556}}
+           ,{id:'pgu_geo_contacts_map_asia', options: {region:142, height:347, width: 556}}
+           ,{id:'pgu_geo_contacts_map_oceania', options: {region:'009', height:347, width: 556}}
+           ,{id:'pgu_geo_contacts_map_africa', options: {region:'002', height:347, width: 556}}
         ];
 
         var that = this;
