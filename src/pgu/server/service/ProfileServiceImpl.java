@@ -20,6 +20,7 @@ import pgu.shared.model.PublicPreferences;
 import pgu.shared.utils.PublicProfileItemType;
 
 import com.google.gson.Gson;
+import com.google.gson.internal.StringMap;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings("serial")
@@ -139,15 +140,15 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
         // {"Paris":{"lat":1.2323,"lng":4.5555},"Nantes":{"lat":9.99,"lng":2.22}}
         //
         @SuppressWarnings("unchecked")
-        final HashMap<String, String> referentialLocations = new Gson().fromJson(profileLocations.getReferentialLocations(), HashMap.class);
+        final HashMap<String, StringMap<String>> referentialLocations = new Gson().fromJson(profileLocations.getReferentialLocations(), HashMap.class);
         final HashMap<String, String> publicReferentialLocations = new HashMap<String, String>();
 
-        for (final Entry<String, String> name2latLng : referentialLocations.entrySet()) {
+        for (final Entry<String, StringMap<String>> name2latLng : referentialLocations.entrySet()) {
             final String name = name2latLng.getKey();
-            final String latLng = name2latLng.getValue();
+            final StringMap<String> latLng = name2latLng.getValue();
 
             if (setOfPublicLocations.contains(name)) {
-                publicReferentialLocations.put(name, latLng);
+                publicReferentialLocations.put(name, latLng.toString());
             }
         }
 
