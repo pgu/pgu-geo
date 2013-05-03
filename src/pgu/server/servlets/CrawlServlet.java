@@ -21,6 +21,8 @@ public class CrawlServlet extends HttpServlet {
 
         final String publicId = req.getRequestURI().split("/crawl/")[1];
 
+        log.info(this, "publicId\n%s", publicId);
+
         if (publicId == null || publicId.trim().isEmpty()) {
             resp.sendError(404);
             return;

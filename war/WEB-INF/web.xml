@@ -64,12 +64,13 @@
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>crawl</servlet-name>
-    <url-pattern>/crawl</url-pattern>
+    <url-pattern>/crawl/*</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->
   <welcome-file-list>
-    <welcome-file>Pgu_geo.html</welcome-file>
+<!--     <welcome-file>Pgu_geo.html</welcome-file> -->
+    <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
 
   <servlet>

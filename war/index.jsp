@@ -1,0 +1,1 @@
+<% response.sendRedirect("Pgu_geo.html"); %>

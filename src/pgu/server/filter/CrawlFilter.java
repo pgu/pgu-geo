@@ -24,11 +24,14 @@ public class CrawlFilter implements Filter {
 
         final String paramOfFragment = request.getParameter("_escaped_fragment_");
 
+
         if (paramOfFragment == null) {
+            log.info(this, "param of fragment is null");
             filterChain.doFilter(request, response);
             return;
         }
 
+        log.info(this, "param of fragment is being crawled");
         //
         // is being crawled
         // ex: http://pgu-contacts.appspot.com/?_escaped_fragment_=public:pub/pascal-guilcher/2/3b1/955
@@ -36,7 +39,7 @@ public class CrawlFilter implements Filter {
         final HttpServletRequest httpRequest = (HttpServletRequest) request;
         final String requestURI = httpRequest.getRequestURI();
 
-        String baseURI = requestURI.split("?")[0];
+        String baseURI = requestURI.split("\\?")[0];
         if (!baseURI.endsWith("/")) {
             baseURI = baseURI + "/";
         }
@@ -44,6 +47,9 @@ public class CrawlFilter implements Filter {
         final String publicId = paramOfFragment.replaceFirst("public:", "");;
 
         final String newURI = baseURI + "crawl/" + publicId;
+
+        log.info(this, "newURI \n %s", newURI);
+
         request.getRequestDispatcher(newURI).forward(request, response);
     }
 
