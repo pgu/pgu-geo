@@ -10,11 +10,17 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import pgu.server.app.AppLog;
+
 public class CrawlFilter implements Filter {
+
+    private final AppLog        log             = new AppLog();
 
     @Override
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain filterChain) throws IOException,
     ServletException {
+
+        log.info(this, "** crawl FILTER **");
 
         final String paramOfFragment = request.getParameter("_escaped_fragment_");
 
