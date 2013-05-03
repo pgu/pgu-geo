@@ -37,6 +37,10 @@
     <servlet-name>login</servlet-name>
     <servlet-class>pgu.server.service.LoginServiceImpl</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>crawl</servlet-name>
+    <servlet-class>pgu.server.servlets.CrawlServlet</servlet-class>
+  </servlet>
   
   <servlet-mapping>
     <servlet-name>contacts</servlet-name>
@@ -57,6 +61,10 @@
   <servlet-mapping>
     <servlet-name>login</servlet-name>
     <url-pattern>/pgu_geo/login</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>crawl</servlet-name>
+    <url-pattern>/crawl</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->
