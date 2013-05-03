@@ -1,9 +1,65 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
 
-    <g:HTMLPanel>
-        <div>Signin page</div>
-        <script type="IN/Login"></script>
+    <ui:style>
+    
+        .container {
+            padding-top: 20px;
+            padding-bottom: 40px;            
+        }
+        
+    </ui:style>
+
+    <g:HTMLPanel addStyleNames="{style.container}">
+
+       <div class="container-narrow">
+    
+          <div class="masthead">
+            <h3 class="muted container-narrow-h3">Pgu-geo</h3>
+          </div>
+    
+          <hr/>
+    
+          <div class="jumbotron">
+            <h1>Geolocalize your CV!</h1>
+            <p class="lead add-top">Show the world the places you've been studying, working and where you wish to go next.</p>
+            <p style="margin-top:40px;">
+                <script type="IN/Login"></script>
+            </p>
+          </div>
+    
+          <hr/>
+    
+          <div class="row-fluid marketing">
+            <div class="span6">
+            
+              <h4 class="marketing_h4 marketing_h4_first">Highlight your places</h4>
+              <p class="marketing_p">Put the focus on the streets, cities or countries you've been working.</p>
+              
+              <h4 class="marketing_h4">Enrich your LinkedIN Profile</h4>
+              <p class="marketing_p">Not another profile. The only reference here is the linkedIN's one. You just extend it here.</p>
+              
+            </div>
+    
+            <div class="span6">
+            
+              <h4 class="marketing_h4 marketing_h4_first">Show your contacts through charts</h4>
+              <p class="marketing_p">Display your contacts' distribution by countries with a pie chart, a bar chart or a geo chart.</p>
+              
+              <h4 class="marketing_h4">Tell your story with a public profile</h4>
+              <p  class="marketing_p">Your career will be presented as an animated travel through your places.</p>
+              
+            </div>
+          </div>
+    
+          <hr/>
+    
+          <div class="footer">
+            <p>&copy; pgu-geo 2013</p>
+          </div>
+    
+        </div> <!-- /container -->
+
     </g:HTMLPanel>
     
 </ui:UiBinder> 
