@@ -21,11 +21,9 @@ public class MarkersHelper {
 
     public native JavaScriptObject createMarker(JavaScriptObject map, String location_name) /*-{
 
-        $wnd.console.log('22');
         var geopoint_is_available = this.@pgu.client.app.utils.MarkersHelper::isLocationInReferential(Ljava/lang/String;)
                                          (location_name);
 
-        $wnd.console.log('221');
         if (geopoint_is_available) {
 
             var
@@ -34,7 +32,6 @@ public class MarkersHelper {
               , lat = geopoint.lat
               , lng = geopoint.lng
             ;
-        $wnd.console.log('223');
 
             return this.@pgu.client.app.utils.MarkersHelper::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)
                         (map, location_name, lat, lng);
