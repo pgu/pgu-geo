@@ -413,29 +413,40 @@ public class PublicViewImpl extends Composite implements PublicView {
           , languages = pub.languages || ''
         ;
 
+        $wnd.console.log(' test 1');
+
         this.@pgu.client.pub.ui.PublicViewImpl::setProfileName(Ljava/lang/String;Ljava/lang/String;)
              (first_name, last_name);
 
+        $wnd.console.log(' test 11');
         this.@pgu.client.pub.ui.PublicViewImpl::setProfileHeadline(Ljava/lang/String;)
              (headline);
 
+        $wnd.console.log(' test 111');
         this.@pgu.client.pub.ui.PublicViewImpl::setProfileLocation(Ljava/lang/String;)
              (current_location_name);
 
+        $wnd.console.log(' test 2');
         this.@pgu.client.pub.ui.PublicViewImpl::setProfileSpecialties(Ljava/lang/String;)
              (specialties);
 
+        $wnd.console.log(' test 3');
         this.@pgu.client.pub.ui.PublicViewImpl::setProfileSummary(Ljava/lang/String;)
              (summary);
 
+        $wnd.console.log(' test 4');
         this.@pgu.client.pub.ui.PublicViewImpl::setProfileLinkedinUrl(Ljava/lang/String;)
              (linkedin_url);
 
+        $wnd.console.log(' test 5');
         this.@pgu.client.pub.ui.PublicViewImpl::setProfileLanguages(Ljava/lang/String;)
              (languages);
 
+        $wnd.console.log(' test 6');
         this.@pgu.client.pub.ui.PublicViewImpl::setProfileItems()
              ();
+
+        $wnd.console.log(' test 7');
 
     }-*/;
 

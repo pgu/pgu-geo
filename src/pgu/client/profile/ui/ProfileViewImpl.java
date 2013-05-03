@@ -31,7 +31,6 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -281,8 +280,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         showLocationOnMap(locationName);
     }
 
+    private native void scrollToTop() /*-{
+        $wnd.$("html, body").animate({ scrollTop: 0 }, 600);
+    }-*/;
+
     private void showLocationOnMap(final String locationName) {
-        Window.scrollTo(0, 0);
+        scrollToTop();
         viewMarkers.createMarkerOnProfileMap(locationName, this);
     }
 
@@ -438,7 +441,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         itemConfigIdToSave = itemConfigId;
         locationSaveBtn.setVisible(true);
 
-        Window.scrollTo(0, 0);
+        scrollToTop();
         locationSearchBox.setFocus(true);
     }
 
