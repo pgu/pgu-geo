@@ -131,6 +131,9 @@ public class PublicViewProfileItems {
 
     public native void initCachesLocation2MarkerAndItems(PublicViewImpl view) /*-{
 
+        var google = this.@pgu.client.pub.ui.PublicViewProfileItems::google()
+                          ();
+
         $wnd.pgu_geo.type_2_locations = {};
         $wnd.pgu_geo.location_2_marker = {};
         $wnd.pgu_geo.location_2_items = {};
