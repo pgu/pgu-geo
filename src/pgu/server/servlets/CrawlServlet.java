@@ -15,6 +15,7 @@ import pgu.server.service.PublicProfileServiceImpl;
 import pgu.server.utils.AppUtils;
 import pgu.shared.dto.FullPublicProfile;
 import pgu.shared.dto.PublicContacts;
+import pgu.shared.model.PublicLocations;
 
 import com.google.gson.Gson;
 import com.google.gson.internal.StringMap;
@@ -55,11 +56,14 @@ public class CrawlServlet extends HttpServlet {
         final ArrayList<StringMap> positions = (ArrayList<StringMap>) profile.get("positions");
         final ArrayList<StringMap> educations = (ArrayList<StringMap>) profile.get("educations");
 
+        final PublicLocations publicLocations = publicProfile.getPublicLocations();
+        final HashMap<String, Object> refLocations = new Gson().fromJson(publicLocations.getReferentialLocations(), HashMap.class);
+
         // html
         final StringBuilder sb = new StringBuilder();
         sb.append("<html>");
         sb.append("<head>");
-        sb.append("<title>Pgu-geo > " + profileFullName + " / " + headline + "</title>");
+        sb.append("<title>Pgu-geo / " + profileFullName + " / " + headline + "</title>");
         sb.append("</head>");
         sb.append("<body>");
         addParagraph("Full name", profileFullName, sb);
@@ -92,6 +96,17 @@ public class CrawlServlet extends HttpServlet {
             }
             sb.append("</p>");
         }
+
+        if (refLocations != null) {
+            sb.append("<p><div><strong>Locations</strong></div>");
+            for (final String refLocation : refLocations.keySet()) {
+                sb.append("<div>" + refLocation + "</div>");
+            }
+            sb.append("</p>");
+        }
+
+        final String htmlContacts = "Total: " + contacts.getTotalNbOfContacts() + "<br/>" + contacts.getContactsNumberByCountry();
+        addParagraph("Contacts", htmlContacts, sb);
 
         sb.append("</body>");
         sb.append("</html>");
