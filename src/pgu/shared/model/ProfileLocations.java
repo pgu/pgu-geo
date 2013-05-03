@@ -9,7 +9,7 @@ public class ProfileLocations implements IsSerializable {
     @Id
     private String profileId;
 
-    // item2locations/cache_items: {"education,1":["Paris","Nantes"],"experience,1":["Madrid"]}
+    // item2locations/cache_items: {"current":["Paris"],"education,1":["Paris","Nantes"],"experience,1":["Madrid"]}
     private String items2locations;
 
     //    referential/cache_referential: {"Paris":{"lat":1.2323,"lng":4.5555},"Nantes":{"lat":9.99,"lng":2.22}}

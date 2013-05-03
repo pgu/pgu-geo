@@ -104,11 +104,19 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
 
         //
         // item2locations/cache_items:
-        // {"education,1":["Paris","Nantes"],"experience,1":["Madrid"]}
+        // {"current":["Paris"],"education,1":["Paris","Nantes"],"experience,1":["Madrid"]}
         //
         @SuppressWarnings("unchecked")
         final HashMap<String, ArrayList<String>> items2locations = new Gson().fromJson(profileLocations.getItems2locations(), HashMap.class);
         final HashMap<String, ArrayList<String>> publicItems2locations = new HashMap<String, ArrayList<String>>();
+
+        for (final Entry<String, ArrayList<String>> e : items2locations.entrySet()) {
+            final String item = e.getKey();
+            if ("current".equals(item)) {
+                publicItems2locations.put(item, e.getValue());
+                break;
+            }
+        }
 
         final Boolean educationsArePublic = type2isPublic.get(PublicProfileItemType.educations);
         if (educationsArePublic) {
@@ -141,14 +149,14 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
         //
         @SuppressWarnings("unchecked")
         final HashMap<String, StringMap<String>> referentialLocations = new Gson().fromJson(profileLocations.getReferentialLocations(), HashMap.class);
-        final HashMap<String, String> publicReferentialLocations = new HashMap<String, String>();
+        final HashMap<String, StringMap<String>> publicReferentialLocations = new HashMap<String, StringMap<String>>();
 
         for (final Entry<String, StringMap<String>> name2latLng : referentialLocations.entrySet()) {
             final String name = name2latLng.getKey();
             final StringMap<String> latLng = name2latLng.getValue();
 
             if (setOfPublicLocations.contains(name)) {
-                publicReferentialLocations.put(name, latLng.toString());
+                publicReferentialLocations.put(name, latLng);
             }
         }
 
@@ -157,7 +165,6 @@ public class ProfileServiceImpl extends RemoteServiceServlet implements ProfileS
         publicLocations.setProfileUrl(profileUrl.getValue());
         publicLocations.setItems2locations(new Gson().toJson(publicItems2locations));
         publicLocations.setReferentialLocations(new Gson().toJson(publicReferentialLocations));
-
         dao.ofy().async().put(publicLocations);
     }
 

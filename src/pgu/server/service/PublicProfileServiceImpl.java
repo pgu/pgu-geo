@@ -2,6 +2,7 @@ package pgu.server.service;
 
 import pgu.client.service.PublicProfileService;
 import pgu.server.access.DAO;
+import pgu.server.app.AppLog;
 import pgu.server.utils.AppUtils;
 import pgu.shared.dto.FullPublicProfile;
 import pgu.shared.dto.PublicContacts;
@@ -21,6 +22,7 @@ public class PublicProfileServiceImpl extends RemoteServiceServlet implements Pu
 
     private final DAO           dao             = new DAO();
     private final AppUtils      u               = new AppUtils();
+    private final AppLog        log             = new AppLog();
 
     @Override
     public FullPublicProfile fetchPublicProfileByUrl(final String profileUrl) {
