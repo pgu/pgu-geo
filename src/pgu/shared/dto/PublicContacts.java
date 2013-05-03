@@ -8,12 +8,14 @@ public class PublicContacts implements IsSerializable {
     private String contactsNumberByCountry;
     private String fusionUrls;
     private String chartsPreferences;
-    private String profileUrl = "TODO";
+    private String profileUrl;
+    private int totalNbOfContacts;
 
     @Override
     public String toString() {
         return "PublicContacts [contactsNumberByCountry=" + contactsNumberByCountry + ", fusionUrls=" + fusionUrls
-                + ", chartsPreferences=" + chartsPreferences + "]";
+                + ", chartsPreferences=" + chartsPreferences + ", profileUrl=" + profileUrl + ", totalNbOfContacts="
+                + totalNbOfContacts + "]";
     }
 
     public String getFusionUrls() {
@@ -46,6 +48,14 @@ public class PublicContacts implements IsSerializable {
 
     public void setProfileUrl(final String profileUrl) {
         this.profileUrl = profileUrl;
+    }
+
+    public int getTotalNbOfContacts() {
+        return totalNbOfContacts;
+    }
+
+    public void setTotalNbOfContacts(final int totalNbOfContacts) {
+        this.totalNbOfContacts = totalNbOfContacts;
     }
 
 }

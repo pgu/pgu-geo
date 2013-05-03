@@ -389,11 +389,6 @@ public class PublicViewImpl extends Composite implements PublicView {
         final BasePublicProfile publicProfile = fullProfile.getBasePublicProfile();
         setProfile(this, publicProfile.getValue());
 
-        // TODO PGU Feb 26, 2013
-        // TODO PGU Feb 26, 2013
-        // TODO PGU Feb 26, 2013
-        // TODO PGU Feb 26, 2013 create public contacts with the profile url
-        // TODO PGU Feb 26, 2013 review the service implementation with the profile url
         presenter.fetchPublicContacts(publicProfile.getProfileUrl());
     }
 
@@ -517,6 +512,9 @@ public class PublicViewImpl extends Composite implements PublicView {
     }
 
     private void setContactsInternal() {
+
+        u.console("set contacts internal");
+
         hasAtLeastOneChart = false;
 
         hideAndClearAllCharts();
@@ -540,6 +538,8 @@ public class PublicViewImpl extends Composite implements PublicView {
 
         chartType2containerId.clear();
 
+        final int totalNbOfContacts = publicContacts.getTotalNbOfContacts();
+
         final String chartsPreferences = publicContacts.getChartsPreferences();
         parseChartsPreferences(this, chartsPreferences);
 
@@ -556,10 +556,10 @@ public class PublicViewImpl extends Composite implements PublicView {
             final String containerId = e.getValue();
 
             if (ChartType.PIE.equals(chartType)) {
-                addPieChart(this, containerId);
+                addPieChart(totalNbOfContacts, this, containerId);
 
             } else if (ChartType.BAR.equals(chartType)) {
-                addBarChart(this, containerId);
+                addBarChart(totalNbOfContacts, this, containerId);
 
             } else {
                 addGeoMap(this, containerId, ChartType.regionCode(chartType));
@@ -587,13 +587,13 @@ public class PublicViewImpl extends Composite implements PublicView {
 
     }-*/;
 
-    private native void addBarChart(PublicViewImpl view, String container_id) /*-{
+    private native void addBarChart(int total_nb_of_contacts, PublicViewImpl view, String container_id) /*-{
         var
             google = $wnd.google
           , data_table = $wnd.pgu_geo.public_contacts_data_table
           , bar_options = {
-                  title: '83 Contacts by countries'
-                , vAxis: {title: 'Country'}
+                  title: total_nb_of_contacts + ' Contacts by countries'
+                , vAxis: {title: 'Countries'}
                 , width : 556
                 , height : 347
             }
@@ -604,12 +604,12 @@ public class PublicViewImpl extends Composite implements PublicView {
 
     }-*/;
 
-    private native void addPieChart(final PublicViewImpl view, final String container_id) /*-{
+    private native void addPieChart(int total_nb_of_contacts, final PublicViewImpl view, final String container_id) /*-{
         var
             google = $wnd.google
           , data_table = $wnd.pgu_geo.public_contacts_data_table
           , pie_options = {
-                title:'83 Contacts by countries'
+                title: total_nb_of_contacts + ' Contacts by countries'
                 , is3D: true
                 , width : 556
                 , height : 347
@@ -707,6 +707,7 @@ public class PublicViewImpl extends Composite implements PublicView {
         // TODO Auto-generated method stub
         // TODO Auto-generated method stub
         // TODO Auto-generated method stub
+        Window.alert("Profile not found!");
     }
 
 }

@@ -9,6 +9,7 @@ public class BaseContacts implements IsSerializable {
     @Id
     private String profileId;
 
+    private int    totalNbOfContacts;
     private String value;
 
     @Override
@@ -43,7 +44,7 @@ public class BaseContacts implements IsSerializable {
 
     @Override
     public String toString() {
-        return "BaseContacts [userId=" + profileId + ", value=" + value + "]";
+        return "BaseContacts [profileId=" + profileId + ", totalNbOfContacts=" + totalNbOfContacts + ", value=" + value + "]";
     }
 
     public String getProfileId() {
@@ -60,6 +61,14 @@ public class BaseContacts implements IsSerializable {
 
     public void setValue(final String value) {
         this.value = value;
+    }
+
+    public int getTotalNbOfContacts() {
+        return totalNbOfContacts;
+    }
+
+    public void setTotalNbOfContacts(final int totalNbOfContacts) {
+        this.totalNbOfContacts = totalNbOfContacts;
     }
 
 }

@@ -59,11 +59,12 @@ public class ContactsServiceImpl extends RemoteServiceServlet implements Contact
     }
 
     @Override
-    public void saveContacts(final String profileId, final String jsonContacts) {
+    public void saveContacts(final String profileId, final String jsonContacts, final int totalNbOfContacts) {
 
         final BaseContacts baseContacts = new BaseContacts();
         baseContacts.setProfileId(profileId);
         baseContacts.setValue(jsonContacts);
+        baseContacts.setTotalNbOfContacts(totalNbOfContacts);
 
         dao.ofy().async().put(baseContacts);
 

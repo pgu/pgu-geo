@@ -13,7 +13,7 @@ public interface ContactsServiceAsync {
 
     void saveContactsNumberByCountry(String profileId, String jsonContactsNumberByCountry, AsyncCallback<Void> callback);
 
-    void saveContacts(String profileId, String jsonContacts, AsyncCallback<Void> asyncCallbackApp);
+    void saveContacts(String profileId, String jsonContacts, int totalNbOfContacts, AsyncCallback<Void> asyncCallbackApp);
 
     void fetchFusionUrls(String profileId, AsyncCallback<FusionUrls> asyncCallbackApp);
 

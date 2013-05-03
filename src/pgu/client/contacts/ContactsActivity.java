@@ -81,6 +81,7 @@ ChartsApiLoadedEvent.Handler //
                 //
                 ctx.getProfileId() //
                 , getJsonContacts() //
+                , view.getTotalNbOfContacts() //
                 //
                 , new AsyncCallbackApp<Void>(eventBus) {
 

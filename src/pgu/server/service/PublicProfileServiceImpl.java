@@ -6,6 +6,7 @@ import pgu.server.app.AppLog;
 import pgu.server.utils.AppUtils;
 import pgu.shared.dto.FullPublicProfile;
 import pgu.shared.dto.PublicContacts;
+import pgu.shared.model.BaseContacts;
 import pgu.shared.model.BasePublicProfile;
 import pgu.shared.model.ChartsPreferences;
 import pgu.shared.model.ContactsNumberByCountry;
@@ -65,6 +66,7 @@ public class PublicProfileServiceImpl extends RemoteServiceServlet implements Pu
 
         final Result<ChartsPreferences> rChartsPreferences = dao.ofy().async().find(ChartsPreferences.class, profileId);
         final Result<FusionUrls> rFusionUrls = dao.ofy().async().find(FusionUrls.class, profileId);
+        final Result<BaseContacts> rBaseContacts = dao.ofy().async().find(BaseContacts.class, profileId);
 
         final ChartsPreferences chartsPreferences = rChartsPreferences.get();
         final String chartsPreferenceValues = chartsPreferences == null ? null : chartsPreferences.getValues();
@@ -86,10 +88,15 @@ public class PublicProfileServiceImpl extends RemoteServiceServlet implements Pu
         final FusionUrls fusionUrls = rFusionUrls.get();
         final String fusionUrlValues = fusionUrls == null ? null : fusionUrls.getValues();
 
+        final BaseContacts baseContacts = rBaseContacts.get();
+        final int totalNbOfContacts = baseContacts == null ? 0 : baseContacts.getTotalNbOfContacts();
+
         final PublicContacts publicContacts = new PublicContacts();
+        publicContacts.setProfileUrl(publicUrl);
         publicContacts.setFusionUrls(fusionUrlValues);
         publicContacts.setContactsNumberByCountry(contactsNumberByCountryValues);
         publicContacts.setChartsPreferences(chartsPreferenceValues);
+        publicContacts.setTotalNbOfContacts(totalNbOfContacts);
         return publicContacts;
     }
 

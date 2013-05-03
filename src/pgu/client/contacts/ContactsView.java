@@ -18,4 +18,6 @@ public interface ContactsView extends IsWidget {
 
     void onFetchFusionUrlsSuccess(String jsonFusionUrls);
 
+    int getTotalNbOfContacts();
+
 }

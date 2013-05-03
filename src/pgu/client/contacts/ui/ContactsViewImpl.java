@@ -82,6 +82,8 @@ public class ContactsViewImpl extends Composite implements ContactsView {
 
     private ContactsActivity presenter;
 
+    private int totalNbOfContacts;
+
     public ContactsViewImpl(final EventBus eventBus) {
         initWidget(uiBinder.createAndBindUi(this));
 
@@ -640,6 +642,7 @@ public class ContactsViewImpl extends Composite implements ContactsView {
     }
 
     private void updateContactsCount(final int contactsCount) {
+        totalNbOfContacts = contactsCount;
         updateTitleContactsCount(contactsCount);
     }
 
@@ -785,6 +788,11 @@ public class ContactsViewImpl extends Composite implements ContactsView {
         fusionPanel.clear();
         fusionUrls.clear();
         parseFusionUrls(jsonFusionUrls);
+    }
+
+    @Override
+    public int getTotalNbOfContacts() {
+        return totalNbOfContacts;
     }
 
 }

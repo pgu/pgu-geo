@@ -140,6 +140,8 @@ public class PublicActivity implements PublicPresenter //
                     @Override
                     public void onSuccess(final PublicContacts result) {
 
+                        u.console("on success fetch public contacts");
+
                         if (result == null) {
                             return;
                         }
