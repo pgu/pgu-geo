@@ -38,6 +38,10 @@ public class PublicViewMarkers {
     public native void deleteMovieMarkers() /*-{
         var movie_markers = $wnd.pgu_geo.movie_markers;
 
+        if (!movie_markers) {
+            return;
+        }
+
         this.@pgu.client.pub.ui.PublicViewMarkers::deleteMarkers(Lcom/google/gwt/core/client/JavaScriptObject;)
              (movie_markers);
     }-*/;

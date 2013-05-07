@@ -498,6 +498,7 @@ public class PublicViewImpl extends Composite implements PublicView {
     }
 
     public void fillWithProfileItem(final String id, final String title, final String content) {
+
         id2itemTitle.put(id, title);
         id2itemContent.put(id, content);
     }

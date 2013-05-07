@@ -174,6 +174,13 @@ public class PublicViewProfileItems {
                                               (profile_item.id)
                     ;
 
+                    var click_on_show_items = function(loc_name) {
+                        return function() {
+                                view.@pgu.client.pub.ui.PublicViewImpl::showItemsForLocation(Ljava/lang/String;)
+                                     (loc_name);
+                        }
+                    }
+
                     for (var i = 0; i < location_names.length; i++) {
 
                         var
@@ -196,12 +203,7 @@ public class PublicViewProfileItems {
                                 var marker = this.@pgu.client.pub.ui.PublicViewProfileItems::createMarkerWithGeopoint(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)
                                                   (null,location_name,lat,lng);
 
-                                google.maps.event.addListener(marker, 'click', //
-                                    function() {
-                                        view.@pgu.client.pub.ui.PublicViewImpl::showItemsForLocation(Ljava/lang/String;)
-                                             (location_name);
-                                    }
-                                );
+                                google.maps.event.addListener(marker, 'click', click_on_show_items(location_name));
 
                                 // TODO PGU counter on how many items are associated to this marker and
                                 // then overrides the marker's title? marker.setTitle(location_name + ': <b>3</b>');
@@ -386,8 +388,6 @@ public class PublicViewProfileItems {
             selected_profile_items = $wnd.pgu_geo.selected_profile_items
           , profile_item = selected_profile_items[token]
         ;
-
-//        $wnd.console.log(profile_item);
 
         var info = [
             '<p><strong>' + profile_item.short_content + '</strong></p>'
