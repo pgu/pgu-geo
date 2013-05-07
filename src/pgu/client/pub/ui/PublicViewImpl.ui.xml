@@ -36,13 +36,13 @@
 <!--         </g:HTMLPanel> -->
 
         <b:Section ui:field="profileSection" addStyleNames="{style.profile_section}">
-            <g:HTMLPanel addStyleNames="row-fluid">
-                <div class="span12">
-                    <g:HTMLPanel addStyleNames="page-header">
-                        <h3>Profile</h3>
-                    </g:HTMLPanel>
-                </div>
-            </g:HTMLPanel>
+<!--             <g:HTMLPanel addStyleNames="row-fluid"> -->
+<!--                 <div class="span12"> -->
+<!--                     <g:HTMLPanel addStyleNames="page-header"> -->
+<!--                         <h3>Profile</h3> -->
+<!--                     </g:HTMLPanel> -->
+<!--                 </div> -->
+<!--             </g:HTMLPanel> -->
             <g:HTMLPanel addStyleNames="row-fluid">
                 <div class="span6">
                     <g:HTMLPanel addStyleNames="row-fluid">

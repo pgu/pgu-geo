@@ -387,7 +387,15 @@ public class PublicViewProfileItems {
           , profile_item = selected_profile_items[token]
         ;
 
-        return profile_item.long_content;
+        $wnd.console.log(profile_item);
+
+        var info = [
+            '<p><strong>' + profile_item.short_content + '</strong></p>'
+          , '<p>' + profile_item.dates.replace('<br/>', ' - ') + '</p>'
+          , '<p>' + profile_item.long_content + '</p>'
+        ];
+
+        return info.join('');
     }-*/;
 
     public native void fillViewWithProfileItems(final PublicViewImpl view, final String location_name) /*-{

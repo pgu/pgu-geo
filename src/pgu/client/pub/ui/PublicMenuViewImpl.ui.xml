@@ -5,10 +5,13 @@
             
     <ui:style>
         .username {
-            color: #CCC !important; 
+            color: white !important; 
+            font-family: Georgia,serif;
+            font-weight: bold !important;
         }
         .headline {
             font-style: italic;
+            color: white !important;
         }
     </ui:style>            
             
