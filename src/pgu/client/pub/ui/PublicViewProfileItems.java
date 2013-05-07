@@ -389,9 +389,14 @@ public class PublicViewProfileItems {
           , profile_item = selected_profile_items[token]
         ;
 
+        var d_parts = profile_item.dates.split('<br/>');
+        var end_date = d_parts[0] || '';
+        var start_date = d_parts[1] || '';
+        var d_length = d_parts[2] || '';
+
         var info = [
             '<p><strong>' + profile_item.short_content + '</strong></p>'
-          , '<p>' + profile_item.dates.replace('<br/>', ' - ') + '</p>'
+          , '<p>' + start_date + ' – ' + end_date + ' ' + d_length + '</p>'
           , '<p>' + profile_item.long_content + '</p>'
         ];
 
