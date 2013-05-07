@@ -415,12 +415,15 @@ public class PublicViewProfileItems {
             ;
 
             if (item.dates) {
-                title.push(item.dates);
-                title.push(' - ');
+                title.push('<p>');
+                title.push(item.dates.replace('<br/>', ' - ').replace('<br/>', '  '));
+                title.push('</p>');
             }
 
             if (item.short_content) {
+                title.push('<p>');
                 title.push(item.short_content);
+                title.push('</p>');
             }
 
             view.@pgu.client.pub.ui.PublicViewImpl::fillWithProfileItem(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)

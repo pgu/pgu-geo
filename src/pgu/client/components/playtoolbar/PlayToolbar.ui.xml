@@ -11,30 +11,30 @@
 
     <g:HTMLPanel addStyleNames="row-fluid {style.play_bar}">
         <div class="span2">
-            <b:ListBox ui:field="itemsBox" addStyleNames="span12" />
+            <b:ListBox ui:field="itemsBox" addStyleNames="span12" title="Type of profile's items" />
         </div>
         <div class="span5">
             <div class="span6">
                 <b:ButtonGroup toggle="radio">
-                    <b:Button ui:field="past2prstBtn" icon="CIRCLE_ARROW_RIGHT" iconSize="LARGE" addStyleNames="active" />
-                    <b:Button ui:field="prst2pastBtn" icon="CIRCLE_ARROW_LEFT" iconSize="LARGE" />
+                    <b:Button ui:field="past2prstBtn" icon="CIRCLE_ARROW_RIGHT" iconSize="LARGE" addStyleNames="active" title="From past to present" />
+                    <b:Button ui:field="prst2pastBtn" icon="CIRCLE_ARROW_LEFT" iconSize="LARGE" title="From present to past" />
                 </b:ButtonGroup>
                 <g:Label ui:field="playDirection" addStyleNames="help-inline" />
             </div>
-            <b:ListBox ui:field="nbSecondsBox" addStyleNames="span3" />
+            <b:ListBox ui:field="nbSecondsBox" addStyleNames="span3" title="Pause between each profile's item"/>
             <span class="help-inline">seconds</span>
         </div>
         <div class="span4">
             <b:ButtonGroup>
-                <b:Button ui:field="bwdBtn" icon="STEP_BACKWARD" iconSize="LARGE" />
-                <b:Button ui:field="stopBtn" icon="STOP" iconSize="LARGE" />
-                <b:Button ui:field="playBtn" icon="PLAY" iconSize="LARGE" />
-                <b:Button ui:field="pauseBtn" icon="PAUSE" iconSize="LARGE" />
-                <b:Button ui:field="fwdBtn" icon="STEP_FORWARD" iconSize="LARGE" />
+                <b:Button ui:field="bwdBtn" icon="STEP_BACKWARD" iconSize="LARGE" title="Go to the previous profile's item" />
+                <b:Button ui:field="stopBtn" icon="STOP" iconSize="LARGE" title="Stop the profile's movie" />
+                <b:Button ui:field="playBtn" icon="PLAY" iconSize="LARGE" title="Play the profile's movie" />
+                <b:Button ui:field="pauseBtn" icon="PAUSE" iconSize="LARGE"  title="Pause the profile's movie" />
+                <b:Button ui:field="fwdBtn" icon="STEP_FORWARD" iconSize="LARGE" title="Go to the next profile's item" />
             </b:ButtonGroup>
         </div>
         <div class="span1">
-            <b:Button ui:field="showAllBtn" icon="MAP_MARKER" iconSize="LARGE" toggle="true" />
+            <b:Button ui:field="showAllBtn" icon="MAP_MARKER" iconSize="LARGE" toggle="true" title="Show all locations" />
         </div>
     </g:HTMLPanel>
     

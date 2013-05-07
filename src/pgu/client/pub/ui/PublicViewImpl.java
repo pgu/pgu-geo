@@ -103,6 +103,8 @@ public class PublicViewImpl extends Composite implements PublicView {
 
         css = ResourcesApp.INSTANCE.css();
 
+        itemsAccordion.getElement().setId(ACCORDION_ID);
+
         pieChart.getElement().setId(PREFIX_CHART_ID + ChartType.PIE);
         barChart.getElement().setId(PREFIX_CHART_ID + ChartType.BAR);
 
@@ -476,7 +478,7 @@ public class PublicViewImpl extends Composite implements PublicView {
     }
 
     private String newAccordionGroup(final boolean isOpen, final String id, final String title, final String content) {
-        final String cssIn = isOpen? " in " : "";
+        final String cssIn = isOpen? "in" : "";
         return
                 "<div class=\"accordion-group\">                          " + //
                 "  <div class=\"accordion-heading\">                      " + //
@@ -488,7 +490,7 @@ public class PublicViewImpl extends Composite implements PublicView {
                 "    </a>                                                 " + //
                 "  </div>                                                 " + //
                 "  <div id=\"accordion_" + id + "\"                       " + //
-                "       class=\"accordion-body collapse" + cssIn + "\">   " + //
+                "       class=\"accordion-body collapse " + cssIn + " \"> " + //
                 "    <div class=\"accordion-inner\">                      " + //
                 content + //
                 "    </div>                                               " + //
