@@ -325,6 +325,10 @@ public class PublicViewProfileItems {
 
         info_content.push('<div>');
 
+        if (profile_item.short_content) {
+            info_content.push('<p style="margin-top:5px"><strong>' + profile_item.short_content + '</strong></p>');
+        }
+
         for ( var i = 0, len = location_names.length; i < len; i++) {
             var location_name = location_names[i];
 
@@ -334,21 +338,17 @@ public class PublicViewProfileItems {
                 first_marker = marker;
             }
 
-            info_content.push('<div><b>' + location_name + '</b></div>');
+            info_content.push('<p style="font-size:large">' + location_name + '</p>');
         }
 
-        if ('<div>' !== info_content.join('')) {
-            info_content.push('<br/>');
-        }
+//        if ('<div>' !== info_content.join('')) {
+//            info_content.push('<br/>');
+//        }
 
-        if (profile_item.dates) {
-            info_content.push('<div>' + profile_item.dates + '</div>');
-            info_content.push('<br/>');
-        }
-
-        if (profile_item.short_content) {
-            info_content.push('<div>' + profile_item.short_content + '</div>');
-        }
+//        if (profile_item.dates) {
+//            info_content.push('<p>' + profile_item.dates + '</p>');
+//            info_content.push('<br/>');
+//        }
 
         info_content.push('</div>');
 
@@ -387,7 +387,7 @@ public class PublicViewProfileItems {
           , profile_item = selected_profile_items[token]
         ;
 
-        $wnd.console.log(profile_item);
+//        $wnd.console.log(profile_item);
 
         var info = [
             '<p><strong>' + profile_item.short_content + '</strong></p>'
