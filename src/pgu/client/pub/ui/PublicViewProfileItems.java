@@ -414,15 +414,15 @@ public class PublicViewProfileItems {
               , content = item.long_content
             ;
 
+            if (item.short_content) {
+                title.push('<p><strong>');
+                title.push(item.short_content);
+                title.push('</strong></p>');
+            }
+
             if (item.dates) {
                 title.push('<p>');
                 title.push(item.dates.replace('<br/>', ' - ').replace('<br/>', '  '));
-                title.push('</p>');
-            }
-
-            if (item.short_content) {
-                title.push('<p>');
-                title.push(item.short_content);
                 title.push('</p>');
             }
 
