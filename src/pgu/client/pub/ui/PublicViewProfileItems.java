@@ -421,8 +421,14 @@ public class PublicViewProfileItems {
             }
 
             if (item.dates) {
+                var d_parts = item.dates.split('<br/>');
+
+                var end_date = d_parts[0] || '';
+                var start_date = d_parts[1] || '';
+                var d_length = d_parts[2] || '';
+
                 title.push('<p>');
-                title.push(item.dates.replace('<br/>', ' - ').replace('<br/>', '  '));
+                title.push(start_date + ' – ' + end_date + ' ' + d_length + ' | ' + location_name);
                 title.push('</p>');
             }
 
