@@ -68,5 +68,5 @@ Oauth lib
 [10]: https://code.google.com/p/objectify-appengine/
 [11]: https://code.google.com/p/google-gson/
 
-[100]: http://pgu-logo.appspot.com/ "Pgu-geo"
+[100]: http://pgu-geo.appspot.com/ "Pgu-geo"
 
