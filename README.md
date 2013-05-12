@@ -3,25 +3,26 @@ Pgu-geo
 
 Website
 ---
-[<strong>&#8594; Go to the website</strong>] [100]
+[<strong>&#8594; Go to the website</strong>] [pgu_geo]
 
 Technologies
 ---
 
 Built with:
 
-- [Google Geochart] [1]
-- [Google Maps] [2]
-- [LinkedIN API: signin, profile and contacts] [3]
-- [Showdown] [4]
-- [Ajax crawling] [5]
-- [GWT] [6]
-- [GWTBootstrap] [7]
+- [Google Geochart] [geo_chart]
+- [Google Maps] [geo_maps]
+- [LinkedIN API: signin, profile and contacts] [linkedin]
+- [Showdown] [showdown]
+- [Ajax crawling] [crawling]
+- [GWT]
+- [GWTBootstrap]
+- [Bootstrap]
 - App Engine APIs:
- - [Search] [8]
- - [Logs] [9]
-- [Objectify] [10]
-- [Gson] [11]
+ - [Search] 
+ - [Logs]
+- [Objectify]
+- [Gson]
 
 First version with:
 
@@ -55,18 +56,18 @@ Oauth lib
 - https://github.com/fernandezpablo85/scribe-java/wiki/getting-started
 - http://commons.apache.org/codec/
 
+[geo_chart]: https://developers.google.com/chart/
+[geo_maps]: https://developers.google.com/maps/
+[linkedin]: http://developer.linkedin.com/apis
+[showdown]: https://github.com/coreyti/showdown
+[crawling]: https://developers.google.com/webmasters/ajax-crawling/
+[GWT]: https://developers.google.com/web-toolkit/
+[GWTBootstrap]: http://gwtbootstrap.github.io/
+[Bootstrap]: http://twitter.github.io/bootstrap/index.html
+[Search]: https://developers.google.com/appengine/docs/java/search/
+[Logs]: https://developers.google.com/appengine/docs/java/logs/
+[Objectify]: https://code.google.com/p/objectify-appengine/
+[Gson]: https://code.google.com/p/google-gson/
 
-[1]: https://developers.google.com/chart/
-[2]: https://developers.google.com/maps/
-[3]: http://developer.linkedin.com/apis
-[4]: https://github.com/coreyti/showdown
-[5]: https://developers.google.com/webmasters/ajax-crawling/
-[6]: https://developers.google.com/web-toolkit/
-[7]: http://gwtbootstrap.github.io/
-[8]: https://developers.google.com/appengine/docs/java/search/
-[9]: https://developers.google.com/appengine/docs/java/logs/
-[10]: https://code.google.com/p/objectify-appengine/
-[11]: https://code.google.com/p/google-gson/
-
-[100]: http://pgu-geo.appspot.com/ "Pgu-geo"
+[pgu_geo]: http://pgu-geo.appspot.com/ "Pgu-geo"
 
