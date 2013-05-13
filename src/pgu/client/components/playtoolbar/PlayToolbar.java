@@ -78,6 +78,9 @@ BwdEvent.HasBwdHandlers //
 
         playDirection.setText(FROM_PAST_TO_PRESENT);
 
+        // TODO PGU May 13, 2013 review this filter with the items blocks
+        itemsBox.setVisible(false);
+
         itemsBox.addChangeHandler(new ChangeHandler() {
 
             @Override
@@ -88,6 +91,8 @@ BwdEvent.HasBwdHandlers //
                 stop();
             }
         });
+
+        playBtn.getElement().setId("pgu_geo_public_play_btn");
 
         allControls.add(bwdBtn);
         allControls.add(stopBtn);
@@ -108,7 +113,19 @@ BwdEvent.HasBwdHandlers //
         nbSecondsBox.addItem("10");
         nbSecondsBox.addItem("30");
         nbSecondsBox.setSelectedIndex(0);
+
+        new Timer() {
+
+            @Override
+            public void run() {
+                showPlayBtnToolTip();
+            }
+        }.schedule(2000);
     }
+
+    private native void showPlayBtnToolTip() /*-{
+        $wnd.$('#pgu_geo_public_play_btn').tooltip('show');
+    }-*/;
 
     @UiHandler("showAllBtn")
     public void clickOnShowAll(final ClickEvent e) {
