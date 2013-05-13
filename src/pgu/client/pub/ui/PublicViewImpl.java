@@ -282,6 +282,8 @@ public class PublicViewImpl extends Composite implements PublicView {
 
     private void setIsNOTInModeAll() {
         isInModeAll = false;
+
+        clearActiveBlocks();
         enabledBlocks();
     }
 
