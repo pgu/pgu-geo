@@ -217,3 +217,11 @@ section {
     background-color: #f6f6f6;
 }
 
+.item_type_color {
+    width: 8px;
+    height: 8px;
+    float: left;
+    margin-top: 3px;
+    margin-right: 5px;
+    border-radius: 5px;
+}

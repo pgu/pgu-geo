@@ -152,7 +152,7 @@ public class PublicViewImpl extends Composite implements PublicView {
             @Override
             public void onPlay(final PlayEvent event) {
                 GWT.log("[on play]");
-                showMovieProfileItem(event.getToken());
+                showMovieProfileItemByToken(event.getToken());
             }
 
         });
@@ -162,6 +162,7 @@ public class PublicViewImpl extends Composite implements PublicView {
             public void onStop(final StopEvent event) {
                 GWT.log("[on stop]");
                 hideProfileItem();
+                clearCssActiveOfBlocks();
             }
 
         });
@@ -179,7 +180,7 @@ public class PublicViewImpl extends Composite implements PublicView {
             @Override
             public void onBwd(final BwdEvent event) {
                 GWT.log("[on bwd]");
-                showMovieProfileItem(event.getToken());
+                showMovieProfileItemByToken(event.getToken());
             }
 
         });
@@ -188,7 +189,7 @@ public class PublicViewImpl extends Composite implements PublicView {
             @Override
             public void onFwd(final FwdEvent event) {
                 GWT.log("[on fwd]");
-                showMovieProfileItem(event.getToken());
+                showMovieProfileItemByToken(event.getToken());
             }
 
         });
@@ -266,9 +267,14 @@ public class PublicViewImpl extends Composite implements PublicView {
         $wnd.$('#' + id).collapse('hide');
     }-*/;
 
-    private void showMovieProfileItem(final int token) {
+    private void showMovieProfileItemByToken(final int token) {
 
         final String profileItemId = viewProfileItems.getProfileItemId(token);
+
+        clearCssActiveOfBlocks();
+
+        final Element block = Document.get().getElementById("pgu_geo_block_" + profileItemId);
+        block.addClassName("active");
 
         showMovieProfileItemById(profileItemId);
     }
@@ -743,12 +749,24 @@ public class PublicViewImpl extends Composite implements PublicView {
         Window.alert("Profile not found!");
     }
 
-    public void addProfileItemBlock(final String itemId, final String dates, final JsArrayString locationNames, final String shortContent) {
+    public void addProfileItemBlock(final String itemId, final String type, final String dates, final JsArrayString locationNames, final String shortContent) {
+
+        String colorType;
+
+        if ("experience".equals(type)) {
+            colorType = "0088cc"; // blue
+
+        } else if ("education".equals(type)) {
+            colorType = "62c462"; // green
+
+        } else {
+            colorType = "fff"; // white
+        }
 
         final String dateFmt = fmtDates(dates);
 
         final StringBuilder html = new StringBuilder();
-        html.append(dateFmt);
+        html.append("<p><span class=\"item_type_color\" style=\"background-color:#" + colorType + "\"></span>" + dateFmt + "</p>");
         html.append("<p>" + locationNames.join("<br/>") + "</p>");
 
         final AnchorElement a = Document.get().createAnchorElement();
@@ -775,13 +793,13 @@ public class PublicViewImpl extends Composite implements PublicView {
             startDate = dateParts[1];
             lengthDate = dateParts[2];
 
-            return "<p><strong>" + startDate + " - " + endDate + "</strong><br/>" + lengthDate + "</p>";
+            return "<strong>" + startDate + " - " + endDate + "</strong><br/>" + lengthDate;
 
         } else if (dateParts.length == 2) {
             endDate = dateParts[0];
             startDate = dateParts[1];
 
-            return "<p><strong>" + startDate + " - " + endDate + "</strong></p>";
+            return "<strong>" + startDate + " - " + endDate + "</strong>";
 
         } else {
             return "";

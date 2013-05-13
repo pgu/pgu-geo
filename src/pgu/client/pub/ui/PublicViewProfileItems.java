@@ -477,8 +477,8 @@ public class PublicViewProfileItems {
             var location_names = this.@pgu.client.pub.ui.PublicViewProfileItems::getLocationNames(Ljava/lang/String;)
                                   (profile_item.id)
 
-            view.@pgu.client.pub.ui.PublicViewImpl::addProfileItemBlock(Ljava/lang/String;Ljava/lang/String;Lcom/google/gwt/core/client/JsArrayString;Ljava/lang/String;)
-                 (profile_item.id, profile_item.dates, location_names, profile_item.short_content);
+            view.@pgu.client.pub.ui.PublicViewImpl::addProfileItemBlock(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/google/gwt/core/client/JsArrayString;Ljava/lang/String;)
+                 (profile_item.id, profile_item.type, profile_item.dates, location_names, profile_item.short_content);
         }
 
     }-*/;
