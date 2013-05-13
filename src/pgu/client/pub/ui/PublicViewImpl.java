@@ -539,12 +539,17 @@ public class PublicViewImpl extends Composite implements PublicView {
         final StringBuilder sb = new StringBuilder();
         final boolean isOpen = id2itemTitle.size() == 1;
 
-        for (final Entry<String, String> e : id2itemTitle.entrySet()) {
-            final String id = e.getKey();
-            final String title = e.getValue();
-            final String content = id2itemContent.get(id);
+        clearCssActiveOfBlocks();
 
-            sb.append(newAccordionGroup(isOpen, id, title, content));
+        for (final Entry<String, String> e : id2itemTitle.entrySet()) {
+            final String itemId = e.getKey();
+            final String title = e.getValue();
+            final String content = id2itemContent.get(itemId);
+
+            sb.append(newAccordionGroup(isOpen, itemId, title, content));
+
+            final Element block = Document.get().getElementById("pgu_geo_block_" + itemId);
+            block.addClassName("active");
         }
 
         itemsAccordion.setHTML(sb.toString());
