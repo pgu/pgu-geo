@@ -102,6 +102,9 @@ public class PublicViewImpl extends Composite implements PublicView {
     private final PublicViewMarkers      viewMarkers = new PublicViewMarkers();
     private final MarkersHelper          markersHelper = new MarkersHelper();
 
+    private boolean isInModePlaying = false;
+    private boolean isInModeAll = false;
+
     private static PublicViewImpl static_self = null;
 
     static {
@@ -152,6 +155,7 @@ public class PublicViewImpl extends Composite implements PublicView {
             @Override
             public void onPlay(final PlayEvent event) {
                 GWT.log("[on play]");
+
                 showMovieProfileItemByToken(event.getToken());
             }
 
@@ -161,6 +165,9 @@ public class PublicViewImpl extends Composite implements PublicView {
             @Override
             public void onStop(final StopEvent event) {
                 GWT.log("[on stop]");
+
+                setIsNOTInModePlaying();
+
                 hideProfileItem();
                 clearCssActiveOfBlocks();
             }
@@ -180,6 +187,8 @@ public class PublicViewImpl extends Composite implements PublicView {
             @Override
             public void onBwd(final BwdEvent event) {
                 GWT.log("[on bwd]");
+
+                setIsInModePlaying();
                 showMovieProfileItemByToken(event.getToken());
             }
 
@@ -189,6 +198,8 @@ public class PublicViewImpl extends Composite implements PublicView {
             @Override
             public void onFwd(final FwdEvent event) {
                 GWT.log("[on fwd]");
+
+                setIsInModePlaying();
                 showMovieProfileItemByToken(event.getToken());
             }
 
@@ -198,6 +209,8 @@ public class PublicViewImpl extends Composite implements PublicView {
             @Override
             public void onShowAll(final ShowAllEvent event) {
                 GWT.log("[on show all]");
+
+                setIsInModeAll();
 
                 singlePanel.setVisible(false);
                 multiPanel.setVisible(true);
@@ -215,6 +228,8 @@ public class PublicViewImpl extends Composite implements PublicView {
             public void onHideAll(final HideAllEvent event) {
                 GWT.log("[on hide all]");
 
+                setIsNOTInModeAll();
+
                 hideProfileMarkers(event);
 
                 displayProfileCurrentLocation();
@@ -226,6 +241,8 @@ public class PublicViewImpl extends Composite implements PublicView {
             @Override
             public void onStartPlaying(final StartPlayingEvent event) {
                 GWT.log("[on start playing]");
+
+                setIsInModePlaying();
 
                 hideProfileMarkers(event);
 
@@ -242,6 +259,26 @@ public class PublicViewImpl extends Composite implements PublicView {
         summaryPanel.setVisible(true);
         profileItemPanel.setVisible(false);
 
+    }
+
+    private void setIsInModePlaying() {
+        isInModePlaying = true;
+        disabledBlocks();
+    }
+
+    private void setIsNOTInModePlaying() {
+        isInModePlaying = false;
+        enabledBlocks();
+    }
+
+    private void setIsInModeAll() {
+        isInModeAll = true;
+        disabledBlocks();
+    }
+
+    private void setIsNOTInModeAll() {
+        isInModeAll = false;
+        enabledBlocks();
     }
 
     private void hideProfileItem() {
@@ -810,11 +847,27 @@ public class PublicViewImpl extends Composite implements PublicView {
         static_self.displayProfileItemInternal(profileItemId);
     }
 
+    private native void disabledBlocks() /*-{
+        $wnd.$('.profile_item_block_li').fadeTo('fast', 0.5);
+    }-*/;
+
+    private native void enabledBlocks() /*-{
+        $wnd.$('.profile_item_block_li').fadeTo('fast', 1);
+    }-*/;
+
     private native void clearCssActiveOfBlocks() /*-{
         $wnd.$('.profile_item_block_li').removeClass('active');
     }-*/;
 
     private void displayProfileItemInternal(final String profileItemId) {
+
+        if (isInModePlaying) {
+            return;
+        }
+
+        if (isInModeAll) {
+            return;
+        }
 
         final Element block = Document.get().getElementById("pgu_geo_block_" + profileItemId);
 
