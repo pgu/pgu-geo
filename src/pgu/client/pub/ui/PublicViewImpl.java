@@ -433,7 +433,7 @@ public class PublicViewImpl extends Composite implements PublicView {
     private final Image linkedinPicture = new Image();
 
     private void setProfileLinkedinUrl(final String url) {
-        // TODO PGU Sep 25, 2012 linkedin picture
+        // TODO PGU Sep 25, 2012 add linkedin picture
         linkedinPicture.addClickHandler(new ClickHandler() {
 
             @Override
@@ -786,9 +786,7 @@ public class PublicViewImpl extends Composite implements PublicView {
     @Override
     public void showProfileNotFound() {
         // TODO Auto-generated method stub
-        // TODO Auto-generated method stub
-        // TODO Auto-generated method stub
-        Window.alert("Profile not found!");
+        Window.alert("TODO Profile not found!");
     }
 
     public void addProfileItemBlock(final String itemId, final String type, final String dates, final JsArrayString locationNames, final String shortContent) {
