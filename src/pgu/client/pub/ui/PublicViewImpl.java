@@ -169,7 +169,7 @@ public class PublicViewImpl extends Composite implements PublicView {
                 setIsNOTInModePlaying();
 
                 hideProfileItem();
-                clearCssActiveOfBlocks();
+                clearActiveBlocks();
             }
 
         });
@@ -263,6 +263,8 @@ public class PublicViewImpl extends Composite implements PublicView {
 
     private void setIsInModePlaying() {
         isInModePlaying = true;
+
+        clearActiveBlocks();
         disabledBlocks();
     }
 
@@ -273,6 +275,8 @@ public class PublicViewImpl extends Composite implements PublicView {
 
     private void setIsInModeAll() {
         isInModeAll = true;
+
+        clearActiveBlocks();
         disabledBlocks();
     }
 
@@ -539,7 +543,7 @@ public class PublicViewImpl extends Composite implements PublicView {
         final StringBuilder sb = new StringBuilder();
         final boolean isOpen = id2itemTitle.size() == 1;
 
-        clearCssActiveOfBlocks();
+        clearActiveBlocks();
 
         for (final Entry<String, String> e : id2itemTitle.entrySet()) {
             final String itemId = e.getKey();
@@ -877,17 +881,21 @@ public class PublicViewImpl extends Composite implements PublicView {
         final boolean isAlreadySelected = block.getClassName().contains("active");
 
         if (isAlreadySelected) {
-            clearCssActiveOfBlocks();
+            clearActiveBlocks();
             hideProfileItem();
 
         } else {
 
-            viewMarkers.deleteMovieMarkers();
-            clearCssActiveOfBlocks();
+            clearActiveBlocks();
 
             block.addClassName("active");
             showMovieProfileItemById(profileItemId);
         }
+    }
+
+    private void clearActiveBlocks() {
+        viewMarkers.deleteMovieMarkers();
+        clearCssActiveOfBlocks();
     }
 
 }

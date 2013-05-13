@@ -115,6 +115,8 @@ BwdEvent.HasBwdHandlers //
         isToggled = !isToggled;
 
         itemsBox.setEnabled(!isToggled);
+        playBtn.setEnabled(!isToggled);
+        fwdBtn.setEnabled(!isToggled);
 
         fireShowAllAction();
     }
