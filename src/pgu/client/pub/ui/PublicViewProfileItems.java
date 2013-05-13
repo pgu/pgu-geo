@@ -310,16 +310,25 @@ public class PublicViewProfileItems {
              (null, selectedItemType);
     }-*/;
 
-    public native void showMovieProfileItemLocations(final int token, final JavaScriptObject map) /*-{
+    public native void showMovieProfileItemLocations(final String profile_item_id, final JavaScriptObject map) /*-{
 
         var selected_profile_items = $wnd.pgu_geo.selected_profile_items;
         if (!selected_profile_items) {
             return;
         }
 
+        var profile_item = null;
+
+        for (var i = 0; i < selected_profile_items.length; i++) {
+            var item = selected_profile_items[i];
+            if (item.id === profile_item_id) {
+                profile_item = item;
+                break;
+            }
+        }
+
         var
-            profile_item = selected_profile_items[token]
-          , location_names = this.@pgu.client.pub.ui.PublicViewProfileItems::getLocationNames(Ljava/lang/String;)
+            location_names = this.@pgu.client.pub.ui.PublicViewProfileItems::getLocationNames(Ljava/lang/String;)
                                   (profile_item.id)
           , info_content = []
           , first_marker = null
@@ -383,11 +392,20 @@ public class PublicViewProfileItems {
         return markers.createMovieMarkerOnPublicMap(location_name, type);
     }
 
-    public native String getSelectedProfileItemDescription(int token) /*-{
+    public native String getSelectedProfileItemDescription(String profile_item_id) /*-{
         var
             selected_profile_items = $wnd.pgu_geo.selected_profile_items
-          , profile_item = selected_profile_items[token]
         ;
+
+        var profile_item = null;
+
+        for (var i = 0; i < selected_profile_items.length; i++) {
+            var item = selected_profile_items[i];
+            if (item.id === profile_item_id) {
+                profile_item = item;
+                break;
+            }
+        }
 
         var d_parts = profile_item.dates.split('<br/>');
         var end_date = d_parts[0] || '';
@@ -456,17 +474,22 @@ public class PublicViewProfileItems {
         for (var i = 0; i < profile_items.length; i++) {
             var profile_item = profile_items[i];
 
-
-            // add a block in the list view...profile_item.dates, profile_item.id, profile_item.short_content, profile_item.education
-            // needs the location
             var location_names = this.@pgu.client.pub.ui.PublicViewProfileItems::getLocationNames(Ljava/lang/String;)
                                   (profile_item.id)
 
-            view.@pgu.client.pub.ui.PublicViewImpl::addProfileItemBlock(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/google/gwt/core/client/JsArrayString;Ljava/lang/String;)
-                 (profile_item.id, profile_item.type, profile_item.dates, location_names, profile_item.short_content);
-
+            view.@pgu.client.pub.ui.PublicViewImpl::addProfileItemBlock(Ljava/lang/String;Ljava/lang/String;Lcom/google/gwt/core/client/JsArrayString;Ljava/lang/String;)
+                 (profile_item.id, profile_item.dates, location_names, profile_item.short_content);
         }
 
+    }-*/;
+
+    public native String getProfileItemId(int token) /*-{
+        var
+            selected_profile_items = $wnd.pgu_geo.selected_profile_items
+          , profile_item = selected_profile_items[token]
+        ;
+
+        return profile_item.id;
     }-*/;
 
 }

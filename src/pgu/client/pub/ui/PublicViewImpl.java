@@ -36,11 +36,8 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.LIElement;
-import com.google.gwt.dom.client.Style;
-import com.google.gwt.dom.client.Style.Cursor;
-import com.google.gwt.dom.client.Style.Overflow;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.UListElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -105,7 +102,19 @@ public class PublicViewImpl extends Composite implements PublicView {
     private final PublicViewMarkers      viewMarkers = new PublicViewMarkers();
     private final MarkersHelper          markersHelper = new MarkersHelper();
 
+    private static PublicViewImpl static_self = null;
+
+    static {
+        initJS();
+    }
+
+    private static native void initJS() /*-{
+        $wnd.pgu_geo.display_profile_item = $entry(@pgu.client.pub.ui.PublicViewImpl::displayProfileItem(Ljava/lang/String;));
+    }-*/;
+
     public PublicViewImpl(final EventBus eventBus) {
+
+        static_self = this;
 
         profileSection = new Section("public:profile");
         contactsSection = new Section("public:contacts");
@@ -258,16 +267,21 @@ public class PublicViewImpl extends Composite implements PublicView {
     }-*/;
 
     private void showMovieProfileItem(final int token) {
-        showProfileItemArea();
 
-        fillProfileItemContent(token);
+        final String profileItemId = viewProfileItems.getProfileItemId(token);
 
-        viewProfileItems.showMovieProfileItemLocations(token, viewMap.getPublicMap());
+        showMovieProfileItemById(profileItemId);
     }
 
-    private void fillProfileItemContent(final int token) {
+    private void showMovieProfileItemById(final String profileItemId) {
+        showProfileItemArea();
+        fillProfileItemContent(profileItemId);
+        viewProfileItems.showMovieProfileItemLocations(profileItemId, viewMap.getPublicMap());
+    }
 
-        final String description = viewProfileItems.getSelectedProfileItemDescription(token);
+    private void fillProfileItemContent(final String profileItemId) {
+
+        final String description = viewProfileItems.getSelectedProfileItemDescription(profileItemId);
         profileItemDescription.setHTML(description);
     }
 
@@ -277,7 +291,9 @@ public class PublicViewImpl extends Composite implements PublicView {
         }
 
         profileItemPanel.setVisible(false);
+
         summaryPanel.setVisible(true);
+        displayProfileCurrentLocation();
     }
 
     private void showProfileItemArea() {
@@ -287,7 +303,9 @@ public class PublicViewImpl extends Composite implements PublicView {
         }
 
         summaryPanel.setVisible(false);
+
         profileItemPanel.setVisible(true);
+        hideProfileCurrentLocation();
     }
 
     @Override
@@ -725,7 +743,7 @@ public class PublicViewImpl extends Composite implements PublicView {
         Window.alert("Profile not found!");
     }
 
-    public void addProfileItemBlock(final String itemId, final String type, final String dates, final JsArrayString locationNames, final String shortContent) {
+    public void addProfileItemBlock(final String itemId, final String dates, final JsArrayString locationNames, final String shortContent) {
 
         final String dateFmt = fmtDates(dates);
 
@@ -735,15 +753,14 @@ public class PublicViewImpl extends Composite implements PublicView {
 
         final AnchorElement a = Document.get().createAnchorElement();
         a.setInnerHTML(html.toString());
+        a.setAttribute("onclick", "pgu_geo.display_profile_item(\"" + itemId + "\")");
+        a.addClassName("profile_item_block");
 
         final LIElement li = Document.get().createLIElement();
         li.appendChild(a);
+        li.setId("pgu_geo_block_" + itemId);
+        li.addClassName("profile_item_block_li"); // just marker
         li.setTitle(shortContent.replace("<br/>", "\n"));
-
-        final Style anchorStyle = a.getStyle();
-        anchorStyle.setHeight(100, Unit.PX);
-        anchorStyle.setOverflow(Overflow.AUTO);
-        anchorStyle.setCursor(Cursor.POINTER);
 
         profileItemsList.appendChild(li);
     }
@@ -768,6 +785,34 @@ public class PublicViewImpl extends Composite implements PublicView {
 
         } else {
             return "";
+        }
+    }
+
+    public static void displayProfileItem(final String profileItemId) {
+        static_self.displayProfileItemInternal(profileItemId);
+    }
+
+    private native void clearCssActiveOfBlocks() /*-{
+        $wnd.$('.profile_item_block_li').removeClass('active');
+    }-*/;
+
+    private void displayProfileItemInternal(final String profileItemId) {
+
+        final Element block = Document.get().getElementById("pgu_geo_block_" + profileItemId);
+
+        final boolean isAlreadySelected = block.getClassName().contains("active");
+
+        if (isAlreadySelected) {
+            clearCssActiveOfBlocks();
+            hideProfileItem();
+
+        } else {
+
+            viewMarkers.deleteMovieMarkers();
+            clearCssActiveOfBlocks();
+
+            block.addClassName("active");
+            showMovieProfileItemById(profileItemId);
         }
     }
 

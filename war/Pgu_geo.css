@@ -209,3 +209,11 @@ section {
     line-height: 20px !important;
 }
 
+/* for public view */
+.profile_item_block {
+    height: 100px;
+    overflow: auto;
+    cursor: pointer;
+    background-color: #f6f6f6;
+}
+
