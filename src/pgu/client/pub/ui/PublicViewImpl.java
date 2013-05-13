@@ -77,7 +77,7 @@ public class PublicViewImpl extends Composite implements PublicView {
     @UiField
     PlayToolbar               playToolbar;
     @UiField
-    HTMLPanel                 spContainer, summaryPanel, profileItemPanel;
+    HTMLPanel                 summaryPanel, profileItemPanel;
     @UiField
     HTMLPanel                 multiPanel, singlePanel;
     @UiField
@@ -284,6 +284,7 @@ public class PublicViewImpl extends Composite implements PublicView {
         isInModeAll = false;
 
         clearActiveBlocks();
+        hideProfileItem();
         enabledBlocks();
     }
 
@@ -424,10 +425,6 @@ public class PublicViewImpl extends Composite implements PublicView {
         marker.setMap(null);
     }-*/;
 
-    public void setProfileSpecialties(final String htmlSpecialties) {
-        spContainer.add(new HTML(htmlSpecialties));
-    }
-
     private void setProfileSummary(final String htmlSummary) {
         summaryContainer.setHTML(htmlSummary);
     }
@@ -482,7 +479,6 @@ public class PublicViewImpl extends Composite implements PublicView {
           , last_name = pub.lastName || ''
           , headline = pub.headline || ''
           , current_location_name = pub.location || ''
-          , specialties = pub.specialties || ''
           , summary = pub.summary || ''
           , linkedin_url = pub.rawPublicProfileUrl || ''
           , languages = pub.languages || ''
@@ -496,9 +492,6 @@ public class PublicViewImpl extends Composite implements PublicView {
 
         this.@pgu.client.pub.ui.PublicViewImpl::setProfileLocation(Ljava/lang/String;)
              (current_location_name);
-
-        this.@pgu.client.pub.ui.PublicViewImpl::setProfileSpecialties(Ljava/lang/String;)
-             (specialties);
 
         this.@pgu.client.pub.ui.PublicViewImpl::setProfileSummary(Ljava/lang/String;)
              (summary);
