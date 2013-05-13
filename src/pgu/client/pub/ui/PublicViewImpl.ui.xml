@@ -25,6 +25,10 @@
             overflow: hidden;
         }
         #pgu_geo_public_profile_map img { max-width:none; }
+        
+        .row_items {
+            margin-top: 25px;
+        }
     </ui:style>            
 
     <g:HTMLPanel>
@@ -96,6 +100,12 @@
                             </g:HTMLPanel>
                         </div>
                     </g:HTMLPanel>
+                </div>
+            </g:HTMLPanel>
+            <g:HTMLPanel addStyleNames="row-fluid {style.row_items}">
+                <div class="span12">
+                    <ul class="nav nav-pills" ui:field="profileItemsList">
+                    </ul>
                 </div>
             </g:HTMLPanel>
         </b:Section>    

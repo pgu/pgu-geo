@@ -447,4 +447,26 @@ public class PublicViewProfileItems {
         return markers.createMovieUnknownMarkerOnPublicMap();
     }
 
+    public native void listItems(final PublicViewImpl view) /*-{
+
+        var
+            profile_items = $wnd.pgu_geo.type_2_profile_items['all']
+        ;
+
+        for (var i = 0; i < profile_items.length; i++) {
+            var profile_item = profile_items[i];
+
+
+            // add a block in the list view...profile_item.dates, profile_item.id, profile_item.short_content, profile_item.education
+            // needs the location
+            var location_names = this.@pgu.client.pub.ui.PublicViewProfileItems::getLocationNames(Ljava/lang/String;)
+                                  (profile_item.id)
+
+            view.@pgu.client.pub.ui.PublicViewImpl::addProfileItemBlock(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/google/gwt/core/client/JsArrayString;Ljava/lang/String;)
+                 (profile_item.id, profile_item.type, profile_item.dates, location_names, profile_item.short_content);
+
+        }
+
+    }-*/;
+
 }

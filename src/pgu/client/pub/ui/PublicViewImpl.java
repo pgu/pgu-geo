@@ -31,8 +31,17 @@ import com.github.gwtbootstrap.client.ui.NavLink;
 import com.github.gwtbootstrap.client.ui.Section;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.AnchorElement;
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.LIElement;
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.dom.client.Style.Overflow;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.UListElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -80,6 +89,8 @@ public class PublicViewImpl extends Composite implements PublicView {
     HTMLPanel pieChart, barChart;
     @UiField
     HTMLPanel fusionPanel;
+    @UiField
+    UListElement profileItemsList;
 
     private PublicPresenter   presenter;
     private final ClientHelper u = new ClientHelper();
@@ -444,6 +455,7 @@ public class PublicViewImpl extends Composite implements PublicView {
                 viewProfileItems.setProfileItems();
                 addProfileItemsToPlayToolbar();
                 viewProfileItems.initCachesLocation2MarkerAndItems(PublicViewImpl.this);
+                viewProfileItems.listItems(PublicViewImpl.this);
             }
         });
     }
@@ -711,6 +723,49 @@ public class PublicViewImpl extends Composite implements PublicView {
         // TODO Auto-generated method stub
         // TODO Auto-generated method stub
         Window.alert("Profile not found!");
+    }
+
+    public void addProfileItemBlock(final String itemId, final String type, final String dates, final JsArrayString locationNames, final String shortContent) {
+
+        final String[] dateParts = dates.split("<br/>");
+        String endDate, startDate, lengthDate = null;
+
+        String dateFmt = "";
+
+        if (dateParts.length == 3) {
+            endDate = dateParts[0];
+            startDate = dateParts[1];
+            lengthDate = dateParts[2];
+
+            dateFmt = "<p><strong>" + startDate + " - " + endDate + "</strong><br/>" + lengthDate + "</p>";
+
+        } else if (dateParts.length == 2) {
+            endDate = dateParts[0];
+            startDate = dateParts[1];
+
+            dateFmt = "<p><strong>" + startDate + " - " + endDate + "</strong></p>";
+
+        } else {
+            dateFmt = "";
+        }
+
+        final StringBuilder html = new StringBuilder();
+        html.append(dateFmt);
+        html.append("<p>" + locationNames.join("<br/>") + "</p>");
+
+        final AnchorElement a = Document.get().createAnchorElement();
+        a.setInnerHTML(html.toString());
+
+        final LIElement li = Document.get().createLIElement();
+        li.appendChild(a);
+        li.setTitle(shortContent.replace("<br/>", "\n"));
+
+        Style anchorStyle = a.getStyle();
+        anchorStyle.setHeight(100, Unit.PX);
+        anchorStyle.setOverflow(Overflow.AUTO);
+        anchorStyle.setCursor(Cursor.POINTER);
+
+        profileItemsList.appendChild(li);
     }
 
 }
