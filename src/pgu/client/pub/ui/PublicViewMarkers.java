@@ -54,12 +54,12 @@ public class PublicViewMarkers {
         markers.length = 0;
     }-*/;
 
-    public native JavaScriptObject createMovieMarkerOnPublicMap(String location_name) /*-{
+    public native JavaScriptObject createMovieMarkerOnPublicMap(String location_name, String type) /*-{
         var public_map = this.@pgu.client.pub.ui.PublicViewMarkers::getPublicMap()
                               ();
 
-        var marker = this.@pgu.client.pub.ui.PublicViewMarkers::createMarker(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;)
-                          (public_map,location_name);
+        var marker = this.@pgu.client.pub.ui.PublicViewMarkers::createMarker(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;Ljava/lang/String;)
+                          (public_map, location_name, type);
 
         var movie_markers = this.@pgu.client.pub.ui.PublicViewMarkers::movieMarkers()
                                  ();
@@ -82,8 +82,8 @@ public class PublicViewMarkers {
         return marker;
     }-*/;
 
-    private JavaScriptObject createMarker(final JavaScriptObject map, final String location_name) {
-        return markers.createMarker(map, location_name);
+    private JavaScriptObject createMarker(final JavaScriptObject map, final String location_name, final String type) {
+        return markers.createMarker(map, location_name, type);
     }
 
     private native JavaScriptObject movieMarkers() /*-{

@@ -334,8 +334,8 @@ public class PublicViewProfileItems {
         for ( var i = 0, len = location_names.length; i < len; i++) {
             var location_name = location_names[i];
 
-            var marker = this.@pgu.client.pub.ui.PublicViewProfileItems::createMovieMarkerOnPublicMap(Ljava/lang/String;)
-                              (location_name);
+            var marker = this.@pgu.client.pub.ui.PublicViewProfileItems::createMovieMarkerOnPublicMap(Ljava/lang/String;Ljava/lang/String;)
+                              (location_name, profile_item.type);
             if (i === 0) {
                 first_marker = marker;
             }
@@ -379,8 +379,8 @@ public class PublicViewProfileItems {
 
     }-*/;
 
-    private JavaScriptObject createMovieMarkerOnPublicMap(final String location_name) {
-        return markers.createMovieMarkerOnPublicMap(location_name);
+    private JavaScriptObject createMovieMarkerOnPublicMap(final String location_name, final String type) {
+        return markers.createMovieMarkerOnPublicMap(location_name, type);
     }
 
     public native String getSelectedProfileItemDescription(int token) /*-{

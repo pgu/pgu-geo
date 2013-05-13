@@ -329,7 +329,7 @@ public class PublicViewImpl extends Composite implements PublicView {
         }
 
         final JavaScriptObject publicMap = viewMap.getPublicMap();
-        currentLocationMarker = markersHelper.createMarker(publicMap, locationName);
+        currentLocationMarker = markersHelper.createMarker(publicMap, locationName, "current");
     }
 
     private JavaScriptObject getPublicMap() {
