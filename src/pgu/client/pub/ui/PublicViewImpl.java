@@ -727,27 +727,7 @@ public class PublicViewImpl extends Composite implements PublicView {
 
     public void addProfileItemBlock(final String itemId, final String type, final String dates, final JsArrayString locationNames, final String shortContent) {
 
-        final String[] dateParts = dates.split("<br/>");
-        String endDate, startDate, lengthDate = null;
-
-        String dateFmt = "";
-
-        if (dateParts.length == 3) {
-            endDate = dateParts[0];
-            startDate = dateParts[1];
-            lengthDate = dateParts[2];
-
-            dateFmt = "<p><strong>" + startDate + " - " + endDate + "</strong><br/>" + lengthDate + "</p>";
-
-        } else if (dateParts.length == 2) {
-            endDate = dateParts[0];
-            startDate = dateParts[1];
-
-            dateFmt = "<p><strong>" + startDate + " - " + endDate + "</strong></p>";
-
-        } else {
-            dateFmt = "";
-        }
+        final String dateFmt = fmtDates(dates);
 
         final StringBuilder html = new StringBuilder();
         html.append(dateFmt);
@@ -760,12 +740,35 @@ public class PublicViewImpl extends Composite implements PublicView {
         li.appendChild(a);
         li.setTitle(shortContent.replace("<br/>", "\n"));
 
-        Style anchorStyle = a.getStyle();
+        final Style anchorStyle = a.getStyle();
         anchorStyle.setHeight(100, Unit.PX);
         anchorStyle.setOverflow(Overflow.AUTO);
         anchorStyle.setCursor(Cursor.POINTER);
 
         profileItemsList.appendChild(li);
+    }
+
+    private String fmtDates(final String dates) {
+        final String[] dateParts = dates.split("<br/>");
+        String endDate, startDate, lengthDate = null;
+
+        if (dateParts.length == 3) {
+
+            endDate = dateParts[0];
+            startDate = dateParts[1];
+            lengthDate = dateParts[2];
+
+            return "<p><strong>" + startDate + " - " + endDate + "</strong><br/>" + lengthDate + "</p>";
+
+        } else if (dateParts.length == 2) {
+            endDate = dateParts[0];
+            startDate = dateParts[1];
+
+            return "<p><strong>" + startDate + " - " + endDate + "</strong></p>";
+
+        } else {
+            return "";
+        }
     }
 
 }
