@@ -11,8 +11,7 @@ public class ProfileViewToPublic {
     private final JsonHelper json = new JsonHelper();
 
     public native String getJsonPublicProfile(
-            String specialtiesHtml
-            , String locationName
+            String locationName
             , String fmtSummary
             , String languagesHtml
             ) /*-{
@@ -28,7 +27,6 @@ public class ProfileViewToPublic {
         public_p.firstName = p.firstName;
         public_p.lastName = p.lastName;
         public_p.headline = p.headline;
-        public_p.specialties = specialtiesHtml;
         public_p.location = locationName;
         public_p.summary = fmtSummary;
         public_p.languages = languagesHtml;

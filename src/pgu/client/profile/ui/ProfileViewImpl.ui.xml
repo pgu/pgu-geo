@@ -83,17 +83,13 @@
                     </b:Hero>  
                     
                     <g:HTMLPanel addStyleNames="row-fluid">
-                        <div class="span4">
+                        <div class="span6">
                             <h6>Location</h6>
                             <b:NavPills>
                                 <b:NavLink ui:field="locContainer" addStyleNames="{style.location}"></b:NavLink>
                             </b:NavPills>
                         </div>
-                        <div class="span4">
-                            <h6>Specialties</h6>
-                            <g:HTMLPanel ui:field="spContainer" />
-                        </div>
-                        <div class="span4">
+                        <div class="span6">
                             <h6>Languages</h6>
                             <g:HTMLPanel ui:field="lgContainer" />
                         </div>

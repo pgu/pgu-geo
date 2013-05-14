@@ -55,7 +55,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     @UiField(provided = true)
     Section                                                 overviewSection, experienceSection, educationSection;
     @UiField
-    HTMLPanel                                               lgContainer, spContainer;
+    HTMLPanel                                               lgContainer;
     @UiField
     Button expPublicState, eduPublicState //
     , clearSearchMarkersBtn //
@@ -303,25 +303,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         headlineBasic.setText(headline);
     }
 
-    private void setSpecialties(final String specialtiesLabel) {
-        final StringBuilder sb = new StringBuilder();
-
-        final String[] rawLabels = specialtiesLabel.split(",");
-        for (final String specialty : rawLabels) {
-
-            if (u.isVoid(specialty)) {
-                continue;
-            }
-
-            sb.append("<div>");
-            sb.append(specialty.trim());
-            sb.append("</div>");
-        }
-
-        final String htmlSpecialties = sb.toString();
-        spContainer.add(new HTML(htmlSpecialties));
-    }
-
     private void setCurrentLocation(final String locationName) {
         locContainer.setText(u.isVoid(locationName) ? "" : locationName);
     }
@@ -348,7 +329,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
           , headline = p.headline || ''
           , current_location = p.location || {}
           , current_location_name = current_location.name || ''
-          , specialties = p.specialties || ''
           , summary = p.summary || ''
           , languages = p.languages || {} //
           , language_values = languages.values || [] //
@@ -364,9 +344,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
         this.@pgu.client.profile.ui.ProfileViewImpl::setCurrentLocation(Ljava/lang/String;)
              (current_location_name);
-
-        this.@pgu.client.profile.ui.ProfileViewImpl::setSpecialties(Ljava/lang/String;)
-             (specialties);
 
         this.@pgu.client.profile.ui.ProfileViewImpl::setSummary(Ljava/lang/String;)
              (summary);
@@ -517,14 +494,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     private String getJsonPublicProfile() {
 
-        final String specialtiesHtml = spContainer.getElement().getInnerHTML();
         final String locationName = locContainer.getText();
 
         final String fmtSummary = summaryBasic.getElement().getFirstChildElement().getAttribute("data-content");
         final String languagesHtml = lgContainer.getElement().getInnerHTML();
 
-        return viewPublic.getJsonPublicProfile(specialtiesHtml //
-                , locationName //
+        return viewPublic.getJsonPublicProfile(locationName //
                 , fmtSummary //
                 , languagesHtml //
                 );
