@@ -29,6 +29,7 @@ public class PublicViewMap {
 
         var div = $wnd.document.getElementById("pgu_geo_public_profile_map");
 
+        google.maps.visualRefresh = true;
         var mapOptions = {
               zoom: 2
               , center: new google.maps.LatLng(0, 0)

@@ -21,6 +21,7 @@ public class ProfileViewMap {
         var google = this.@pgu.client.profile.ui.ProfileViewMap::google()
                           ();
 
+        google.maps.visualRefresh = true;
         var mapOptions = {
               zoom: 2,
               center: new google.maps.LatLng(0, 0),

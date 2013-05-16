@@ -183,7 +183,18 @@ public class Pgu_geo implements EntryPoint {
                 pMenuActivity.start(appView.getHeader(), eventBus);
 
                 final String hash = Window.Location.getHash();
-                final String publicUrl = hash.substring("#!public:".length());
+
+
+                String tag = null;
+
+                if (hash.contains("#!public:")) {
+                    tag = "#!public:";
+
+                } else if (hash.contains("#!public%3a")) {
+                    tag = "#!public%3a";
+                }
+
+                final String publicUrl = hash.substring(tag.length());
 
                 final PublicView pView = new PublicViewImpl(eventBus);
                 final PublicActivity pActivity = new PublicActivity(pView, ctx, publicUrl);
