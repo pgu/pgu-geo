@@ -62,6 +62,9 @@
                 <div class="span6">
                 
                     <g:HTMLPanel ui:field="multiPanel">
+                        <g:HTML ui:field="multiPanelInfo" addStyleNames="alert alert-info">
+                            <strong>Heads up!</strong> Click on a location.
+                        </g:HTML>
                         <g:HTML ui:field="itemsAccordion" addStyleNames="accordion" />
                     </g:HTMLPanel>
                     

@@ -88,6 +88,8 @@ public class PublicViewImpl extends Composite implements PublicView {
     HTMLPanel fusionPanel;
     @UiField
     UListElement profileItemsList;
+    @UiField
+    HTML multiPanelInfo;
 
     private PublicPresenter   presenter;
     private final ClientHelper u = new ClientHelper();
