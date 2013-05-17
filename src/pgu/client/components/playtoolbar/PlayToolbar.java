@@ -120,7 +120,7 @@ BwdEvent.HasBwdHandlers //
             public void run() {
                 showPlayBtnToolTip();
             }
-        }.schedule(2000);
+        }.schedule(3000);
     }
 
     private native void showPlayBtnToolTip() /*-{

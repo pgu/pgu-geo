@@ -1,24 +1,31 @@
 package pgu.client.pub.ui;
 
 import pgu.client.app.utils.GoogleHelper;
+import pgu.client.app.utils.MapHelper;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
 public class PublicViewMap {
 
     private final GoogleHelper google = new GoogleHelper();
+    private final MapHelper map = new MapHelper();
 
     private JavaScriptObject google() {
         return google.google();
     }
 
+    private JavaScriptObject buildMap(final String containerId) {
+        return map.buildMap(containerId);
+    }
+
     public native void initPublicProfileMap() /*-{
         $wnd.console.log('initPublicProfileMap');
 
-        var google = this.@pgu.client.pub.ui.PublicViewMap::google()
-                          ();
 
         if ($wnd.pgu_geo.public_profile_map) {
+
+            var google = this.@pgu.client.pub.ui.PublicViewMap::google()
+                              ();
 
             var map = $wnd.pgu_geo.public_profile_map;
             map.setCenter(new google.maps.LatLng(0, 0));
@@ -27,20 +34,8 @@ public class PublicViewMap {
             return; // already initialized, just reset
         }
 
-        var div = $wnd.document.getElementById("pgu_geo_public_profile_map");
-
-        google.maps.visualRefresh = true;
-        var mapOptions = {
-              zoom: 2
-              , center: new google.maps.LatLng(0, 0)
-              , mapTypeId: google.maps.MapTypeId.ROADMAP
-            }
-        ;
-
-        $wnd.pgu_geo.public_profile_map = new google.maps.Map( //
-            div //
-            , mapOptions);
-
+        $wnd.pgu_geo.public_profile_map = this.@pgu.client.pub.ui.PublicViewMap::buildMap(Ljava/lang/String;)
+                                               ('pgu_geo_public_profile_map');
     }-*/;
 
     public native JavaScriptObject getPublicMap() /*-{
