@@ -629,13 +629,13 @@ public class LinkedinServiceImpl extends RemoteServiceServlet implements Linkedi
 
         if (nbResults == 1) {
             final ScoredDocument doc = docs.getResults().iterator().next();
-            getLocationsIdx().removeAsync(doc.getId());
+            getLocationsIdx().deleteAsync(doc.getId());
         }
 
         final Document.Builder docBuilder = Document.newBuilder();
         docBuilder.addField(Field.newBuilder().setName("user_id").setText(userId));
         docBuilder.addField(Field.newBuilder().setName("locations").setText(locations));
-        getLocationsIdx().add(docBuilder.build());
+        getLocationsIdx().put(docBuilder.build());
 
         //
         //
