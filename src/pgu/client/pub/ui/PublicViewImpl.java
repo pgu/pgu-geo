@@ -216,6 +216,7 @@ public class PublicViewImpl extends Composite implements PublicView {
 
                 singlePanel.setVisible(false);
                 multiPanel.setVisible(true);
+                multiPanelInfo.setVisible(true);
 
                 hideProfileCurrentLocation();
 
@@ -553,6 +554,7 @@ public class PublicViewImpl extends Composite implements PublicView {
             block.addClassName("active");
         }
 
+        multiPanelInfo.setVisible(false);
         itemsAccordion.setHTML(sb.toString());
     }
 
