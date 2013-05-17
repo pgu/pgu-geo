@@ -21,6 +21,7 @@ import com.github.gwtbootstrap.client.ui.Popover;
 import com.github.gwtbootstrap.client.ui.Section;
 import com.github.gwtbootstrap.client.ui.TextBox;
 import com.github.gwtbootstrap.client.ui.Tooltip;
+import com.github.gwtbootstrap.client.ui.constants.ButtonType;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
@@ -227,23 +228,28 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     private void updatePublicHeader(final String public_preference, final boolean is_public, final Button btn) {
 
-        btn.setIcon(is_public ? IconType.EYE_OPEN : IconType.EYE_CLOSE);
+        updatePublicPreferencesBtns(is_public, btn);
         viewPublic.updatePublicPreference(public_preference, is_public);
 
         final String jsonPublicPreferences = viewPublic.getJsonPublicPreferences();
         presenter.savePublicPreferences(public_preference, jsonPublicPreferences);
     }
 
+    private void updatePublicPreferencesBtns(final boolean is_public, final Button btn) {
+        btn.setIcon(is_public ? IconType.EYE_OPEN : IconType.EYE_CLOSE);
+        btn.setType(is_public ? ButtonType.SUCCESS : ButtonType.DANGER);
+    }
+
     public void setPublicHeader(final String public_preference, final boolean is_public) {
 
         if (PublicProfileItemType.educations.equals(public_preference)) {
 
-            eduPublicState.setIcon(is_public ? IconType.EYE_OPEN : IconType.EYE_CLOSE);
+            updatePublicPreferencesBtns(is_public, eduPublicState);
             isEduPublic = is_public;
 
         } else if (PublicProfileItemType.positions.equals(public_preference)) {
 
-            expPublicState.setIcon(is_public ? IconType.EYE_OPEN : IconType.EYE_CLOSE);
+            updatePublicPreferencesBtns(is_public, expPublicState);
             isExpPublic = is_public;
 
         } else {

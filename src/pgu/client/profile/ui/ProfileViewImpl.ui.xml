@@ -104,7 +104,7 @@
                 <div class="span12">
                     <g:HTMLPanel addStyleNames="page-header">
                         <b:Tooltip ui:field="expPublicTooltip" text='Saved.' trigger="MANUAL">
-                            <b:Button ui:field="expPublicState" type="INFO" iconSize="LARGE" addStyleNames="pull-right" />
+                            <b:Button ui:field="expPublicState" type="DANGER" iconSize="LARGE" addStyleNames="pull-right" />
                         </b:Tooltip>
                         <h3>Experience</h3>
                     </g:HTMLPanel>
@@ -125,7 +125,7 @@
                 <div class="span12">
                     <g:HTMLPanel addStyleNames="page-header">
                         <b:Tooltip ui:field="eduPublicTooltip" text='Saved.' trigger="MANUAL">
-                            <b:Button ui:field="eduPublicState" type="INFO" iconSize="LARGE" addStyleNames="pull-right" />
+                            <b:Button ui:field="eduPublicState" type="DANGER" iconSize="LARGE" addStyleNames="pull-right" />
                         </b:Tooltip>
                         <h3>Education</h3>
                     </g:HTMLPanel>
