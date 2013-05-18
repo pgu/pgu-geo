@@ -19,7 +19,7 @@
         .contacts_section {
         }
         #pgu_geo_public_profile_map { 
-            height: 570px; 
+            height: 450px; /* 570 */ 
             position: relative; 
             background-color: #E5E3DF;
             overflow: hidden;
