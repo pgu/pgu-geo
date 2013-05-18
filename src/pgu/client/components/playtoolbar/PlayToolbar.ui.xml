@@ -14,7 +14,7 @@
             <b:ListBox ui:field="itemsBox" addStyleNames="span12" title="Type of profile's items" />
         </div>
         <div class="span1">
-            <b:Button ui:field="showAllBtn" icon="MAP_MARKER" iconSize="LARGE" toggle="true" title="Show all locations" />
+            <b:Button ui:field="showAllBtn" icon="MAP_MARKER" iconSize="LARGE" toggle="true" title="Show all locations" type="INVERSE" />
         </div>
         <div class="span4">
             <div class="span6">
@@ -31,7 +31,7 @@
             <b:ButtonGroup>
                 <b:Button ui:field="bwdBtn" icon="STEP_BACKWARD" iconSize="LARGE" title="Go to the previous profile's item" />
                 <b:Button ui:field="stopBtn" icon="STOP" iconSize="LARGE" title="Stop the profile's movie" />
-                <b:Button ui:field="playBtn" icon="PLAY" iconSize="LARGE" title="Play the profile's movie" />
+                <b:Button ui:field="playBtn" icon="PLAY" iconSize="LARGE" title="Play the profile's movie" type="INVERSE" />
                 <b:Button ui:field="pauseBtn" icon="PAUSE" iconSize="LARGE"  title="Pause the profile's movie" />
                 <b:Button ui:field="fwdBtn" icon="STEP_FORWARD" iconSize="LARGE" title="Go to the next profile's item" />
             </b:ButtonGroup>
