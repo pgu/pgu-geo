@@ -69,5 +69,5 @@ Oauth lib
 [Objectify]: https://code.google.com/p/objectify-appengine/
 [Gson]: https://code.google.com/p/google-gson/
 
-[pgu_geo]: http://pgu-geo.appspot.com/ "Pgu-geo"
+[pgu_geo]: http://pgu-geo.com/ "Pgu-geo"
 

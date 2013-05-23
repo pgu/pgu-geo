@@ -1,4 +1,4 @@
-Sitemap: http://pgu-geo.appspot.com/sitemap.txt
+Sitemap: http://pgu-geo.com/sitemap.txt
 User-agent: *
 Disallow: /img/
 Disallow: /js/
